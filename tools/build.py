@@ -15,9 +15,10 @@ for pid in ORDER:
         items = [h.replace('<img ', '<img loading="lazy" decoding="async" ') for h in items]
     if pid == 'intro':
         items = [h for h in items if not any(f'data-node-id="{n}"' in h[:400] for n in PIN_NODES)]
-        for (x, y), target, num in zip([(320, 347), (540, 744), (760, 298), (980, 692), (1200, 257)], ORDER[1:], ['01', '02', '03', '04', '05']):
-            cls = 'pin'
-            extra += f'<a class="hot {cls}" href="#{target}" style="left:{x}px;top:{y}px" aria-label="{target}">{num}</a>'
+        names = ['us &amp; our services', 'projects', 'downloads &amp; links', 'bits &amp; bats', 'contact']
+        sides = ['r', 'l', 'r', 'l', 'l']   # which side of its circle each title sits on
+        for (x, y), target, num, nm, sd in zip([(320, 347), (540, 744), (760, 298), (980, 692), (1200, 257)], ORDER[1:], ['01', '02', '03', '04', '05'], names, sides):
+            extra += f'<a class="hot pin" href="#{target}" style="left:{x}px;top:{y}px">{num}<span class="pl {sd}">{nm}</span></a>'
     sections.append(f'<section class="pg" id="{pid}"><div class="{ROOT} frame">{"".join(items)}{extra}</div></section>')
 
 chromes = ''.join(f'<div class="chrome{" on" if pid == "intro" else ""}" data-pg="{pid}">{"".join(S[pid]["chrome"])}</div>' for pid in ORDER)
@@ -69,6 +70,9 @@ html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
 
 .hot.pin{{width:30px;height:30px;box-sizing:border-box;border-radius:50%;border:calc(1px / var(--s,1)) solid #000;background:#bfbfbf;
   display:flex;align-items:center;justify-content:center;font:400 18px/1 Calibri,Carlito,sans-serif;color:#000;text-decoration:none;z-index:6;transition:background .15s}}
+.pin .pl{{position:absolute;top:50%;transform:translateY(-50%);white-space:nowrap;font:400 15px/1 Calibri,Carlito,sans-serif;color:#000;padding:4px 0}}
+.pin .pl.r{{left:calc(100% + 9px)}} .pin .pl.l{{right:calc(100% + 9px)}}
+.hot.pin:hover .pl,.hot.pin:focus-visible .pl{{color:#e30613}}
 .hot.pin:hover,.hot.pin:focus-visible,.hot.pin:active{{background:#d4fb4d;font-weight:700;z-index:7;border:calc(2.5px / var(--s,1)) solid #e30613;outline:none}}
 .hot:focus-visible{{outline:2px solid red;outline-offset:2px}}
 /* arrow to the next page, with its label; on the last page it points up and leads back to the start */

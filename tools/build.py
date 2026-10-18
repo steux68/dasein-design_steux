@@ -21,7 +21,7 @@ for pid in ORDER:
             extra += f'<a class="hot pin" href="#{target}" style="left:{x}px;top:{y}px">{num}<span class="pl {sd}">{nm}</span></a>'
     sections.append(f'<section class="pg" id="{pid}"><div class="{ROOT} frame">{"".join(items)}{extra}</div></section>')
 
-chromes = ''.join(f'<div class="chrome{" on" if pid == "intro" else ""}" data-pg="{pid}">{"".join(S[pid]["chrome"])}</div>' for pid in ORDER)
+chromes = ''.join(f'<div class="chrome{" on" if pid == "intro" else ""}" data-pg="{pid}">{"".join(h for h in S[pid]["chrome"] if "inset-[95.7%_6.25%_2.83%_92.71%]" not in h[:300])}</div>' for pid in ORDER)
 labels = ['us &amp; our services', 'projects', 'downloads &amp; links', 'bits &amp; bats', 'contact']
 hot = ''.join(f'<a class="hot tab" href="#{pid}" style="left:{235 + 220 * i}px;top:0;width:200px;height:25px" aria-label="{labels[i]}"></a>' for i, pid in enumerate(ORDER[1:]))
 hot += ('<a class="hot nextp" id="nextp" href="#services" style="left:745px;top:998px;width:90px;height:24px" aria-label="next page">'
@@ -52,7 +52,7 @@ html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
 .chrome.on{{visibility:visible}}
 .hot{{position:absolute;display:block;z-index:5}}
 /* menu bar: no drop shadow under the labels; the tab under the mouse gets a red label and a red frame */
-.chrome [class*="h-[25px]"][class*="w-[190px]"]{{text-shadow:none!important}}
+.chrome [class*="h-[25px]"][class*="w-[190px]"],.chrome [class*="w-[252px]"]{{text-shadow:none!important}}
 .hot.tab:hover,.hot.tab:focus-visible{{box-shadow:inset 0 0 0 calc(1.5px / var(--s,1)) #e30613;outline:none}}
 .hot.tab.cur:hover,.hot.tab.cur:focus-visible{{box-shadow:none}}
 /* the tab of the page you are on: bold label in red, no frame */
@@ -210,6 +210,6 @@ html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
 </body>
 </html>
 '''
-html = html.replace('> 2022<', '> 2026<')   # copyright year
+html = html.replace('> 2022<', '>© 2026<')   # copyright year, with © as real text instead of Figma's little picture
 open('site/index.html', 'w').write(html)
 print(len(html))

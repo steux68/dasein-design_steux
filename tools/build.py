@@ -87,6 +87,11 @@ html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
 .chrome [data-name="Facebook"],.chrome [data-name="Instagram"],.chrome [data-name="Twitter Squared"]{{display:none}}
 .social{{display:flex;align-items:center;justify-content:center;border-radius:4px}}
 .social:hover{{box-shadow:inset 0 0 0 calc(1.5px / var(--s,1)) #e30613}}
+/* vertical section titles: the light "&" and the number in red; a quiet slide-in when you arrive on a page */
+.chrome [class*="w-[560px]"] .fcal-l,.chrome [class*="w-[560px]"] span[class*="text-[20px]"]{{color:#e30613}}
+.chrome.arrive [class*="h-[560px]"][class*="w-[84px]"]{{animation:arrive .9s cubic-bezier(.2,.7,.2,1) both}}
+@keyframes arrive{{from{{opacity:0;transform:translateY(40px)}}to{{opacity:1;transform:none}}}}
+@media (prefers-reduced-motion:reduce){{.chrome.arrive [class*="h-[560px]"][class*="w-[84px]"]{{animation:none}}}}
 /* services: section headings in red, to match their red symbols */
 [data-node-id="1:554"] > p:first-child,[data-node-id="1:628"] > p:first-child,[data-node-id="1:633"] > p:first-child,[data-node-id="1:634"] > p:first-child{{color:#e30613}}
 /* arrow to the next page, with its label; on the last page it points up and leads back to the start */
@@ -155,7 +160,7 @@ html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
   }});
   function update(){{
     const i=Math.max(0,Math.min(pgs.length-1,Math.round(sc.scrollTop/1024))), id=pgs[i].id;
-    if(id===cur) return; if(cur==='contact'&&map) homeView(); /* leaving the contact page resets the map */ cur=id; chromes.forEach(c=>c.classList.toggle('on',c.dataset.pg===id)); const nx=document.getElementById('nextp'), k=pgs.findIndex(p=>p.id===id), last=k===pgs.length-1; nx.setAttribute('href','#'+(last?pgs[0].id:pgs[k+1].id)); nx.classList.toggle('up',last); if(id!=='intro') moved=true; const hint=id==='intro'&&!moved; nx.classList.toggle('hint',hint); nx.style.width=hint?'200px':'90px'; nx.lastChild.textContent=last?'top':(hint?'scroll or click the menu':'scroll'); document.querySelectorAll('.hot.tab').forEach(t=>t.classList.toggle('cur',t.getAttribute('href')==='#'+id));
+    if(id===cur) return; if(cur==='contact'&&map) homeView(); /* leaving the contact page resets the map */ cur=id; chromes.forEach(c=>{{c.classList.toggle('on',c.dataset.pg===id); c.classList.remove('arrive');}}); const ch=chromes.find(c=>c.dataset.pg===id); void ch.offsetWidth; ch.classList.add('arrive'); const nx=document.getElementById('nextp'), k=pgs.findIndex(p=>p.id===id), last=k===pgs.length-1; nx.setAttribute('href','#'+(last?pgs[0].id:pgs[k+1].id)); nx.classList.toggle('up',last); if(id!=='intro') moved=true; const hint=id==='intro'&&!moved; nx.classList.toggle('hint',hint); nx.style.width=hint?'200px':'90px'; nx.lastChild.textContent=last?'top':(hint?'scroll or click the menu':'scroll'); document.querySelectorAll('.hot.tab').forEach(t=>t.classList.toggle('cur',t.getAttribute('href')==='#'+id));
   }}
   sc.addEventListener('scroll',update,{{passive:true}});
   /* the page always scales itself to fit the window, so block browser zoom (Ctrl/Cmd + wheel, Ctrl/Cmd + plus/minus) */

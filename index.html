@@ -19,7 +19,15 @@ html,body{margin:0;height:100%;overflow:hidden;background:#fff}
 .chrome{position:absolute;inset:0;pointer-events:none;visibility:hidden}
 .chrome.on{visibility:visible}
 .hot{position:absolute;display:block;z-index:5}
-.hot.tab:hover{background:rgba(255,255,255,.25);outline:1px solid rgba(0,0,0,.15)}
+/* menu bar: no drop shadow under the labels; the tab under the mouse gets a red label and a red frame */
+.chrome [class*="h-[25px]"][class*="w-[190px]"]{text-shadow:none!important}
+.hot.tab:hover,.hot.tab:focus-visible{box-shadow:inset 0 0 0 calc(2.5px / var(--s,1)) #e30613;outline:none}
+.stage[data-hover="0"] .chrome.on [class*="w-[190px]"][class*="left-[335px]"]{color:#e30613!important}
+.stage[data-hover="1"] .chrome.on [class*="w-[190px]"][class*="left-[555px]"]{color:#e30613!important}
+.stage[data-hover="2"] .chrome.on [class*="w-[190px]"][class*="left-[775px]"]{color:#e30613!important}
+.stage[data-hover="3"] .chrome.on [class*="w-[190px]"][class*="left-[995px]"]{color:#e30613!important}
+.stage[data-hover="4"] .chrome.on [class*="w-[190px]"][class*="left-[1215px]"]{color:#e30613!important}
+
 .hot.pin{width:30px;height:30px;box-sizing:border-box;border-radius:50%;border:calc(1px / var(--s,1)) solid #000;background:#bfbfbf;
   display:flex;align-items:center;justify-content:center;font:400 18px/1 Calibri,Carlito,sans-serif;color:#000;text-decoration:none;z-index:6;transition:background .15s}
 .hot.pin:hover,.hot.pin:focus-visible,.hot.pin:active{background:#d4fb4d;font-weight:700;z-index:7;border:calc(2.5px / var(--s,1)) solid #e30613;outline:none}
@@ -57,6 +65,11 @@ html,body{margin:0;height:100%;overflow:hidden;background:#fff}
   function go(id,instant){const el=document.getElementById(id); if(el) sc.scrollTo({top:el.offsetTop,behavior:(instant||reduce)?'auto':'smooth'});}
   document.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]'); if(!a) return; e.preventDefault(); go(a.getAttribute('href').slice(1)); history.replaceState(null,'',a.getAttribute('href'));});
   let cur='';
+  const stage=document.getElementById('stage');
+  document.querySelectorAll('.hot.tab').forEach((t,i)=>{
+    const on=()=>stage.dataset.hover=i, off=()=>delete stage.dataset.hover;
+    t.addEventListener('mouseenter',on); t.addEventListener('mouseleave',off); t.addEventListener('focus',on); t.addEventListener('blur',off);
+  });
   function update(){
     const i=Math.max(0,Math.min(pgs.length-1,Math.round(sc.scrollTop/1024))), id=pgs[i].id;
     if(id===cur) return; cur=id; chromes.forEach(c=>c.classList.toggle('on',c.dataset.pg===id));

@@ -42,8 +42,8 @@ html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
 .hot.pin{{border-radius:50%}}
 .hot.pin:hover{{background:rgba(205,255,62,.55)}}
 .hot:focus-visible{{outline:2px solid red;outline-offset:2px}}
-.gl{{position:absolute;inset:0;pointer-events:none;z-index:30}}
-.gl i{{position:absolute;top:0;bottom:0;background:#e9e9e9;mix-blend-mode:multiply}}
+.gl{{position:absolute;left:0;top:0;pointer-events:none;z-index:30}}
+.gl i{{position:absolute;display:block}}
 </style>
 </head>
 <body>
@@ -56,7 +56,7 @@ html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
 {chromes}
 <div class="hotlayer">{hot}</div>
 </div>
-<div class="gl" id="gl"></div>
+<canvas class="gl" id="gl"></canvas>
 </div></div>
 <script>
 (function(){{
@@ -78,8 +78,17 @@ html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
   function fit(){{
     const s=Math.min(innerWidth/1440,innerHeight/1024);
     document.documentElement.style.setProperty('--s',s);
-    const dpr=devicePixelRatio||1, lw=Math.max(1,Math.round(1.6*s*dpr))/dpr;
-    document.getElementById('gl').innerHTML=[115,225,445,665,885,1105,1325].map(x=>`<i style="left:${{Math.round(x*s*dpr)/dpr-lw/2}}px;width:${{lw}}px"></i>`).join('');
+    /* light grey dashed guide lines and tick marks, drawn on a canvas over everything in whole screen pixels,
+       so every line is exactly one pixel thin and every dash is the same length */
+    const dpr=devicePixelRatio||1, cv=document.getElementById('gl');
+    const W=Math.round(1440*s*dpr), H=Math.round(1024*s*dpr);
+    cv.width=W; cv.height=H; cv.style.width=(W/dpr)+'px'; cv.style.height=(H/dpr)+'px';
+    const g=cv.getContext('2d'); g.clearRect(0,0,W,H); g.fillStyle='#c4c4c4';
+    const k=s*dpr, dash=Math.max(2,Math.round(5*k)), gap=Math.max(1,Math.round(2.5*k));
+    [115,225,445,665,885,1105,1325].forEach(x=>{{const X=Math.round(x*k); for(let y=0;y<H;y+=dash+gap) g.fillRect(X,y,1,Math.min(dash,H-y));}});
+    [25,50,60,240,250,430,440,620,630,810,820,1000,1010].forEach(y=>[105,1325].forEach(x=>{{
+      const Y=Math.round(y*k), X0=Math.round(x*k), X1=Math.round((x+10)*k);
+      for(let X=X0;X<X1;X+=dash+gap) g.fillRect(X,Y,Math.min(dash,X1-X),1);}}));
   }}
   fit(); addEventListener('resize',fit);
   if(location.hash) go(location.hash.slice(1),true);

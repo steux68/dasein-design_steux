@@ -20,7 +20,8 @@ with sync_playwright() as p:
             if(!r){dropped.push(id);continue;}
             const w=r.right-r.left,h=r.bottom-r.top;
             if(r.bottom<=0||r.top>=1024){dropped.push(id);continue;}
-            if(h>1000&&w<4){dropped.push(id);continue;}          // full-height grid lines: replaced by the site's own overlay lines
+            if(h>1000&&w<4){dropped.push(id);continue;}
+            if(h<3&&w>=8&&w<=12){dropped.push(id);continue;}      // small tick marks: redrawn by the site's overlay          // full-height grid lines: replaced by the site's own overlay lines
             if(r.right<=226||r.left>=1324||(r.top<2&&r.bottom<=27)) chrome.push(el.outerHTML); else content.push(el.outerHTML);
           }
           return {chrome,content,dropped,rootClass:root.className};

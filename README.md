@@ -10,4 +10,4 @@ Live: https://steux68.github.io/dasein-design_steux/
 - `img/`, `fonts/` – images from Figma and the Calibri-compatible font Carlito
 - `tools/` – scripts used to convert the Figma export
 
-Identity-document images in the Figma file are replaced by grey placeholders on this public site.
+

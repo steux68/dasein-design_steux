@@ -5,7 +5,21 @@ from PIL import Image, ImageDraw, ImageOps
 PAGES = {'intro': 'LIntro', 'services': 'LUsOurServices01', 'projects': 'LProjects02',
          'downloads': 'LDownloadsLinks03', 'bits': 'LBitsBats04', 'contact': 'LContact05'}
 # Images that are real identity documents: never published, replaced by a neutral placeholder
-PRIVATE = {('services', 'imgImage'), ('services', 'imgImage1'), ('projects', 'imgImage'), ('bits', 'imgImage18')}
+PRIVATE = set()  # ID-card images are now shown, at the owner's request
+# ...but with document numbers, dates of birth/issue and signatures made unreadable (original pixel coordinates)
+LIC = [(425, 352, 725, 394), (400, 394, 785, 424), (430, 452, 600, 494), (495, 505, 705, 598), (935, 155, 1075, 315)]
+REDACT = {('services', 'imgImage'): [(350, 222, 500, 264), (350, 508, 540, 552), (390, 592, 690, 672)],
+          ('services', 'imgImage1'): LIC, ('projects', 'imgImage'): LIC, ('bits', 'imgImage18'): LIC}
+
+def redact(im, boxes):
+    from PIL import ImageFilter
+    im = im.copy()
+    for b in boxes:
+        reg = im.crop(b)
+        w, h = reg.size
+        reg = reg.resize((max(1, w // 14), max(1, h // 14)), Image.BILINEAR).resize((w, h), Image.BILINEAR)
+        im.paste(reg.filter(ImageFilter.GaussianBlur(6)), b[:2])
+    return im
 
 OUT = 'site'
 os.makedirs(f'{OUT}/img', exist_ok=True)
@@ -33,6 +47,8 @@ def optimise(pid, name, src):
     if ext == 'svg':
         out = f'{OUT}/img/{base}.svg'; shutil.copy(src, out); return out
     im = ImageOps.exif_transpose(Image.open(src))
+    if (pid, name) in REDACT:
+        im = redact(im, REDACT[(pid, name)])
     big = max(im.size) > 1600
     if big:
         im.thumbnail((1600, 1600), Image.LANCZOS)
@@ -93,12 +109,29 @@ for pid, fn in PAGES.items():
     if pid == 'projects':
         # "who is this guy?" spans two columns: 235-655 (420 wide), not 430, so it stops at the column edge like the rest
         for old, new in [
-            ('left-[235px] top-[440px] w-[430px]" data-node-id="1:248"><div class="-rotate-90 flex-none"><div class="border-[0.5px] border-black border-dashed h-[430px] relative w-[370px]"',
-             'left-[235px] top-[440px] w-[420px]" data-node-id="1:248"><div class="-rotate-90 flex-none"><div class="border-[0.5px] border-black border-dashed h-[420px] relative w-[370px]"'),
             ('h-[35px] left-[235px] top-[775px] w-[430px]" data-node-id="1:262"', 'h-[35px] left-[235px] top-[775px] w-[420px]" data-node-id="1:262"'),
             ('top-[792.5px] w-[427px]" data-node-id="1:263"', 'top-[792.5px] w-[417px]" data-node-id="1:263"')]:
             assert old in h, old[:40]
             h = h.replace(old, new)
+    # the ID-card photos fill their frames (upright where the frame is landscape, turned where it is tall)
+    def boxed(h, nid, x, y, w, hh, src):
+        pat = re.compile(r'<div[^>]*data-node-id="' + re.escape(nid) + r'"[^>]*>(?:<div[^>]*>)*<img[^>]*>(?:</div>)+')
+        m = pat.search(h); assert m, nid
+        depth = m.group(0).count('<div')
+        whole = re.match(r'(?:<div[^>]*>)+<img[^>]*>' + '</div>' * depth, m.group(0)).group(0)
+        new = (f'<div class="absolute border-[0.5px] border-black border-dashed overflow-hidden" data-node-id="{nid}" data-name="IMAGE" '
+               f'style="left:{x}px;top:{y}px;width:{w}px;height:{hh}px"><img alt="" class="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src="{src}"></div>')
+        return h.replace(whole, new, 1)
+    if pid == 'services':
+        h = boxed(h, '1:555', 235, 290, 200, 150, paths['imgImage'])
+        h = boxed(h, '1:600', 895, 290, 200, 150, paths['imgImage1'])
+    if pid == 'projects':
+        h = boxed(h, '1:248', 235, 440, 420, 370, paths['imgImage'])
+    if pid == 'bits':
+        im = Image.open(f"{OUT}/{paths['imgImage18']}")
+        rot = paths['imgImage18'].rsplit('.', 1)[0] + '-tall.' + paths['imgImage18'].rsplit('.', 1)[1]
+        im.rotate(90, expand=True).save(f'{OUT}/{rot}')
+        h = boxed(h, '1:78', 455, 250, 200, 370, rot)
     open(f'frag/{pid}.html', 'w').write(h)
     manifest[pid] = paths
 json.dump(manifest, open('frag/manifest.json', 'w'), indent=1)

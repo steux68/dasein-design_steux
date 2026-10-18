@@ -21,7 +21,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#fff}
 .chrome.on{visibility:visible}
 .hot{position:absolute;display:block;z-index:5}
 /* menu bar: no drop shadow under the labels; the tab under the mouse gets a red label and a red frame */
-.chrome [class*="h-[25px]"][class*="w-[190px]"],.chrome [class*="w-[252px]"]{text-shadow:none!important}
+[class*="text-shadow-"]{text-shadow:none!important}   /* no blurred Figma drop shadows anywhere */
 .hot.tab:hover,.hot.tab:focus-visible{box-shadow:inset 0 0 0 calc(1.5px / var(--s,1)) #e30613;outline:none}
 .hot.tab.cur:hover,.hot.tab.cur:focus-visible{box-shadow:none}
 /* the tab of the page you are on: bold label in red, no frame */

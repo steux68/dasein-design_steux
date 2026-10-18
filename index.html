@@ -43,7 +43,9 @@ a{color:inherit;text-decoration:none}
 a:focus-visible{outline:3px solid var(--red);outline-offset:2px}
 
 /* chrome */
-.vl{width:1.5px;height:1024px;top:0;margin-left:-.75px;background:repeating-linear-gradient(to bottom,#8f8f8f 0 5px,transparent 5px 11px)}
+.vl{display:none}
+.gl{position:absolute;inset:0;pointer-events:none;z-index:30}
+.gl i{position:absolute;top:0;bottom:0;background:#e9e9e9;mix-blend-mode:multiply}
 .tk{width:10px;height:0;border-top:1px solid var(--rule)}
 .tab{height:25px;width:200px;top:0;background:var(--tab);font-size:14px;line-height:25px;text-align:center;cursor:pointer}
 .tab small{font-size:10px}
@@ -181,15 +183,15 @@ const LABELS={intro:'architecture &amp; design <small>[...]</small>',services:'u
 
 /* one fixed stage: grid lines behind, pages scroll in the middle, menus and side bar on top */
 const ch=chrome(-1,LABELS.intro);
-const inner=/<div class="vl" style="left:(445|665|885|1105)px[^>]*><\/div>/g;
-const lines=(ch.match(inner)||[]).join("");
+const inner=/<div class="vl"[^>]*><\/div>/g;
+const lines="";
 const chromeHtml=ch.replace(inner,"");
 document.getElementById("strip").innerHTML=`<nav class="mnav" aria-label="Sections">${TABS.map(([id,n,num])=>`<a href="#${id}">${n} <small>[${num}]</small></a>`).join("")}</nav><div class="holder"><div class="stage" id="stage">
   <div class="layer">${lines}</div>
   <div class="scroller" id="scroller">${pages.map(([id,h])=>`<section class="pg" id="${id}"><div class="pc">${h}</div></section>`).join("")}</div>
   <div class="mask l"></div><div class="mask r"></div><div class="mask t"></div>
   <div class="layer chrome">${chromeHtml}</div>
-</div></div>`;
+</div><div class="gl" id="gl"></div></div>`;
 const scroller=document.getElementById("scroller");
 const pgs=[...scroller.children];
 const labelEl=document.querySelector(".chrome .label");
@@ -215,6 +217,10 @@ function fit(){
   const small=s<0.5;
   document.documentElement.classList.toggle("small-screen",small);
   document.documentElement.style.setProperty("--s",s);
+  /* grid lines drawn on top, snapped to whole screen pixels so every line has the same thickness */
+  const dpr=window.devicePixelRatio||1, lw=Math.max(1,Math.round(1.6*s*dpr))/dpr;
+  const gl=document.getElementById("gl");
+  if(gl) gl.innerHTML=[115,225,445,665,885,1105,1325].map(x=>`<i style="left:${Math.round(x*s*dpr)/dpr-lw/2}px;width:${lw}px"></i>`).join("");
 }
 fit(); addEventListener("resize",fit);
 

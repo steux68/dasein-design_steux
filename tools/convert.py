@@ -131,6 +131,15 @@ for pid, fn in PAGES.items():
         rot = paths['imgImage18'].rsplit('.', 1)[0] + '-tall.' + paths['imgImage18'].rsplit('.', 1)[1]
         im.rotate(90, expand=True).save(f'{OUT}/{rot}')
         h = boxed(h, '1:78', 455, 250, 200, 370, rot)
+    if pid == 'downloads':   # captions brought up to date (Oct 2026)
+        for old, new in [
+            ('<span class="leading-[normal]">ZT: Arch+Ing</span><span class="[word-break:break-word] fcal-r leading-[normal] not-italic"> </span></p><p class="fcal-r leading-[normal] text-[10px]">Bundeskammer der ZiviltechnikerInnen Österreich [EU]</p>',
+             '<span class="leading-[normal]">zt: Kammer Ost</span><span class="[word-break:break-word] fcal-r leading-[normal] not-italic"> </span></p><p class="fcal-r leading-[normal] text-[10px]">Ziviltechniker:innen Wien, Niederösterreich &amp; Burgenland [Ö]</p>'),
+            ('<span class="leading-[normal]">MA37 - Baupolizei [Wien]</span><span class="[word-break:break-word] fcal-r leading-[normal] not-italic"> </span></p><p class="fcal-r leading-[normal] text-[10px]">Bundeskammer der ZiviltechnikerInnen Österreich [EU]</p>',
+             '<span class="leading-[normal]">MA 37 - Baupolizei</span><span class="[word-break:break-word] fcal-r leading-[normal] not-italic"> </span></p><p class="fcal-r leading-[normal] text-[10px]">Baubehörde der Stadt Wien [W]</p>'),
+            ('MA 21 - Stadtteilplanung und Flächenwidmung </span>', 'MA 21 A/B - Stadtteilplanung und Flächenwidmung </span>')]:
+            assert old in h, old[:40]
+            h = h.replace(old, new)
     open(f'frag/{pid}.html', 'w').write(h)
     manifest[pid] = paths
 json.dump(manifest, open('frag/manifest.json', 'w'), indent=1)

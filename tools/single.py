@@ -5,7 +5,7 @@ head=re.sub(r'<meta[^>]*>\n?','',head); t=re.search(r'<title>.*?</title>',head).
 s=t+'\n'+head.strip()+'\n'+body.strip()
 s=re.sub(r'<(link|script)[^>]*data-live-map[^>]*>(</script>)?\n?','',s)  # artifact pages cannot load map tiles: keep the static map
 def uri(p):
-    m={'svg':'image/svg+xml','png':'image/png','jpg':'image/jpeg','woff2':'font/woff2'}[p.rsplit('.',1)[1]]
+    m={'svg':'image/svg+xml','png':'image/png','jpg':'image/jpeg','webp':'image/webp','woff2':'font/woff2'}[p.rsplit('.',1)[1]]
     return f'data:{m};base64,'+base64.b64encode(open('site/'+p,'rb').read()).decode()
 css=re.sub(r'url\((fonts/[^)]+)\)',lambda m:f'url({uri(m.group(1))})',open('site/fonts.css').read())
 faces=[f for f in re.findall(r'@font-face\s*\{[^}]*\}',css) if not re.search('cyrillic|greek|vietnamese',f)]

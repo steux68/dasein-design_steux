@@ -32,35 +32,29 @@ FONT = {
     "font-['Inter:Semi_Bold']": 'finter',
 }
 
+import hashlib
+_SEEN = {}   # identical pictures used on several pages are stored once
+
 def optimise(pid, name, src):
-    """Return published path for an asset, resizing/compressing big photos."""
+    """Return the published path for an asset: photos resized to max 1600 px and saved as WebP, duplicates shared."""
     ext = src.rsplit('.', 1)[1]
-    base = f'{pid}-{name}'
-    if (pid, name) in PRIVATE:
-        im = Image.open(src)
-        w, h = im.size
-        ph = Image.new('RGB', (w, h), (214, 214, 210))
-        d = ImageDraw.Draw(ph)
-        d.rectangle([0, 0, w - 1, h - 1], outline=(190, 190, 186), width=2)
-        out = f'{OUT}/img/{base}.png'; ph.save(out, optimize=True)
-        return out
     if ext == 'svg':
-        out = f'{OUT}/img/{base}.svg'; shutil.copy(src, out); return out
+        key = hashlib.md5(open(src, 'rb').read()).hexdigest()
+        if key in _SEEN: return _SEEN[key]
+        out = f'{OUT}/img/{pid}-{name}.svg'; shutil.copy(src, out); _SEEN[key] = out; return out
+    key = hashlib.md5(open(src, 'rb').read() + repr(REDACT.get((pid, name))).encode()).hexdigest()
+    if key in _SEEN: return _SEEN[key]
     im = ImageOps.exif_transpose(Image.open(src))
     if (pid, name) in REDACT:
         im = redact(im, REDACT[(pid, name)])
-    big = max(im.size) > 1600
-    if big:
+    if max(im.size) > 1600:
         im.thumbnail((1600, 1600), Image.LANCZOS)
-    if im.mode == 'RGB' or (im.mode == 'RGBA' and im.getextrema()[3][0] == 255):
-        out = f'{OUT}/img/{base}.jpg'
-        im.convert('RGB').save(out, quality=84, optimize=True, progressive=True)
+    out = f'{OUT}/img/{pid}-{name}.webp'
+    if im.mode in ('RGBA', 'LA', 'P') and im.convert('RGBA').getextrema()[3][0] < 255:
+        im.convert('RGBA').save(out, 'WEBP', quality=86, method=6)
     else:
-        out = f'{OUT}/img/{base}.png'
-        if big or os.path.getsize(src) > 200_000:
-            im.save(out, optimize=True)
-        else:
-            shutil.copy(src, out)
+        im.convert('RGB').save(out, 'WEBP', quality=82, method=6)
+    _SEEN[key] = out
     return out
 
 def jsx_to_html(t, pid):

@@ -1,6 +1,7 @@
 """Assemble the single-page site from the split Figma pages."""
 import json
 S = json.load(open('frag/split.json'))
+M = json.load(open('frag/manifest.json'))['contact']   # published paths of the map buttons and marker
 ORDER = ['intro', 'services', 'projects', 'downloads', 'bits', 'contact']
 ROOT = 'bg-white relative'  # each frame keeps Figma's root styling
 
@@ -9,7 +10,9 @@ sections = []
 PIN_NODES = {'1:190', '1:212', '1:215', '1:218', '1:221', '1:210', '1:213', '1:216', '1:219', '1:222'}
 for pid in ORDER:
     extra = ''
-    items = S[pid]["content"]
+    items = [h for h in S[pid]["content"] if not any(f'data-node-id="{n}"' in h[:400] for n in ('1:275', '1:47'))]
+    if pid != 'intro':
+        items = [h.replace('<img ', '<img loading="lazy" decoding="async" ') for h in items]
     if pid == 'intro':
         items = [h for h in items if not any(f'data-node-id="{n}"' in h[:400] for n in PIN_NODES)]
         for (x, y), target, num in zip([(320, 347), (540, 744), (760, 298), (980, 692), (1200, 257)], ORDER[1:], ['01', '02', '03', '04', '05']):
@@ -20,6 +23,9 @@ for pid in ORDER:
 chromes = ''.join(f'<div class="chrome{" on" if pid == "intro" else ""}" data-pg="{pid}">{"".join(S[pid]["chrome"])}</div>' for pid in ORDER)
 labels = ['us &amp; our services', 'projects', 'downloads &amp; links', 'bits &amp; bats', 'contact']
 hot = ''.join(f'<a class="hot tab" href="#{pid}" style="left:{235 + 220 * i}px;top:0;width:200px;height:25px" aria-label="{labels[i]}"></a>' for i, pid in enumerate(ORDER[1:]))
+hot += ('<a class="hot nextp" id="nextp" href="#services" style="left:745px;top:998px;width:90px;height:24px" aria-label="next page">'
+        '<svg width="20" height="15" viewBox="-0.5 -0.5 16.26 11.61" aria-hidden="true"><path class="tri" d="M6.83791 0.390006C7.23821 -0.130002 8.02242 -0.130002 8.42272 0.390005L15.0512 9.00065C15.5574 9.65821 15.0886 10.6106 14.2588 10.6106H1.00184C0.172004 10.6106 -0.296761 9.65822 0.209436 9.00065L6.83791 0.390006Z"/></svg>'
+        '<span>scroll</span></a>')
 hot += '<a class="hot" href="#intro" style="left:115px;top:0;width:110px;height:365px" aria-label="dasein-design home"></a>'
 
 html = f'''<!doctype html>
@@ -65,6 +71,18 @@ html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
   display:flex;align-items:center;justify-content:center;font:400 18px/1 Calibri,Carlito,sans-serif;color:#000;text-decoration:none;z-index:6;transition:background .15s}}
 .hot.pin:hover,.hot.pin:focus-visible,.hot.pin:active{{background:#d4fb4d;font-weight:700;z-index:7;border:calc(2.5px / var(--s,1)) solid #e30613;outline:none}}
 .hot:focus-visible{{outline:2px solid red;outline-offset:2px}}
+/* arrow to the next page, with its label; on the last page it points up and leads back to the start */
+.nextp{{display:flex;align-items:center;gap:6px;text-decoration:none;color:#666;font:400 11px/1 Calibri,Carlito,sans-serif;letter-spacing:.06em;padding-left:20px}}
+.nextp svg{{transform:rotate(180deg);transition:transform .25s}}
+.nextp .tri{{fill:rgba(205,255,62,.86);stroke:#000;stroke-width:1}}
+.nextp:hover{{color:#e30613}} .nextp:hover .tri{{stroke:#e30613}}
+.nextp.up svg{{transform:none}}
+/* first visit to the intro: the arrow nudges downwards and the label invites you in, until you first move on */
+.nextp.hint svg{{animation:nudge 1.3s ease-in-out infinite}}
+.nextp.hint span{{color:#e30613;animation:glow 1.3s ease-in-out infinite}}
+@keyframes nudge{{0%,100%{{transform:rotate(180deg) translateY(0)}}50%{{transform:rotate(180deg) translateY(-5px)}}}}
+@keyframes glow{{0%,100%{{opacity:1}}50%{{opacity:.35}}}}
+@media (prefers-reduced-motion:reduce){{.nextp.hint svg,.nextp.hint span{{animation:none}}}}
 .gl{{position:absolute;left:0;top:0;pointer-events:none;z-index:30}}
 /* dashed frames around images: same thin light-grey dash as the guide lines */
 .frame .border-dashed.border-black{{border-width:0!important}}
@@ -101,7 +119,7 @@ html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
 </div>
 <canvas class="gl" id="gl"></canvas>
 <div class="mapclip" id="mapclip" hidden><div class="mapwrap" id="mapwrap"><div id="livemap"></div>
-<div class="mz" id="mz"><button id="zin" aria-label="Zoom in"><img src="img/contact-imgZoomIn.png" alt=""></button><button id="zout" aria-label="Zoom out"><img src="img/contact-imgZoomOut.png" alt=""></button></div></div></div>
+<div class="mz" id="mz"><button id="zin" aria-label="Zoom in"><img src="{M['imgZoomIn']}" alt=""></button><button id="zout" aria-label="Zoom out"><img src="{M['imgZoomOut']}" alt=""></button></div></div></div>
 </div></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" data-live-map></script>
 <script>
@@ -111,7 +129,7 @@ html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   function go(id,instant){{const el=document.getElementById(id); if(el) sc.scrollTo({{top:el.offsetTop,behavior:(instant||reduce)?'auto':'smooth'}});}}
   document.addEventListener('click',e=>{{const a=e.target.closest('a[href^="#"]'); if(!a) return; e.preventDefault(); go(a.getAttribute('href').slice(1)); history.replaceState(null,'',a.getAttribute('href'));}});
-  let cur='';
+  let cur='', moved=false;
   const stage=document.getElementById('stage');
   document.querySelectorAll('.hot.tab').forEach((t,i)=>{{
     const on=()=>stage.dataset.hover=i, off=()=>delete stage.dataset.hover;
@@ -119,7 +137,7 @@ html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
   }});
   function update(){{
     const i=Math.max(0,Math.min(pgs.length-1,Math.round(sc.scrollTop/1024))), id=pgs[i].id;
-    if(id===cur) return; if(cur==='contact'&&map) homeView(); /* leaving the contact page resets the map */ cur=id; chromes.forEach(c=>c.classList.toggle('on',c.dataset.pg===id)); document.querySelectorAll('.hot.tab').forEach(t=>t.classList.toggle('cur',t.getAttribute('href')==='#'+id));
+    if(id===cur) return; if(cur==='contact'&&map) homeView(); /* leaving the contact page resets the map */ cur=id; chromes.forEach(c=>c.classList.toggle('on',c.dataset.pg===id)); const nx=document.getElementById('nextp'), k=pgs.findIndex(p=>p.id===id), last=k===pgs.length-1; nx.setAttribute('href','#'+(last?pgs[0].id:pgs[k+1].id)); nx.classList.toggle('up',last); if(id!=='intro') moved=true; const hint=id==='intro'&&!moved; nx.classList.toggle('hint',hint); nx.style.width=hint?'200px':'90px'; nx.lastChild.textContent=last?'top':(hint?'scroll or click the menu':'scroll'); document.querySelectorAll('.hot.tab').forEach(t=>t.classList.toggle('cur',t.getAttribute('href')==='#'+id));
   }}
   sc.addEventListener('scroll',update,{{passive:true}});
   /* the page always scales itself to fit the window, so block browser zoom (Ctrl/Cmd + wheel, Ctrl/Cmd + plus/minus) */

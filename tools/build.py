@@ -171,8 +171,6 @@ html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
     document.getElementById('zin').onclick=()=>map.zoomIn();
     document.getElementById('zout').onclick=()=>map.zoomOut();
     sc.addEventListener('scroll',placeMap,{{passive:true}});
-    /* the map sits above the pages, so pass mouse-wheel scrolling on to the pages underneath */
-    wrap.addEventListener('wheel',e=>{{e.preventDefault(); sc.scrollBy({{top:e.deltaY/S}});}},{{passive:false}});
   }}
   fit(); addEventListener('resize',()=>{{fit(); if(map){{placeMap(); homeView(map.getZoom()); pin.setIcon(marker());}}}});
   if(location.hash) go(location.hash.slice(1),true);

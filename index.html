@@ -21,7 +21,15 @@ html,body{margin:0;height:100%;overflow:hidden;background:#fff}
 .hot{position:absolute;display:block;z-index:5}
 /* menu bar: no drop shadow under the labels; the tab under the mouse gets a red label and a red frame */
 .chrome [class*="h-[25px]"][class*="w-[190px]"]{text-shadow:none!important}
-.hot.tab:hover,.hot.tab:focus-visible{box-shadow:inset 0 0 0 calc(2.5px / var(--s,1)) #e30613;outline:none}
+.hot.tab:hover,.hot.tab:focus-visible{box-shadow:inset 0 0 0 calc(1.5px / var(--s,1)) #e30613;outline:none}
+.hot.tab.cur:hover,.hot.tab.cur:focus-visible{box-shadow:none}
+/* the tab of the page you are on: bold label in red, no frame */
+.chrome[data-pg="services"] [class*="w-[190px]"][class*="left-[335px]"]{color:#e30613!important}
+.chrome[data-pg="projects"] [class*="w-[190px]"][class*="left-[555px]"]{color:#e30613!important}
+.chrome[data-pg="downloads"] [class*="w-[190px]"][class*="left-[775px]"]{color:#e30613!important}
+.chrome[data-pg="bits"] [class*="w-[190px]"][class*="left-[995px]"]{color:#e30613!important}
+.chrome[data-pg="contact"] [class*="w-[190px]"][class*="left-[1215px]"]{color:#e30613!important}
+
 .stage[data-hover="0"] .chrome.on [class*="w-[190px]"][class*="left-[335px]"]{color:#e30613!important}
 .stage[data-hover="1"] .chrome.on [class*="w-[190px]"][class*="left-[555px]"]{color:#e30613!important}
 .stage[data-hover="2"] .chrome.on [class*="w-[190px]"][class*="left-[775px]"]{color:#e30613!important}
@@ -72,7 +80,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#fff}
   });
   function update(){
     const i=Math.max(0,Math.min(pgs.length-1,Math.round(sc.scrollTop/1024))), id=pgs[i].id;
-    if(id===cur) return; cur=id; chromes.forEach(c=>c.classList.toggle('on',c.dataset.pg===id));
+    if(id===cur) return; cur=id; chromes.forEach(c=>c.classList.toggle('on',c.dataset.pg===id)); document.querySelectorAll('.hot.tab').forEach(t=>t.classList.toggle('cur',t.getAttribute('href')==='#'+id));
   }
   sc.addEventListener('scroll',update,{passive:true});
   addEventListener('keydown',e=>{

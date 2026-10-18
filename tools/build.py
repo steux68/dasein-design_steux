@@ -17,7 +17,7 @@ for pid in ORDER:
             extra += f'<a class="hot {cls}" href="#{target}" style="left:{x}px;top:{y}px" aria-label="{target}">{num}</a>'
     sections.append(f'<section class="pg" id="{pid}"><div class="{ROOT} frame">{"".join(items)}{extra}</div></section>')
 
-chromes = ''.join(f'<div class="chrome" data-pg="{pid}">{"".join(S[pid]["chrome"])}</div>' for pid in ORDER)
+chromes = ''.join(f'<div class="chrome{" on" if pid == "intro" else ""}" data-pg="{pid}">{"".join(S[pid]["chrome"])}</div>' for pid in ORDER)
 labels = ['us &amp; our services', 'projects', 'downloads &amp; links', 'bits &amp; bats', 'contact']
 hot = ''.join(f'<a class="hot tab" href="#{pid}" style="left:{235 + 220 * i}px;top:0;width:200px;height:25px" aria-label="{labels[i]}"></a>' for i, pid in enumerate(ORDER[1:]))
 hot += '<a class="hot" href="#intro" style="left:115px;top:0;width:110px;height:365px" aria-label="dasein-design home"></a>'
@@ -164,22 +164,25 @@ html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
       html:`<div class="pin42" style="width:${{25*s}}px;font-size:${{12*s}}px"><img src="img/contact-imgVector.svg" alt="" style="width:${{25*s}}px;height:${{35*s}}px">42/6</div>`}});
   }}
   let pin=null;
-  if(window.L){{
-    clip.hidden=false;
-    map=L.map('livemap',{{zoomControl:false,scrollWheelZoom:false,attributionControl:true}});
-    L.tileLayer('https://tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png',{{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}}).addTo(map);
-    map.attributionControl.setPrefix(false);
-    placeMap(); homeView();
-    pin=L.marker(HOME,{{icon:marker(),keyboard:false}}).addTo(map);
-    document.getElementById('zin').onclick=()=>map.zoomIn();
-    document.getElementById('zout').onclick=()=>map.zoomOut();
-    sc.addEventListener('scroll',placeMap,{{passive:true}});
-    /* the map sits above the pages, so pass mouse-wheel scrolling on to the pages underneath */
-    wrap.addEventListener('wheel',e=>{{e.preventDefault(); sc.scrollBy({{top:e.deltaY/S}});}},{{passive:false}});
-  }}
-  fit(); addEventListener('resize',()=>{{fit(); if(map){{placeMap(); homeView(map.getZoom()); pin.setIcon(marker());}}}});
+  /* page first: scale it, show the menus and side bars; the map is added afterwards so it can never stop the page */
+  fit(); addEventListener('resize',()=>{{fit(); try{{ if(map){{placeMap(); homeView(map.getZoom()); pin.setIcon(marker());}} }}catch(err){{console.warn(err);}} }});
   if(location.hash) go(location.hash.slice(1),true);
   update();
+  try{{
+    if(window.L){{
+      clip.hidden=false; placeMap();
+      map=L.map('livemap',{{zoomControl:false,scrollWheelZoom:false,attributionControl:true}});
+      L.tileLayer('https://tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png',{{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}}).addTo(map);
+      map.attributionControl.setPrefix(false);
+      placeMap(); homeView();
+      pin=L.marker(HOME,{{icon:marker(),keyboard:false}}).addTo(map);
+      document.getElementById('zin').onclick=()=>map.zoomIn();
+      document.getElementById('zout').onclick=()=>map.zoomOut();
+      sc.addEventListener('scroll',placeMap,{{passive:true}});
+      /* the map sits above the pages, so pass mouse-wheel scrolling on to the pages underneath */
+      wrap.addEventListener('wheel',e=>{{e.preventDefault(); sc.scrollBy({{top:e.deltaY/S}});}},{{passive:false}});
+    }}
+  }}catch(err){{ console.warn('map not available',err); clip.hidden=true; map=null; }}
 }})();
 </script>
 </body>

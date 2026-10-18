@@ -28,13 +28,13 @@ hot = ''.join(f'<a class="hot tab" href="#{pid}" style="left:{235 + 220 * i}px;t
 hot += ('<a class="hot nextp" id="nextp" href="#services" style="left:745px;top:998px;width:90px;height:24px" aria-label="next page">'
         '<svg width="20" height="15" viewBox="-0.5 -0.5 16.26 11.61" aria-hidden="true"><path class="tri" d="M6.83791 0.390006C7.23821 -0.130002 8.02242 -0.130002 8.42272 0.390005L15.0512 9.00065C15.5574 9.65821 15.0886 10.6106 14.2588 10.6106H1.00184C0.172004 10.6106 -0.296761 9.65822 0.209436 9.00065L6.83791 0.390006Z"/></svg>'
         '<span>scroll</span></a>')
-SOCIAL = [('facebook', 'Facebook', 57, '#0866FF', ''), ('instagram', 'Instagram', 82, 'url(#igrad)', ''), ('x', 'X (Twitter)', 107, '#000000', '')]
+SOCIAL = [('facebook', 'Facebook', 60, '#0866FF', ''), ('instagram', 'Instagram', 96, 'url(#igrad)', ''), ('x', 'X (Twitter)', 132, '#000000', '')]
 hot += ('<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><radialGradient id="igrad" cx="30%" cy="107%" r="150%">'
         '<stop offset="0" stop-color="#fdf497"/><stop offset=".05" stop-color="#fdf497"/><stop offset=".45" stop-color="#fd5949"/>'
         '<stop offset=".6" stop-color="#d6249f"/><stop offset=".9" stop-color="#285AEB"/></radialGradient></defs></svg>')
 for key, label, y, fill, url in SOCIAL:   # url: fill in the profile address when the accounts exist
     hot += (f'<a class="hot social" href="{url or "#"}" data-pending="{0 if url else 1}" aria-label="{label}" style="left:1335px;top:{y}px;width:25px;height:25px">'
-            f'<svg viewBox="0 0 24 24" width="21" height="21"><path fill="{fill}" d="{ICONS[key]}"/></svg></a>')
+            f'<svg viewBox="0 0 24 24" width="16" height="16"><path fill="{fill}" d="{ICONS[key]}"/></svg></a>')
 hot += '<a class="hot" href="#intro" style="left:115px;top:0;width:110px;height:365px" aria-label="dasein-design home"></a>'
 
 html = f'''<!doctype html>

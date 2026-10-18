@@ -1,5 +1,6 @@
 """Assemble the single-page site from the split Figma pages."""
 import json
+ICONS = json.load(open('icons.json'))   # current brand marks (Simple Icons)
 S = json.load(open('frag/split.json'))
 M = json.load(open('frag/manifest.json'))['contact']   # published paths of the map buttons and marker
 ORDER = ['intro', 'services', 'projects', 'downloads', 'bits', 'contact']
@@ -27,6 +28,13 @@ hot = ''.join(f'<a class="hot tab" href="#{pid}" style="left:{235 + 220 * i}px;t
 hot += ('<a class="hot nextp" id="nextp" href="#services" style="left:745px;top:998px;width:90px;height:24px" aria-label="next page">'
         '<svg width="20" height="15" viewBox="-0.5 -0.5 16.26 11.61" aria-hidden="true"><path class="tri" d="M6.83791 0.390006C7.23821 -0.130002 8.02242 -0.130002 8.42272 0.390005L15.0512 9.00065C15.5574 9.65821 15.0886 10.6106 14.2588 10.6106H1.00184C0.172004 10.6106 -0.296761 9.65822 0.209436 9.00065L6.83791 0.390006Z"/></svg>'
         '<span>scroll</span></a>')
+SOCIAL = [('facebook', 'Facebook', 57, '#0866FF', ''), ('instagram', 'Instagram', 82, 'url(#igrad)', ''), ('x', 'X (Twitter)', 107, '#000000', '')]
+hot += ('<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><radialGradient id="igrad" cx="30%" cy="107%" r="150%">'
+        '<stop offset="0" stop-color="#fdf497"/><stop offset=".05" stop-color="#fdf497"/><stop offset=".45" stop-color="#fd5949"/>'
+        '<stop offset=".6" stop-color="#d6249f"/><stop offset=".9" stop-color="#285AEB"/></radialGradient></defs></svg>')
+for key, label, y, fill, url in SOCIAL:   # url: fill in the profile address when the accounts exist
+    hot += (f'<a class="hot social" href="{url or "#"}" data-pending="{0 if url else 1}" aria-label="{label}" style="left:1335px;top:{y}px;width:25px;height:25px">'
+            f'<svg viewBox="0 0 24 24" width="21" height="21"><path fill="{fill}" d="{ICONS[key]}"/></svg></a>')
 hot += '<a class="hot" href="#intro" style="left:115px;top:0;width:110px;height:365px" aria-label="dasein-design home"></a>'
 
 html = f'''<!doctype html>
@@ -75,6 +83,12 @@ html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
 .hot.pin:hover .pl,.hot.pin:focus-visible .pl{{color:#e30613}}
 .hot.pin:hover,.hot.pin:focus-visible,.hot.pin:active{{background:#d4fb4d;font-weight:700;z-index:7;border:calc(2.5px / var(--s,1)) solid #e30613;outline:none}}
 .hot:focus-visible{{outline:2px solid red;outline-offset:2px}}
+/* social links: current brand marks in their own colours (Figma's old icons are hidden) */
+.chrome [data-name="Facebook"],.chrome [data-name="Instagram"],.chrome [data-name="Twitter Squared"]{{display:none}}
+.social{{display:flex;align-items:center;justify-content:center;border-radius:4px}}
+.social:hover{{box-shadow:inset 0 0 0 calc(1.5px / var(--s,1)) #e30613}}
+/* services: section headings in red, to match their red symbols */
+[data-node-id="1:554"] > p:first-child,[data-node-id="1:628"] > p:first-child,[data-node-id="1:633"] > p:first-child,[data-node-id="1:634"] > p:first-child{{color:#e30613}}
 /* arrow to the next page, with its label; on the last page it points up and leads back to the start */
 .nextp{{display:flex;align-items:center;gap:6px;text-decoration:none;color:#666;font:400 11px/1 Calibri,Carlito,sans-serif;letter-spacing:.06em;padding-left:20px}}
 .nextp svg{{transform:rotate(180deg);transition:transform .25s}}
@@ -132,7 +146,7 @@ html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
   const chromes=[...document.querySelectorAll('.chrome')];
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   function go(id,instant){{const el=document.getElementById(id); if(el) sc.scrollTo({{top:el.offsetTop,behavior:(instant||reduce)?'auto':'smooth'}});}}
-  document.addEventListener('click',e=>{{const a=e.target.closest('a[href^="#"]'); if(!a) return; e.preventDefault(); go(a.getAttribute('href').slice(1)); history.replaceState(null,'',a.getAttribute('href'));}});
+  document.addEventListener('click',e=>{{const a=e.target.closest('a[href^="#"]'); if(!a) return; e.preventDefault(); if(a.dataset.pending==='1') return; go(a.getAttribute('href').slice(1)); history.replaceState(null,'',a.getAttribute('href'));}});
   let cur='', moved=false;
   const stage=document.getElementById('stage');
   document.querySelectorAll('.hot.tab').forEach((t,i)=>{{

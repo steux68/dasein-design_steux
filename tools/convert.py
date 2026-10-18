@@ -41,13 +41,16 @@ def optimise(pid, name, src):
     if ext == 'svg':
         key = hashlib.md5(open(src, 'rb').read()).hexdigest()
         if key in _SEEN: return _SEEN[key]
-        out = f'{OUT}/img/{pid}-{name}.svg'; shutil.copy(src, out); _SEEN[key] = out; return out
+        out = f'{OUT}/img/{pid}-{name}.svg'
+        svg = open(src).read()
+        if name == 'imgGroups': svg = svg.replace('fill="black"', 'fill="#E30613"')   # service symbol in red
+        open(out, 'w').write(svg); _SEEN[key] = out; return out
     key = hashlib.md5(open(src, 'rb').read() + repr(REDACT.get((pid, name))).encode()).hexdigest()
     if key in _SEEN: return _SEEN[key]
     im = ImageOps.exif_transpose(Image.open(src))
     if (pid, name) in REDACT:
         im = redact(im, REDACT[(pid, name)])
-    if name == 'imgPdf':   # PDF download symbols in dasein-design red
+    if name in ('imgPdf', 'imgWorkstation', 'imgExterior', 'imgBrainstormSkill'):   # PDF + service symbols in dasein-design red
         im = im.convert('RGBA'); red = Image.new('RGBA', im.size, (227, 6, 19, 255)); red.putalpha(im.getchannel('A')); im = red
     if max(im.size) > 1600:
         im.thumbnail((1600, 1600), Image.LANCZOS)

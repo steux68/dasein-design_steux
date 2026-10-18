@@ -24,6 +24,15 @@ html,body{margin:0;height:100%;overflow:hidden;background:#fff}
 .hot.pin:hover{background:rgba(205,255,62,.55)}
 .hot:focus-visible{outline:2px solid red;outline-offset:2px}
 .gl{position:absolute;left:0;top:0;pointer-events:none;z-index:30}
+/* dashed frames around images: same thin light-grey dash as the guide lines */
+.frame .border-dashed.border-black{border-width:0!important}
+.frame .border-dashed.border-black::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;
+  --c:#c4c4c4;--d:5px;--p:7.5px;--w:calc(1px / (var(--s,1) * var(--dpr,1)));
+  background:
+   repeating-linear-gradient(to right,var(--c) 0 var(--d),transparent var(--d) var(--p)) left top/100% var(--w) no-repeat,
+   repeating-linear-gradient(to right,var(--c) 0 var(--d),transparent var(--d) var(--p)) left bottom/100% var(--w) no-repeat,
+   repeating-linear-gradient(to bottom,var(--c) 0 var(--d),transparent var(--d) var(--p)) left top/var(--w) 100% no-repeat,
+   repeating-linear-gradient(to bottom,var(--c) 0 var(--d),transparent var(--d) var(--p)) right top/var(--w) 100% no-repeat}
 .gl i{position:absolute;display:block}
 </style>
 </head>
@@ -62,6 +71,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#fff}
     /* light grey dashed guide lines and tick marks, drawn on a canvas over everything in whole screen pixels,
        so every line is exactly one pixel thin and every dash is the same length */
     const dpr=devicePixelRatio||1, cv=document.getElementById('gl');
+    document.documentElement.style.setProperty('--dpr',dpr);
     const W=Math.round(1440*s*dpr), H=Math.round(1024*s*dpr);
     cv.width=W; cv.height=H; cv.style.width=(W/dpr)+'px'; cv.style.height=(H/dpr)+'px';
     const g=cv.getContext('2d'); g.clearRect(0,0,W,H); g.fillStyle='#c4c4c4';

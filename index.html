@@ -43,10 +43,10 @@ a{color:inherit;text-decoration:none}
 a:focus-visible{outline:3px solid var(--red);outline-offset:2px}
 
 /* chrome */
-.vl{width:0;height:1024px;top:0;border-left:1px dotted var(--rule)}
+.vl{width:1.5px;height:1024px;top:0;margin-left:-.75px;background:repeating-linear-gradient(to bottom,#8f8f8f 0 5px,transparent 5px 11px)}
 .tk{width:10px;height:0;border-top:1px solid var(--rule)}
-.tab{height:25px;width:200px;top:0;background:var(--tab);font-size:13px;line-height:25px;text-align:center;cursor:pointer}
-.tab small{font-size:9px}
+.tab{height:25px;width:200px;top:0;background:var(--tab);font-size:14px;line-height:25px;text-align:center;cursor:pointer}
+.tab small{font-size:10px}
 .tab.on{background:var(--lime);font-weight:700}
 .tab:hover{filter:brightness(.95)}
 .rot{transform-origin:0 0;transform:rotate(-90deg);white-space:nowrap;line-height:1}
@@ -59,17 +59,18 @@ a:focus-visible{outline:3px solid var(--red);outline-offset:2px}
 
 /* content */
 .img{border-radius:0}
-.cap{background:rgba(255,255,255,.92);font-size:11px;font-weight:700;padding:3px 4px;line-height:1.25;text-transform:uppercase}
-.cap span{display:block;font-weight:400;text-transform:none;font-size:10px}
-.t{font-size:10.5px;line-height:1.4;overflow:hidden}
+.cap{background:rgba(255,255,255,.92);font-size:11.5px;letter-spacing:-.15px;font-weight:700;padding:3px 4px;line-height:1.25;text-transform:uppercase}
+.cap span{display:block;font-weight:400;text-transform:none;font-size:10.5px;letter-spacing:0}
+.t{font-size:12px;line-height:1.38;overflow:hidden}
 .t b{font-weight:700}
-.t.xs{font-size:8.3px;line-height:1.32}
+.t.xs{font-size:9.2px;line-height:1.3}
+.t.col{overflow:visible}.par{margin:0 0 14px}.ico-in{float:right;width:18px;height:18px;background:var(--ink);border-radius:2px;margin:0 0 4px 8px}
 .bar{background:var(--ink)}
 .pdf{width:25px;height:25px;background:var(--red);color:#fff;font-size:8px;font-weight:700;display:grid;place-items:center}
-.pdfl{font-size:10px;line-height:25px;white-space:nowrap}
-.linkcap{font-size:10px;line-height:1.3;text-align:left}
-.linkcap b{display:block;font-size:11px}
-.pin{width:30px;height:30px;border-radius:50%;background:var(--pin);border:1px solid var(--ink);font-size:12px;display:grid;place-items:center;transition:background .2s}
+.pdfl{font-size:11.5px;line-height:25px;white-space:nowrap}
+.linkcap{font-size:10.5px;line-height:1.22;overflow:visible;text-align:left}
+.linkcap b{display:block;font-size:12px}
+.pin{width:30px;height:30px;border-radius:50%;background:var(--pin);border:1px solid var(--ink);font-size:13px;display:grid;place-items:center;transition:background .2s}
 .pin:hover,.pin.on{background:var(--lime)}
 .dash{border-color:var(--ink);border-style:dotted;border-width:0}
 .tri{width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:15px solid var(--ink)}
@@ -87,7 +88,7 @@ const X=[235,455,675,895,1115];
 function box(cls,x,y,w,h,html="",extra=""){return `<div class="${cls}" style="left:${x}px;top:${y}px;${w!=null?`width:${w}px;`:""}${h!=null?`height:${h}px;`:""}${extra}">${html}</div>`}
 function link(cls,href,x,y,w,h,html="",extra=""){return `<a class="${cls}" href="#${href}" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px;${extra}">${html}</a>`}
 const img=(x,y,w,h)=>box("img",x,y,w,h,"",`background:${col()}`);
-const cap=(x,y,w,h,t)=>box("cap",x,y,w,h,`${t}<span>smaller text example</span>`);
+const cap=(x,y,w,h,t)=>box("cap",x,y,w,null,`${t}<span>smaller text example</span>`,`top:auto;bottom:${1024-y-h}px;min-height:${h}px`);
 const txt=(x,y,w,h,html,c="t")=>box(c,x,y,w,h,html);
 const bar=(x,y,w,h)=>box("bar",x,y,w,h);
 const pdf=(ix,y,lx,lw,label,href)=>link("pdf",href,ix,y,25,25,"PDF")+box("pdfl",lx,y,lw,25,label);
@@ -126,18 +127,14 @@ const pages=[];
 
 // 01 SERVICES
 (()=>{let h='';
- h+=txt(675,57,170,90,"<b>PARTNERSHIP »</b><br>Jan.’03 - bis dato<br>dasein-design [architecture+design] [Wien]");
+ h+=txt(675,57,200,560,"<p class=\"par\"><i class=\"ico-in\"></i><b>PARTNERSHIP »</b><br>Jan.’03 - bis dato<br>dasein-design [architecture+design] [Wien]</p><p class=\"par\"><i class=\"ico-in\"></i><b>IT »</b> Experte: Archicad<br>» gute Kenntnisse: AutoCAD, Microstation V8 &amp; Triforma, 3d Studio MAX+VRAY, Adobe Paket, Microsoft Office Paket, FormZ, Bentley Generative Components, Solibri Modelchecker, Vectorworks.<br>» Grundkenntnisse: Autodesk Revit, Rhinoceros, SidounWinAVA, NBS Building.</p><p class=\"par\"><i class=\"ico-in\"></i><b>PROJEKTE »</b> Vorentwurf bis Ausfuhrungsplannung, Möbeldesign, örtl. Bauaufsicht für diverse Projekte, darunter eine Hotel Pension, Kleingartenhäuser, Wohnungen, Klavierübungsstudio, Büro, Ausstellungen, Ateliers / Café-Bar &amp; Einfamilienhäuser hauptsächlich in Wien.</p><p class=\"par\"><i class=\"ico-in\"></i><b>SKILLS »</b> Vorentwurf bis Ausfuhrungsplannung, Möbeldesign, örtl. Bauaufsicht für diverse Projekte, darunter eine Hotel Pension, Kleingartenhäuser, Wohnungen, Klavierübungsstudio, Büro, Ausstellungen, Ateliers / Café-Bar &amp; Einfamilienhäuser hauptsächlich in Wien.</p>","t col");
  h+=img(235,290,200,150)+cap(235,408,200,32,"WHO IS THIS GUY?");
  h+=img(895,290,200,150)+cap(895,408,200,32,"WHO IS THIS GUY?");
  h+=bar(235,250,200,5)+bar(895,250,200,5);
  h+=txt(895,257,420,25,"<b>» Architect Steuart J Mackenzie HARRISON BArch MArch ARB</b>");
  h+=txt(235,257,420,25,"<b>» Architekt Cuong TRAN-VIET BArch DipArch</b>");
  h+=txt(1115,290,200,150,"<b>Kontakt:</b><br>T: +43 [0] 699 1941 9240<br>E: steuart@dasein-design.net<br>---<br>Staatsbürgerschaft: Schottland [Europäisch!]<br>---<br>Sprachen: Englisch [Muttersprache] &amp; Deutsch [B2]");
- h+=txt(455,290,200,130,"<b>Kontakt:</b><br>T: +43 [0] 676 4822 464<br>E: cuong@dasein-design.net<br>---<br>Staatsbürgerschaft: Österreich [EU]<br>---<br>Sprachen: Deutsch &amp; Vietnamesich [Muttersprache] &amp; English [verhandlungssicher]");
- h+=txt(675,114,170,125,"<b>IT »</b> Experte: Archicad<br>» gute Kenntnisse: AutoCAD, Microstation V8 &amp; Triforma, 3d Studio MAX+VRAY, Adobe Paket, Microsoft Office Paket, FormZ, Bentley Generative Components, Solibri Modelchecker, Vectorworks.<br>» Grundkenntnisse: Autodesk Revit, Rhinoceros, SidounWinAVA, NBS Building.");
- h+=txt(675,254,170,90,"<b>PROJEKTE »</b> Vorentwurf bis Ausfuhrungsplannung, Möbeldesign, örtl. Bauaufsicht für diverse Projekte, darunter eine Hotel Pension, Kleingartenhäuser, Wohnungen, Klavierübungsstudio, Büro, Ausstellungen, Ateliers / Café-Bar &amp; Einfamilienhäuser hauptsächlich in Wien.");
- h+=txt(675,378,170,90,"<b>SKILLS »</b> Vorentwurf bis Ausfuhrungsplannung, Möbeldesign, örtl. Bauaufsicht für diverse Projekte, darunter eine Hotel Pension, Kleingartenhäuser, Wohnungen, Klavierübungsstudio, Büro, Ausstellungen, Ateliers / Café-Bar &amp; Einfamilienhäuser hauptsächlich in Wien.");
- [[851,114],[851,250],[850,370],[850,57]].forEach(([x,y])=>h+=box("ico",x+3,y+3,null,null));
+ h+=txt(455,290,200,165,"<b>Kontakt:</b><br>T: +43 [0] 676 4822 464<br>E: cuong@dasein-design.net<br>---<br>Staatsbürgerschaft: Österreich [EU]<br>---<br>Sprachen: Deutsch &amp; Vietnamesich [Muttersprache] &amp; English [verhandlungssicher]");
  h+=txt(896,455,420,523,`<b>Qualifications:</b> ……………………………… [Vienna, Glasgow &amp; London]<br><b>Professional:</b><br>2019 ZT: Arch+Ing: Architektenbefugnis des "Bundeskammer der ZiviltechnikerInnen, Österreich". [EU] [pos. Bescheid/n. vereidet]<br>2004 ARB: Architektenbefugnis des "Architects Registration Board of the United Kingdom". [UK] [Reg. No.: 069180A]<br>2004 RIAS: Mitglied der "Royal Incorporation of Architects in Scotland". [SCO] [Reg. No.: 8234]<br><b>Academic:</b> [* Mackintosh School of Architecture, Glasgow School of Art &amp; Glasgow University]<br>1994 Master of Architecture [M. Arch]*<br>1993 Diploma of Architecture [Dip. Arch]*<br>1992 RIBA Professional Practice Examination [Part II]*<br>1989 RIBA Professional Practice Examination [Part I]*<br>1989 Bachelor of Architecture [B. Arch]*<br><b>Akademische Tätigkeit</b> ………………………………………………<br><b>Univ. Stellen:</b><br>Mär.’02 - Aug.’17 » Technische Universität [TU Wien. Wien, Österreich] Institut für Architektur &amp; Entwerfen / Abteilung für Gebäudelehre und Entwerfen [E253/1] - Universitätslektor [Univ. Lekt.] - Sommersemester Studio &amp; MA/BA Tutor [Ass. Prof W Koelbl - 2014]<br>Mar.’14 - Sep.’14 &amp; Sep.’06 - Aug.’12 » New Design University [NDU. St. Pölten, Österreich] Fakultät für Gestaltung [Bachelor Lehrgang - BA Innenarchitektur &amp; 3D Gestaltung] - co-Leiter [1 JG] &amp; Major Project Tutor [3 JG] - Leiter des Internationalen Büros: Aug.’09 - Aug.’12 - Mitglied des Akademischen Rates: Aug.’09 - Aug.’12<br><b>Gastkritiker:</b><br>Jul.’09 » Universität Belgrad - Fakultät für Architektur [Belgrad, Serbien] - eingeladen von Prof. Zoran Lazović [Leiter d. Departments f. Architektur] - Diplompräsentationen<br>Dez.’08 » Ryerson University - School of Interior Design [Toronto, Kanada] - eingeladen von Prof. Jana Macalik [Lower School Coordinator] – Projektpräsentationen<br>Jun.’19 » New Design University [NDU. St. Pölten, Österreich] - Externer Gutachter/Berater: Curricula / Akkreditierung / Masterpräsentationen [Master Innenarchitektur]<br><b>Berater:</b><br>Jul.’03 - Jän.’04 » New Design University [NDU. St. Pölten, Österreich] [in Zusammenarbeit mit Kingston University, London, England &amp; WiFi, St. Pölten, Österreich.] - Externer Berater: Curricula / Akkreditierung für eine neue Privat Universität [Innenarchitektur]<br><b>Berufliche Tätigkeiten:</b> ……………………………… Auswahl…<br>als Mitarbeiter: 1989 - 2005 Mitarbeit in diversen Architekturbüros, darunter Atelier Ernst Hoffmann, Büro Geiswinkler, Atelier Artec und Büro Hagmüller [Wien], Tim Bushe Associates [London] &amp; E.C. Riach Architects [Glasgow]<br>Tätigkeit: Entwurfs-, Einreich und Ausführungsplanung für Bürogebäude und Einkaufszentren, Cafés/Restaurants, Wohngebäude und Dachgeschoßausbauten, Einfamilienhäuser, Gesundheits- und Ärzte-Zentrum, u.a.`,"t xs");
  h+=txt(236,455,420,515,`<b>Qualifications:</b> ……………………………… [Vienna, Glasgow &amp; London]<br><b>Professional:</b><br>2010 ZT: Arch+Ing: Architektenbefugnis des "Bundeskammer der ZiviltechnikerInnen, Österreich". [EU]<br>2005 ARB: Architektenbefugnis des "Architects Registration Board of the United Kingdom". [UK] [Reg. No.: 069180A]<br><b>Academic:</b><br>Sep.’00 - Jun.’02 » Bartlett School of Architecture, UCL [London, England] - Diploma of Architecture [Dip. Arch]**<br>2002 RIBA Professional Practice Examination [Part II]*<br>1998 RIBA Professional Practice Examination [Part I]*<br>Okt.’96 - Jun.’98 » Mackintosh School of Architecture, Glasgow University [Glasgow, Schottland] - Bachelor of Architecture [B. Arch]<br>Okt.’90 - Dez.’95 » Technische Universität, Fakultät Architektur [Wien, Österreich]<br><b>Berufliche Tätigkeiten:</b> ……………………………… Auswahl…<br>als Mitarbeiter: [1993 – 2021] in diversen Architekturbüros in Wien, Glasgow &amp; London<br>Jan.’21 - Mai.’21 » Franz und Sue Architekten [Wien, Österreich] • Evangelischer Schulcampus Nürnberg (Vorentwurfsplanung) • Schulcampus Puntigam (Detailplanung)<br>Sep.’19 - Mai.’20 » BWM Architekten [Wien, Österreich] • Diverse Hotelprojekte im Ausland (Planungs-, Projekt- &amp; Teamleitung, Mitarbeit an Vorentwurfsplanung) • Fitout Peek &amp; Cloppenburg Etele Plaza Budapest (Planungs-, Projekt- &amp; Teamleitung, Vorentwurfsplanung bis Ausschreibungsplanung)<br>Mar.’10 - Aug.’19 » BEHF Architects [Wien, Österreich] • Roll-out ALDI Italien &amp; Hofer Österreich (Planungs-, Projekt- &amp; Teamleitung für das Rollout, Mitarbeit an Entwurfs- &amp; Einreichplanung, Leitung des BIM Rollouts bzw. BIM Koordination &amp; Monitoring inkl. Erstellen von BIM-Standards, IFC Austauschprotokoll, BIM Handbücher, etc.) • Hotel Elisabethstraße, Wien (Entwurfs- &amp; Einreichplanung) • Arkade Salzburg Refurbishment, Salzburg (Mitarbeit an Ausführungs- &amp; Detailplanung &amp; Mieterkoordination in ArchiCAD) • Münzwardeingasse 2 Refurbishment, Wien (Bauherrenkoordinationsplanung in ArchiCAD) • UNO Shopping Center Refurbishment, Leonding (Ausführungsplanung, Erstellung von Leitdetails in ArchiCAD)<br>Jun.’99 - Feb.’10 » Aedas, Ian Simpson Architects, David Morley Architects, Arthur Collin Architect &amp; Gregory Phillips [London, England] (Projektleiter zuständig für Entwurf, Einreichung, Ausführungs- und Detailplanung)<br>Jan.’96 - Sep.’96 » Zivildienst [AKH Wien]<br>Mar.’93 - Jan.’96 » Atelier Roland Hagmüller, Architekt Richard Gala &amp; ZMT Medizintechnik Gmbh. [Wien, Österreich]`,"t xs");
  h+=pdf(1294,978,1194,100,"dd - Steuart CV.pdf","services");

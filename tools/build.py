@@ -119,7 +119,7 @@ html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
   }});
   function update(){{
     const i=Math.max(0,Math.min(pgs.length-1,Math.round(sc.scrollTop/1024))), id=pgs[i].id;
-    if(id===cur) return; cur=id; chromes.forEach(c=>c.classList.toggle('on',c.dataset.pg===id)); document.querySelectorAll('.hot.tab').forEach(t=>t.classList.toggle('cur',t.getAttribute('href')==='#'+id));
+    if(id===cur) return; if(cur==='contact'&&map) homeView(); cur=id;   // leaving the contact page resets the map chromes.forEach(c=>c.classList.toggle('on',c.dataset.pg===id)); document.querySelectorAll('.hot.tab').forEach(t=>t.classList.toggle('cur',t.getAttribute('href')==='#'+id));
   }}
   sc.addEventListener('scroll',update,{{passive:true}});
   addEventListener('keydown',e=>{{

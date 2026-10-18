@@ -5,12 +5,17 @@ ORDER = ['intro', 'services', 'projects', 'downloads', 'bits', 'contact']
 ROOT = 'bg-white relative'  # each frame keeps Figma's root styling
 
 sections = []
+# Figma's pointer circles + numbers on the intro are redrawn as clean, clickable circles (same size, place and colours)
+PIN_NODES = {'1:190', '1:212', '1:215', '1:218', '1:221', '1:210', '1:213', '1:216', '1:219', '1:222'}
 for pid in ORDER:
     extra = ''
-    if pid == 'intro':  # the numbered pointers on the beetle jump to their pages
-        for (x, y), target in zip([(320, 347), (540, 744), (760, 298), (980, 692), (1200, 257)], ORDER[1:]):
-            extra += f'<a class="hot pin" href="#{target}" style="left:{x}px;top:{y}px;width:30px;height:30px" aria-label="{target}"></a>'
-    sections.append(f'<section class="pg" id="{pid}"><div class="{ROOT} frame">{"".join(S[pid]["content"])}{extra}</div></section>')
+    items = S[pid]["content"]
+    if pid == 'intro':
+        items = [h for h in items if not any(f'data-node-id="{n}"' in h[:400] for n in PIN_NODES)]
+        for (x, y), target, num in zip([(320, 347), (540, 744), (760, 298), (980, 692), (1200, 257)], ORDER[1:], ['01', '02', '03', '04', '05']):
+            cls = 'pin lime' if num == '02' else 'pin'
+            extra += f'<a class="hot {cls}" href="#{target}" style="left:{x}px;top:{y}px" aria-label="{target}">{num}</a>'
+    sections.append(f'<section class="pg" id="{pid}"><div class="{ROOT} frame">{"".join(items)}{extra}</div></section>')
 
 chromes = ''.join(f'<div class="chrome" data-pg="{pid}">{"".join(S[pid]["chrome"])}</div>' for pid in ORDER)
 labels = ['us &amp; our services', 'projects', 'downloads &amp; links', 'bits &amp; bats', 'contact']
@@ -39,8 +44,10 @@ html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
 .chrome.on{{visibility:visible}}
 .hot{{position:absolute;display:block;z-index:5}}
 .hot.tab:hover{{background:rgba(255,255,255,.25);outline:1px solid rgba(0,0,0,.15)}}
-.hot.pin{{border-radius:50%}}
-.hot.pin:hover{{background:rgba(205,255,62,.55)}}
+.hot.pin{{width:30px;height:30px;box-sizing:border-box;border-radius:50%;border:calc(1px / var(--s,1)) solid #000;background:#bfbfbf;
+  display:flex;align-items:center;justify-content:center;font:400 18px/1 Calibri,Carlito,sans-serif;color:#000;text-decoration:none;z-index:6;transition:background .15s}}
+.hot.pin.lime{{background:#d4fb4d;font-weight:700}}
+.hot.pin:hover,.hot.pin:focus-visible,.hot.pin:active{{background:#d4fb4d;font-weight:700;z-index:7}}
 .hot:focus-visible{{outline:2px solid red;outline-offset:2px}}
 .gl{{position:absolute;left:0;top:0;pointer-events:none;z-index:30}}
 /* dashed frames around images: same thin light-grey dash as the guide lines */

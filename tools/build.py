@@ -210,5 +210,6 @@ html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
 </body>
 </html>
 '''
+html = html.replace('> 2022<', '> 2026<')   # copyright year
 open('site/index.html', 'w').write(html)
 print(len(html))

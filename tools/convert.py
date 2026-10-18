@@ -1,0 +1,96 @@
+"""Convert the Figma React+Tailwind exports into plain HTML fragments + optimised assets."""
+import re, os, json, html, shutil
+from PIL import Image, ImageDraw, ImageOps
+
+PAGES = {'intro': 'LIntro', 'services': 'LUsOurServices01', 'projects': 'LProjects02',
+         'downloads': 'LDownloadsLinks03', 'bits': 'LBitsBats04', 'contact': 'LContact05'}
+# Images that are real identity documents: never published, replaced by a neutral placeholder
+PRIVATE = {('services', 'imgImage'), ('services', 'imgImage1'), ('projects', 'imgImage'), ('bits', 'imgImage18')}
+
+OUT = 'site'
+os.makedirs(f'{OUT}/img', exist_ok=True)
+os.makedirs('frag', exist_ok=True)
+
+FONT = {
+    "font-['Calibri:Regular']": 'fcal-r',
+    "font-['Calibri:Bold']": 'fcal-b',
+    "font-['Calibri:Light']": 'fcal-l',
+    "font-['Inter:Semi_Bold']": 'finter',
+}
+
+def optimise(pid, name, src):
+    """Return published path for an asset, resizing/compressing big photos."""
+    ext = src.rsplit('.', 1)[1]
+    base = f'{pid}-{name}'
+    if (pid, name) in PRIVATE:
+        im = Image.open(src)
+        w, h = im.size
+        ph = Image.new('RGB', (w, h), (214, 214, 210))
+        d = ImageDraw.Draw(ph)
+        d.rectangle([0, 0, w - 1, h - 1], outline=(190, 190, 186), width=2)
+        out = f'{OUT}/img/{base}.png'; ph.save(out, optimize=True)
+        return out
+    if ext == 'svg':
+        out = f'{OUT}/img/{base}.svg'; shutil.copy(src, out); return out
+    im = ImageOps.exif_transpose(Image.open(src))
+    big = max(im.size) > 1600
+    if big:
+        im.thumbnail((1600, 1600), Image.LANCZOS)
+    if im.mode == 'RGB' or (im.mode == 'RGBA' and im.getextrema()[3][0] == 255):
+        out = f'{OUT}/img/{base}.jpg'
+        im.convert('RGB').save(out, quality=84, optimize=True, progressive=True)
+    else:
+        out = f'{OUT}/img/{base}.png'
+        if big or os.path.getsize(src) > 200_000:
+            im.save(out, optimize=True)
+        else:
+            shutil.copy(src, out)
+    return out
+
+def jsx_to_html(t, pid):
+    consts = dict(re.findall(r'const (\w+) = "(https://www\.figma\.com/api/mcp/asset/[^"]+)";', t))
+    paths = {}
+    for name, url in consts.items():
+        ext = url.rsplit('.', 1)[1]
+        paths[name] = optimise(pid, name, f'assets/{pid}/{name}.{ext}').replace(f'{OUT}/', '')
+    body = t[t.index('return (') + len('return ('): t.rindex(');')]
+    body = re.sub(r'\{`([^`]*)`\}', lambda m: html.escape(m.group(1), quote=False), body)
+    body = re.sub(r'src=\{(\w+)\}', lambda m: f'src="{paths[m.group(1)]}"', body)
+    body = body.replace('style={{ containerType: "size" }}', 'style="container-type:size"')
+    body = body.replace('className=', 'class=')
+    body = re.sub(r'<(div|span|p|a)(\s[^<>]*?)?\s*/>', lambda m: f'<{m.group(1)}{m.group(2) or ""}></{m.group(1)}>', body)
+    for k, v in FONT.items():
+        body = body.replace(k, v)
+    # JSX whitespace rules: line breaks + indentation between/around tags are not text
+    body = re.sub(r'>\s*\n\s*', '>', body)
+    body = re.sub(r'\s*\n\s*<', '<', body)
+    def unrotate(m):
+        pre, h, w, rest = m.group(1), m.group(2), m.group(3), m.group(4)
+        src = re.search(r'src="([^"]+)"', rest)
+        if src:
+            iw, ih = Image.open(f'{OUT}/{src.group(1)}').size
+            if ih / iw > 3:
+                return f'<div class="flex-none"><div class="{pre}h-[{w}px] relative w-[{h}px]"{rest}'
+        return m.group(0)
+    body = re.sub(r'<div class="-rotate-90 flex-none"><div class="([^"]*?)h-\[(\d+)px\] relative w-\[(\d+)px\]"([^>]*><img[^>]*>)', unrotate, body)
+    # side-bar texture: Figma rotates the fill back, so show it upright in its 90x570 slot
+    body = re.sub(r'<div class="-rotate-90 flex-none"><div class="border-\[0\.5px\] border-solid border-white h-\[90px\] relative w-\[570px\]"',
+                  '<div class="flex-none"><div class="border-[0.5px] border-solid border-white h-[570px] relative w-[90px]"', body)
+    # unify Figma's two blacks/greys? no: keep values exactly
+    return body.strip(), paths
+
+manifest = {}
+for pid, fn in PAGES.items():
+    h, paths = jsx_to_html(open(fn + '.jsx').read(), pid)
+    if pid == 'services':
+        # personal data kept off the public site
+        h = re.sub(r'<p class="mb-0">\s*<span class="leading-\[normal\]">Geburts(datum|ort): </span>\s*<span[^>]*>[^<]*</span>\s*</p>', '', h)
+        # Figma links pointed to a placeholder address; link the address that is shown
+        parts = h.split('href="mailto:steux@steux.com"')
+        # each address appears on an <a> and its inner <span>: 4 occurrences, Steuart's first
+        addrs = ['steuart@dasein-design.net'] * 2 + ['cuong@dasein-design.net'] * 2
+        h = parts[0] + ''.join(f'href="mailto:{addrs[i]}"' + p for i, p in enumerate(parts[1:]))
+    open(f'frag/{pid}.html', 'w').write(h)
+    manifest[pid] = paths
+json.dump(manifest, open('frag/manifest.json', 'w'), indent=1)
+print('ok', {k: len(v) for k, v in manifest.items()})

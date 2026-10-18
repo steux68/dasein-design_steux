@@ -1,0 +1,12 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="15.2606" height="10.6106" viewBox="0 0 15.2606 10.6106" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="Polygon 7">
+<use xlink:href="#stroke0_0_13" fill="#CDFF3E" fill-opacity="0.86"/>
+<mask id="stroke1_0_13" fill="white">
+<use xlink:href="#stroke0_0_13"/>
+</mask>
+<path d="M1.00184 10.6106H14.2588C15.0886 10.6106 15.5574 9.65821 15.0512 9.00065L8.42272 0.390006C8.02242 -0.130002 7.23821 -0.130002 6.83791 0.390006L0.209436 9.00065C-0.296761 9.65822 0.172004 10.6106 1.00184 10.6106Z" stroke="black" mask="url(#stroke1_0_13)"/>
+</g>
+<defs>
+<path id="stroke0_0_13" d="M6.83791 0.390006C7.23821 -0.130002 8.02242 -0.130002 8.42272 0.390005L15.0512 9.00065C15.5574 9.65821 15.0886 10.6106 14.2588 10.6106H1.00184C0.172004 10.6106 -0.296761 9.65822 0.209436 9.00065L6.83791 0.390006Z"/>
+</defs>
+</svg>

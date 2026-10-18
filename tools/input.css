@@ -1,0 +1,7 @@
+@import "tailwindcss" source(none);
+@source "./frag/*.html";
+@source "./shell.html";
+.fcal-r{font-family:Calibri,Carlito,sans-serif;font-weight:400}
+.fcal-b{font-family:Calibri,Carlito,sans-serif;font-weight:700}
+.fcal-l{font-family:"Calibri Light",Calibri,Carlito,sans-serif;font-weight:300}
+.finter{font-family:Inter,sans-serif}

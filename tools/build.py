@@ -30,6 +30,7 @@ html = f'''<!doctype html>
 <title>dasein-design Big Stripes</title>
 <link rel="stylesheet" href="fonts.css">
 <link rel="stylesheet" href="figma.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" data-live-map>
 <style>
 html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
 .strip{{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}}
@@ -75,6 +76,17 @@ html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
    repeating-linear-gradient(to bottom,var(--c) 0 var(--d),transparent var(--d) var(--p)) left top/var(--w) 100% no-repeat,
    repeating-linear-gradient(to bottom,var(--c) 0 var(--d),transparent var(--d) var(--p)) right top/var(--w) 100% no-repeat}}
 .gl i{{position:absolute;display:block}}
+/* live map on the contact page: OpenStreetMap, zoomable, with the dasein-design marker */
+.mapclip{{position:absolute;overflow:hidden;z-index:20;pointer-events:none}}
+.mapwrap{{position:absolute;pointer-events:auto;background:#e8e4dc}}
+#livemap{{position:absolute;inset:0;background:#e8e4dc}}
+.mz{{position:absolute;z-index:500;display:flex;flex-direction:column;gap:1px}}
+.mz button{{padding:0;margin:0;border:1px dashed #c4c4c4;background:#fff;cursor:pointer;display:block}}
+.mz button img{{display:block;width:100%;height:100%}}
+.mz button:hover{{border:1px solid #e30613}}
+.pin42{{position:relative;text-align:center;font-family:Calibri,Carlito,sans-serif;font-weight:700;color:#000}}
+.pin42 img{{display:block;margin:0 auto}}
+.leaflet-container .leaflet-control-attribution{{font:10px/1.3 Calibri,Carlito,sans-serif;background:rgba(255,255,255,.7)}}
 </style>
 </head>
 <body>
@@ -88,7 +100,10 @@ html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
 <div class="hotlayer">{hot}</div>
 </div>
 <canvas class="gl" id="gl"></canvas>
+<div class="mapclip" id="mapclip" hidden><div class="mapwrap" id="mapwrap"><div id="livemap"></div>
+<div class="mz" id="mz"><button id="zin" aria-label="Zoom in"><img src="img/contact-imgZoomIn.png" alt=""></button><button id="zout" aria-label="Zoom out"><img src="img/contact-imgZoomOut.png" alt=""></button></div></div></div>
 </div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" data-live-map></script>
 <script>
 (function(){{
   const sc=document.getElementById('scroller'), pgs=[...sc.children];
@@ -111,8 +126,9 @@ html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
     const d={{ArrowDown:1,PageDown:1,ArrowRight:1,' ':1,ArrowUp:-1,PageUp:-1,ArrowLeft:-1}}[e.key]; if(!d) return;
     e.preventDefault(); const i=Math.round(sc.scrollTop/1024)+d; go(pgs[Math.max(0,Math.min(pgs.length-1,i))].id);
   }});
+  let S=1, map=null;
   function fit(){{
-    const s=Math.min(innerWidth/1440,innerHeight/1024);
+    const s=Math.min(innerWidth/1440,innerHeight/1024); S=s;
     document.documentElement.style.setProperty('--s',s);
     /* light grey dashed guide lines and tick marks, drawn on a canvas over everything in whole screen pixels,
        so every line is exactly one pixel thin and every dash is the same length */
@@ -127,7 +143,38 @@ html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
       const Y=Math.round(y*k), X0=Math.round(x*k), X1=Math.round((x+10)*k);
       for(let X=X0;X<X1;X+=dash+gap) g.fillRect(X,Y,Math.min(dash,X1-X),1);}}));
   }}
-  fit(); addEventListener('resize',fit);
+  /* live map: positioned over the contact page's map area, scrolling with it, clipped to the content area */
+  const HOME=[48.211431,16.333964], clip=document.getElementById('mapclip'), wrap=document.getElementById('mapwrap'), contact=document.getElementById('contact');
+  function placeMap(){{
+    if(!map) return;
+    const s=S, y=(contact.offsetTop-sc.scrollTop+440-32)*s;
+    clip.style.cssText=`left:${{225*s}}px;top:${{32*s}}px;width:${{1100*s}}px;height:${{992*s}}px`;
+    wrap.style.cssText=`left:${{230*s}}px;top:${{y}}px;width:${{860*s}}px;height:${{560*s}}px`;
+    const mz=document.getElementById('mz'); mz.style.cssText=`left:${{835*s}}px;top:${{252*s}}px`;
+    mz.querySelectorAll('button').forEach(b=>{{b.style.width=b.style.height=(25*s)+'px';}});
+  }}
+  function homeView(z){{
+    map.invalidateSize(); map.setView(HOME,z||17,{{animate:false}});
+    map.panBy([-(558-430)*S,-(297-280)*S],{{animate:false}});   // the marker sits where the design puts it
+  }}
+  function marker(){{
+    const s=S;
+    return L.divIcon({{className:'',iconSize:[25*s,52*s],iconAnchor:[12.5*s,35*s],
+      html:`<div class="pin42" style="width:${{25*s}}px;font-size:${{12*s}}px"><img src="img/contact-imgVector.svg" alt="" style="width:${{25*s}}px;height:${{35*s}}px">42/6</div>`}});
+  }}
+  let pin=null;
+  if(window.L){{
+    clip.hidden=false;
+    map=L.map('livemap',{{zoomControl:false,scrollWheelZoom:false,attributionControl:true}});
+    L.tileLayer('https://tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png',{{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}}).addTo(map);
+    map.attributionControl.setPrefix(false);
+    placeMap(); homeView();
+    pin=L.marker(HOME,{{icon:marker(),keyboard:false}}).addTo(map);
+    document.getElementById('zin').onclick=()=>map.zoomIn();
+    document.getElementById('zout').onclick=()=>map.zoomOut();
+    sc.addEventListener('scroll',placeMap,{{passive:true}});
+  }}
+  fit(); addEventListener('resize',()=>{{fit(); if(map){{placeMap(); homeView(map.getZoom()); pin.setIcon(marker());}}}});
   if(location.hash) go(location.hash.slice(1),true);
   update();
 }})();

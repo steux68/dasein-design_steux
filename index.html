@@ -149,6 +149,14 @@ html,body{margin:0;height:100%;overflow:hidden;background:#fff}
     document.getElementById('zin').onclick=()=>map.zoomIn();
     document.getElementById('zout').onclick=()=>map.zoomOut();
     sc.addEventListener('scroll',placeMap,{passive:true});
+    /* setup helper: open the site with ?setup to see the map's current view, to copy it as the new default */
+    if(new URLSearchParams(location.search).has('setup')){
+      const box=document.createElement('div');
+      box.style.cssText='position:absolute;left:8px;top:8px;z-index:600;background:#fff;border:1px solid #e30613;padding:6px 8px;font:13px/1.3 Calibri,Carlito,sans-serif;user-select:all';
+      wrap.appendChild(box);
+      const show=()=>{const c=map.getCenter(); box.textContent=`VIEW ${c.lat.toFixed(6)}, ${c.lng.toFixed(6)}, ${map.getZoom()}`;};
+      map.on('moveend zoomend',show); show();
+    }
   }
   fit(); addEventListener('resize',()=>{fit(); if(map){placeMap(); homeView(map.getZoom()); pin.setIcon(marker());}});
   if(location.hash) go(location.hash.slice(1),true);

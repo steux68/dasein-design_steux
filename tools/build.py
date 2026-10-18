@@ -20,6 +20,18 @@ for pid in ORDER:
         sides = ['r', 'l', 'r', 'l', 'l']   # which side of its circle each title sits on
         for (x, y), target, num, nm, sd in zip([(320, 347), (540, 744), (760, 298), (980, 692), (1200, 257)], ORDER[1:], ['01', '02', '03', '04', '05'], names, sides):
             extra += f'<a class="hot pin" href="#{target}" style="left:{x}px;top:{y}px">{num}<span class="pl {sd}">{nm}</span></a>'
+    if pid == 'downloads':   # every logo + caption opens that organisation's website in a new tab
+        LINKS = [[('Kammer der Ziviltechniker:innen W/NÖ/B', 'https://ost.zt.at/'), ('Architects Registration Board', 'https://arb.org.uk/'),
+                  ('MA 37 Baupolizei', 'https://www.wien.gv.at/wohnen/baupolizei/'), ('Wiener Rauchfangkehrer', 'https://www.rauchfangkehrer.wien/'),
+                  ('Architekturzentrum Wien', 'https://www.azw.at/')],
+                 [('nextroom', 'https://www.nextroom.at/'), ('wohnfonds_wien', 'https://www.wohnfonds.wien.at/'),
+                  ('OIB', 'https://www.oib.or.at/'), ('Austrian Standards', 'https://www.austrian-standards.at/'), ('ÖGFA', 'https://www.oegfa.at/')],
+                 [('Gebietsbetreuung Stadterneuerung', 'https://www.gbstern.at/'), ('Kleingärtner', 'https://www.kleingaertner.at/'),
+                  ('Bundesdenkmalamt', 'https://www.bda.gv.at/'), ('IG Architektur', 'https://www.ig-architektur.at/'),
+                  ('MA 21 Flächenwidmung', 'https://www.wien.gv.at/stadtentwicklung/flaechenwidmung/')]]
+        for col, x in zip(LINKS, (675, 895, 1115)):
+            for i, (nm, url) in enumerate(col):
+                extra += f'<a class="hot lk" href="{url}" target="_blank" rel="noopener" aria-label="{nm} (opens in a new tab)" style="left:{x}px;top:{438 + 110 * i}px"></a>'
     sections.append(f'<section class="pg" id="{pid}"><div class="{ROOT} frame">{"".join(items)}{extra}</div></section>')
 
 chromes = ''.join(f'<div class="chrome{" on" if pid == "intro" else ""}" data-pg="{pid}">{"".join(h for h in S[pid]["chrome"] if "inset-[95.7%_6.25%_2.83%_92.71%]" not in h[:300])}</div>' for pid in ORDER)
@@ -92,6 +104,9 @@ html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
 .chrome.arrive [class*="h-[560px]"][class*="w-[84px]"]{{animation:arrive .9s cubic-bezier(.2,.7,.2,1) both}}
 @keyframes arrive{{from{{opacity:0;transform:translateY(40px)}}to{{opacity:1;transform:none}}}}
 @media (prefers-reduced-motion:reduce){{.chrome.arrive [class*="h-[560px]"][class*="w-[84px]"]{{animation:none}}}}
+.hot.lk{{width:200px;height:100px}}
+.hot.lk::before{{content:"";position:absolute;left:0;top:0;width:200px;height:50px}}
+.hot.lk:hover::before,.hot.lk:focus-visible::before{{box-shadow:inset 0 0 0 calc(1.5px / var(--s,1)) #e30613}}
 /* services: section headings in red, to match their red symbols */
 [data-node-id="1:554"] > p:first-child,[data-node-id="1:628"] > p:first-child,[data-node-id="1:633"] > p:first-child,[data-node-id="1:634"] > p:first-child{{color:#e30613}}
 /* arrow to the next page, with its label; on the last page it points up and leads back to the start */

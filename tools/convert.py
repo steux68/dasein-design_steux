@@ -90,6 +90,15 @@ for pid, fn in PAGES.items():
         # each address appears on an <a> and its inner <span>: 4 occurrences, Steuart's first
         addrs = ['steuart@dasein-design.net'] * 2 + ['cuong@dasein-design.net'] * 2
         h = parts[0] + ''.join(f'href="mailto:{addrs[i]}"' + p for i, p in enumerate(parts[1:]))
+    if pid == 'projects':
+        # "who is this guy?" spans two columns: 235-655 (420 wide), not 430, so it stops at the column edge like the rest
+        for old, new in [
+            ('left-[235px] top-[440px] w-[430px]" data-node-id="1:248"><div class="-rotate-90 flex-none"><div class="border-[0.5px] border-black border-dashed h-[430px] relative w-[370px]"',
+             'left-[235px] top-[440px] w-[420px]" data-node-id="1:248"><div class="-rotate-90 flex-none"><div class="border-[0.5px] border-black border-dashed h-[420px] relative w-[370px]"'),
+            ('h-[35px] left-[235px] top-[775px] w-[430px]" data-node-id="1:262"', 'h-[35px] left-[235px] top-[775px] w-[420px]" data-node-id="1:262"'),
+            ('top-[792.5px] w-[427px]" data-node-id="1:263"', 'top-[792.5px] w-[417px]" data-node-id="1:263"')]:
+            assert old in h, old[:40]
+            h = h.replace(old, new)
     open(f'frag/{pid}.html', 'w').write(h)
     manifest[pid] = paths
 json.dump(manifest, open('frag/manifest.json', 'w'), indent=1)

@@ -100,11 +100,11 @@ html,body{margin:0;height:100%;overflow:hidden;background:#fff}
 .pcur{position:fixed;left:0;top:0;width:0;height:0;pointer-events:none;z-index:2147483000;display:none}
 .pcur.on{display:block}
 .pcur b,.pcur::before,.pcur::after{content:"";position:absolute;left:0;top:0;border-radius:50%;transform:translate(-50%,-50%)}
-.pcur b{width:8px;height:8px;background:#d4fb4d;box-shadow:inset 0 0 0 1px #e30613;animation:pcdot 1.4s ease-in-out infinite}
-.pcur::before,.pcur::after{width:8px;height:8px;border:1px solid #e30613;box-sizing:border-box;animation:pcring 1.4s ease-out infinite}
+.pcur b{width:6px;height:6px;background:#d4fb4d;box-shadow:inset 0 0 0 .5px #e30613;animation:pcdot 1.4s ease-in-out infinite}
+.pcur::before,.pcur::after{width:6px;height:6px;border:.6px solid #e30613;box-sizing:border-box;animation:pcring 1.4s ease-out infinite}
 .pcur::after{animation-delay:.7s}
 @keyframes pcdot{50%{transform:translate(-50%,-50%) scale(.75)}}
-@keyframes pcring{from{width:8px;height:8px;opacity:.9}to{width:34px;height:34px;opacity:0}}
+@keyframes pcring{from{width:6px;height:6px;opacity:.8}to{width:30px;height:30px;opacity:0}}
 @media (prefers-reduced-motion:reduce){.pcur b,.pcur::before,.pcur::after{animation:none}.pcur::after{display:none}.pcur::before{width:18px;height:18px}}
 /* over the photo the pointer becomes a small yellow arrow, pulsing and sending out thin red rings like the circle */
 .pcar{position:fixed;left:0;top:0;width:0;height:0;pointer-events:none;z-index:10;display:none}
@@ -112,10 +112,10 @@ html,body{margin:0;height:100%;overflow:hidden;background:#fff}
 .pcar svg{position:absolute;left:-24px;top:-24px;width:48px;height:48px;overflow:visible}
 .pcar.l svg{transform:rotate(180deg)}
 .pcar .k{fill:#d4fb4d;transform-origin:0 0;animation:pcak 1.4s ease-in-out infinite}
-.pcar .g{fill:none;stroke:#e30613;stroke-width:1;transform-origin:0 0;animation:pcarr 1.4s ease-out infinite}
+.pcar .g{fill:none;stroke:#e30613;stroke-width:.6;transform-origin:0 0;animation:pcarr 1.4s ease-out infinite}
 .pcar .g2{animation-delay:.7s}
 @keyframes pcak{50%{transform:scale(.8)}}
-@keyframes pcarr{from{transform:scale(1);opacity:.9;stroke-width:1}to{transform:scale(2.6);opacity:0;stroke-width:.4}}   /* lines stay about one pixel thin as they grow */
+@keyframes pcarr{from{transform:scale(1);opacity:.8;stroke-width:.6}to{transform:scale(2.6);opacity:0;stroke-width:.23}}   /* lines stay about one pixel thin as they grow */
 @media (prefers-reduced-motion:reduce){.pcar .k,.pcar .g{animation:none}.pcar .g{opacity:0}}
 /* project pop-up: only the main area is veiled and blurred; side bars, title and menu stay sharp */
 dialog.lb{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;background:transparent;overflow:hidden;color:#000}
@@ -144,9 +144,12 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
 /* top line: counter on the left, close on the right */
 .lbk{position:absolute;left:30px;top:30px;font:400 13px/25px Calibri,Carlito,sans-serif;color:#666;letter-spacing:.06em}
 .lbk b{color:#e30613;font-weight:400}
-.lbx{position:absolute;right:30px;top:30px;width:200px;height:25px;border:0;padding:0;background:#ebebeb;font:400 15px/25px Calibri,Carlito,sans-serif;color:#000;cursor:pointer;text-align:center}
-.lbx small{font-size:10px;color:#666}
-.lbx:hover,.lbx:focus-visible{color:#e30613;box-shadow:inset 0 0 0 calc(1px / var(--s,1)) #e30613;outline:none}
+.lbx{position:absolute;right:26px;top:31px;width:24px;height:24px;border:0;padding:0;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.lbx svg{width:16px;height:16px;stroke:#000;stroke-width:1;transition:stroke .2s}
+.lbx:hover svg,.lbx:focus-visible svg{stroke:#e30613;animation:lbxp 1.4s ease-in-out infinite}
+.lbx:focus-visible{outline:none}
+@keyframes lbxp{50%{transform:scale(1.3)}}
+@media (prefers-reduced-motion:reduce){.lbx:hover svg,.lbx:focus-visible svg{animation:none}}
 /* main photo */
 .lbi{position:absolute;left:30px;top:75px;width:520px;height:390px;display:flex;align-items:center;justify-content:center;background:rgba(240,240,240,.55)}
 .lbi img{width:100%;height:100%;object-fit:contain;display:block;transition:opacity .2s}
@@ -159,6 +162,7 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
 .lbn:focus-visible{outline:none}
 .tri{fill:rgba(205,255,62,.86);stroke:none}
 .lbn:hover .tri,.lbm button:hover .tri,.lbsa:hover .tri{fill:#d4fb4d}
+.lbsa .tri,.lbm .tri{stroke:#000;stroke-width:.3}
 /* beside the photo: title, text, then the project details */
 .lbc{position:absolute;left:580px;top:75px;width:310px;height:390px;overflow-y:auto;scrollbar-width:thin}
 .lbt{margin:0;font:700 20px/1.15 Calibri,Carlito,sans-serif;color:#e30613}
@@ -209,11 +213,11 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
 <div class="mapclip" id="mapclip" hidden><div class="mapwrap" id="mapwrap"><div id="livemap"></div>
 <div class="mz" id="mz"><button id="zin" aria-label="Zoom in"><img src="img/contact-imgZoomIn.webp" alt=""></button><button id="zout" aria-label="Zoom out"><img src="img/contact-imgZoomOut.webp" alt=""></button></div></div></div>
 </div></div>
-<div class="pcur" id="pcur" aria-hidden="true"><b></b></div><dialog class="lb" id="lb" aria-labelledby="lbt"><div class="pcar" id="pcar" aria-hidden="true"><svg viewBox="-24 -24 48 48"><path class="g" d="M-6 -7.5L8 0L-6 7.5Z"/><path class="g g2" d="M-6 -7.5L8 0L-6 7.5Z"/><path class="k" d="M-6 -7.5L8 0L-6 7.5Z"/></svg></div><div class="lbh"><div class="lbs" id="lbs">
+<div class="pcur" id="pcur" aria-hidden="true"><b></b></div><dialog class="lb" id="lb" aria-labelledby="lbt"><div class="pcar" id="pcar" aria-hidden="true"><svg viewBox="-24 -24 48 48"><path class="g" d="M-4.5 -5.5L6 0L-4.5 5.5Z"/><path class="g g2" d="M-4.5 -5.5L6 0L-4.5 5.5Z"/><path class="k" d="M-4.5 -5.5L6 0L-4.5 5.5Z"/></svg></div><div class="lbh"><div class="lbs" id="lbs">
 <div class="lbv"></div><div class="lbg"><i style="left:225px"></i><i style="left:445px"></i><i style="left:665px"></i><i style="left:885px"></i><i style="left:1105px"></i><i style="left:1325px"></i></div>
-<div class="lbp lbd" id="lbp" tabindex="-1" style="left:315px;top:168px;width:920px;height:720px">
+<div class="lbp" id="lbp" tabindex="-1" style="left:315px;top:168px;width:920px;height:720px">
 <div class="lbk" id="lbk"></div>
-<button type="button" class="lbx" id="lbx">close &#x2715; <small>[esc]</small></button>
+<button type="button" class="lbx" id="lbx" aria-label="close (Esc)" title="close (Esc)"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 2L14 14M14 2L2 14"/></svg></button>
 <div class="lbi lbd"><img id="lbimg" alt="">
 <button type="button" class="lbn prev" id="lbprev" aria-label="previous photo"><span><svg width="20" height="15" viewBox="-0.5 -0.5 16.26 11.61" aria-hidden="true"><path class="tri" d="M6.83791 0.390006C7.23821 -0.130002 8.02242 -0.130002 8.42272 0.390005L15.0512 9.00065C15.5574 9.65821 15.0886 10.6106 14.2588 10.6106H1.00184C0.172004 10.6106 -0.296761 9.65822 0.209436 9.00065L6.83791 0.390006Z"/></svg></span></button>
 <button type="button" class="lbn next" id="lbnext" aria-label="next photo"><span><svg width="20" height="15" viewBox="-0.5 -0.5 16.26 11.61" aria-hidden="true"><path class="tri" d="M6.83791 0.390006C7.23821 -0.130002 8.02242 -0.130002 8.42272 0.390005L15.0512 9.00065C15.5574 9.65821 15.0886 10.6106 14.2588 10.6106H1.00184C0.172004 10.6106 -0.296761 9.65822 0.209436 9.00065L6.83791 0.390006Z"/></svg></span></button></div>

@@ -34,6 +34,10 @@ for pid in ORDER:
         for col, x in zip(LINKS, (675, 895, 1115)):
             for i, (nm, url) in enumerate(col):
                 extra += f'<a class="hot lk" href="{url}" target="_blank" rel="noopener" aria-label="{nm} (opens in a new tab)" style="left:{x}px;top:{438 + 110 * i}px"></a>'
+    if pid == 'bits':   # Steuart's own photos instead of the pictures repeated from the projects and services pages
+        BITS = {'projects-imgDdLogoWithTextFinal13.webp': 'p-drawing-grille.webp', 'services-imgImage1-tall.webp': 'p-akh-crate.webp', 'projects-imgImage3.webp': 'p-scaffolding.webp', 'intro-imgImage.webp': 'p-streaks-white-blue.webp', 'projects-imgImage7.webp': 'p-pocket-watch.webp', 'projects-imgImage1.webp': 'p-barriers-night.webp', 'projects-imgDdLogoWithTextFinal14.webp': 'p-cages-night.webp', 'projects-imgImage2.webp': 'p-plastic-sheet.webp', 'projects-imgImage6.webp': 'p-section-grey.webp', 'projects-imgImage5.webp': 'p-tower-drawing-blue.webp', 'projects-imgImage8.webp': 'p-streaks-orange.webp'}
+        for a, c in BITS.items():
+            items = [h.replace('object-contain', 'object-cover').replace('img/' + a, 'img/' + c) if 'img/' + a in h else h for h in items]
     if pid == 'projects':   # each project tile opens the pop-up viewer
         extra += LB.TILES
         # "WHO IS THIS GUY?" shows Steuart's line portrait, so the ID card appears only on the services page

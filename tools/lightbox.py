@@ -32,6 +32,12 @@ PLACEHOLDER = ('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do 
                'et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.')
 # the details shown under the text, in this order; a missing entry shows a dash
 FIELDS = [('name', 'project'), ('place', 'place'), ('date', 'date'), ('client', 'client'), ('type', 'type'), ('status', 'status')]
+# coloured placeholder photos in mixed shapes (img/ph-01.svg ... ph-10.svg) until the real photos arrive:
+# each project gets nine of them after its tile photo, starting at a different one so the strips differ
+PH = [f'img/ph-{i:02d}.svg' for i in range(1, 11)]
+for n, p in enumerate(PROJECTS):
+    if len(p['imgs']) == 1:
+        p['imgs'] += (PH[n % 10:] + PH[:n % 10])[:9]
 for p in PROJECTS:
     p.setdefault('x', PLACEHOLDER)
     p.setdefault('d', {})
@@ -70,7 +76,7 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
 .lbg i{position:absolute;top:32px;height:992px;width:var(--w);pointer-events:none;
   --w:calc(1px / (var(--s,1) * var(--dpr,1)));background:repeating-linear-gradient(to bottom,#b4b4b4 0 5px,transparent 5px 7.5px)}
 /* the pop-up itself, centred in the main area */
-.lbp{position:absolute;outline:none;background:#fff;box-shadow:0 12px 40px rgba(0,0,0,.10)}
+.lbp{position:absolute;outline:none;background:rgba(255,255,255,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:0 12px 40px rgba(0,0,0,.10)}
 .lbd::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;
   --c:#c4c4c4;--d:5px;--p:7.5px;--w:calc(1px / (var(--s,1) * var(--dpr,1)));
   background:
@@ -85,7 +91,7 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
 .lbx small{font-size:10px;color:#666}
 .lbx:hover,.lbx:focus-visible{color:#e30613;box-shadow:inset 0 0 0 1.5px #e30613;outline:none}
 /* main photo */
-.lbi{position:absolute;left:30px;top:75px;width:520px;height:390px;display:flex;align-items:center;justify-content:center;background:#f6f6f6}
+.lbi{position:absolute;left:30px;top:75px;width:520px;height:390px;display:flex;align-items:center;justify-content:center;background:rgba(240,240,240,.55)}
 .lbi img{width:100%;height:100%;object-fit:contain;display:block;transition:opacity .2s}
 .lbi img.ld{opacity:0}
 .lbn{position:absolute;top:0;width:50%;height:100%;padding:0;border:0;background:none;cursor:pointer;display:flex;align-items:center;z-index:3}
@@ -110,13 +116,13 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
 .lbsa{flex:none;width:22px;height:120px;border:0;padding:0;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .lbsa:disabled{opacity:.25;cursor:default}
 .lbsa:focus-visible{outline:1px solid #e30613}
-.lbst{flex:1;height:120px;display:flex;gap:10px;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none}
+.lbst{flex:1;height:120px;display:flex;align-items:flex-end;gap:10px;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none}
 .lbst::-webkit-scrollbar{display:none}
-.lbst button{position:relative;flex:none;width:160px;height:120px;padding:0;border:0;background:#f6f6f6;cursor:pointer}
-.lbst img{width:100%;height:100%;object-fit:cover;display:block}
+.lbst button{position:relative;flex:none;padding:0;border:0;background:none;cursor:pointer;line-height:0}
+.lbst img{display:block;width:auto;height:auto;max-width:150px;max-height:120px}
 .lbst button::before{content:"";position:absolute;inset:0;z-index:1}
 .lbst button:hover::before,.lbst button:focus-visible::before{box-shadow:inset 0 0 0 1.5px #e30613}
-.lbst button.cur::before{box-shadow:inset 0 0 0 3px #e30613}
+.lbst button.cur::before{box-shadow:inset 0 0 0 3px #e30613,inset 0 0 0 6px #d4fb4d}
 .lbst button:focus-visible{outline:none}
 /* bottom line: previous / next project */
 .lbm{position:absolute;left:30px;right:30px;bottom:30px;display:flex;justify-content:space-between}
@@ -159,6 +165,7 @@ JS = '''
       $('lbt').textContent=pr.t; $('lbtx').textContent=pr.x;
       $('lbdt').innerHTML=F.map(([k,l])=>'<dt>'+l+'</dt><dd>'+esc(pr.d[k]||'–')+'</dd>').join('');
       st.innerHTML=pr.imgs.map((s,k)=>'<button type="button" data-k="'+k+'" aria-label="photo '+(k+1)+'"><img src="'+s+'" alt=""></button>').join('');
+      st.querySelectorAll('img').forEach(i=>i.addEventListener('load',arrows));
       st.scrollLeft=0;
     }
     $('lbsl').textContent='photos '+(ph+1)+' / '+pr.imgs.length;

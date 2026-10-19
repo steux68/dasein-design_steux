@@ -6,6 +6,7 @@ Each piece flies in from outside, turned and slightly larger, and lands squarely
 so white gaps of different widths show between the pieces; after a pause they all lock together
 and the real image takes over. On the start page a small pulsing dot follows the pointer with a hint
 ("click the menu or a number on the beetle") that switches sides near the edges.
+When the pointer is over the beetle its pieces ease slightly apart and close again when it leaves.
 It plays every time you arrive on the start page, never with "reduce motion" switched on.
 build.py imports HTML (placed in the intro page), CSS and JS. Run from tools/ (reads ../img/).
 """
@@ -77,9 +78,9 @@ JS = '''
     if(bug && bug.animate && !reduce){
       const ps=[...bug.children], R=(a,b)=>a+Math.random()*(b-a);
       const T=3600, LOCK=3150, SNAP=260;   /* whole run, moment the pieces lock, how long the lock takes */
-      let anims=[], run=0;
+      let anims=[], run=0, playing=false, hov=[], isOpen=false;
       const play=()=>{
-        anims.forEach(a=>a.cancel()); const me=++run;
+        anims.forEach(a=>a.cancel()); hov.forEach(a=>a.cancel()); hov=[]; isOpen=false; playing=true; const me=++run;
         fr.classList.add('bugplay');
         anims=ps.map(p=>{
           const ang=R(0,Math.PI*2), dist=R(700,1100), r=R(-160,160), d=R(0,750), fly=R(1500,1850);
@@ -98,8 +99,27 @@ JS = '''
             {duration:T,fill:'both'});
         });
         /* all pieces locked: the real beetle takes over */
-        Promise.all(anims.map(a=>a.finished)).then(()=>{ if(me===run) fr.classList.remove('bugplay'); }).catch(()=>{});
+        Promise.all(anims.map(a=>a.finished)).then(()=>{ if(me===run){ playing=false; if(!isOpen) fr.classList.remove('bugplay'); } }).catch(()=>{});
       };
+      /* pointer over the beetle: the pieces ease slightly apart, as just before they lock; they close again when it leaves */
+      const X0=parseFloat(bug.style.left), Y0=parseFloat(bug.style.top), st=document.getElementById('stage'), intro=document.getElementById('intro');
+      const RECTS=ps.map(p=>[X0+parseFloat(p.style.left), Y0+parseFloat(p.style.top), parseFloat(p.style.width), parseFloat(p.style.height)]);
+      const OPEN=ps.map(p=>{ const dx=+p.dataset.dx, dy=+p.dataset.dy, n=Math.hypot(dx,dy)||1, g=R(5,15), k=Math.max(.55,Math.min(1,n*1.6));
+        return `translate(${dx/n*g*k+R(-3,3)}px,${dy/n*g*k+R(-3,3)}px)`; });
+      function setOpen(o){
+        if(o===isOpen||playing) return; isOpen=o;
+        const from=ps.map(p=>getComputedStyle(p).transform);
+        hov.forEach(a=>a.cancel()); if(o) fr.classList.add('bugplay');
+        hov=ps.map((p,i)=>p.animate([{transform:from[i]==='none'?'none':from[i],opacity:1},{transform:o?OPEN[i]:'none',opacity:1}],
+          {duration:o?380:300,easing:o?'cubic-bezier(.2,.7,.3,1)':'cubic-bezier(.6,0,.4,1.3)',fill:'forwards'}));
+        if(!o) Promise.all(hov.map(a=>a.finished)).then(()=>{ if(!isOpen&&!playing) fr.classList.remove('bugplay'); }).catch(()=>{});
+      }
+      addEventListener('mousemove',e=>{
+        if(cur!=='intro'||playing){ if(isOpen&&!playing) setOpen(false); return; }
+        const r=st.getBoundingClientRect(), s=r.width/1440, x=(e.clientX-r.left)/s, y=(e.clientY-r.top)/s+sc.scrollTop-intro.offsetTop;
+        setOpen(RECTS.some(q=>x>=q[0]&&x<q[0]+q[2]&&y>=q[1]&&y<q[1]+q[3]));
+      },{passive:true});
+      document.addEventListener('mouseleave',()=>setOpen(false));
       document.addEventListener('pagechange',e=>{ if(e.detail==='intro') play(); });
       if(cur==='intro') play();
     }

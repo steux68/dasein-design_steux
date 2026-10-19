@@ -1,8 +1,11 @@
-"""Start page: the beetle flies in as a collage of torn pieces and puts itself together (about 3 s).
+"""Start page: the beetle flies in as a collage of square-cut pieces and puts itself together (about 3.6 s).
 
-The beetle image (transparent background) is cut into an irregular grid of pieces that tile exactly;
-only pieces that contain some beetle are kept. Each piece flies in from outside, turned and slightly
-larger, lands a little askew and then snaps into place; at the end the real image takes over.
+The beetle image (transparent background) is cut with straight, right-angled cuts into rectangles of
+mixed sizes (a recursive split, like cutting card); only pieces that contain some beetle are kept.
+Each piece flies in from outside, turned and slightly larger, and lands squarely but still apart,
+so white gaps of different widths show between the pieces; after a pause they all lock together
+and the real image takes over. On the start page a small pulsing dot follows the pointer with a hint
+("click the menu or a number on the beetle") that switches sides near the edges.
 It plays every time you arrive on the start page, never with "reduce motion" switched on.
 build.py imports HTML (placed in the intro page), CSS and JS. Run from tools/ (reads ../img/).
 """
@@ -20,53 +23,34 @@ k = im.width / W
 alpha = im.getchannel('A').resize((W, H))
 bx0, by0, bx1, by1 = alpha.getbbox()
 
-# grid points, the inner ones moved about so the pieces look torn rather than cut
-xs = [bx0 + (bx1 - bx0) * i / COLS for i in range(COLS + 1)]
-ys = [by0 + (by1 - by0) * j / ROWS for j in range(ROWS + 1)]
-cw, ch = (bx1 - bx0) / COLS, (by1 - by0) / ROWS
-pt = {}
-for i in range(COLS + 1):
-    for j in range(ROWS + 1):
-        dx = rnd.uniform(-.3, .3) * cw if 0 < i < COLS else 0
-        dy = rnd.uniform(-.3, .3) * ch if 0 < j < ROWS else 0
-        pt[i, j] = (xs[i] + dx, ys[j] + dy)
-
-
-def edge(a, b, n=3, amp=6):
-    """a ragged edge from a to b: a few small zigzags, the same for both pieces that share it"""
-    key = (min(a, b), max(a, b))
-    r = random.Random(hash(key) & 0xffffffff)
-    out = []
-    for t in range(1, n + 1):
-        f = t / (n + 1)
-        out.append((a[0] + (b[0] - a[0]) * f + r.uniform(-amp, amp), a[1] + (b[1] - a[1]) * f + r.uniform(-amp, amp)))
-    return out if a <= b else out
-
-
+# recursive straight cuts: split the longer side at a random point until pieces are small enough
 pieces = []
 apx = alpha.load()
-for i in range(COLS):
-    for j in range(ROWS):
-        c = [pt[i, j], pt[i + 1, j], pt[i + 1, j + 1], pt[i, j + 1]]
-        poly = []
-        for q in range(4):
-            a, b = c[q], c[(q + 1) % 4]
-            mid = edge(min(a, b), max(a, b))
-            if a > b:
-                mid = mid[::-1]
-            poly += [a] + mid
-        px0, py0 = int(min(p[0] for p in poly)), int(min(p[1] for p in poly))
-        px1, py1 = int(max(p[0] for p in poly)) + 1, int(max(p[1] for p in poly)) + 1
-        # keep the piece only if there is beetle inside it
-        hits = sum(1 for x in range(max(0, px0), min(W, px1), 3) for y in range(max(0, py0), min(H, py1), 3) if apx[x, y] > 100)
-        if hits < 40:
-            continue
-        pieces.append(dict(b=[px0, py0, px1 - px0, py1 - py0],
-                           c=' '.join(f'{x - px0:.1f}px {y - py0:.1f}px,' for x, y in poly).rstrip(',')))
 
-HTML = (f'<div class="bug" id="bug" aria-hidden="true" style="left:{X0}px;top:{Y0}px;width:{W}px;height:{H}px">'
-        + ''.join(f'<div class="bp" style="left:{p["b"][0]}px;top:{p["b"][1]}px;width:{p["b"][2]}px;height:{p["b"][3]}px">'
-                  f'<i style="clip-path:polygon({p["c"]});background-position:{-p["b"][0]}px {-p["b"][1]}px"></i></div>'
+
+def split(x0, y0, x1, y1, depth=0):
+    w, h = x1 - x0, y1 - y0
+    big = max(w, h)
+    if big < 72 or (big < 140 and rnd.random() < .3) or depth > 12:
+        hits = sum(1 for x in range(int(x0), int(x1), 3) for y in range(int(y0), int(y1), 3) if apx[min(W - 1, x), min(H - 1, y)] > 100)
+        if hits >= 40:
+            pieces.append(dict(b=[int(x0), int(y0), int(x1) - int(x0), int(y1) - int(y0)]))
+        return
+    f = rnd.uniform(.3, .7)
+    if w >= h:
+        m = round(x0 + w * f); split(x0, y0, m, y1, depth + 1); split(m, y0, x1, y1, depth + 1)
+    else:
+        m = round(y0 + h * f); split(x0, y0, x1, m, depth + 1); split(x0, m, x1, y1, depth + 1)
+
+
+split(bx0, by0, bx1, by1)
+CX, CY = (bx0 + bx1) / 2, (by0 + by1) / 2
+
+HTML = ('<div class="pcur ihint" id="ihint" aria-hidden="true"><b></b><span class="ilab">click the menu or a number on the beetle</span></div>'
+        + f'<div class="bug" id="bug" aria-hidden="true" style="left:{X0}px;top:{Y0}px;width:{W}px;height:{H}px">'
+        + ''.join(f'<div class="bp" data-dx="{(p["b"][0] + p["b"][2] / 2 - CX) / 550:.3f}" data-dy="{(p["b"][1] + p["b"][3] / 2 - CY) / 470:.3f}" '
+                  f'style="left:{p["b"][0]}px;top:{p["b"][1]}px;width:{p["b"][2]}px;height:{p["b"][3]}px">'
+                  f'<i style="background-position:{-p["b"][0]}px {-p["b"][1]}px"></i></div>'
                   for p in pieces)
         + '</div>')
 
@@ -77,35 +61,68 @@ CSS = f'''
 .bugplay [data-node-id="1:144"]{{visibility:hidden}}
 .bp{{position:absolute;opacity:0;will-change:transform}}
 .bp i{{position:absolute;inset:0;background:url({SRC}) no-repeat;background-size:{W}px {H}px}}
+/* start page hint: a small pulsing dot follows the pointer over the main area, with a note that switches sides near the edges */
+.ihint .ilab{{position:absolute;left:14px;bottom:8px;white-space:nowrap;background:rgba(255,255,255,.92);color:#000;
+  font:400 13px/1.25 Calibri,Carlito,sans-serif;padding:4px 8px}}
+.ihint.l .ilab{{left:auto;right:14px}}
+.ihint.b .ilab{{bottom:auto;top:10px}}
+.ihoff,.ihoff *{{cursor:none!important}}
 '''
 
 JS = '''
-  /* start page: the beetle flies in as torn pieces and puts itself together, about 3 seconds,
-     every time you arrive on the start page */
+  /* start page: the beetle flies in as square-cut pieces, lands still apart with white gaps,
+     pauses, then locks together - about 3.6 seconds, every time you arrive on the start page */
   try{
     const bug=document.getElementById('bug'), fr=bug&&bug.parentElement;
     if(bug && bug.animate && !reduce){
       const ps=[...bug.children], R=(a,b)=>a+Math.random()*(b-a);
+      const T=3600, LOCK=3150, SNAP=260;   /* whole run, moment the pieces lock, how long the lock takes */
       let anims=[], run=0;
       const play=()=>{
         anims.forEach(a=>a.cancel()); const me=++run;
         fr.classList.add('bugplay');
         anims=ps.map(p=>{
-          const ang=R(0,Math.PI*2), dist=R(700,1100), r=R(-140,140), d=R(0,800);
+          const ang=R(0,Math.PI*2), dist=R(700,1100), r=R(-160,160), d=R(0,750), fly=R(1500,1850);
+          /* resting place before the lock: pushed outwards from the beetle's middle by a different amount each */
+          const dx=+p.dataset.dx, dy=+p.dataset.dy, n=Math.hypot(dx,dy)||1, g=R(9,32);
+          const k=Math.max(.55,Math.min(1,n*1.6)), ax=dx/n*g*k+R(-5,5), ay=dy/n*g*k+R(-5,5);
+          const land=(d+fly)/T, hold=LOCK/T;
           return p.animate([
-            {transform:`translate(${Math.cos(ang)*dist}px,${Math.sin(ang)*dist}px) rotate(${r}deg) scale(1.25)`,opacity:0,filter:'drop-shadow(0 10px 8px rgba(0,0,0,.28))'},
-            {opacity:1,offset:.12},
-            {transform:`translate(${R(-7,7)}px,${R(-7,7)}px) rotate(${R(-5,5)}deg) scale(1.02)`,offset:.82,filter:'drop-shadow(0 3px 3px rgba(0,0,0,.18))'},
-            {transform:'none',opacity:1,filter:'drop-shadow(0 0 0 rgba(0,0,0,0))'}],
-            {duration:R(1650,2050),delay:d,easing:'cubic-bezier(.22,.7,.3,1)',fill:'both'});
+            {offset:0,transform:`translate(${Math.cos(ang)*dist}px,${Math.sin(ang)*dist}px) rotate(${r}deg) scale(1.25)`,opacity:0,easing:'step-end'},
+            {offset:d/T,transform:`translate(${Math.cos(ang)*dist}px,${Math.sin(ang)*dist}px) rotate(${r}deg) scale(1.25)`,opacity:0,easing:'cubic-bezier(.2,.7,.3,1)'},
+            {offset:(d+fly*.15)/T,opacity:1},
+            {offset:land,transform:`translate(${ax}px,${ay}px)`,opacity:1},
+            {offset:hold,transform:`translate(${ax}px,${ay}px)`,opacity:1,easing:'cubic-bezier(.6,0,.4,1.4)'},
+            {offset:(LOCK+SNAP)/T,transform:'none',opacity:1},
+            {offset:1,transform:'none',opacity:1}],
+            {duration:T,fill:'both'});
         });
-        /* all pieces in place: the real beetle takes over */
-        Promise.all(anims.map(a=>a.finished)).then(()=>setTimeout(()=>{ if(me===run) fr.classList.remove('bugplay'); },120)).catch(()=>{});
+        /* all pieces locked: the real beetle takes over */
+        Promise.all(anims.map(a=>a.finished)).then(()=>{ if(me===run) fr.classList.remove('bugplay'); }).catch(()=>{});
       };
       document.addEventListener('pagechange',e=>{ if(e.detail==='intro') play(); });
       if(cur==='intro') play();
     }
   }catch(err){ console.warn('beetle animation skipped',err); }
+  /* start page hint: pulsing dot that follows the pointer over the main area, with a note */
+  try{
+    const ih=document.getElementById('ihint'), st=document.getElementById('stage'), lab=ih&&ih.querySelector('.ilab');
+    if(ih && matchMedia('(hover:hover)').matches){
+      document.body.appendChild(ih);   /* outside the scaled page, so it sits exactly on the pointer */
+      const hide=()=>{ ih.classList.remove('on'); document.body.classList.remove('ihoff'); };
+      addEventListener('mousemove',e=>{
+        const r=st.getBoundingClientRect(), s=r.width/1440, x=(e.clientX-r.left)/s, y=(e.clientY-r.top)/s;
+        const lbOpen=document.getElementById('lb')&&document.getElementById('lb').open;
+        const inMain=x>225&&x<1325&&y>32&&y<1024, onLink=e.target.closest('a,button');
+        if(cur!=='intro'||lbOpen||!inMain||onLink){ hide(); return; }
+        ih.style.transform=`translate(${e.clientX}px,${e.clientY}px)`; ih.classList.add('on'); document.body.classList.add('ihoff');
+        const lw=lab.offsetWidth, lh=lab.offsetHeight, right=r.left+1325*s, top=r.top+32*s;
+        ih.classList.toggle('l', e.clientX+14+lw+6>right);
+        ih.classList.toggle('b', e.clientY-8-lh-6<top);
+      },{passive:true});
+      document.addEventListener('mouseleave',hide); document.addEventListener('pagechange',hide);
+    }
+  }catch(err){ console.warn('start page hint skipped',err); }
 '''
 
 if __name__ == '__main__':

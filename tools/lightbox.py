@@ -58,8 +58,18 @@ BX, BY, BW, BH = 315, 168, 920, 720
 
 CSS = '''
 /* project tiles: a red frame on hover, as on the links page; a click opens the pop-up */
-.hot.proj{padding:0;margin:0;border:0;background:none;cursor:zoom-in}
-.hot.proj:hover,.hot.proj:focus-visible{box-shadow:inset 0 0 0 calc(1.5px / var(--s,1)) #e30613;outline:none}
+.hot.proj{padding:0;margin:0;border:0;background:none;cursor:none}
+.hot.proj:hover,.hot.proj:focus-visible{box-shadow:inset 0 0 0 calc(1px / var(--s,1)) #e30613;outline:none}
+/* over a project tile the pointer becomes a small pulsing circle sending out thin red rings */
+.pcur{position:fixed;left:0;top:0;width:0;height:0;pointer-events:none;z-index:2147483000;display:none}
+.pcur.on{display:block}
+.pcur b,.pcur::before,.pcur::after{content:"";position:absolute;left:0;top:0;border-radius:50%;transform:translate(-50%,-50%)}
+.pcur b{width:8px;height:8px;background:#d4fb4d;box-shadow:inset 0 0 0 1px #e30613;animation:pcdot 1.4s ease-in-out infinite}
+.pcur::before,.pcur::after{width:8px;height:8px;border:1px solid #e30613;box-sizing:border-box;animation:pcring 1.4s ease-out infinite}
+.pcur::after{animation-delay:.7s}
+@keyframes pcdot{50%{transform:translate(-50%,-50%) scale(.75)}}
+@keyframes pcring{from{width:8px;height:8px;opacity:.9}to{width:34px;height:34px;opacity:0}}
+@media (prefers-reduced-motion:reduce){.pcur b,.pcur::before,.pcur::after{animation:none}.pcur::after{display:none}.pcur::before{width:18px;height:18px}}
 /* project pop-up: only the main area is veiled and blurred; side bars, title and menu stay sharp */
 dialog.lb{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;background:transparent;overflow:hidden;color:#000}
 dialog.lb::backdrop{background:transparent}
@@ -89,7 +99,7 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
 .lbk b{color:#e30613;font-weight:400}
 .lbx{position:absolute;right:30px;top:30px;width:200px;height:25px;border:0;padding:0;background:#ebebeb;font:400 15px/25px Calibri,Carlito,sans-serif;color:#000;cursor:pointer;text-align:center}
 .lbx small{font-size:10px;color:#666}
-.lbx:hover,.lbx:focus-visible{color:#e30613;box-shadow:inset 0 0 0 1.5px #e30613;outline:none}
+.lbx:hover,.lbx:focus-visible{color:#e30613;box-shadow:inset 0 0 0 calc(1px / var(--s,1)) #e30613;outline:none}
 /* main photo */
 .lbi{position:absolute;left:30px;top:75px;width:520px;height:390px;display:flex;align-items:center;justify-content:center;background:rgba(240,240,240,.55)}
 .lbi img{width:100%;height:100%;object-fit:contain;display:block;transition:opacity .2s}
@@ -99,10 +109,10 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
 .lbn span{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.88);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s}
 .lbn.prev svg,.lbm .pp svg,.lbsa.l svg{transform:rotate(-90deg)}.lbn.next svg,.lbm .np svg,.lbsa.r svg{transform:rotate(90deg)}
 .lbi:hover .lbn span,.lbn:focus-visible span{opacity:1}
-.lbn:hover span{box-shadow:inset 0 0 0 1.5px #e30613}
+.lbn:hover span{box-shadow:inset 0 0 0 calc(1px / var(--s,1)) #e30613}
 .lbn:focus-visible{outline:none}
-.tri{fill:rgba(205,255,62,.86);stroke:#000;stroke-width:1}
-.lbn:hover .tri,.lbm button:hover .tri,.lbsa:hover .tri{stroke:#e30613}
+.tri{fill:rgba(205,255,62,.86);stroke:#e30613;stroke-width:.8}
+.lbn:hover .tri,.lbm button:hover .tri,.lbsa:hover .tri{fill:#d4fb4d;stroke-width:1.2}
 /* beside the photo: title, text, then the project details */
 .lbc{position:absolute;left:580px;top:75px;width:310px;height:390px;overflow-y:auto;scrollbar-width:thin}
 .lbt{margin:0;font:700 20px/1.15 Calibri,Carlito,sans-serif;color:#e30613}
@@ -121,7 +131,7 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
 .lbst button{position:relative;flex:none;padding:0;border:0;background:none;cursor:pointer;line-height:0}
 .lbst img{display:block;width:auto;height:auto;max-width:150px;max-height:120px}
 .lbst button::before{content:"";position:absolute;inset:0;z-index:1}
-.lbst button:hover::before,.lbst button:focus-visible::before{box-shadow:inset 0 0 0 1.5px #e30613}
+.lbst button:hover::before,.lbst button:focus-visible::before{box-shadow:inset 0 0 0 calc(1px / var(--s,1)) #e30613}
 .lbst button.cur::before{box-shadow:inset 0 0 0 3px #e30613,inset 0 0 0 6px #d4fb4d}
 .lbst button:focus-visible{outline:none}
 /* bottom line: previous / next project */
@@ -133,7 +143,7 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
 ARROW = f'<svg width="20" height="15" viewBox="-0.5 -0.5 16.26 11.61" aria-hidden="true"><path class="tri" d="{TRI}"/></svg>'
 LINES = ''.join(f'<i style="left:{x}px"></i>' for x in (225, 445, 665, 885, 1105, 1325))
 
-HTML = f'''<dialog class="lb" id="lb" aria-labelledby="lbt"><div class="lbh"><div class="lbs" id="lbs">
+HTML = '<div class="pcur" id="pcur" aria-hidden="true"><b></b></div>' + f'''<dialog class="lb" id="lb" aria-labelledby="lbt"><div class="lbh"><div class="lbs" id="lbs">
 <div class="lbv"></div><div class="lbg">{LINES}</div>
 <div class="lbp lbd" id="lbp" tabindex="-1" style="left:{BX}px;top:{BY}px;width:{BW}px;height:{BH}px">
 <div class="lbk" id="lbk"></div>
@@ -182,6 +192,13 @@ JS = '''
   st.addEventListener('click',e=>{ const b=e.target.closest('button'); if(b) show(pi,+b.dataset.k); });
   st.addEventListener('scroll',arrows,{passive:true});
   $('lbsl0').onclick=()=>{ st.scrollLeft-=st.clientWidth*.8; }; $('lbsr0').onclick=()=>{ st.scrollLeft+=st.clientWidth*.8; };
+  /* pulsing pointer over the project tiles */
+  const pc=$('pcur');
+  document.querySelectorAll('.hot.proj').forEach(b=>{
+    b.addEventListener('mousemove',e=>{ pc.style.transform=`translate(${e.clientX}px,${e.clientY}px)`; pc.classList.add('on'); });
+    b.addEventListener('mouseleave',()=>pc.classList.remove('on'));
+    b.addEventListener('click',()=>pc.classList.remove('on'));
+  });
   /* a click beside the pop-up closes it */
   lb.addEventListener('click',e=>{ if(!e.target.closest('#lbp')) lb.close(); });
   lb.addEventListener('keydown',e=>{

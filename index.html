@@ -22,7 +22,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#fff}
 .hot{position:absolute;display:block;z-index:5}
 /* menu bar: no drop shadow under the labels; the tab under the mouse gets a red label and a red frame */
 [class*="text-shadow-"]{text-shadow:none!important}   /* no blurred Figma drop shadows anywhere */
-.hot.tab:hover,.hot.tab:focus-visible{box-shadow:inset 0 0 0 calc(1.5px / var(--s,1)) #e30613;outline:none}
+.hot.tab:hover,.hot.tab:focus-visible{box-shadow:inset 0 0 0 calc(1px / var(--s,1)) #e30613;outline:none}
 .hot.tab.cur:hover,.hot.tab.cur:focus-visible{box-shadow:none}
 /* the tab of the page you are on: bold label in red, no frame */
 .chrome[data-pg="services"] [class*="w-[190px]"][class*="left-[335px]"]{color:#e30613!important}
@@ -42,12 +42,12 @@ html,body{margin:0;height:100%;overflow:hidden;background:#fff}
 .pin .pl{position:absolute;top:50%;transform:translateY(-50%);white-space:nowrap;font:400 15px/1 Calibri,Carlito,sans-serif;color:#000;padding:4px 0}
 .pin .pl.r{left:calc(100% + 9px)} .pin .pl.l{right:calc(100% + 9px)}
 .hot.pin:hover .pl,.hot.pin:focus-visible .pl{color:#e30613}
-.hot.pin:hover,.hot.pin:focus-visible,.hot.pin:active{background:#d4fb4d;font-weight:700;z-index:7;border:calc(2.5px / var(--s,1)) solid #e30613;outline:none}
+.hot.pin:hover,.hot.pin:focus-visible,.hot.pin:active{background:#d4fb4d;font-weight:700;z-index:7;border:calc(1px / var(--s,1)) solid #e30613;outline:none}
 .hot:focus-visible{outline:2px solid red;outline-offset:2px}
 /* social links: current brand marks in their own colours (Figma's old icons are hidden) */
 .chrome [data-name="Facebook"],.chrome [data-name="Instagram"],.chrome [data-name="Twitter Squared"]{display:none}
 .social{display:flex;align-items:center;justify-content:center;border-radius:4px}
-.social:hover{box-shadow:inset 0 0 0 calc(1.5px / var(--s,1)) #e30613}
+.social:hover{box-shadow:inset 0 0 0 calc(1px / var(--s,1)) #e30613}
 /* vertical section titles: the light "&" and the number in red; a quiet slide-in when you arrive on a page */
 .chrome [class*="w-[560px]"] .fcal-l,.chrome [class*="w-[560px]"] span[class*="text-[20px]"]{color:#e30613}
 .chrome.arrive [class*="h-[560px]"][class*="w-[84px]"]{animation:arrive .9s cubic-bezier(.2,.7,.2,1) both}
@@ -55,14 +55,14 @@ html,body{margin:0;height:100%;overflow:hidden;background:#fff}
 @media (prefers-reduced-motion:reduce){.chrome.arrive [class*="h-[560px]"][class*="w-[84px]"]{animation:none}}
 .hot.lk{width:200px;height:100px}
 .hot.lk::before{content:"";position:absolute;left:0;top:0;width:200px;height:50px}
-.hot.lk:hover::before,.hot.lk:focus-visible::before{box-shadow:inset 0 0 0 calc(1.5px / var(--s,1)) #e30613}
+.hot.lk:hover::before,.hot.lk:focus-visible::before{box-shadow:inset 0 0 0 calc(1px / var(--s,1)) #e30613}
 /* services: section headings in red, to match their red symbols */
 [data-node-id="1:554"] > p:first-child,[data-node-id="1:628"] > p:first-child,[data-node-id="1:633"] > p:first-child,[data-node-id="1:634"] > p:first-child{color:#e30613}
 /* arrow to the next page, with its label; on the last page it points up and leads back to the start */
 .nextp{display:flex;align-items:center;gap:6px;text-decoration:none;color:#666;font:400 11px/1 Calibri,Carlito,sans-serif;letter-spacing:.06em;padding-left:20px}
 .nextp svg{transform:rotate(180deg);transition:transform .25s}
-.nextp .tri{fill:rgba(205,255,62,.86);stroke:#000;stroke-width:1}
-.nextp:hover{color:#e30613} .nextp:hover .tri{stroke:#e30613}
+.nextp .tri{fill:rgba(205,255,62,.86);stroke:#e30613;stroke-width:.8}
+.nextp:hover{color:#e30613} .nextp:hover .tri{fill:#d4fb4d;stroke-width:1.2}
 .nextp.up svg{transform:none}
 /* first visit to the intro: the arrow nudges downwards and the label invites you in, until you first move on */
 .nextp.hint svg{animation:nudge 1.3s ease-in-out infinite}
@@ -94,8 +94,18 @@ html,body{margin:0;height:100%;overflow:hidden;background:#fff}
 .leaflet-container .leaflet-control-attribution{font:10px/1.3 Calibri,Carlito,sans-serif;background:rgba(255,255,255,.7)}
 
 /* project tiles: a red frame on hover, as on the links page; a click opens the pop-up */
-.hot.proj{padding:0;margin:0;border:0;background:none;cursor:zoom-in}
-.hot.proj:hover,.hot.proj:focus-visible{box-shadow:inset 0 0 0 calc(1.5px / var(--s,1)) #e30613;outline:none}
+.hot.proj{padding:0;margin:0;border:0;background:none;cursor:none}
+.hot.proj:hover,.hot.proj:focus-visible{box-shadow:inset 0 0 0 calc(1px / var(--s,1)) #e30613;outline:none}
+/* over a project tile the pointer becomes a small pulsing circle sending out thin red rings */
+.pcur{position:fixed;left:0;top:0;width:0;height:0;pointer-events:none;z-index:2147483000;display:none}
+.pcur.on{display:block}
+.pcur b,.pcur::before,.pcur::after{content:"";position:absolute;left:0;top:0;border-radius:50%;transform:translate(-50%,-50%)}
+.pcur b{width:8px;height:8px;background:#d4fb4d;box-shadow:inset 0 0 0 1px #e30613;animation:pcdot 1.4s ease-in-out infinite}
+.pcur::before,.pcur::after{width:8px;height:8px;border:1px solid #e30613;box-sizing:border-box;animation:pcring 1.4s ease-out infinite}
+.pcur::after{animation-delay:.7s}
+@keyframes pcdot{50%{transform:translate(-50%,-50%) scale(.75)}}
+@keyframes pcring{from{width:8px;height:8px;opacity:.9}to{width:34px;height:34px;opacity:0}}
+@media (prefers-reduced-motion:reduce){.pcur b,.pcur::before,.pcur::after{animation:none}.pcur::after{display:none}.pcur::before{width:18px;height:18px}}
 /* project pop-up: only the main area is veiled and blurred; side bars, title and menu stay sharp */
 dialog.lb{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;background:transparent;overflow:hidden;color:#000}
 dialog.lb::backdrop{background:transparent}
@@ -125,7 +135,7 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
 .lbk b{color:#e30613;font-weight:400}
 .lbx{position:absolute;right:30px;top:30px;width:200px;height:25px;border:0;padding:0;background:#ebebeb;font:400 15px/25px Calibri,Carlito,sans-serif;color:#000;cursor:pointer;text-align:center}
 .lbx small{font-size:10px;color:#666}
-.lbx:hover,.lbx:focus-visible{color:#e30613;box-shadow:inset 0 0 0 1.5px #e30613;outline:none}
+.lbx:hover,.lbx:focus-visible{color:#e30613;box-shadow:inset 0 0 0 calc(1px / var(--s,1)) #e30613;outline:none}
 /* main photo */
 .lbi{position:absolute;left:30px;top:75px;width:520px;height:390px;display:flex;align-items:center;justify-content:center;background:rgba(240,240,240,.55)}
 .lbi img{width:100%;height:100%;object-fit:contain;display:block;transition:opacity .2s}
@@ -135,10 +145,10 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
 .lbn span{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.88);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s}
 .lbn.prev svg,.lbm .pp svg,.lbsa.l svg{transform:rotate(-90deg)}.lbn.next svg,.lbm .np svg,.lbsa.r svg{transform:rotate(90deg)}
 .lbi:hover .lbn span,.lbn:focus-visible span{opacity:1}
-.lbn:hover span{box-shadow:inset 0 0 0 1.5px #e30613}
+.lbn:hover span{box-shadow:inset 0 0 0 calc(1px / var(--s,1)) #e30613}
 .lbn:focus-visible{outline:none}
-.tri{fill:rgba(205,255,62,.86);stroke:#000;stroke-width:1}
-.lbn:hover .tri,.lbm button:hover .tri,.lbsa:hover .tri{stroke:#e30613}
+.tri{fill:rgba(205,255,62,.86);stroke:#e30613;stroke-width:.8}
+.lbn:hover .tri,.lbm button:hover .tri,.lbsa:hover .tri{fill:#d4fb4d;stroke-width:1.2}
 /* beside the photo: title, text, then the project details */
 .lbc{position:absolute;left:580px;top:75px;width:310px;height:390px;overflow-y:auto;scrollbar-width:thin}
 .lbt{margin:0;font:700 20px/1.15 Calibri,Carlito,sans-serif;color:#e30613}
@@ -157,7 +167,7 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
 .lbst button{position:relative;flex:none;padding:0;border:0;background:none;cursor:pointer;line-height:0}
 .lbst img{display:block;width:auto;height:auto;max-width:150px;max-height:120px}
 .lbst button::before{content:"";position:absolute;inset:0;z-index:1}
-.lbst button:hover::before,.lbst button:focus-visible::before{box-shadow:inset 0 0 0 1.5px #e30613}
+.lbst button:hover::before,.lbst button:focus-visible::before{box-shadow:inset 0 0 0 calc(1px / var(--s,1)) #e30613}
 .lbst button.cur::before{box-shadow:inset 0 0 0 3px #e30613,inset 0 0 0 6px #d4fb4d}
 .lbst button:focus-visible{outline:none}
 /* bottom line: previous / next project */
@@ -187,7 +197,7 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
 <div class="mapclip" id="mapclip" hidden><div class="mapwrap" id="mapwrap"><div id="livemap"></div>
 <div class="mz" id="mz"><button id="zin" aria-label="Zoom in"><img src="img/contact-imgZoomIn.webp" alt=""></button><button id="zout" aria-label="Zoom out"><img src="img/contact-imgZoomOut.webp" alt=""></button></div></div></div>
 </div></div>
-<dialog class="lb" id="lb" aria-labelledby="lbt"><div class="lbh"><div class="lbs" id="lbs">
+<div class="pcur" id="pcur" aria-hidden="true"><b></b></div><dialog class="lb" id="lb" aria-labelledby="lbt"><div class="lbh"><div class="lbs" id="lbs">
 <div class="lbv"></div><div class="lbg"><i style="left:225px"></i><i style="left:445px"></i><i style="left:665px"></i><i style="left:885px"></i><i style="left:1105px"></i><i style="left:1325px"></i></div>
 <div class="lbp lbd" id="lbp" tabindex="-1" style="left:315px;top:168px;width:920px;height:720px">
 <div class="lbk" id="lbk"></div>
@@ -301,6 +311,13 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
   st.addEventListener('click',e=>{ const b=e.target.closest('button'); if(b) show(pi,+b.dataset.k); });
   st.addEventListener('scroll',arrows,{passive:true});
   $('lbsl0').onclick=()=>{ st.scrollLeft-=st.clientWidth*.8; }; $('lbsr0').onclick=()=>{ st.scrollLeft+=st.clientWidth*.8; };
+  /* pulsing pointer over the project tiles */
+  const pc=$('pcur');
+  document.querySelectorAll('.hot.proj').forEach(b=>{
+    b.addEventListener('mousemove',e=>{ pc.style.transform=`translate(${e.clientX}px,${e.clientY}px)`; pc.classList.add('on'); });
+    b.addEventListener('mouseleave',()=>pc.classList.remove('on'));
+    b.addEventListener('click',()=>pc.classList.remove('on'));
+  });
   /* a click beside the pop-up closes it */
   lb.addEventListener('click',e=>{ if(!e.target.closest('#lbp')) lb.close(); });
   lb.addEventListener('keydown',e=>{
@@ -318,13 +335,13 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
       fr.classList.add('bugplay');
       const ps=[...bug.children], R=(a,b)=>a+Math.random()*(b-a);
       const done=ps.map((p,n)=>{
-        const ang=R(0,Math.PI*2), dist=R(700,1100), r=R(-140,140), d=R(0,650);
+        const ang=R(0,Math.PI*2), dist=R(700,1100), r=R(-140,140), d=R(0,800);
         const a=p.animate([
           {transform:`translate(${Math.cos(ang)*dist}px,${Math.sin(ang)*dist}px) rotate(${r}deg) scale(1.25)`,opacity:0,filter:'drop-shadow(0 10px 8px rgba(0,0,0,.28))'},
           {opacity:1,offset:.12},
           {transform:`translate(${R(-7,7)}px,${R(-7,7)}px) rotate(${R(-5,5)}deg) scale(1.02)`,offset:.82,filter:'drop-shadow(0 3px 3px rgba(0,0,0,.18))'},
           {transform:'none',opacity:1,filter:'drop-shadow(0 0 0 rgba(0,0,0,0))'}],
-          {duration:R(1300,1650),delay:d,easing:'cubic-bezier(.22,.7,.3,1)',fill:'both'});
+          {duration:R(1650,2050),delay:d,easing:'cubic-bezier(.22,.7,.3,1)',fill:'both'});
         return a.finished;
       });
       /* all pieces in place: the real beetle takes over */

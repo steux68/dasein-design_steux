@@ -79,7 +79,7 @@ html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
 .hot{{position:absolute;display:block;z-index:5}}
 /* menu bar: no drop shadow under the labels; the tab under the mouse gets a red label and a red frame */
 [class*="text-shadow-"]{{text-shadow:none!important}}   /* no blurred Figma drop shadows anywhere */
-.hot.tab:hover,.hot.tab:focus-visible{{box-shadow:inset 0 0 0 calc(1.5px / var(--s,1)) #e30613;outline:none}}
+.hot.tab:hover,.hot.tab:focus-visible{{box-shadow:inset 0 0 0 calc(1px / var(--s,1)) #e30613;outline:none}}
 .hot.tab.cur:hover,.hot.tab.cur:focus-visible{{box-shadow:none}}
 /* the tab of the page you are on: bold label in red, no frame */
 .chrome[data-pg="services"] [class*="w-[190px]"][class*="left-[335px]"]{{color:#e30613!important}}
@@ -99,12 +99,12 @@ html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
 .pin .pl{{position:absolute;top:50%;transform:translateY(-50%);white-space:nowrap;font:400 15px/1 Calibri,Carlito,sans-serif;color:#000;padding:4px 0}}
 .pin .pl.r{{left:calc(100% + 9px)}} .pin .pl.l{{right:calc(100% + 9px)}}
 .hot.pin:hover .pl,.hot.pin:focus-visible .pl{{color:#e30613}}
-.hot.pin:hover,.hot.pin:focus-visible,.hot.pin:active{{background:#d4fb4d;font-weight:700;z-index:7;border:calc(2.5px / var(--s,1)) solid #e30613;outline:none}}
+.hot.pin:hover,.hot.pin:focus-visible,.hot.pin:active{{background:#d4fb4d;font-weight:700;z-index:7;border:calc(1px / var(--s,1)) solid #e30613;outline:none}}
 .hot:focus-visible{{outline:2px solid red;outline-offset:2px}}
 /* social links: current brand marks in their own colours (Figma's old icons are hidden) */
 .chrome [data-name="Facebook"],.chrome [data-name="Instagram"],.chrome [data-name="Twitter Squared"]{{display:none}}
 .social{{display:flex;align-items:center;justify-content:center;border-radius:4px}}
-.social:hover{{box-shadow:inset 0 0 0 calc(1.5px / var(--s,1)) #e30613}}
+.social:hover{{box-shadow:inset 0 0 0 calc(1px / var(--s,1)) #e30613}}
 /* vertical section titles: the light "&" and the number in red; a quiet slide-in when you arrive on a page */
 .chrome [class*="w-[560px]"] .fcal-l,.chrome [class*="w-[560px]"] span[class*="text-[20px]"]{{color:#e30613}}
 .chrome.arrive [class*="h-[560px]"][class*="w-[84px]"]{{animation:arrive .9s cubic-bezier(.2,.7,.2,1) both}}
@@ -112,14 +112,14 @@ html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
 @media (prefers-reduced-motion:reduce){{.chrome.arrive [class*="h-[560px]"][class*="w-[84px]"]{{animation:none}}}}
 .hot.lk{{width:200px;height:100px}}
 .hot.lk::before{{content:"";position:absolute;left:0;top:0;width:200px;height:50px}}
-.hot.lk:hover::before,.hot.lk:focus-visible::before{{box-shadow:inset 0 0 0 calc(1.5px / var(--s,1)) #e30613}}
+.hot.lk:hover::before,.hot.lk:focus-visible::before{{box-shadow:inset 0 0 0 calc(1px / var(--s,1)) #e30613}}
 /* services: section headings in red, to match their red symbols */
 [data-node-id="1:554"] > p:first-child,[data-node-id="1:628"] > p:first-child,[data-node-id="1:633"] > p:first-child,[data-node-id="1:634"] > p:first-child{{color:#e30613}}
 /* arrow to the next page, with its label; on the last page it points up and leads back to the start */
 .nextp{{display:flex;align-items:center;gap:6px;text-decoration:none;color:#666;font:400 11px/1 Calibri,Carlito,sans-serif;letter-spacing:.06em;padding-left:20px}}
 .nextp svg{{transform:rotate(180deg);transition:transform .25s}}
-.nextp .tri{{fill:rgba(205,255,62,.86);stroke:#000;stroke-width:1}}
-.nextp:hover{{color:#e30613}} .nextp:hover .tri{{stroke:#e30613}}
+.nextp .tri{{fill:rgba(205,255,62,.86);stroke:#e30613;stroke-width:.8}}
+.nextp:hover{{color:#e30613}} .nextp:hover .tri{{fill:#d4fb4d;stroke-width:1.2}}
 .nextp.up svg{{transform:none}}
 /* first visit to the intro: the arrow nudges downwards and the label invites you in, until you first move on */
 .nextp.hint svg{{animation:nudge 1.3s ease-in-out infinite}}

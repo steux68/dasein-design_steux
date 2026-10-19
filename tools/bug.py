@@ -1,4 +1,4 @@
-"""Start page: the beetle flies in as a collage of torn pieces and puts itself together (about 2.5 s).
+"""Start page: the beetle flies in as a collage of torn pieces and puts itself together (about 3 s).
 
 The beetle image (transparent background) is cut into an irregular grid of pieces that tile exactly;
 only pieces that contain some beetle are kept. Each piece flies in from outside, turned and slightly
@@ -87,13 +87,13 @@ JS = '''
       fr.classList.add('bugplay');
       const ps=[...bug.children], R=(a,b)=>a+Math.random()*(b-a);
       const done=ps.map((p,n)=>{
-        const ang=R(0,Math.PI*2), dist=R(700,1100), r=R(-140,140), d=R(0,650);
+        const ang=R(0,Math.PI*2), dist=R(700,1100), r=R(-140,140), d=R(0,800);
         const a=p.animate([
           {transform:`translate(${Math.cos(ang)*dist}px,${Math.sin(ang)*dist}px) rotate(${r}deg) scale(1.25)`,opacity:0,filter:'drop-shadow(0 10px 8px rgba(0,0,0,.28))'},
           {opacity:1,offset:.12},
           {transform:`translate(${R(-7,7)}px,${R(-7,7)}px) rotate(${R(-5,5)}deg) scale(1.02)`,offset:.82,filter:'drop-shadow(0 3px 3px rgba(0,0,0,.18))'},
           {transform:'none',opacity:1,filter:'drop-shadow(0 0 0 rgba(0,0,0,0))'}],
-          {duration:R(1300,1650),delay:d,easing:'cubic-bezier(.22,.7,.3,1)',fill:'both'});
+          {duration:R(1650,2050),delay:d,easing:'cubic-bezier(.22,.7,.3,1)',fill:'both'});
         return a.finished;
       });
       /* all pieces in place: the real beetle takes over */

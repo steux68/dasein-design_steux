@@ -121,7 +121,7 @@ html,body,button,input,select,textarea,dialog{{font-family:Calibri,Carlito,sans-
 .chrome [class*="h-[560px]"][class*="w-[84px]"][class*="top-[1000px]"] [class*="w-[560px]"]{{width:570px!important}}
 .chrome [class*="h-[560px]"][class*="w-[84px]"][class*="top-[1003px]"] [class*="w-[560px]"]{{width:573px!important}}
 .chrome [class*="w-[560px]"] > p{{display:flex;align-items:baseline;white-space:pre;margin:0}}
-.chrome [class*="w-[560px]"] > p > span[class*="text-[20px]"]{{font-size:50px!important;margin-left:auto}}
+.chrome [class*="w-[560px]"] > p > span[class*="text-[20px]"]{{font-size:40px!important;margin-left:auto}}
 /* start page: the projects tab grey like the others (Figma had it lime) */
 .chrome[data-pg="intro"] [class*="left-[455px]"][class*="h-[25px]"][class*="bg-"]{{background:rgba(0,0,0,.05)!important}}
 .chrome[data-pg="intro"] [class*="w-[190px]"][class*="left-[555px]"] .fcal-b{{font-weight:400!important;font-size:15px!important}}

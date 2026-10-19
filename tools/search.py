@@ -17,10 +17,10 @@ ZOOM_IN = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r
 ZOOM_OUT = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5"/><path d="M7.5 12H16.5"/></svg>'
 
 CSS = '''
-/* site search: the Figma magnifier is replaced by a thin red one */
+/* site search: the Figma magnifier is replaced by a red one, a little sturdier than the hairline arrows (like the map pin) */
 .chrome [data-name="Search"]{display:none}
 .sbtn{padding:0;margin:0;border:0;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.sbtn svg{width:21px;height:21px;fill:none;stroke:#e30613;stroke-width:var(--hp);stroke-linecap:round;overflow:visible}
+.sbtn svg{width:21px;height:21px;fill:none;stroke:#e30613;stroke-width:2;stroke-linecap:round;overflow:visible}
 .sbtn:hover svg,.sbtn:focus-visible svg,.sbtn[aria-expanded="true"] svg{animation:lbxp 1.4s ease-in-out infinite}
 .sbtn:focus-visible{outline:none}
 @media (prefers-reduced-motion:reduce){.sbtn svg{animation:none!important}}
@@ -43,8 +43,8 @@ CSS = '''
 .mz{gap:4px!important}
 .mz button{border:0!important;border-radius:50%;background:none!important;padding:0}
 .mz button svg{display:block;width:100%;height:100%;overflow:visible}
-.mz button circle{fill:rgba(255,255,255,.9);stroke:#e30613;stroke-width:1;vector-effect:non-scaling-stroke}
-.mz button path{fill:none;stroke:#e30613;stroke-width:1;vector-effect:non-scaling-stroke;stroke-linecap:round}
+.mz button circle{fill:rgba(255,255,255,.9);stroke:#e30613;stroke-width:2;vector-effect:non-scaling-stroke}
+.mz button path{fill:none;stroke:#e30613;stroke-width:2;vector-effect:non-scaling-stroke;stroke-linecap:round}
 .mz button:hover circle,.mz button:focus-visible circle{fill:rgba(212,251,77,.92)}
 .mz button:focus-visible{outline:none}
 '''

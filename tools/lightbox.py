@@ -75,8 +75,8 @@ CSS = '''
 .pcar.on{display:block}
 .pcar svg{position:absolute;left:-24px;top:-24px;width:48px;height:48px;overflow:visible}
 .pcar.l svg{transform:rotate(180deg)}
-.pcar .k{fill:#d4fb4d;transform-origin:0 0;animation:pcak 1.4s ease-in-out infinite}
-.pcar .g{fill:none;stroke:#e30613;stroke-width:.6;transform-origin:0 0;animation:pcarr 1.4s ease-out infinite}
+.pcar .k{fill:#4d4f4a;stroke:#1a1a1a;stroke-width:.4;transform-origin:0 0;animation:pcak 1.4s ease-in-out infinite}
+.pcar .g{fill:none;stroke:#3a3c37;stroke-width:.6;transform-origin:0 0;animation:pcarr 1.4s ease-out infinite}
 .pcar .g2{animation-delay:.7s}
 @keyframes pcak{50%{transform:scale(.8)}}
 @keyframes pcarr{from{transform:scale(1);opacity:.8;stroke-width:.6}to{transform:scale(2.6);opacity:0;stroke-width:.23}}   /* lines stay about one pixel thin as they grow */
@@ -124,9 +124,16 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
 .lbn.prev svg,.lbm .pp svg,.lbsa.l svg{transform:rotate(-90deg)}.lbn.next svg,.lbm .np svg,.lbsa.r svg{transform:rotate(90deg)}
 .lbn:focus-visible span{opacity:1}
 .lbn:focus-visible{outline:none}
-.tri{fill:rgba(205,255,62,.86);stroke:none}
-.lbn:hover .tri,.lbm button:hover .tri,.lbsa:hover .tri{fill:#d4fb4d}
-.lbsa .tri,.lbm .tri{stroke:#1a1a1a;stroke-width:calc(.81px / (var(--s,1) * var(--dpr,1)))}   /* one screen pixel */
+/* all triangle arrows: dark grey with a hairline edge as thin as the dashed guide lines (one screen pixel);
+   pointed at, they send out thin dark rings, like the pulsing pointers */
+:root{--hp:calc(.81px / (var(--s,1) * var(--dpr,1)))}
+.ar{overflow:visible}
+.tri,.nextp .tri{fill:#4d4f4a;stroke:#1a1a1a;stroke-width:var(--hp)}
+.tr{fill:none;stroke:#3a3c37;stroke-width:var(--hp);opacity:0;transform-box:fill-box;transform-origin:center}
+.lbm button:hover .tr,.lbm button:focus-visible .tr,.lbsa:not(:disabled):hover .tr,.nextp:hover .tr,.nextp:focus-visible .tr,.nextp.hint .tr{animation:arring 1.4s ease-out infinite}
+.tr2{animation-delay:.7s!important}
+@keyframes arring{from{transform:scale(1);opacity:.75}to{transform:scale(2.4);opacity:0;stroke-width:calc(var(--hp) / 2.4)}}
+@media (prefers-reduced-motion:reduce){.tr{animation:none!important}}
 /* beside the photo: title, text, then the project details */
 .lbc{position:absolute;left:580px;top:75px;width:310px;height:390px;overflow-y:auto;scrollbar-width:thin}
 .lbt{margin:0;font:700 20px/1.15 Calibri,Carlito,sans-serif;color:#e30613}
@@ -156,7 +163,8 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
 .lbm button:hover,.lbm button:focus-visible{color:#e30613;outline:none}
 '''
 
-ARROW = f'<svg width="20" height="15" viewBox="-0.5 -0.5 16.26 11.61" aria-hidden="true"><path class="tri" d="{TRI}"/></svg>'
+ARROW = (f'<svg class="ar" width="20" height="15" viewBox="-0.5 -0.5 16.26 11.61" aria-hidden="true">'
+         f'<path class="tr" d="{TRI}"/><path class="tr tr2" d="{TRI}"/><path class="tri" d="{TRI}"/></svg>')
 LINES = ''.join(f'<i style="left:{x}px"></i>' for x in (225, 445, 665, 885, 1105, 1325))
 
 HTML = '<div class="pcur" id="pcur" aria-hidden="true"><b></b></div>' + f'''<dialog class="lb" id="lb" aria-labelledby="lbt"><div class="pcar" id="pcar" aria-hidden="true"><svg viewBox="-24 -24 48 48"><path class="g" d="M-4.5 -5.5L6 0L-4.5 5.5Z"/><path class="g g2" d="M-4.5 -5.5L6 0L-4.5 5.5Z"/><path class="k" d="M-4.5 -5.5L6 0L-4.5 5.5Z"/></svg></div><div class="lbh"><div class="lbs" id="lbs">

@@ -50,6 +50,16 @@ html,body,button,input,select,textarea,dialog{font-family:Calibri,Carlito,sans-s
 .social{display:flex;align-items:center;justify-content:center;border-radius:4px}
 .social:hover{box-shadow:inset 0 0 0 calc(1px / var(--s,1)) #e30613}
 /* vertical section titles: the light "&" and the number in red; a quiet slide-in when you arrive on a page */
+/* vertical titles run from the foot of the side bar up to the top of the grey text block (y 430); the [number] is as big as the words and ends level with it */
+.chrome [class*="h-[560px]"][class*="w-[84px]"][class*="top-[1000px]"]{height:570px!important}
+.chrome [class*="h-[560px]"][class*="w-[84px]"][class*="top-[1003px]"]{height:573px!important}
+.chrome [class*="h-[560px]"][class*="w-[84px]"][class*="top-[1000px]"] [class*="w-[560px]"]{width:570px!important}
+.chrome [class*="h-[560px]"][class*="w-[84px]"][class*="top-[1003px]"] [class*="w-[560px]"]{width:573px!important}
+.chrome [class*="w-[560px]"] > p{display:flex;align-items:baseline;white-space:pre;margin:0}
+.chrome [class*="w-[560px]"] > p > span[class*="text-[20px]"]{font-size:50px!important;margin-left:auto}
+/* bits & bats: the tall AKH 1 photo sits underneath its caption bar */
+#bits img[src="img/p-akh-crate.webp"]{z-index:-1}
+#bits .frame{isolation:isolate}
 .chrome [class*="w-[560px]"] .fcal-l,.chrome [class*="w-[560px]"] span[class*="text-[20px]"]{color:#e30613}
 .chrome.arrive [class*="h-[560px]"][class*="w-[84px]"]{animation:arrive .9s cubic-bezier(.2,.7,.2,1) both}
 @keyframes arrive{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
@@ -88,8 +98,19 @@ html,body,button,input,select,textarea,dialog{font-family:Calibri,Carlito,sans-s
 .mz button{padding:0;margin:0;border:1px dotted #b8b8b8;background:#fff;cursor:pointer;display:block}
 .mz button img{display:block;width:100%;height:100%}
 .mz button:hover{border:1px solid #e30613}
-.pin42{position:relative;text-align:center;font-family:Calibri,Carlito,sans-serif;font-weight:700;color:#000}
-.pin42 img{display:block;margin:0 auto}
+.pinH{position:relative}
+.pinsvg{display:block;width:100%;height:100%;overflow:visible}
+.pinsvg .pb{fill:#3a3c37}
+.pinsvg .pw{fill:#fff}
+.pinsvg .pr{fill:none;stroke:#3a3c37;stroke-width:1;vector-effect:non-scaling-stroke}
+.pinsvg .pa{fill:#4d4f4a;stroke:#1a1a1a;stroke-width:1;vector-effect:non-scaling-stroke;stroke-linejoin:round}
+.pinsvg text{fill:#3a3c37;font:700 6.4px Calibri,Carlito,sans-serif;text-anchor:middle;dominant-baseline:central}
+/* address label: top right of the pin; it moves to the other side or below as the pin nears the map's edges */
+.plab{position:absolute;left:calc(100% + .35em);bottom:62%;white-space:nowrap;background:rgba(255,255,255,.92);color:#000;
+  font-family:Calibri,Carlito,sans-serif;font-weight:400;line-height:1.25;padding:.3em .55em;text-align:left}
+.plab b{font-weight:700}
+.pinH.l .plab{left:auto;right:calc(100% + .35em)}
+.pinH.b .plab{bottom:auto;top:30%}
 .leaflet-container .leaflet-control-attribution{font:10px/1.3 Calibri,Carlito,sans-serif;background:rgba(255,255,255,.7)}
 
 /* project tiles: a red frame on hover, as on the links page; a click opens the pop-up */
@@ -300,13 +321,20 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
   const VIEW=[48.211114,16.337330], VIEW_ZOOM=17;   // default view chosen by Steuart
   function homeView(z){ map.invalidateSize(); map.setView(VIEW,z||VIEW_ZOOM,{animate:false}); }
   function marker(){
-    const s=S;
-    return L.divIcon({className:'',iconSize:[25*s,52*s],iconAnchor:[12.5*s,35*s],
-      html:`<div class="pin42" style="width:${25*s}px;font-size:${12*s}px"><img src="img/contact-imgVector.svg" alt="" style="width:${25*s}px;height:${35*s}px">42/6</div>`});
+    const s=S, W=34*s, H=44*s;
+    return L.divIcon({className:'',iconSize:[W,H],iconAnchor:[W/2,H],
+      html:`<div class="pinH" style="width:${W}px;height:${H}px;font-size:${12*s}px"><svg class="pinsvg" viewBox="0 0 40 52" aria-hidden="true"><path class="pb" d="M20 51C14.5 40.5 2 31 2 19A18 18 0 0 1 38 19C38 31 25.5 40.5 20 51Z"/><circle class="pw" cx="20" cy="19" r="14.5"/><g transform="translate(20 19) scale(1.12)"><path class="pr" d="M-5.31 7.88A9.5 9.5 0 1 1 5.31 7.88"/><path class="pa" transform="rotate(90)" d="M5.4 0L-4.6 -4.9L-2.2 0L-4.6 4.9Z"/><text x="0.00" y="9.50">H</text></g></svg><div class="plab"><b>dasein-design</b><br>Neulerchenfelderstrasse 42/6<br>A-1160 Wien</div></div>`});
+  }
+  /* keep the address label inside the map: right of the pin by default, left near the right edge, below near the top */
+  function flipLabel(){
+    const el=pin&&pin.getElement(); if(!el) return; const box=el.querySelector('.pinH'), lab=el.querySelector('.plab'); if(!box||!lab) return;
+    const pt=map.latLngToContainerPoint(HOME), sz=map.getSize(), W=box.offsetWidth, H=box.offsetHeight, lw=lab.offsetWidth, lh=lab.offsetHeight, m=6;
+    box.classList.toggle('l', pt.x+W/2+lw+m>sz.x && pt.x-W/2-lw-m>0);
+    box.classList.toggle('b', pt.y-H*.62-lh-m<0);
   }
   let pin=null;
   /* page first: scale it, show the menus and side bars; the map is added afterwards so it can never stop the page */
-  fit(); addEventListener('resize',()=>{fit(); try{ if(map){placeMap(); homeView(map.getZoom()); pin.setIcon(marker());} }catch(err){console.warn(err);} });
+  fit(); addEventListener('resize',()=>{fit(); try{ if(map){placeMap(); homeView(map.getZoom()); pin.setIcon(marker()); flipLabel();} }catch(err){console.warn(err);} });
   if(location.hash) go(location.hash.slice(1),true);
   update();
   try{ 
@@ -400,7 +428,7 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(map);
       map.attributionControl.setPrefix(false);
       placeMap(); homeView();
-      pin=L.marker(HOME,{icon:marker(),keyboard:false}).addTo(map);
+      pin=L.marker(HOME,{icon:marker(),keyboard:false}).addTo(map); map.on('move zoom resize',flipLabel); flipLabel();
       document.getElementById('zin').onclick=()=>map.zoomIn();
       document.getElementById('zout').onclick=()=>map.zoomOut();
       sc.addEventListener('scroll',placeMap,{passive:true});

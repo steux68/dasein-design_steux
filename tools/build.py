@@ -121,6 +121,14 @@ html,body,button,input,select,textarea,dialog{{font-family:Calibri,Carlito,sans-
 .hot.pin.near{{animation:pinpulse 1.5s ease-in-out infinite}}
 @keyframes pinring{{from{{transform:scale(1);opacity:.8}}to{{transform:scale(2.1);opacity:0}}}}
 @keyframes pinpulse{{50%{{transform:scale(1.07)}}}}
+/* menu tabs: on hover, or with the pointer close below, thin red ripples run off the tab - downwards and sideways only,
+   open at the top, since the tabs sit right on the top edge of the screen */
+.hot.tab::before,.hot.tab::after{{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transform-origin:50% 0;
+  border:calc(1px / (var(--s,1) * var(--dpr,1))) solid #e30613;border-top:0}}
+.hot.tab.near:not(.cur)::before,.hot.tab.near:not(.cur)::after,.hot.tab:not(.cur):hover::before,.hot.tab:not(.cur):hover::after{{animation:tabring 1.5s ease-out infinite}}
+.hot.tab.near::after,.hot.tab:hover::after{{animation-delay:.75s}}
+@keyframes tabring{{from{{transform:scale(1,1);opacity:.8}}to{{transform:scale(1.14,2.6);opacity:0}}}}
+@media (prefers-reduced-motion:reduce){{.hot.tab::before,.hot.tab::after{{animation:none!important}}}}
 .pinnear .ihint .ilab{{display:none}}
 @media (prefers-reduced-motion:reduce){{.hot.pin.near,.hot.pin.near::before,.hot.pin.near::after{{animation:none}}}}
 .hot.pin:hover,.hot.pin:focus-visible,.hot.pin:active{{background:#d4fb4d;font-weight:700;z-index:7;border:calc(1px / var(--s,1)) solid #e30613;outline:none}}
@@ -303,6 +311,20 @@ html,body,button,input,select,textarea,dialog{{font-family:Calibri,Carlito,sans-
       document.addEventListener('mouseleave',()=>pins.forEach(a=>a.classList.remove('near')));
     }}
   }}catch(err){{ console.warn('pin pulse skipped',err); }}
+
+  /* menu tabs ripple when the pointer comes close below them (within about 45 px) */
+  try{{
+    const tabs=[...document.querySelectorAll('.hot.tab')], st=document.getElementById('stage');
+    if(tabs.length && !reduce){{
+      const T=tabs.map(a=>[a.offsetLeft,a.offsetLeft+a.offsetWidth,a.offsetTop+a.offsetHeight]);
+      addEventListener('mousemove',e=>{{
+        const lbo=document.getElementById('lb'); if(lbo&&lbo.open){{ tabs.forEach(a=>a.classList.remove('near')); return; }}
+        const r=st.getBoundingClientRect(), s=r.width/1440, x=(e.clientX-r.left)/s, y=(e.clientY-r.top)/s;
+        tabs.forEach((a,i)=>a.classList.toggle('near', x>T[i][0]-20&&x<T[i][1]+20&&y>=0&&y<T[i][2]+45));
+      }},{{passive:true}});
+      document.addEventListener('mouseleave',()=>tabs.forEach(a=>a.classList.remove('near')));
+    }}
+  }}catch(err){{ console.warn('tab ripple skipped',err); }}
 {SEARCH.JS}
   try{{
     if(window.L){{

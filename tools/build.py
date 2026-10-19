@@ -22,7 +22,7 @@ for pid in ORDER:
         names = ['us &amp; our services', 'projects', 'downloads &amp; links', 'bits &amp; bats', 'contact']
         sides = ['r', 'l', 'r', 'l', 'l']   # which side of its circle each title sits on
         for (x, y), target, num, nm, sd in zip([(320, 347), (540, 744), (760, 298), (980, 692), (1200, 257)], ORDER[1:], ['01', '02', '03', '04', '05'], names, sides):
-            extra += f'<a class="hot pin" href="#{target}" style="left:{x}px;top:{y}px">{num}<span class="pl {sd}">{nm}</span></a>'
+            extra += f'<a class="hot pin" href="#{target}" style="left:{x}px;top:{y}px">{num}<svg class="pring" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="14.5"/></svg><span class="pl {sd}">{nm}</span></a>'
     if pid == 'downloads':   # every logo + caption opens that organisation's website in a new tab
         LINKS = [[('Kammer der Ziviltechniker:innen W/NÖ/B', 'https://ost.zt.at/'), ('Architects Registration Board', 'https://arb.org.uk/'),
                   ('MA 37 Baupolizei', 'https://www.wien.gv.at/wohnen/baupolizei/'), ('Wiener Rauchfangkehrer', 'https://www.rauchfangkehrer.wien/'),
@@ -108,6 +108,21 @@ html,body,button,input,select,textarea,dialog{{font-family:Calibri,Carlito,sans-
 .pin .pl{{position:absolute;top:50%;transform:translateY(-50%);white-space:nowrap;font:400 15px/1 Calibri,Carlito,sans-serif;color:#000;padding:4px 0}}
 .pin .pl.r{{left:calc(100% + 9px)}} .pin .pl.l{{right:calc(100% + 9px)}}
 .hot.pin:hover .pl,.hot.pin:focus-visible .pl{{color:#e30613}}
+/* numbered circles: the ring is a vector circle (even in every browser, unlike a border on the scaled page);
+   when the pointer comes near, the circle sends out thin red rings */
+.hot.pin{{border:0!important}}
+.pin .pring{{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}}
+.pin .pring circle{{fill:none;stroke:#000;stroke-width:1;vector-effect:non-scaling-stroke}}
+.hot.pin:hover .pring circle,.hot.pin:focus-visible .pring circle,.hot.pin:active .pring circle{{stroke:#e30613}}
+.hot.pin::before,.hot.pin::after{{content:"";position:absolute;inset:0;border-radius:50%;pointer-events:none;opacity:0;
+  border:calc(1px / (var(--s,1) * var(--dpr,1))) solid #e30613}}
+.hot.pin.near::before,.hot.pin.near::after{{animation:pinring 1.5s ease-out infinite}}
+.hot.pin.near::after{{animation-delay:.75s}}
+.hot.pin.near{{animation:pinpulse 1.5s ease-in-out infinite}}
+@keyframes pinring{{from{{transform:scale(1);opacity:.8}}to{{transform:scale(2.1);opacity:0}}}}
+@keyframes pinpulse{{50%{{transform:scale(1.07)}}}}
+.pinnear .ihint .ilab{{display:none}}
+@media (prefers-reduced-motion:reduce){{.hot.pin.near,.hot.pin.near::before,.hot.pin.near::after{{animation:none}}}}
 .hot.pin:hover,.hot.pin:focus-visible,.hot.pin:active{{background:#d4fb4d;font-weight:700;z-index:7;border:calc(1px / var(--s,1)) solid #e30613;outline:none}}
 .hot:focus-visible{{outline:2px solid red;outline-offset:2px}}
 /* social links: current brand marks in their own colours (Figma's old icons are hidden) */
@@ -273,6 +288,21 @@ html,body,button,input,select,textarea,dialog{{font-family:Calibri,Carlito,sans-
   update();
   try{{ {LB.JS} }}catch(err){{ console.warn('project viewer not available',err); }}
 {BUG.JS}
+
+  /* numbered circles pulse when the pointer comes within about 80 px */
+  try{{
+    const pins=[...document.querySelectorAll('.hot.pin')], st=document.getElementById('stage'), intro=document.getElementById('intro');
+    if(pins.length && !reduce){{
+      const C=pins.map(a=>[a.offsetLeft+15,a.offsetTop+15]);
+      addEventListener('mousemove',e=>{{
+        if(cur!=='intro'){{ pins.forEach(a=>a.classList.remove('near')); return; }}
+        const r=st.getBoundingClientRect(), s=r.width/1440, x=(e.clientX-r.left)/s, y=(e.clientY-r.top)/s+sc.scrollTop-intro.offsetTop;
+        let any=false; pins.forEach((a,i)=>{{ const n=Math.hypot(x-C[i][0],y-C[i][1])<80; a.classList.toggle('near',n); any=any||n; }});
+        document.body.classList.toggle('pinnear',any);   /* near a circle its own label says it all: the hint note steps aside */
+      }},{{passive:true}});
+      document.addEventListener('mouseleave',()=>pins.forEach(a=>a.classList.remove('near')));
+    }}
+  }}catch(err){{ console.warn('pin pulse skipped',err); }}
 {SEARCH.JS}
   try{{
     if(window.L){{

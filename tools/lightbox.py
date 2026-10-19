@@ -28,8 +28,26 @@ PROJECTS = [
     dict(r=(455, 820, 200, 180), t='dd - OUR OLD LOGO', imgs=['img/projects-imgImage2.webp']),
     dict(r=(895, 820, 200, 180), t='INTERIOR COURTYARDS', imgs=['img/projects-imgImage7.webp']),
 ]
-PLACEHOLDER = ('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore '
-               'et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.')
+PLACEHOLDER = ['Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore '
+               'et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.',
+               'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore. '
+               'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt.']
+# imaginary placeholder details, in project order, until the real ones are written
+DETAILS = [
+    dict(place='Wien 16, Ottakring', date='2024', client='dasein-design (own work)', type='corporate identity, logo', status='completed'),
+    dict(place='Hinterstoder, Upper Austria', date='2019', client='regional tourism board', type='landscape study', status='study'),
+    dict(place='Wien 7, Neubau', date='2021', client='café chain', type='interior refurbishment', status='completed'),
+    dict(place='Wien 7, Museumsplatz', date='2018', client='cultural institution', type='exhibition design', status='completed'),
+    dict(place='Wien 16, Ottakring', date='2025', client='dasein-design (own work)', type='graphic design, print', status='completed'),
+    dict(place='Wien', date='2026', client='–', type='portrait, about us', status='ongoing'),
+    dict(place='Wien 10, Favoriten', date='2022', client='public client', type='lighting concept, underpass', status='competition entry'),
+    dict(place='Wien 3, Landstraße', date='2020', client='research', type='architectural history, documentation', status='published'),
+    dict(place='Wien 2, Prater', date='2017', client='private client', type='event space, interior', status='completed'),
+    dict(place='Wien', date='2008', client='dasein-design (own work)', type='corporate identity', status='archived'),
+    dict(place='Wien 16, Ottakring', date='2023', client='housing cooperative', type='courtyard greening', status='under construction'),
+]
+for p, d in zip(PROJECTS, DETAILS):
+    p.setdefault('d', dict(d))
 # the details shown under the text, in this order; a missing entry shows a dash
 FIELDS = [('name', 'project'), ('place', 'place'), ('date', 'date'), ('client', 'client'), ('type', 'type'), ('status', 'status')]
 # coloured placeholder photos in mixed shapes (img/ph-01.svg ... ph-10.svg) until the real photos arrive:
@@ -103,7 +121,9 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
    repeating-linear-gradient(to bottom,var(--c) 0 var(--d),transparent var(--d) var(--p)) left top/var(--w) 100% no-repeat,
    repeating-linear-gradient(to bottom,var(--c) 0 var(--d),transparent var(--d) var(--p)) right top/var(--w) 100% no-repeat}
 /* top line: counter on the left, close on the right */
-.lbk{position:absolute;left:30px;top:30px;font:400 13px/25px Calibri,Carlito,sans-serif;color:#666;letter-spacing:.06em}
+.lbk{position:absolute;left:26px;top:30px;height:25px;display:flex;align-items:center;gap:8px;font:400 13px/25px Calibri,Carlito,sans-serif;color:#666;letter-spacing:.06em}
+.lbkb{display:flex;align-items:center;border:0;background:none;padding:0;cursor:pointer}
+.lbkb:focus-visible{outline:none}
 .lbk b{color:#e30613;font-weight:400}
 .lbx{position:absolute;right:26px;top:31px;width:24px;height:24px;border:0;padding:0;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .lbx svg{width:16px;height:16px;stroke:#000;stroke-width:1;transition:stroke .2s}
@@ -129,14 +149,15 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
 .ar .dt{fill:#4d4f4a;stroke:#1a1a1a;stroke-width:var(--hp);stroke-linejoin:round}
 .ar text{fill:#3a3c37;font:700 6.4px Calibri,Carlito,sans-serif;text-anchor:middle;dominant-baseline:central}
 .tr{fill:none;stroke:#3a3c37;stroke-width:var(--hp);opacity:0;transform-box:fill-box;transform-origin:center}
-.lbm button:hover .tr,.lbm button:focus-visible .tr,.lbsa:not(:disabled):hover .tr,.nextp:hover .tr,.nextp:focus-visible .tr,.nextp.hint .tr{animation:arring 1.4s ease-out infinite}
+.lbm button:hover .tr,.lbm button:focus-visible .tr,.lbkb:hover .tr,.lbkb:focus-visible .tr,.lbsa:not(:disabled):hover .tr,.nextp:hover .tr,.nextp:focus-visible .tr,.nextp.hint .tr{animation:arring 1.4s ease-out infinite}
 .tr2{animation-delay:.7s!important}
 @keyframes arring{from{transform:scale(1);opacity:.75}to{transform:scale(1.8);opacity:0;stroke-width:calc(var(--hp) / 1.8)}}
 @media (prefers-reduced-motion:reduce){.tr{animation:none!important}}
 /* beside the photo: title, text, then the project details */
 .lbc{position:absolute;left:580px;top:75px;width:310px;height:390px;overflow-y:auto;scrollbar-width:thin}
 .lbt{margin:0;font:700 20px/1.15 Calibri,Carlito,sans-serif;color:#e30613}
-.lbtx{margin:12px 0 0;font:400 14px/1.4 Calibri,Carlito,sans-serif;color:#222}
+.lbtx{margin:12px 0 0;font:400 14px/1.4 Calibri,Carlito,sans-serif;color:#222;display:flex;flex-direction:column;gap:8px}
+.lbtx p{margin:0}
 .lbdt{margin:18px 0 0;padding-top:12px;border-top:1px dashed #c4c4c4;display:grid;grid-template-columns:62px 1fr;gap:5px 10px;font:400 13px/1.3 Calibri,Carlito,sans-serif}
 .lbdt dt{color:#888;letter-spacing:.04em}
 .lbdt dd{margin:0;color:#000}
@@ -182,12 +203,12 @@ LINES = ''.join(f'<i style="left:{x}px"></i>' for x in (225, 445, 665, 885, 1105
 HTML = '<div class="pcur" id="pcur" aria-hidden="true"><b></b></div>' + f'''<dialog class="lb" id="lb" aria-labelledby="lbt"><div class="pcar" id="pcar" aria-hidden="true">{compass("W", 28, "cw")}{compass("E", 28, "ce")}</div><div class="lbh"><div class="lbs" id="lbs">
 <div class="lbv"></div><div class="lbg">{LINES}</div>
 <div class="lbp" id="lbp" tabindex="-1" style="left:{BX}px;top:{BY}px;width:{BW}px;height:{BH}px">
-<div class="lbk" id="lbk"></div>
+<div class="lbk"><button type="button" class="lbkb" id="lbkp" aria-label="previous project">{compass("W", 18)}</button><span id="lbk"></span><button type="button" class="lbkb" id="lbkn" aria-label="next project">{compass("E", 18)}</button></div>
 <button type="button" class="lbx" id="lbx" aria-label="close (Esc)" title="close (Esc)"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 2L14 14M14 2L2 14"/></svg></button>
 <div class="lbi lbd"><img id="lbimg" alt="">
 <button type="button" class="lbn prev" id="lbprev" aria-label="previous photo"><span>{ARROW_W}</span></button>
 <button type="button" class="lbn next" id="lbnext" aria-label="next photo"><span>{ARROW_E}</span></button></div>
-<div class="lbc"><h2 class="lbt" id="lbt"></h2><p class="lbtx" id="lbtx"></p><dl class="lbdt" id="lbdt"></dl></div>
+<div class="lbc"><h2 class="lbt" id="lbt"></h2><div class="lbtx" id="lbtx"></div><dl class="lbdt" id="lbdt"></dl></div>
 <div class="lbsl" id="lbsl"></div>
 <div class="lbsw"><button type="button" class="lbsa l" id="lbsl0" aria-label="scroll photos left">{ARROW_W}</button>
 <div class="lbst" id="lbst"></div>
@@ -208,7 +229,7 @@ JS = '''
     const im=$('lbimg'); if(im.getAttribute('src')!==pr.imgs[ph]){ im.classList.add('ld'); im.onload=()=>im.classList.remove('ld'); im.src=pr.imgs[ph]; } im.alt=pr.t;
     $('lbk').innerHTML='projects <b>'+two(pi+1)+'</b> / '+two(P.length);
     if(newp){
-      $('lbt').textContent=pr.t; $('lbtx').textContent=pr.x;
+      $('lbt').textContent=pr.t; $('lbtx').innerHTML=(Array.isArray(pr.x)?pr.x:[pr.x]).map(t=>'<p>'+esc(t)+'</p>').join('');
       $('lbdt').innerHTML=F.map(([k,l])=>'<dt>'+l+'</dt><dd>'+esc(pr.d[k]||'–')+'</dd>').join('');
       st.innerHTML=pr.imgs.map((s,k)=>'<button type="button" data-k="'+k+'" aria-label="photo '+(k+1)+'"><img src="'+s+'" alt=""></button>').join('');
       st.querySelectorAll('img').forEach(i=>i.addEventListener('load',arrows));
@@ -224,7 +245,7 @@ JS = '''
   document.querySelectorAll('.hot.proj').forEach(b=>b.addEventListener('click',()=>{ pi=-1; lb.showModal(); show(+b.dataset.p,0); $('lbp').focus({preventScroll:true}); }));
   $('lbx').onclick=()=>lb.close();
   $('lbprev').onclick=()=>step(-1); $('lbnext').onclick=()=>step(1);
-  $('lbpp').onclick=()=>show(pi-1,0); $('lbnp').onclick=()=>show(pi+1,0);
+  $('lbpp').onclick=$('lbkp').onclick=()=>show(pi-1,0); $('lbnp').onclick=$('lbkn').onclick=()=>show(pi+1,0);
   st.addEventListener('click',e=>{ const b=e.target.closest('button'); if(b) show(pi,+b.dataset.k); });
   st.addEventListener('scroll',arrows,{passive:true});
   $('lbsl0').onclick=()=>{ st.scrollLeft-=st.clientWidth*.8; }; $('lbsr0').onclick=()=>{ st.scrollLeft+=st.clientWidth*.8; };

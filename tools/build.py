@@ -97,11 +97,6 @@ html,body,button,input,select,textarea,dialog{{font-family:Calibri,Carlito,sans-
 .chrome[data-pg="bits"] [class*="w-[190px]"][class*="left-[995px]"]{{color:#e30613!important}}
 .chrome[data-pg="contact"] [class*="w-[190px]"][class*="left-[1215px]"]{{color:#e30613!important}}
 
-.stage[data-hover="0"] .chrome.on [class*="w-[190px]"][class*="left-[335px]"]{{color:#e30613!important}}
-.stage[data-hover="1"] .chrome.on [class*="w-[190px]"][class*="left-[555px]"]{{color:#e30613!important}}
-.stage[data-hover="2"] .chrome.on [class*="w-[190px]"][class*="left-[775px]"]{{color:#e30613!important}}
-.stage[data-hover="3"] .chrome.on [class*="w-[190px]"][class*="left-[995px]"]{{color:#e30613!important}}
-.stage[data-hover="4"] .chrome.on [class*="w-[190px]"][class*="left-[1215px]"]{{color:#e30613!important}}
 
 .hot.pin{{width:30px;height:30px;box-sizing:border-box;border-radius:50%;border:calc(1px / var(--s,1)) solid #000;background:#bfbfbf;
   display:flex;align-items:center;justify-content:center;font:400 18px/1 Calibri,Carlito,sans-serif;color:#000;text-decoration:none;z-index:6;transition:background .15s}}
@@ -129,6 +124,12 @@ html,body,button,input,select,textarea,dialog{{font-family:Calibri,Carlito,sans-
 .stage[data-bob="3"] .chrome.on [class*="left-[895px]"][class*="h-[25px]"][class*="bg-"],.stage[data-bob="3"] .chrome.on [class*="w-[190px]"][class*="left-[995px]"],.stage[data-bob="3"] .hot.tab[href]:nth-of-type(4),
 .stage[data-bob="4"] .chrome.on [class*="left-[1115px]"][class*="h-[25px]"][class*="bg-"],.stage[data-bob="4"] .chrome.on [class*="w-[190px]"][class*="left-[1215px]"],.stage[data-bob="4"] .hot.tab[href]:nth-of-type(5){{animation:tabbob 1.1s ease-in-out infinite}}
 @keyframes tabbob{{0%,100%{{transform:translateY(0)}}45%{{transform:translateY(3px)}}65%{{transform:translateY(1.5px)}}}}
+/* the tab box turns lime like the numbered circles; the label stays as it is (bold only on the current page) */
+.stage[data-bob="0"] .chrome.on [class*="left-[235px]"][class*="h-[25px]"][class*="bg-"],
+.stage[data-bob="1"] .chrome.on [class*="left-[455px]"][class*="h-[25px]"][class*="bg-"],
+.stage[data-bob="2"] .chrome.on [class*="left-[675px]"][class*="h-[25px]"][class*="bg-"],
+.stage[data-bob="3"] .chrome.on [class*="left-[895px]"][class*="h-[25px]"][class*="bg-"],
+.stage[data-bob="4"] .chrome.on [class*="left-[1115px]"][class*="h-[25px]"][class*="bg-"]{{background:#d4fb4d!important;transition:background .15s}}
 @media (prefers-reduced-motion:reduce){{.stage[data-bob] *{{animation-name:none!important}}}}
 .pinnear .ihint .ilab{{display:none}}
 @media (prefers-reduced-motion:reduce){{.hot.pin.near,.hot.pin.near::before,.hot.pin.near::after{{animation:none}}}}

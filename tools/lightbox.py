@@ -82,11 +82,11 @@ CSS = '''
 .pcur{position:fixed;left:0;top:0;width:0;height:0;pointer-events:none;z-index:2147483000;display:none}
 .pcur.on{display:block}
 .pcur b,.pcur::before,.pcur::after{content:"";position:absolute;left:0;top:0;border-radius:50%;transform:translate(-50%,-50%)}
-.pcur b{width:6px;height:6px;background:#d4fb4d;box-shadow:inset 0 0 0 .5px #e30613;animation:pcdot 1.4s ease-in-out infinite}
-.pcur::before,.pcur::after{width:6px;height:6px;border:.6px solid #e30613;box-sizing:border-box;animation:pcring 1.4s ease-out infinite}
+.pcur b{width:9px;height:9px;background:#d4fb4d;box-shadow:inset 0 0 0 .5px #e30613;animation:pcdot 1.4s ease-in-out infinite}
+.pcur::before,.pcur::after{width:9px;height:9px;border:.6px solid #e30613;box-sizing:border-box;animation:pcring 1.4s ease-out infinite}
 .pcur::after{animation-delay:.7s}
 @keyframes pcdot{50%{transform:translate(-50%,-50%) scale(.75)}}
-@keyframes pcring{from{width:6px;height:6px;opacity:.8}to{width:30px;height:30px;opacity:0}}
+@keyframes pcring{from{width:9px;height:9px;opacity:.8}to{width:45px;height:45px;opacity:0}}
 @media (prefers-reduced-motion:reduce){.pcur b,.pcur::before,.pcur::after{animation:none}.pcur::after{display:none}.pcur::before{width:18px;height:18px}}
 /* over the photo the pointer becomes a small yellow arrow, pulsing and sending out thin red rings like the circle */
 .pcar{position:fixed;left:0;top:0;width:0;height:0;pointer-events:none;z-index:10;display:none}
@@ -114,7 +114,7 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
 /* the pop-up itself, centred in the main area */
 .lbp{position:absolute;outline:none;background:rgba(255,255,255,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:0 12px 40px rgba(0,0,0,.10)}
 .lbd::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;
-  --c:#c4c4c4;--d:5px;--p:7.5px;--w:calc(1px / (var(--s,1) * var(--dpr,1)));
+  --c:#d4d4d4;--d:var(--w);--p:calc(var(--w) * 3);--w:calc(1px / (var(--s,1) * var(--dpr,1)));
   background:
    repeating-linear-gradient(to right,var(--c) 0 var(--d),transparent var(--d) var(--p)) left top/100% var(--w) no-repeat,
    repeating-linear-gradient(to right,var(--c) 0 var(--d),transparent var(--d) var(--p)) left bottom/100% var(--w) no-repeat,
@@ -158,7 +158,7 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
 .lbt{margin:0;font:700 20px/1.15 Calibri,Carlito,sans-serif;color:#e30613}
 .lbtx{margin:12px 0 0;font:400 14px/1.4 Calibri,Carlito,sans-serif;color:#222;display:flex;flex-direction:column;gap:8px}
 .lbtx p{margin:0}
-.lbdt{margin:18px 0 0;padding-top:12px;border-top:1px dashed #c4c4c4;display:grid;grid-template-columns:62px 1fr;gap:5px 10px;font:400 13px/1.3 Calibri,Carlito,sans-serif}
+.lbdt{margin:18px 0 0;padding-top:12px;border-top:calc(1px / (var(--s,1) * var(--dpr,1))) dotted #d4d4d4;display:grid;grid-template-columns:62px 1fr;gap:5px 10px;font:400 13px/1.3 Calibri,Carlito,sans-serif}
 .lbdt dt{color:#888;letter-spacing:.04em}
 .lbdt dd{margin:0;color:#000}
 /* photo strip of this project, for quick navigation */

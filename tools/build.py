@@ -124,16 +124,16 @@ html,body,button,input,select,textarea,dialog{{font-family:Calibri,Carlito,sans-
 .stage[data-bob="3"] .chrome.on [class*="left-[895px]"][class*="h-[25px]"][class*="bg-"],.stage[data-bob="3"] .chrome.on [class*="w-[190px]"][class*="left-[995px]"],.stage[data-bob="3"] .hot.tab[href]:nth-of-type(4),
 .stage[data-bob="4"] .chrome.on [class*="left-[1115px]"][class*="h-[25px]"][class*="bg-"],.stage[data-bob="4"] .chrome.on [class*="w-[190px]"][class*="left-[1215px]"],.stage[data-bob="4"] .hot.tab[href]:nth-of-type(5){{animation:tabbob 1.1s ease-in-out infinite}}
 @keyframes tabbob{{0%,100%{{transform:translateY(0)}}45%{{transform:translateY(3px)}}65%{{transform:translateY(1.5px)}}}}
-/* the tab box turns lime like the numbered circles; the label stays as it is (bold only on the current page) */
+/* hover is a passing state: the tab box (and a numbered circle) turns lime green; the current page keeps its yellow-lime; the label stays as it is */
 .stage[data-bob="0"] .chrome.on [class*="left-[235px]"][class*="h-[25px]"][class*="bg-"],
 .stage[data-bob="1"] .chrome.on [class*="left-[455px]"][class*="h-[25px]"][class*="bg-"],
 .stage[data-bob="2"] .chrome.on [class*="left-[675px]"][class*="h-[25px]"][class*="bg-"],
 .stage[data-bob="3"] .chrome.on [class*="left-[895px]"][class*="h-[25px]"][class*="bg-"],
-.stage[data-bob="4"] .chrome.on [class*="left-[1115px]"][class*="h-[25px]"][class*="bg-"]{{background:#d4fb4d!important;transition:background .15s}}
+.stage[data-bob="4"] .chrome.on [class*="left-[1115px]"][class*="h-[25px]"][class*="bg-"]{{background:#a5e35a!important;transition:background .15s}}
 @media (prefers-reduced-motion:reduce){{.stage[data-bob] *{{animation-name:none!important}}}}
 .pinnear .ihint .ilab{{display:none}}
 @media (prefers-reduced-motion:reduce){{.hot.pin.near,.hot.pin.near::before,.hot.pin.near::after{{animation:none}}}}
-.hot.pin:hover,.hot.pin:focus-visible,.hot.pin:active{{background:#d4fb4d;font-weight:700;z-index:7;border:calc(1px / var(--s,1)) solid #e30613;outline:none}}
+.hot.pin:hover,.hot.pin:focus-visible,.hot.pin:active{{background:#a5e35a;font-weight:700;z-index:7;border:calc(1px / var(--s,1)) solid #e30613;outline:none}}
 .hot:focus-visible{{outline:2px solid red;outline-offset:2px}}
 /* social links: current brand marks in their own colours (Figma's old icons are hidden) */
 .chrome [data-name="Facebook"],.chrome [data-name="Instagram"],.chrome [data-name="Twitter Squared"]{{display:none}}

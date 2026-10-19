@@ -1,6 +1,7 @@
 """Assemble the single-page site from the split Figma pages."""
 import json
 import lightbox as LB   # project pop-up viewer
+import bug as BUG   # start page: the beetle flies in as a collage
 ICONS = json.load(open('icons.json'))   # current brand marks (Simple Icons)
 S = json.load(open('frag/split.json'))
 M = json.load(open('frag/manifest.json'))['contact']   # published paths of the map buttons and marker
@@ -35,6 +36,8 @@ for pid in ORDER:
                 extra += f'<a class="hot lk" href="{url}" target="_blank" rel="noopener" aria-label="{nm} (opens in a new tab)" style="left:{x}px;top:{438 + 110 * i}px"></a>'
     if pid == 'projects':   # each project tile opens the pop-up viewer
         extra += LB.TILES
+    if pid == 'intro':   # beetle collage pieces, over the beetle
+        extra += BUG.HTML
     sections.append(f'<section class="pg" id="{pid}"><div class="{ROOT} frame">{"".join(items)}{extra}</div></section>')
 
 chromes = ''.join(f'<div class="chrome{" on" if pid == "intro" else ""}" data-pg="{pid}">{"".join(h for h in S[pid]["chrome"] if "inset-[95.7%_6.25%_2.83%_92.71%]" not in h[:300])}</div>' for pid in ORDER)
@@ -146,7 +149,7 @@ html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
 .pin42{{position:relative;text-align:center;font-family:Calibri,Carlito,sans-serif;font-weight:700;color:#000}}
 .pin42 img{{display:block;margin:0 auto}}
 .leaflet-container .leaflet-control-attribution{{font:10px/1.3 Calibri,Carlito,sans-serif;background:rgba(255,255,255,.7)}}
-{LB.CSS}</style>
+{LB.CSS}{BUG.CSS}</style>
 </head>
 <body>
 <div class="strip"><div class="holder" id="holder">
@@ -230,6 +233,7 @@ html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
   if(location.hash) go(location.hash.slice(1),true);
   update();
   try{{ {LB.JS} }}catch(err){{ console.warn('project viewer not available',err); }}
+{BUG.JS}
   try{{
     if(window.L){{
       clip.hidden=false; placeMap();

@@ -133,10 +133,10 @@ html,body,button,input,select,textarea,dialog{{font-family:Calibri,Carlito,sans-
 @keyframes glow{{0%,100%{{opacity:1}}50%{{opacity:.35}}}}
 @media (prefers-reduced-motion:reduce){{.nextp.hint svg,.nextp.hint span{{animation:none}}}}
 .gl{{position:absolute;left:0;top:0;pointer-events:none;z-index:30}}
-/* frames around images: light dotted, one and a quarter screen pixels; only the main grid lines are dashed */
+/* frames around images: light dotted, one screen pixel; only the main grid lines are dashed */
 .frame .border-dashed.border-black{{border-width:0!important}}
 .frame .border-dashed.border-black::after{{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;
-  --c:#cbcbcb;--d:var(--w);--p:calc(var(--w) * 3);--w:calc(1.25px / (var(--s,1) * var(--dpr,1)));
+  --c:#b8b8b8;--d:var(--w);--p:calc(var(--w) * 3);--w:calc(1px / (var(--s,1) * var(--dpr,1)));
   background:
    repeating-linear-gradient(to right,var(--c) 0 var(--d),transparent var(--d) var(--p)) left top/100% var(--w) no-repeat,
    repeating-linear-gradient(to right,var(--c) 0 var(--d),transparent var(--d) var(--p)) left bottom/100% var(--w) no-repeat,
@@ -148,7 +148,7 @@ html,body,button,input,select,textarea,dialog{{font-family:Calibri,Carlito,sans-
 .mapwrap{{position:absolute;pointer-events:auto;background:#e8e4dc}}
 #livemap{{position:absolute;inset:0;background:#e8e4dc}}
 .mz{{position:absolute;z-index:500;display:flex;flex-direction:column;gap:1px}}
-.mz button{{padding:0;margin:0;border:1.25px dotted #cbcbcb;background:#fff;cursor:pointer;display:block}}
+.mz button{{padding:0;margin:0;border:1px dotted #b8b8b8;background:#fff;cursor:pointer;display:block}}
 .mz button img{{display:block;width:100%;height:100%}}
 .mz button:hover{{border:1px solid #e30613}}
 .pin42{{position:relative;text-align:center;font-family:Calibri,Carlito,sans-serif;font-weight:700;color:#000}}

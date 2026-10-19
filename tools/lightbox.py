@@ -126,7 +126,7 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
 .lbn:focus-visible{outline:none}
 .tri{fill:rgba(205,255,62,.86);stroke:none}
 .lbn:hover .tri,.lbm button:hover .tri,.lbsa:hover .tri{fill:#d4fb4d}
-.lbsa .tri,.lbm .tri{stroke:#000;stroke-width:.3}
+.lbsa .tri,.lbm .tri{stroke:#1a1a1a;stroke-width:calc(.81px / (var(--s,1) * var(--dpr,1)))}   /* one screen pixel */
 /* beside the photo: title, text, then the project details */
 .lbc{position:absolute;left:580px;top:75px;width:310px;height:390px;overflow-y:auto;scrollbar-width:thin}
 .lbt{margin:0;font:700 20px/1.15 Calibri,Carlito,sans-serif;color:#e30613}

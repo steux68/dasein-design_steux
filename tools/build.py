@@ -66,6 +66,7 @@ html = f'''<!doctype html>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" data-live-map>
 <style>
 html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
+html,body,button,input,select,textarea,dialog{{font-family:Calibri,Carlito,sans-serif}}   /* one font everywhere, buttons included */
 .strip{{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}}
 .holder{{position:relative;flex:none;width:calc(1440px * var(--s,.5));height:calc(1024px * var(--s,.5))}}
 .stage{{position:absolute;left:0;top:0;width:1440px;height:1024px;transform:scale(var(--s,.5));transform-origin:0 0;background:#fff;overflow:hidden}}
@@ -182,7 +183,7 @@ html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
   }});
   function update(){{
     const i=Math.max(0,Math.min(pgs.length-1,Math.round(sc.scrollTop/1024))), id=pgs[i].id;
-    if(id===cur) return; if(cur==='contact'&&map) homeView(); /* leaving the contact page resets the map */ cur=id; chromes.forEach(c=>{{c.classList.toggle('on',c.dataset.pg===id); c.classList.remove('arrive');}}); const ch=chromes.find(c=>c.dataset.pg===id); void ch.offsetWidth; ch.classList.add('arrive'); const nx=document.getElementById('nextp'), k=pgs.findIndex(p=>p.id===id), last=k===pgs.length-1; nx.setAttribute('href','#'+(last?pgs[0].id:pgs[k+1].id)); nx.classList.toggle('up',last); if(id!=='intro') moved=true; const hint=id==='intro'&&!moved; nx.classList.toggle('hint',hint); nx.style.width=hint?'200px':'90px'; nx.lastChild.textContent=last?'top':(hint?'scroll or click the menu':'scroll'); document.querySelectorAll('.hot.tab').forEach(t=>t.classList.toggle('cur',t.getAttribute('href')==='#'+id));
+    if(id===cur) return; if(cur==='contact'&&map) homeView(); /* leaving the contact page resets the map */ cur=id; document.dispatchEvent(new CustomEvent('pagechange',{{detail:id}})); chromes.forEach(c=>{{c.classList.toggle('on',c.dataset.pg===id); c.classList.remove('arrive');}}); const ch=chromes.find(c=>c.dataset.pg===id); void ch.offsetWidth; ch.classList.add('arrive'); const nx=document.getElementById('nextp'), k=pgs.findIndex(p=>p.id===id), last=k===pgs.length-1; nx.setAttribute('href','#'+(last?pgs[0].id:pgs[k+1].id)); nx.classList.toggle('up',last); if(id!=='intro') moved=true; const hint=id==='intro'&&!moved; nx.classList.toggle('hint',hint); nx.style.width=hint?'200px':'90px'; nx.lastChild.textContent=last?'top':(hint?'scroll or click the menu':'scroll'); document.querySelectorAll('.hot.tab').forEach(t=>t.classList.toggle('cur',t.getAttribute('href')==='#'+id));
   }}
   sc.addEventListener('scroll',update,{{passive:true}});
   /* the page always scales itself to fit the window, so block browser zoom (Ctrl/Cmd + wheel, Ctrl/Cmd + plus/minus) */

@@ -3,7 +3,7 @@
 The beetle image (transparent background) is cut into an irregular grid of pieces that tile exactly;
 only pieces that contain some beetle are kept. Each piece flies in from outside, turned and slightly
 larger, lands a little askew and then snaps into place; at the end the real image takes over.
-It plays when the site opens on the start page, never with "reduce motion" switched on.
+It plays every time you arrive on the start page, never with "reduce motion" switched on.
 build.py imports HTML (placed in the intro page), CSS and JS. Run from tools/ (reads ../img/).
 """
 import os
@@ -80,24 +80,30 @@ CSS = f'''
 '''
 
 JS = '''
-  /* start page: the beetle flies in as torn pieces and puts itself together, about 2.5 seconds */
+  /* start page: the beetle flies in as torn pieces and puts itself together, about 3 seconds,
+     every time you arrive on the start page */
   try{
     const bug=document.getElementById('bug'), fr=bug&&bug.parentElement;
-    if(bug && cur==='intro' && !reduce && bug.animate){
-      fr.classList.add('bugplay');
+    if(bug && bug.animate && !reduce){
       const ps=[...bug.children], R=(a,b)=>a+Math.random()*(b-a);
-      const done=ps.map((p,n)=>{
-        const ang=R(0,Math.PI*2), dist=R(700,1100), r=R(-140,140), d=R(0,800);
-        const a=p.animate([
-          {transform:`translate(${Math.cos(ang)*dist}px,${Math.sin(ang)*dist}px) rotate(${r}deg) scale(1.25)`,opacity:0,filter:'drop-shadow(0 10px 8px rgba(0,0,0,.28))'},
-          {opacity:1,offset:.12},
-          {transform:`translate(${R(-7,7)}px,${R(-7,7)}px) rotate(${R(-5,5)}deg) scale(1.02)`,offset:.82,filter:'drop-shadow(0 3px 3px rgba(0,0,0,.18))'},
-          {transform:'none',opacity:1,filter:'drop-shadow(0 0 0 rgba(0,0,0,0))'}],
-          {duration:R(1650,2050),delay:d,easing:'cubic-bezier(.22,.7,.3,1)',fill:'both'});
-        return a.finished;
-      });
-      /* all pieces in place: the real beetle takes over */
-      Promise.all(done).then(()=>setTimeout(()=>{fr.classList.remove('bugplay'); bug.remove();},120));
+      let anims=[], run=0;
+      const play=()=>{
+        anims.forEach(a=>a.cancel()); const me=++run;
+        fr.classList.add('bugplay');
+        anims=ps.map(p=>{
+          const ang=R(0,Math.PI*2), dist=R(700,1100), r=R(-140,140), d=R(0,800);
+          return p.animate([
+            {transform:`translate(${Math.cos(ang)*dist}px,${Math.sin(ang)*dist}px) rotate(${r}deg) scale(1.25)`,opacity:0,filter:'drop-shadow(0 10px 8px rgba(0,0,0,.28))'},
+            {opacity:1,offset:.12},
+            {transform:`translate(${R(-7,7)}px,${R(-7,7)}px) rotate(${R(-5,5)}deg) scale(1.02)`,offset:.82,filter:'drop-shadow(0 3px 3px rgba(0,0,0,.18))'},
+            {transform:'none',opacity:1,filter:'drop-shadow(0 0 0 rgba(0,0,0,0))'}],
+            {duration:R(1650,2050),delay:d,easing:'cubic-bezier(.22,.7,.3,1)',fill:'both'});
+        });
+        /* all pieces in place: the real beetle takes over */
+        Promise.all(anims.map(a=>a.finished)).then(()=>setTimeout(()=>{ if(me===run) fr.classList.remove('bugplay'); },120)).catch(()=>{});
+      };
+      document.addEventListener('pagechange',e=>{ if(e.detail==='intro') play(); });
+      if(cur==='intro') play();
     }
   }catch(err){ console.warn('beetle animation skipped',err); }
 '''

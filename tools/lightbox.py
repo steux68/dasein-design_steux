@@ -73,14 +73,11 @@ CSS = '''
 /* over the photo the pointer becomes a small yellow arrow, pulsing and sending out thin red rings like the circle */
 .pcar{position:fixed;left:0;top:0;width:0;height:0;pointer-events:none;z-index:10;display:none}
 .pcar.on{display:block}
-.pcar svg{position:absolute;left:-24px;top:-24px;width:48px;height:48px;overflow:visible}
-.pcar.l svg{transform:rotate(180deg)}
-.pcar .k{fill:#4d4f4a;stroke:#1a1a1a;stroke-width:.4;transform-origin:0 0;animation:pcak 1.4s ease-in-out infinite}
-.pcar .g{fill:none;stroke:#3a3c37;stroke-width:.6;transform-origin:0 0;animation:pcarr 1.4s ease-out infinite}
-.pcar .g2{animation-delay:.7s}
-@keyframes pcak{50%{transform:scale(.8)}}
-@keyframes pcarr{from{transform:scale(1);opacity:.8;stroke-width:.6}to{transform:scale(2.6);opacity:0;stroke-width:.23}}   /* lines stay about one pixel thin as they grow */
-@media (prefers-reduced-motion:reduce){.pcar .k,.pcar .g{animation:none}.pcar .g{opacity:0}}
+.pcar{--hp:calc(.86px / var(--dpr,1))}
+.pcar svg{position:absolute;left:-14px;top:-14px;display:none}
+.pcar.l .cw,.pcar.r .ce{display:block}
+.pcar .tr{animation:arring 1.4s ease-out infinite}
+.pcar .dt{transform-box:fill-box;transform-origin:center}
 /* project pop-up: only the main area is veiled and blurred; side bars, title and menu stay sharp */
 dialog.lb{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;background:transparent;overflow:hidden;color:#000}
 dialog.lb::backdrop{background:transparent}
@@ -121,18 +118,20 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
 .lbn{position:absolute;top:0;width:50%;height:100%;padding:0;border:0;background:none;cursor:none;display:flex;align-items:center;z-index:3}
 .lbn.prev{left:0;justify-content:flex-start;padding-left:12px}.lbn.next{right:0;justify-content:flex-end;padding-right:12px}
 .lbn span{width:40px;height:40px;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s}
-.lbn.prev svg,.lbm .pp svg,.lbsa.l svg{transform:rotate(-90deg)}.lbn.next svg,.lbm .np svg,.lbsa.r svg{transform:rotate(90deg)}
 .lbn:focus-visible span{opacity:1}
 .lbn:focus-visible{outline:none}
-/* all triangle arrows: dark grey with a hairline edge as thin as the dashed guide lines (one screen pixel);
-   pointed at, they send out thin dark rings, like the pulsing pointers */
-:root{--hp:calc(.81px / (var(--s,1) * var(--dpr,1)))}
-.ar{overflow:visible}
-.tri,.nextp .tri{fill:#4d4f4a;stroke:#1a1a1a;stroke-width:var(--hp)}
+/* all arrows are compass arrows (north = top of the screen): a dark grey notched arrowhead in an open circle,
+   with N, E, S or W in the gap; every line as thin as the dashed guide lines (one screen pixel).
+   Pointed at, they send out thin dark rings, like the pulsing pointers */
+:root{--hp:calc(.92px / (var(--s,1) * var(--dpr,1)))}
+.ar{overflow:visible;flex:none}
+.ar .rg{fill:none;stroke:#3a3c37;stroke-width:var(--hp)}
+.ar .dt{fill:#4d4f4a;stroke:#1a1a1a;stroke-width:var(--hp);stroke-linejoin:round}
+.ar text{fill:#3a3c37;font:700 6.4px Calibri,Carlito,sans-serif;text-anchor:middle;dominant-baseline:central}
 .tr{fill:none;stroke:#3a3c37;stroke-width:var(--hp);opacity:0;transform-box:fill-box;transform-origin:center}
 .lbm button:hover .tr,.lbm button:focus-visible .tr,.lbsa:not(:disabled):hover .tr,.nextp:hover .tr,.nextp:focus-visible .tr,.nextp.hint .tr{animation:arring 1.4s ease-out infinite}
 .tr2{animation-delay:.7s!important}
-@keyframes arring{from{transform:scale(1);opacity:.75}to{transform:scale(2.4);opacity:0;stroke-width:calc(var(--hp) / 2.4)}}
+@keyframes arring{from{transform:scale(1);opacity:.75}to{transform:scale(1.8);opacity:0;stroke-width:calc(var(--hp) / 1.8)}}
 @media (prefers-reduced-motion:reduce){.tr{animation:none!important}}
 /* beside the photo: title, text, then the project details */
 .lbc{position:absolute;left:580px;top:75px;width:310px;height:390px;overflow-y:auto;scrollbar-width:thin}
@@ -163,24 +162,37 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
 .lbm button:hover,.lbm button:focus-visible{color:#e30613;outline:none}
 '''
 
-ARROW = (f'<svg class="ar" width="20" height="15" viewBox="-0.5 -0.5 16.26 11.61" aria-hidden="true">'
-         f'<path class="tr" d="{TRI}"/><path class="tr tr2" d="{TRI}"/><path class="tri" d="{TRI}"/></svg>')
+def compass(d, size=22, cls=''):
+    """compass arrow: a notched arrowhead in an open circle, with N, E, S or W in the gap it points to"""
+    import math
+    a = {'E': 0, 'S': 90, 'W': 180, 'N': 270}[d]
+    r, gap = 9.5, 34
+    p = lambda deg: (r * math.cos(math.radians(deg)), r * math.sin(math.radians(deg)))
+    (x0, y0), (x1, y1), (lx, ly) = p(a + gap), p(a - gap), p(a)
+    return (f'<svg class="ar {cls}" width="{size}" height="{size}" viewBox="-12 -12 24 24" aria-hidden="true">'
+            f'<circle class="tr" r="{r}"/><circle class="tr tr2" r="{r}"/>'
+            f'<path class="rg" d="M{x0:.2f} {y0:.2f}A{r} {r} 0 1 1 {x1:.2f} {y1:.2f}"/>'
+            f'<path class="dt" transform="rotate({a})" d="M5.4 0L-4.6 -4.9L-2.2 0L-4.6 4.9Z"/>'
+            f'<text x="{lx:.2f}" y="{ly:.2f}">{d}</text></svg>')
+
+
+ARROW_W, ARROW_E = compass('W'), compass('E')
 LINES = ''.join(f'<i style="left:{x}px"></i>' for x in (225, 445, 665, 885, 1105, 1325))
 
-HTML = '<div class="pcur" id="pcur" aria-hidden="true"><b></b></div>' + f'''<dialog class="lb" id="lb" aria-labelledby="lbt"><div class="pcar" id="pcar" aria-hidden="true"><svg viewBox="-24 -24 48 48"><path class="g" d="M-4.5 -5.5L6 0L-4.5 5.5Z"/><path class="g g2" d="M-4.5 -5.5L6 0L-4.5 5.5Z"/><path class="k" d="M-4.5 -5.5L6 0L-4.5 5.5Z"/></svg></div><div class="lbh"><div class="lbs" id="lbs">
+HTML = '<div class="pcur" id="pcur" aria-hidden="true"><b></b></div>' + f'''<dialog class="lb" id="lb" aria-labelledby="lbt"><div class="pcar" id="pcar" aria-hidden="true">{compass("W", 28, "cw")}{compass("E", 28, "ce")}</div><div class="lbh"><div class="lbs" id="lbs">
 <div class="lbv"></div><div class="lbg">{LINES}</div>
 <div class="lbp" id="lbp" tabindex="-1" style="left:{BX}px;top:{BY}px;width:{BW}px;height:{BH}px">
 <div class="lbk" id="lbk"></div>
 <button type="button" class="lbx" id="lbx" aria-label="close (Esc)" title="close (Esc)"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 2L14 14M14 2L2 14"/></svg></button>
 <div class="lbi lbd"><img id="lbimg" alt="">
-<button type="button" class="lbn prev" id="lbprev" aria-label="previous photo"><span>{ARROW}</span></button>
-<button type="button" class="lbn next" id="lbnext" aria-label="next photo"><span>{ARROW}</span></button></div>
+<button type="button" class="lbn prev" id="lbprev" aria-label="previous photo"><span>{ARROW_W}</span></button>
+<button type="button" class="lbn next" id="lbnext" aria-label="next photo"><span>{ARROW_E}</span></button></div>
 <div class="lbc"><h2 class="lbt" id="lbt"></h2><p class="lbtx" id="lbtx"></p><dl class="lbdt" id="lbdt"></dl></div>
 <div class="lbsl" id="lbsl"></div>
-<div class="lbsw"><button type="button" class="lbsa l" id="lbsl0" aria-label="scroll photos left">{ARROW}</button>
+<div class="lbsw"><button type="button" class="lbsa l" id="lbsl0" aria-label="scroll photos left">{ARROW_W}</button>
 <div class="lbst" id="lbst"></div>
-<button type="button" class="lbsa r" id="lbsr0" aria-label="scroll photos right">{ARROW}</button></div>
-<div class="lbm"><button type="button" class="pp" id="lbpp">{ARROW}previous project</button><button type="button" class="np" id="lbnp">next project{ARROW}</button></div>
+<button type="button" class="lbsa r" id="lbsr0" aria-label="scroll photos right">{ARROW_E}</button></div>
+<div class="lbm"><button type="button" class="pp" id="lbpp">{ARROW_W}previous project</button><button type="button" class="np" id="lbnp">next project{ARROW_E}</button></div>
 </div></div></div></dialog>'''
 
 JS = '''

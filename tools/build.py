@@ -44,7 +44,7 @@ chromes = ''.join(f'<div class="chrome{" on" if pid == "intro" else ""}" data-pg
 labels = ['us &amp; our services', 'projects', 'downloads &amp; links', 'bits &amp; bats', 'contact']
 hot = ''.join(f'<a class="hot tab" href="#{pid}" style="left:{235 + 220 * i}px;top:0;width:200px;height:25px" aria-label="{labels[i]}"></a>' for i, pid in enumerate(ORDER[1:]))
 hot += ('<a class="hot nextp" id="nextp" href="#services" style="left:745px;top:998px;width:90px;height:24px" aria-label="next page">'
-        '<svg class="ar" width="20" height="15" viewBox="-0.5 -0.5 16.26 11.61" aria-hidden="true"><path class="tr" d="M6.83791 0.390006C7.23821 -0.130002 8.02242 -0.130002 8.42272 0.390005L15.0512 9.00065C15.5574 9.65821 15.0886 10.6106 14.2588 10.6106H1.00184C0.172004 10.6106 -0.296761 9.65822 0.209436 9.00065L6.83791 0.390006Z"/><path class="tr tr2" d="M6.83791 0.390006C7.23821 -0.130002 8.02242 -0.130002 8.42272 0.390005L15.0512 9.00065C15.5574 9.65821 15.0886 10.6106 14.2588 10.6106H1.00184C0.172004 10.6106 -0.296761 9.65822 0.209436 9.00065L6.83791 0.390006Z"/><path class="tri" d="M6.83791 0.390006C7.23821 -0.130002 8.02242 -0.130002 8.42272 0.390005L15.0512 9.00065C15.5574 9.65821 15.0886 10.6106 14.2588 10.6106H1.00184C0.172004 10.6106 -0.296761 9.65822 0.209436 9.00065L6.83791 0.390006Z"/></svg>'
+        + LB.compass('S', 22, 'cs') + LB.compass('N', 22, 'cn') +
         '<span>scroll</span></a>')
 SOCIAL = [('facebook', 'Facebook', 60, '#0866FF', ''), ('instagram', 'Instagram', 96, 'url(#igrad)', ''), ('x', 'X (Twitter)', 132, '#000000', '')]
 hot += ('<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><radialGradient id="igrad" cx="30%" cy="107%" r="150%">'
@@ -118,13 +118,12 @@ html,body,button,input,select,textarea,dialog{{font-family:Calibri,Carlito,sans-
 [data-node-id="1:554"] > p:first-child,[data-node-id="1:628"] > p:first-child,[data-node-id="1:633"] > p:first-child,[data-node-id="1:634"] > p:first-child{{color:#e30613}}
 /* arrow to the next page, with its label; on the last page it points up and leads back to the start */
 .nextp{{display:flex;align-items:center;gap:6px;text-decoration:none;color:#666;font:400 11px/1 Calibri,Carlito,sans-serif;letter-spacing:.06em;padding-left:20px}}
-.nextp svg{{transform:rotate(180deg);transition:transform .25s}}
 .nextp:hover{{color:#e30613}}
-.nextp.up svg{{transform:none}}
+.nextp .cn,.nextp.up .cs{{display:none}} .nextp.up .cn{{display:block}}   /* S: on to the next page; N on the last page: back to the top */
 /* first visit to the intro: the arrow nudges downwards and the label invites you in, until you first move on */
 .nextp.hint svg{{animation:nudge 1.3s ease-in-out infinite}}
 .nextp.hint span{{color:#e30613;animation:glow 1.3s ease-in-out infinite}}
-@keyframes nudge{{0%,100%{{transform:rotate(180deg) translateY(0)}}50%{{transform:rotate(180deg) translateY(-5px)}}}}
+@keyframes nudge{{0%,100%{{transform:translateY(0)}}50%{{transform:translateY(4px)}}}}
 @keyframes glow{{0%,100%{{opacity:1}}50%{{opacity:.35}}}}
 @media (prefers-reduced-motion:reduce){{.nextp.hint svg,.nextp.hint span{{animation:none}}}}
 .gl{{position:absolute;left:0;top:0;pointer-events:none;z-index:30}}

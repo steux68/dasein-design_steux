@@ -16,18 +16,18 @@ TRI = 'M6.83791 0.390006C7.23821 -0.130002 8.02242 -0.130002 8.42272 0.390005L15
 
 # tile on the projects page (x, y, w, h in Figma pixels), title, text, details, photos - in reading order
 PROJECTS = [
-    dict(r=(235, 60, 200, 370), t='dd - NEW LOGO & IDENTITY', imgs=['img/projects-imgDdLogoWithTextFinal13.webp', 'img/p-fly-drawing.webp', 'img/p-spiky-drawing.webp', 'img/p-tower-drawing-frame.webp']),
-    dict(r=(455, 60, 200, 180), t='SKI SLOPES IN SUMMER', imgs=['img/projects-imgDdLogoWithTextFinal14.webp', 'img/p-motorway-gantry.webp', 'img/p-horse-rider.webp']),
-    dict(r=(455, 250, 200, 180), t='AIDA - THE BEST COFFEE CHAIN', imgs=['img/projects-imgImage6.webp', 'img/p-coffee-stain.webp', 'img/p-coffee-stain-paper.webp']),
-    dict(r=(675, 60, 420, 370), t='MUSEUMS QUARTIER', imgs=['img/projects-imgImage5.webp', 'img/p-banana-tape.webp', 'img/p-triple-head.webp', 'img/p-tower-drawing-grey.webp']),
-    dict(r=(1115, 60, 200, 370), t='dd - NEW BUSINESS CARDS', imgs=['img/intro-imgImage.webp', 'img/p-paper-shreds.webp', 'img/p-graffiti-nieder.webp']),
+    dict(r=(235, 60, 200, 370), t='dd - NEW LOGO & IDENTITY', imgs=['img/projects-imgDdLogoWithTextFinal13.webp', 'img/p-fly-drawing.webp', 'img/p-spiky-drawing.webp', 'img/p-tower-drawing-frame.webp', 'img/p-tower-drawing-up.webp', 'img/p-sketchbooks-colour.webp']),
+    dict(r=(455, 60, 200, 180), t='SKI SLOPES IN SUMMER', imgs=['img/projects-imgDdLogoWithTextFinal14.webp', 'img/p-motorway-gantry.webp', 'img/p-horse-rider.webp', 'img/p-render-twin-towers.webp', 'img/p-section-sky-pen.webp']),
+    dict(r=(455, 250, 200, 180), t='AIDA - THE BEST COFFEE CHAIN', imgs=['img/projects-imgImage6.webp', 'img/p-coffee-stain.webp', 'img/p-coffee-stain-paper.webp', 'img/p-milk-glass.webp', 'img/p-crates-black.webp']),
+    dict(r=(675, 60, 420, 370), t='MUSEUMS QUARTIER', imgs=['img/projects-imgImage5.webp', 'img/p-banana-tape.webp', 'img/p-triple-head.webp', 'img/p-tower-drawing-grey.webp', 'img/p-render-three-towers.webp', 'img/p-render-crystal.webp']),
+    dict(r=(1115, 60, 200, 370), t='dd - NEW BUSINESS CARDS', imgs=['img/intro-imgImage.webp', 'img/p-paper-shreds.webp', 'img/p-graffiti-nieder.webp', 'img/p-sketchbook-wall.webp']),
     # the tile shows Steuart's line portrait (the ID card stays on the services page only)
     dict(r=(235, 440, 420, 370), t='WHO IS THIS GUY?', imgs=['img/p-portrait-drawing.webp', 'img/p-haircut.webp', 'img/p-boy-sunlight.webp', 'img/p-letter-pappi.webp', 'img/p-face-lines.webp']),
-    dict(r=(895, 440, 420, 370), t='LIGHT AT THE END OF THE TUNNEL', imgs=['img/projects-imgImage8.webp', 'img/p-light-hole.webp', 'img/p-streaks-green-yellow.webp']),
-    dict(r=(675, 630, 200, 370), t='Hr. KARL SCHWANZER', imgs=['img/projects-imgImage3.webp', 'img/p-section-trees.webp', 'img/p-section-wide.webp', 'img/p-section-blue.webp']),
-    dict(r=(235, 820, 200, 180), t='MIRROR BALL & DISCO HALLS', imgs=['img/projects-imgImage1.webp', 'img/p-carrots-plate.webp']),
-    dict(r=(455, 820, 200, 180), t='dd - OUR OLD LOGO', imgs=['img/projects-imgImage2.webp', 'img/p-torn-strips-drawing.webp', 'img/p-torn-strips-photo.webp']),
-    dict(r=(895, 820, 200, 180), t='INTERIOR COURTYARDS', imgs=['img/projects-imgImage7.webp', 'img/p-light-switch.webp', 'img/p-yellow-dots-box.webp', 'img/p-plastic-sheet-2.webp']),
+    dict(r=(895, 440, 420, 370), t='LIGHT AT THE END OF THE TUNNEL', imgs=['img/projects-imgImage8.webp', 'img/p-light-hole.webp', 'img/p-streaks-green-yellow.webp', 'img/p-motion-blur-grey.webp', 'img/p-render-motorway-loop.webp']),
+    dict(r=(675, 630, 200, 370), t='Hr. KARL SCHWANZER', imgs=['img/projects-imgImage3.webp', 'img/p-section-trees.webp', 'img/p-section-wide.webp', 'img/p-section-blue.webp', 'img/p-render-spiky-tower.webp', 'img/p-render-concrete-tower.webp']),
+    dict(r=(235, 820, 200, 180), t='MIRROR BALL & DISCO HALLS', imgs=['img/projects-imgImage1.webp', 'img/p-carrots-plate.webp', 'img/p-wasp-red.webp', 'img/p-render-harbour-bridge.webp', 'img/p-plan-vertical.webp']),
+    dict(r=(455, 820, 200, 180), t='dd - OUR OLD LOGO', imgs=['img/projects-imgImage2.webp', 'img/p-torn-strips-drawing.webp', 'img/p-torn-strips-photo.webp', 'img/p-plan-horizontal.webp', 'img/p-folded-houses.webp']),
+    dict(r=(895, 820, 200, 180), t='INTERIOR COURTYARDS', imgs=['img/projects-imgImage7.webp', 'img/p-light-switch.webp', 'img/p-yellow-dots-box.webp', 'img/p-plastic-sheet-2.webp', 'img/p-flower-shadows.webp', 'img/p-drawing-cranes.webp']),
 ]
 PLACEHOLDER = ['Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore '
                'et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.',

@@ -36,6 +36,8 @@ for pid in ORDER:
                 extra += f'<a class="hot lk" href="{url}" target="_blank" rel="noopener" aria-label="{nm} (opens in a new tab)" style="left:{x}px;top:{438 + 110 * i}px"></a>'
     if pid == 'projects':   # each project tile opens the pop-up viewer
         extra += LB.TILES
+        # "WHO IS THIS GUY?" shows Steuart's line portrait, so the ID card appears only on the services page
+        items = [h.replace('src="img/services-imgImage1.webp"', 'src="img/p-portrait-drawing.webp"') for h in items]
     if pid == 'intro':   # beetle collage pieces, over the beetle
         extra += BUG.HTML
     sections.append(f'<section class="pg" id="{pid}"><div class="{ROOT} frame">{"".join(items)}{extra}</div></section>')

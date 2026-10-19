@@ -1,7 +1,8 @@
 """Assemble the single-page site from the split Figma pages."""
 import json
 import lightbox as LB   # project pop-up viewer
-import bug as BUG   # start page: the beetle flies in as a collage
+import bug as BUG
+import search as SEARCH   # site search and the map zoom buttons   # start page: the beetle flies in as a collage
 ICONS = json.load(open('icons.json'))   # current brand marks (Simple Icons)
 S = json.load(open('frag/split.json'))
 M = json.load(open('frag/manifest.json'))['contact']   # published paths of the map buttons and marker
@@ -59,6 +60,7 @@ hot += ('<svg width="0" height="0" style="position:absolute" aria-hidden="true">
 for key, label, y, fill, url in SOCIAL:   # url: fill in the profile address when the accounts exist
     hot += (f'<a class="hot social" href="{url or "#"}" data-pending="{0 if url else 1}" aria-label="{label}" style="left:1335px;top:{y}px;width:25px;height:25px">'
             f'<svg viewBox="0 0 24 24" width="16" height="16"><path fill="{fill}" d="{ICONS[key]}"/></svg></a>')
+hot += SEARCH.BUTTON   # thin red magnifier + search pop-up
 hot += '<a class="hot" href="#intro" style="left:115px;top:0;width:110px;height:365px" aria-label="dasein-design home"></a>'
 
 html = f'''<!doctype html>
@@ -179,7 +181,7 @@ html,body,button,input,select,textarea,dialog{{font-family:Calibri,Carlito,sans-
 .pinH.l .plab{{left:auto;right:calc(100% + .35em)}}
 .pinH.b .plab{{bottom:auto;top:30%}}
 .leaflet-container .leaflet-control-attribution{{font:10px/1.3 Calibri,Carlito,sans-serif;background:rgba(255,255,255,.7)}}
-{LB.CSS}{BUG.CSS}</style>
+{LB.CSS}{BUG.CSS}{SEARCH.CSS}</style>
 </head>
 <body>
 <div class="strip"><div class="holder" id="holder">
@@ -193,7 +195,7 @@ html,body,button,input,select,textarea,dialog{{font-family:Calibri,Carlito,sans-
 </div>
 <canvas class="gl" id="gl"></canvas>
 <div class="mapclip" id="mapclip" hidden><div class="mapwrap" id="mapwrap"><div id="livemap"></div>
-<div class="mz" id="mz"><button id="zin" aria-label="Zoom in"><img src="{M['imgZoomIn']}" alt=""></button><button id="zout" aria-label="Zoom out"><img src="{M['imgZoomOut']}" alt=""></button></div></div></div>
+<div class="mz" id="mz"><button id="zin" aria-label="Zoom in">{SEARCH.ZOOM_IN}</button><button id="zout" aria-label="Zoom out">{SEARCH.ZOOM_OUT}</button></div></div></div>
 </div></div>
 {LB.HTML}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" data-live-map></script>
@@ -271,6 +273,7 @@ html,body,button,input,select,textarea,dialog{{font-family:Calibri,Carlito,sans-
   update();
   try{{ {LB.JS} }}catch(err){{ console.warn('project viewer not available',err); }}
 {BUG.JS}
+{SEARCH.JS}
   try{{
     if(window.L){{
       clip.hidden=false; placeMap();

@@ -114,7 +114,7 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
 /* the pop-up itself, centred in the main area */
 .lbp{position:absolute;outline:none;background:rgba(255,255,255,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:0 12px 40px rgba(0,0,0,.10)}
 .lbd::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;
-  --c:#c2c2c2;--d:var(--w);--p:calc(var(--w) * 3);--w:calc(1.5px / (var(--s,1) * var(--dpr,1)));
+  --c:#cbcbcb;--d:var(--w);--p:calc(var(--w) * 3);--w:calc(1.25px / (var(--s,1) * var(--dpr,1)));
   background:
    repeating-linear-gradient(to right,var(--c) 0 var(--d),transparent var(--d) var(--p)) left top/100% var(--w) no-repeat,
    repeating-linear-gradient(to right,var(--c) 0 var(--d),transparent var(--d) var(--p)) left bottom/100% var(--w) no-repeat,
@@ -158,7 +158,7 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
 .lbt{margin:0;font:700 20px/1.15 Calibri,Carlito,sans-serif;color:#e30613}
 .lbtx{margin:12px 0 0;font:400 14px/1.4 Calibri,Carlito,sans-serif;color:#222;display:flex;flex-direction:column;gap:8px}
 .lbtx p{margin:0}
-.lbdt{margin:18px 0 0;padding-top:12px;border-top:calc(1.5px / (var(--s,1) * var(--dpr,1))) dotted #c2c2c2;display:grid;grid-template-columns:62px 1fr;gap:5px 10px;font:400 13px/1.3 Calibri,Carlito,sans-serif}
+.lbdt{margin:18px 0 0;padding-top:12px;border-top:calc(1.25px / (var(--s,1) * var(--dpr,1))) dotted #cbcbcb;display:grid;grid-template-columns:62px 1fr;gap:5px 10px;font:400 13px/1.3 Calibri,Carlito,sans-serif}
 .lbdt dt{color:#888;letter-spacing:.04em}
 .lbdt dd{margin:0;color:#000}
 /* photo strip of this project, for quick navigation */
@@ -174,6 +174,13 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
 .lbst img{opacity:.4;transition:opacity .25s}
 .lbst button:hover img,.lbst button:focus-visible img{opacity:.8}
 .lbst button.cur img{opacity:1}
+.lbst button::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
+  --c:#cbcbcb;--d:var(--w);--p:calc(var(--w) * 3);--w:calc(1.25px / (var(--s,1) * var(--dpr,1)));
+  background:
+   repeating-linear-gradient(to right,var(--c) 0 var(--d),transparent var(--d) var(--p)) left top/100% var(--w) no-repeat,
+   repeating-linear-gradient(to right,var(--c) 0 var(--d),transparent var(--d) var(--p)) left bottom/100% var(--w) no-repeat,
+   repeating-linear-gradient(to bottom,var(--c) 0 var(--d),transparent var(--d) var(--p)) left top/var(--w) 100% no-repeat,
+   repeating-linear-gradient(to bottom,var(--c) 0 var(--d),transparent var(--d) var(--p)) right top/var(--w) 100% no-repeat}
 .lbst button::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:#d4fb4d;transform:scaleX(0);transition:transform .25s}
 .lbst button.cur::after{transform:none}
 .lbst button:focus-visible{outline:none}

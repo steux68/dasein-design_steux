@@ -220,7 +220,7 @@ html,body,button,input,select,textarea,dialog{{font-family:Calibri,Carlito,sans-
 </div>
 <canvas class="gl" id="gl"></canvas>
 <div class="mapclip" id="mapclip" hidden><div class="mapwrap" id="mapwrap"><div id="livemap"></div>
-<div class="mz" id="mz"><button id="zin" aria-label="Zoom in">{SEARCH.ZOOM_IN}</button><button id="zout" aria-label="Zoom out">{SEARCH.ZOOM_OUT}</button></div></div></div>
+<div class="mz" id="mz"><button id="zin" aria-label="Zoom in">{SEARCH.ZOOM_IN}</button><button id="zout" aria-label="Zoom out">{SEARCH.ZOOM_OUT}</button><button id="zhome" aria-label="Back to the start view" title="back to the start view">{SEARCH.ZOOM_HOME}</button></div></div></div>
 </div></div>
 {LB.HTML}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" data-live-map></script>
@@ -274,7 +274,7 @@ html,body,button,input,select,textarea,dialog{{font-family:Calibri,Carlito,sans-
     const s=S, y=(contact.offsetTop-sc.scrollTop+440-32)*s;
     clip.style.cssText=`left:${{225*s}}px;top:${{32*s}}px;width:${{1100*s}}px;height:${{992*s}}px`;
     wrap.style.cssText=`left:${{230*s}}px;top:${{y}}px;width:${{860*s}}px;height:${{560*s}}px`;
-    const mz=document.getElementById('mz'); mz.style.cssText=`left:${{835*s}}px;top:${{252*s}}px`;
+    const mz=document.getElementById('mz'); mz.style.cssText=`left:${{826*s}}px;top:${{240*s}}px`;   /* a little in from the map's right edge */
     mz.querySelectorAll('button').forEach(b=>{{b.style.width=b.style.height=(25*s)+'px';}});
   }}
   const VIEW=[48.211114,16.337330], VIEW_ZOOM=17;   // default view chosen by Steuart
@@ -339,6 +339,7 @@ html,body,button,input,select,textarea,dialog{{font-family:Calibri,Carlito,sans-
       pin=L.marker(HOME,{{icon:marker(),keyboard:false}}).addTo(map); map.on('move zoom resize',flipLabel); flipLabel();
       document.getElementById('zin').onclick=()=>map.zoomIn();
       document.getElementById('zout').onclick=()=>map.zoomOut();
+      document.getElementById('zhome').onclick=()=>map.flyTo(VIEW,VIEW_ZOOM,{duration:reduce?0:.6});   /* back to the start view */
       sc.addEventListener('scroll',placeMap,{{passive:true}});
       /* the map sits above the pages, so pass mouse-wheel scrolling on to the pages underneath */
       wrap.addEventListener('wheel',e=>{{e.preventDefault(); sc.scrollBy({{top:e.deltaY/S}});}},{{passive:false}});

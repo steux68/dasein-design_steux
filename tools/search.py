@@ -14,6 +14,8 @@ BUTTON = ('<button type="button" class="hot sbtn" id="sbtn" aria-label="search t
           '<div id="sres" role="list"></div></div>')
 
 ZOOM_IN = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5"/><path d="M7.5 12H16.5M12 7.5V16.5"/></svg>'
+ZOOM_HOME = ('<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5"/>'
+             '<path d="M7.4 11.8L12 7.8L16.6 11.8M9 10.6V16.2H15V10.6"/></svg>')   # little house: back to the start view
 ZOOM_OUT = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5"/><path d="M7.5 12H16.5"/></svg>'
 
 CSS = '''
@@ -41,10 +43,11 @@ CSS = '''
 .sflash{background:rgba(212,251,77,.9)!important;box-shadow:0 0 0 3px rgba(212,251,77,.9)}
 /* map zoom: white circles with a thin red + / -, like the search magnifier */
 .mz{gap:4px!important}
+.mz #zhome{margin-top:9px}   /* a little apart from + and -: it brings the map back to the start view */
 .mz button{border:0!important;border-radius:50%;background:none!important;padding:0}
 .mz button svg{display:block;width:100%;height:100%;overflow:visible}
 .mz button circle{fill:rgba(255,255,255,.9);stroke:#e30613;stroke-width:2;vector-effect:non-scaling-stroke}
-.mz button path{fill:none;stroke:#e30613;stroke-width:2;vector-effect:non-scaling-stroke;stroke-linecap:round}
+.mz button path{fill:none;stroke:#e30613;stroke-width:2;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round}
 .mz button:hover circle,.mz button:focus-visible circle{fill:rgba(212,251,77,.92)}
 .mz button:focus-visible{outline:none}
 '''

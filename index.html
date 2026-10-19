@@ -293,10 +293,11 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
 .sflash{background:rgba(212,251,77,.9)!important;box-shadow:0 0 0 3px rgba(212,251,77,.9)}
 /* map zoom: white circles with a thin red + / -, like the search magnifier */
 .mz{gap:4px!important}
+.mz #zhome{margin-top:9px}   /* a little apart from + and -: it brings the map back to the start view */
 .mz button{border:0!important;border-radius:50%;background:none!important;padding:0}
 .mz button svg{display:block;width:100%;height:100%;overflow:visible}
 .mz button circle{fill:rgba(255,255,255,.9);stroke:#e30613;stroke-width:2;vector-effect:non-scaling-stroke}
-.mz button path{fill:none;stroke:#e30613;stroke-width:2;vector-effect:non-scaling-stroke;stroke-linecap:round}
+.mz button path{fill:none;stroke:#e30613;stroke-width:2;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round}
 .mz button:hover circle,.mz button:focus-visible circle{fill:rgba(212,251,77,.92)}
 .mz button:focus-visible{outline:none}
 </style>
@@ -313,7 +314,7 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
 </div>
 <canvas class="gl" id="gl"></canvas>
 <div class="mapclip" id="mapclip" hidden><div class="mapwrap" id="mapwrap"><div id="livemap"></div>
-<div class="mz" id="mz"><button id="zin" aria-label="Zoom in"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5"/><path d="M7.5 12H16.5M12 7.5V16.5"/></svg></button><button id="zout" aria-label="Zoom out"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5"/><path d="M7.5 12H16.5"/></svg></button></div></div></div>
+<div class="mz" id="mz"><button id="zin" aria-label="Zoom in"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5"/><path d="M7.5 12H16.5M12 7.5V16.5"/></svg></button><button id="zout" aria-label="Zoom out"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5"/><path d="M7.5 12H16.5"/></svg></button><button id="zhome" aria-label="Back to the start view" title="back to the start view"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5"/><path d="M7.4 11.8L12 7.8L16.6 11.8M9 10.6V16.2H15V10.6"/></svg></button></div></div></div>
 </div></div>
 <div class="pcur" id="pcur" aria-hidden="true"><b></b></div><dialog class="lb" id="lb" aria-labelledby="lbt"><div class="pcar" id="pcar" aria-hidden="true"><svg class="ar cw" width="28" height="28" viewBox="-12 -12 24 24" aria-hidden="true"><circle class="tr" r="9.5"/><circle class="tr tr2" r="9.5"/><path class="rg" d="M-7.88 -5.31A9.5 9.5 0 1 1 -7.88 5.31"/><path class="dt" transform="rotate(180)" d="M5.4 0L-4.6 -4.9L-2.2 0L-4.6 4.9Z"/><text x="-9.50" y="0.00">W</text></svg><svg class="ar ce" width="28" height="28" viewBox="-12 -12 24 24" aria-hidden="true"><circle class="tr" r="9.5"/><circle class="tr tr2" r="9.5"/><path class="rg" d="M7.88 5.31A9.5 9.5 0 1 1 7.88 -5.31"/><path class="dt" transform="rotate(0)" d="M5.4 0L-4.6 -4.9L-2.2 0L-4.6 4.9Z"/><text x="9.50" y="0.00">E</text></svg></div><div class="lbh"><div class="lbs" id="lbs">
 <div class="lbv"></div><div class="lbg"><i style="left:225px"></i><i style="left:445px"></i><i style="left:665px"></i><i style="left:885px"></i><i style="left:1105px"></i><i style="left:1325px"></i></div>
@@ -381,7 +382,7 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
     const s=S, y=(contact.offsetTop-sc.scrollTop+440-32)*s;
     clip.style.cssText=`left:${225*s}px;top:${32*s}px;width:${1100*s}px;height:${992*s}px`;
     wrap.style.cssText=`left:${230*s}px;top:${y}px;width:${860*s}px;height:${560*s}px`;
-    const mz=document.getElementById('mz'); mz.style.cssText=`left:${835*s}px;top:${252*s}px`;
+    const mz=document.getElementById('mz'); mz.style.cssText=`left:${826*s}px;top:${240*s}px`;   /* a little in from the map's right edge */
     mz.querySelectorAll('button').forEach(b=>{b.style.width=b.style.height=(25*s)+'px';});
   }
   const VIEW=[48.211114,16.337330], VIEW_ZOOM=17;   // default view chosen by Steuart
@@ -612,6 +613,7 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
       pin=L.marker(HOME,{icon:marker(),keyboard:false}).addTo(map); map.on('move zoom resize',flipLabel); flipLabel();
       document.getElementById('zin').onclick=()=>map.zoomIn();
       document.getElementById('zout').onclick=()=>map.zoomOut();
+      document.getElementById('zhome').onclick=()=>map.flyTo(VIEW,VIEW_ZOOM,{duration:reduce?0:.6});   /* back to the start view */
       sc.addEventListener('scroll',placeMap,{passive:true});
       /* the map sits above the pages, so pass mouse-wheel scrolling on to the pages underneath */
       wrap.addEventListener('wheel',e=>{e.preventDefault(); sc.scrollBy({top:e.deltaY/S});},{passive:false});

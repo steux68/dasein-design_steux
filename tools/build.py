@@ -118,8 +118,8 @@ html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
 /* arrow to the next page, with its label; on the last page it points up and leads back to the start */
 .nextp{{display:flex;align-items:center;gap:6px;text-decoration:none;color:#666;font:400 11px/1 Calibri,Carlito,sans-serif;letter-spacing:.06em;padding-left:20px}}
 .nextp svg{{transform:rotate(180deg);transition:transform .25s}}
-.nextp .tri{{fill:rgba(205,255,62,.86);stroke:#e30613;stroke-width:.8}}
-.nextp:hover{{color:#e30613}} .nextp:hover .tri{{fill:#d4fb4d;stroke-width:1.2}}
+.nextp .tri{{fill:rgba(205,255,62,.86);stroke:none}}
+.nextp:hover{{color:#e30613}} .nextp:hover .tri{{fill:#d4fb4d}}
 .nextp.up svg{{transform:none}}
 /* first visit to the intro: the arrow nudges downwards and the label invites you in, until you first move on */
 .nextp.hint svg{{animation:nudge 1.3s ease-in-out infinite}}

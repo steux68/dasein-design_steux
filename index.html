@@ -61,8 +61,8 @@ html,body{margin:0;height:100%;overflow:hidden;background:#fff}
 /* arrow to the next page, with its label; on the last page it points up and leads back to the start */
 .nextp{display:flex;align-items:center;gap:6px;text-decoration:none;color:#666;font:400 11px/1 Calibri,Carlito,sans-serif;letter-spacing:.06em;padding-left:20px}
 .nextp svg{transform:rotate(180deg);transition:transform .25s}
-.nextp .tri{fill:rgba(205,255,62,.86);stroke:#e30613;stroke-width:.8}
-.nextp:hover{color:#e30613} .nextp:hover .tri{fill:#d4fb4d;stroke-width:1.2}
+.nextp .tri{fill:rgba(205,255,62,.86);stroke:none}
+.nextp:hover{color:#e30613} .nextp:hover .tri{fill:#d4fb4d}
 .nextp.up svg{transform:none}
 /* first visit to the intro: the arrow nudges downwards and the label invites you in, until you first move on */
 .nextp.hint svg{animation:nudge 1.3s ease-in-out infinite}
@@ -142,13 +142,12 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
 .lbi img.ld{opacity:0}
 .lbn{position:absolute;top:0;width:50%;height:100%;padding:0;border:0;background:none;cursor:pointer;display:flex;align-items:center;z-index:3}
 .lbn.prev{left:0;justify-content:flex-start;padding-left:12px}.lbn.next{right:0;justify-content:flex-end;padding-right:12px}
-.lbn span{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.88);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s}
+.lbn span{width:40px;height:40px;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s}
 .lbn.prev svg,.lbm .pp svg,.lbsa.l svg{transform:rotate(-90deg)}.lbn.next svg,.lbm .np svg,.lbsa.r svg{transform:rotate(90deg)}
 .lbi:hover .lbn span,.lbn:focus-visible span{opacity:1}
-.lbn:hover span{box-shadow:inset 0 0 0 calc(1px / var(--s,1)) #e30613}
 .lbn:focus-visible{outline:none}
-.tri{fill:rgba(205,255,62,.86);stroke:#e30613;stroke-width:.8}
-.lbn:hover .tri,.lbm button:hover .tri,.lbsa:hover .tri{fill:#d4fb4d;stroke-width:1.2}
+.tri{fill:rgba(205,255,62,.86);stroke:none}
+.lbn:hover .tri,.lbm button:hover .tri,.lbsa:hover .tri{fill:#d4fb4d}
 /* beside the photo: title, text, then the project details */
 .lbc{position:absolute;left:580px;top:75px;width:310px;height:390px;overflow-y:auto;scrollbar-width:thin}
 .lbt{margin:0;font:700 20px/1.15 Calibri,Carlito,sans-serif;color:#e30613}

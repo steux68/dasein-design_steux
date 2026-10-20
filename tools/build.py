@@ -41,8 +41,8 @@ for pid in ORDER:
             items = [h.replace('object-contain', 'object-cover').replace('img/' + a, 'img/' + c) if 'img/' + a in h else h for h in items]
     if pid == 'projects':   # each project tile opens the pop-up viewer
         extra += LB.TILES
-        # "WHO IS THIS GUY?" shows Steuart's drawing of folded houses round two towers (the ID card appears only on the services page)
-        items = [h.replace('src="img/services-imgImage1.webp"', 'src="img/p-folded-houses-light.webp"') for h in items]
+        # "WHO IS THIS GUY?" shows Steuart's straw drawing (the ID card appears only on the services page)
+        items = [h.replace('src="img/services-imgImage1.webp"', 'src="img/p-straw-drawing.webp"') for h in items]
     if pid == 'intro':   # beetle collage pieces, over the beetle
         extra += BUG.HTML
     sections.append(f'<section class="pg" id="{pid}"><div class="{ROOT} frame">{"".join(items)}{extra}</div></section>')

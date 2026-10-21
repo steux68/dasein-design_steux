@@ -557,7 +557,7 @@ dialog .top{{flex:none}}
   document.querySelectorAll('.cvp, .fold').forEach(d=>cvio.observe(d));
   document.querySelectorAll('.cvp, .fold').forEach(d=>d.addEventListener('toggle',()=>{{
     document.querySelectorAll('.cvb[aria-controls="'+d.id+'"]').forEach(b=>b.setAttribute('aria-expanded',String(d.open))); }}));
-  document.querySelectorAll('.cvb').forEach(b=>b.addEventListener('click',()=>{{ const d=document.getElementById(b.getAttribute('aria-controls')), op=!d.open;
+  document.querySelectorAll('.cvb[aria-controls]').forEach(b=>b.addEventListener('click',()=>{{ const d=document.getElementById(b.getAttribute('aria-controls')), op=!d.open;
     document.querySelectorAll(d.classList.contains('fold')?'.fold[open]:not(#'+d.id+')':'.cvp[open]').forEach(x=>{{ if(x!==d) x.open=false; }});
     d.open=op; if(op&&!d.classList.contains('fold')) requestAnimationFrame(()=>d.scrollIntoView({{behavior:'smooth',block:'start'}}));
     else if(b.closest('.cvp')) document.getElementById('us').scrollIntoView({{behavior:'smooth'}}); }}));

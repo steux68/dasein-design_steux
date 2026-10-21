@@ -73,9 +73,12 @@ ARW, ARE = LB.compass('W', 26), LB.compass('E', 26)
 
 
 def section(i, name, num, body):
-    """a page: its title sticks under the header while you scroll through it and is pushed up by the next page's title"""
-    return (f'<section class="pg" id="{i}"><h2 class="ttl"><b>{name.replace("&", "<em>&amp;</em>")}</b> <i>[{num}]</i></h2>'
-            f'<div class="body">{body}</div></section>')
+    """a page; no title bar - the lit tab in the side strip shows where you are"""
+    return f'<section class="pg" id="{i}" aria-label="{name} [{num}]"><div class="body">{body}</div></section>'
+
+
+ARN, ARS = LB.compass('N', 24), LB.compass('S', 24)
+ARW2, ARE2 = LB.compass('W', 34, 'pulse'), LB.compass('E', 34, 'pulse')
 
 
 # ---------- downloads & links: client information (the four PDFs) and the 15 links with their logos ----------
@@ -175,7 +178,7 @@ HTML = f'''<!doctype html>
 <link rel="stylesheet" href="../fonts.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
-:root{{--red:#e30613;--lime:rgba(205,255,62,.86);--green:#a5e35a;--grey:#ebebeb;--line:#c4c4c4;--dot:#b8b8b8;--hp:1px;--head:118px;--side:0px;--ttl:44px}}
+:root{{--bar:30px;--red:#e30613;--lime:rgba(205,255,62,.86);--green:#a5e35a;--grey:#ebebeb;--line:#c4c4c4;--dot:#b8b8b8;--hp:1px;--head:118px;--side:0px;--ttl:44px}}
 /* logo on the side: a narrow strip down the left with the mark and the name, the header only holds the tabs */
 .side{{--side:42px}}
 .sidebar{{display:none}}
@@ -196,13 +199,14 @@ HTML = f'''<!doctype html>
 .side.rail nav{{display:flex;flex-direction:column;height:100%;margin:0;gap:5px}}
 .side.rail .tab{{flex:1;min-height:0;height:auto;writing-mode:vertical-rl;transform:rotate(180deg);padding:3px 0;font-size:min(12.5px,1.75svh);gap:3px;overflow:hidden}}
 .side.rail .tab small{{font-size:8.5px}}
-.side.rail .stage{{height:calc(100svh - 64px)}}
-.side.rail .hint{{padding-bottom:30px}}
-.side.rail .note{{position:fixed;right:6px;bottom:calc(env(safe-area-inset-bottom,0px) + 6px);z-index:30;background:rgba(255,255,255,.94);padding:2px 6px;border:1px dotted var(--dot)}}
+.note2{{display:none}}
+.side.rail .stage{{height:calc(100svh - 2 * var(--bar) - 50px)}}
+.side.rail .row1 .note{{display:none}}
+.side.rail .note2{{display:block;text-align:center;margin:-6px 0 0;padding-bottom:8px}}
 .side header{{left:var(--side)}}
 .side main{{padding-left:var(--side)}}
 *{{box-sizing:border-box}}
-html{{scroll-behavior:smooth;scroll-padding-top:var(--head)}}
+html{{scroll-behavior:smooth;scroll-padding-top:calc(var(--head) + var(--bar))}}
 @media (prefers-reduced-motion:reduce){{html{{scroll-behavior:auto}}}}
 body{{margin:0;background:#fff;color:#000;font:400 15px/1.35 Calibri,Carlito,sans-serif;-webkit-text-size-adjust:100%}}
 a{{color:inherit}}
@@ -222,17 +226,25 @@ nav{{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px}}
 .tab:active{{background:var(--green)}}
 .tab.cur{{background:var(--lime);font-weight:700}}
 .tab.cur small{{font-weight:400}}
-main{{padding-top:var(--head)}}
+main{{padding-top:calc(var(--head) + var(--bar));padding-bottom:var(--bar)}}
 /* every page: its title sticks just under the header and is pushed up by the next page's title as that one arrives */
-.pg{{position:relative;min-height:calc(100svh - var(--head));border-bottom:1px dashed var(--line)}}
-.ttl{{position:sticky;top:var(--head);z-index:10;margin:0;height:var(--ttl);display:flex;align-items:center;gap:6px;padding:0 10px;background:#fff;
-  border-bottom:1px dashed var(--line);font-weight:400;font-size:27px;line-height:1;white-space:nowrap;color:rgba(0,0,0,.8)}}
-.ttl b{{font-weight:700}} .ttl em{{font-style:normal;font-weight:300;color:var(--red)}} .ttl i{{font-style:normal;color:var(--red);font-size:21px}}
+.pg{{position:relative;min-height:calc(100svh - var(--head) - 2 * var(--bar));border-bottom:1px dashed var(--line)}}
+/* thin white bars at the top and bottom of the screen with the N and S arrows: previous / next page */
+.bar{{position:fixed;left:var(--side);right:0;z-index:15;height:var(--bar);display:flex;align-items:center;justify-content:center;background:#fff}}
+.bar.btop{{top:var(--head);border-bottom:1px dashed var(--line)}}
+.bar.bbot{{bottom:0;height:calc(var(--bar) + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);border-top:1px dashed var(--line)}}
+.bar button{{border:0;background:none;padding:3px 24px;display:flex;-webkit-tap-highlight-color:transparent;transition:opacity .2s}}
+.bar button:disabled{{opacity:.2}}
+/* pulsing thin dark rings round an arrow, as on the desktop */
+.ar.pulse .tr,.bar .go .tr{{display:block;fill:none;stroke:#3a3c37;stroke-width:.7;transform-box:fill-box;transform-origin:center;animation:ring 2.2s ease-out infinite}}
+.ar.pulse .tr2,.bar .go .tr2{{animation-delay:1.1s}}
+@keyframes ring{{0%{{transform:scale(1);opacity:.55}}100%{{transform:scale(1.7);opacity:0}}}}
+@media (prefers-reduced-motion:reduce){{.ar .tr{{animation:none!important;display:none!important}}}}
 .body{{min-width:0;padding:12px 10px 28px}}
 /* start page: the upright beetle with the five circles beside it */
-#start{{display:block;min-height:calc(100svh - var(--head));overflow:clip}}
+#start{{display:block;min-height:calc(100svh - var(--head) - 2 * var(--bar));overflow:clip}}
 html,body{{overflow-x:clip}}
-.stage{{position:relative;height:calc(100svh - var(--head) - 34px);min-height:430px;margin:0 auto}}
+.stage{{position:relative;height:calc(100svh - var(--head) - 2 * var(--bar) - 30px);min-height:430px;margin:0 auto}}
 .beetle{{position:absolute;left:50%;top:10px;bottom:10px;aspect-ratio:{BW}/{BH};transform:translateX(-50%);max-width:52vw}}
 .beetle .whole{{position:absolute;inset:0;background:url(../img/m-bug-up.webp) center/100% 100% no-repeat}}
 .bp{{position:absolute;display:none;background-image:url(../img/m-bug-up.webp);background-repeat:no-repeat;will-change:transform}}
@@ -309,16 +321,25 @@ dialog::backdrop{{background:rgba(255,255,255,.4);-webkit-backdrop-filter:blur(4
 .ar text{{fill:#3a3c37;font:700 6.4px Calibri,Carlito,sans-serif;text-anchor:middle;dominant-baseline:central}} .ar .tr{{display:none}}
 .photos{{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;background:#f6f6f6}}
 .photos::-webkit-scrollbar{{display:none}}
-.photos img{{flex:none;width:100%;height:62svh;object-fit:contain;scroll-snap-align:center}}
+.photos img{{flex:none;width:100%;height:44svh;object-fit:contain;scroll-snap-align:center}}
+/* the pop-ups fill exactly one screen; nothing scrolls up and down */
+dialog[open]{{display:flex;flex-direction:column;overflow:hidden}}
+dialog .top{{flex:none}}
+.phw{{position:relative;flex:none}}
+.phw button{{position:absolute;top:50%;margin-top:-21px;width:42px;height:42px;border:0;padding:0;border-radius:50%;background:rgba(255,255,255,.82);display:flex;align-items:center;justify-content:center;
+  -webkit-tap-highlight-color:transparent;transition:opacity .2s}}
+.phw .pw{{left:6px}} .phw .pe{{right:6px}}
+.phw button:disabled{{opacity:0;pointer-events:none}}
 .pcount{{font-size:11px;color:#888;letter-spacing:.06em;padding:6px 12px 0}}
 .dots{{display:flex;gap:5px;justify-content:center;padding:6px 0 0}}
 .dots i{{width:6px;height:6px;border-radius:50%;background:#ccc}} .dots i.on{{background:var(--red)}}
-.txt{{padding:8px 14px 30px}}
-.txt h2{{margin:6px 0 0;color:var(--red);font-size:21px;line-height:1.15}}
-.txt p{{margin:10px 0 0;font-size:15px;line-height:1.45;color:#222}}
-.txt dl{{margin:16px 0 0;padding-top:10px;border-top:1px dotted var(--dot);display:grid;grid-template-columns:70px 1fr;gap:5px 10px;font-size:14px}}
+.txt{{flex:1;min-height:0;overflow:hidden;position:relative;padding:4px 14px 0}}
+.txt::after{{content:"";position:absolute;left:0;right:0;bottom:0;height:14px;background:linear-gradient(rgba(255,255,255,0),rgba(255,255,255,.96))}}
+.txt h2{{margin:4px 0 0;color:var(--red);font-size:18px;line-height:1.15}}
+.txt p{{margin:5px 0 0;font-size:13.5px;line-height:1.36;color:#222}}
+.txt dl{{margin:8px 0 0;padding-top:6px;border-top:1px dotted var(--dot);display:grid;grid-template-columns:auto 1fr auto 1fr;gap:2px 8px;font-size:12px;line-height:1.3}}
 .txt dt{{color:#888}} .txt dd{{margin:0}}
-.nav2{{display:flex;justify-content:space-between;padding:6px 14px 26px}}
+.nav2{{flex:none;display:flex;justify-content:space-between;padding:4px 14px calc(env(safe-area-inset-bottom,0px) + 8px);border-top:1px dotted var(--dot)}}
 .nav2 button{{display:flex;align-items:center;gap:6px;border:0;background:none;font:400 12px Calibri,Carlito,sans-serif;letter-spacing:.06em;color:#666;padding:6px 0}}
 .note{{margin-left:auto;align-self:flex-start;font-size:10.5px;color:#888;letter-spacing:.04em;white-space:nowrap}}
 .note a{{color:var(--red)}}
@@ -344,7 +365,7 @@ dialog::backdrop{{background:rgba(255,255,255,.4);-webkit-backdrop-filter:blur(4
 .bgrid .tile{{aspect-ratio:auto;height:100%}}
 .bgrid .tall{{grid-row:span 2}}
 /* one picture full screen, swipe to the next */
-#iv .photos img{{height:72svh}}
+#iv .photos img{{height:70svh}}
 .ivcap{{padding:10px 14px 30px;color:var(--red);font-size:17px;font-weight:700}}
 .ivcap small{{display:block;margin-top:4px;color:#888;font-weight:400;font-size:12px;letter-spacing:.06em}}
 </style>
@@ -361,23 +382,25 @@ dialog::backdrop{{background:rgba(255,255,255,.4);-webkit-backdrop-filter:blur(4
 </header>
 <main>
 <section class="pg" id="start"><div class="stage"><div class="beetle" id="beetle"><div class="whole"></div>{PIECES}</div><svg class="leads" id="leads" aria-hidden="true"></svg>{PINS}</div>
-<p class="hint">tap a number or the menu</p></section>
+<p class="hint">tap a number or the menu</p><span class="note note2">preview · <button type="button" data-logo="rail">all side</button>/<button type="button" data-logo="side">logo side</button>/<button type="button" data-logo="top">top</button> · <a href="../">full site</a></span></section>
 {section("us", "us & contact", "01", US)}
 {section("projects", "projects", "02", '<div class="grid">' + TILES + '</div>')}
 {section("downloads", "downloads & links", "03", DOWNLOADS)}
 {section("bits", "bits & bats", "04", BITSHTML)}
 </main>
+<div class="bar btop"><button type="button" id="goN" aria-label="previous page">{ARN}</button></div>
+<div class="bar bbot"><button type="button" id="goS" aria-label="next page">{ARS}</button></div>
 <dialog id="lb" aria-labelledby="lt">
 <div class="top"><div class="cnt"><button type="button" id="pp" aria-label="previous project">{ARW}</button><span id="lk"></span><button type="button" id="np" aria-label="next project">{ARE}</button></div>
 <button type="button" class="x" id="lx" aria-label="close"><svg viewBox="0 0 16 16" fill="none"><path d="M2 2L14 14M14 2L2 14"/></svg></button></div>
-<div class="photos" id="ph"></div><div class="dots" id="dots"></div>
+<div class="phw"><div class="photos" id="ph"></div><button type="button" class="pw" id="phw" aria-label="previous photo">{ARW2}</button><button type="button" class="pe" id="phe" aria-label="next photo">{ARE2}</button></div><div class="dots" id="dots"></div>
 <div class="txt"><h2 id="lt"></h2><div id="tx"></div><dl id="dl"></dl></div>
 <div class="nav2"><button type="button" id="pp2">{ARW}previous project</button><button type="button" id="np2">next project{ARE}</button></div>
 </dialog>
 <dialog id="iv" aria-label="bits &amp; bats">
 <div class="top"><div class="cnt"><span id="ik"></span></div>
 <button type="button" class="x" id="ix" aria-label="close"><svg viewBox="0 0 16 16" fill="none"><path d="M2 2L14 14M14 2L2 14"/></svg></button></div>
-<div class="photos" id="iph"></div><div class="ivcap" id="icap"></div>
+<div class="phw"><div class="photos" id="iph"></div><button type="button" class="pw" id="iw" aria-label="previous picture">{ARW2}</button><button type="button" class="pe" id="ie" aria-label="next picture">{ARE2}</button></div><div class="ivcap" id="icap"></div>
 </dialog>
 <script>
 (function(){{
@@ -451,10 +474,26 @@ dialog::backdrop{{background:rgba(255,255,255,.4);-webkit-backdrop-filter:blur(4
     ph.innerHTML=p.imgs.map(s=>'<img src="'+s+'" alt="" loading="lazy">').join(''); ph.scrollLeft=0;
     dots.innerHTML=p.imgs.map((s,k)=>'<i class="'+(k?'':'on')+'"></i>').join('');
     $('lt').textContent=p.t; $('tx').innerHTML=(Array.isArray(p.x)?p.x:[p.x]).map(t=>'<p>'+esc(t)+'</p>').join('');
-    $('dl').innerHTML=F.map(([k,l])=>'<dt>'+l+'</dt><dd>'+esc(p.d[k]||'–')+'</dd>').join('');
+    $('dl').innerHTML=F.filter(([k])=>k!=='name').map(([k,l])=>'<dt>'+l+'</dt><dd>'+esc(p.d[k]||'–')+'</dd>').join('');
     lb.scrollTop=0;
   }}
+  /* W / E arrows on the photos: tap to slide to the previous / next photo; hidden at the first / last */
+  const arrows=(box,w,e)=>{{ const upd=()=>{{ const k=Math.round(box.scrollLeft/box.clientWidth), n=box.children.length; w.disabled=k<=0; e.disabled=k>=n-1; }};
+    w.onclick=()=>box.scrollBy({{left:-box.clientWidth,behavior:'smooth'}}); e.onclick=()=>box.scrollBy({{left:box.clientWidth,behavior:'smooth'}});
+    box.addEventListener('scroll',upd,{{passive:true}}); return upd; }};
+  const phUpd=arrows(ph,$('phw'),$('phe')), ivUpd=arrows(document.getElementById('iph'),$('iw'),$('ie'));
   ph.addEventListener('scroll',()=>{{ const k=Math.round(ph.scrollLeft/ph.clientWidth); [...dots.children].forEach((d,i)=>d.classList.toggle('on',i===k)); }},{{passive:true}});
+  new MutationObserver(phUpd).observe(ph,{{childList:true}});
+  document.querySelectorAll('.bt').forEach(t=>t.addEventListener('click',()=>requestAnimationFrame(ivUpd)));
+  /* N / S arrows in the bars: previous / next page */
+  const pages=[...document.querySelectorAll('.pg')], gN=$('goN'), gS=$('goS');
+  const top0=()=>parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop)||0;
+  const curIdx=()=>{{ const y=top0()+4; let i=0; pages.forEach((p,k)=>{{ if(p.getBoundingClientRect().top<=y) i=k; }}); return i; }};
+  const barUpd=()=>{{ const i=curIdx(), atTop=scrollY<4, atEnd=innerHeight+scrollY>=document.documentElement.scrollHeight-4;
+    gN.disabled=atTop; gS.disabled=atEnd; gS.classList.toggle('go',i===0&&atTop); }};
+  gS.onclick=()=>{{ const i=curIdx(); if(pages[i+1]) pages[i+1].scrollIntoView({{behavior:'smooth'}}); }};
+  gN.onclick=()=>{{ const i=curIdx(), off=pages[i].getBoundingClientRect().top-top0(); (off<-8?pages[i]:pages[Math.max(0,i-1)]).scrollIntoView({{behavior:'smooth'}}); }};
+  addEventListener('scroll',barUpd,{{passive:true}}); addEventListener('resize',barUpd); barUpd();
   document.querySelectorAll('.tile[data-p]').forEach(t=>t.addEventListener('click',()=>{{ show(+t.dataset.p); lb.showModal(); }}));
   $('lx').onclick=()=>lb.close();
   $('pp').onclick=$('pp2').onclick=()=>show(pi-1); $('np').onclick=$('np2').onclick=()=>show(pi+1);

@@ -169,10 +169,10 @@ def partner(p):
             f'<circle class="c" r="8"/><path class="v" d="M0 -4.2V4.2"/><path d="M-4.2 0H4.2"/></svg><span class="cvt">full</span><b>CV</b></summary>{cv}</details></article>')
 
 
-US = ('<div class="box"><p class="lab first">PARTNERSHIP</p><p class="firm"><b>dasein-design</b> [architecture+design] [Wien]<br><span>» Jan.’03 – bis dato</span></p></div>'
+US = ('<div class="box"><p class="lab first">PARTNERSHIP</p><p class="firm"><b class="dd">dasein-design</b> [architecture+design] [Wien]<br><span>» Jan.’03 – bis dato</span></p></div>'
       + ''.join(partner(p) for p in PARTNERS)
       )
-CONTACT = ('<div class="box"><p class="lab first">OFFICE</p><p class="addr"><b>dasein-design</b><br>Neulerchenfelderstrasse 42/6<br>A-1160 Wien · Austria · EU</p>'
+CONTACT = ('<div class="box"><p class="lab first">OFFICE</p><p class="addr"><b class="dd">dasein-design</b><br>Neulerchenfelderstrasse 42/6<br>A-1160 Wien · Austria · EU</p>'
       '<div class="mapw"><div class="map" id="map"></div><div class="mz"><button type="button" id="zin" aria-label="zoom in">' + SEARCH.ZOOM_IN + '</button><button type="button" id="zout" aria-label="zoom out">' + SEARCH.ZOOM_OUT + '</button><button type="button" id="zhome" aria-label="back to the start view">' + SEARCH.ZOOM_HOME + '</button></div></div>'
       '<p class="mapl"><a href="https://www.openstreetmap.org/?mlat=48.211431&amp;mlon=16.333964#map=18/48.211431/16.333964">open the map</a></p></div>')
 
@@ -208,7 +208,7 @@ HTML = f'''<!doctype html>
 .side.rail .tab small{{font-size:8.5px}}
 /* the split first tab: two halves, 2 px apart, sharing one tab's place */
 .side.rail .tab.half{{flex:.5}}   /* about us at the top and contact at the bottom are half tabs */
-@media (max-height:740px){{.side.rail .tab.half small{{display:none}}}}   /* small phones: the halves too short for the number */
+.side.rail .tab.half{{font-size:min(12.5px,1.6svh);gap:2px}} .side.rail .tab.half small{{font-size:min(8.5px,1.15svh)}}   /* halves keep their number: a touch smaller type on short phones */
 nav .tab:last-child:nth-child(odd){{grid-column:span 2}}
 .note2{{display:none}}
 .side.rail .row1 .note{{display:none}}
@@ -321,20 +321,20 @@ html,body{{overflow-x:clip}}
 .who{{margin:8px 0 0;padding:10px;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat}}
 .who + .who{{margin-top:8px}}
 .who .role{{margin:0;font-size:12px;color:#666}}
-.who h3{{margin:2px 0 0;font-weight:400;font-size:16px;line-height:1.2;color:var(--red)}} .who h3 b{{font-weight:700}}
-.who .q{{font-size:13px;font-weight:400;color:#555;margin-left:4px;white-space:nowrap}}
+.who h3{{margin:2px 0 0;font-weight:400;font-size:min(16px,4.05vw);line-height:1.2;white-space:nowrap;color:var(--red)}} .who h3 b{{font-weight:700}}
+.who .q{{font-size:11.5px;font-style:italic;font-weight:400;color:#555;margin-left:3px;white-space:nowrap}}
 /* ID card under the name, to identify the partner (number, birth date and signature blurred) */
 .who .idw{{display:block;position:relative;margin:8px 0 2px;padding:10px 0;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat #f4f4f4}}
 .who .idc{{display:block;width:78%;max-width:300px;height:auto;margin:0 auto;border-radius:9px}}
 .who .kt{{display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px;margin:8px 0 0;font-size:min(13.5px,3.42vw);line-height:1.5;white-space:nowrap}}
 .who .sep{{display:block;width:2.5px;height:1.15em;background:#3a3c37}} .who .kt a{{text-decoration:none;padding-bottom:1px;background:var(--dh) left bottom/100% 1px no-repeat}}
 .who .ex{{margin:6px 0 0;font-size:12.5px;color:#555}}
-details{{margin:8px 0 0}}
+details{{margin:4px 0 0}}
 /* "CV (+) full CV": a red cross in a circle that sends out pulsing yellow-lime rings; open, it becomes a minus and reads "close" */
-summary{{display:inline-flex;align-items:center;gap:7px;cursor:pointer;list-style:none;font-size:14px;letter-spacing:.04em;padding:4px 0;-webkit-tap-highlight-color:transparent}}
+summary{{display:inline-flex;align-items:center;gap:7px;cursor:pointer;list-style:none;font-size:14px;letter-spacing:.04em;padding:1px 0;-webkit-tap-highlight-color:transparent}}
 summary::-webkit-details-marker{{display:none}}
 summary b{{color:var(--red);font-weight:700;font-size:15px;margin-left:-3px}} .cvt{{color:#000;font-weight:300;font-size:13px}}
-.cvx{{width:24px;height:24px;overflow:visible}}
+.cvx{{width:20px;height:20px;overflow:visible}}
 .cvx .c{{fill:#fff;stroke:var(--red);stroke-width:1.5}} .cvx path{{stroke:var(--red);stroke-width:1.6;stroke-linecap:round}}
 .cvx .r1,.cvx .r2{{fill:none;stroke:#cdff3e;stroke-width:2.2;transform-box:fill-box;transform-origin:center;animation:cvp 1.8s ease-out infinite}}
 .cvx .r2{{animation-delay:.9s}}
@@ -356,7 +356,11 @@ p.lab:not(.first){{margin-top:22px;padding-top:12px;background:var(--dh) left to
 .mz circle{{fill:rgba(255,255,255,.9);stroke:#e30613;stroke-width:2}}
 .mz path{{fill:none;stroke:#e30613;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}}
 .mz button:active circle{{fill:var(--green)}}
-.mapl{{margin:6px 0 0;font-size:12px}} .mapl a{{color:var(--red)}}
+.mapl{{margin:6px 0 0;font-size:12px}}
+/* "dasein-design" in text is always in the logo red */
+.dd{{color:var(--red)}}
+/* links that do something: phone numbers green (call), e-mail and web addresses blue */
+a[href^="tel:"]{{color:#1e8e3e}} a[href^="mailto:"],.mapl a{{color:#1a5fd0}}
 .pinH{{position:relative;width:34px;height:44px;font-size:12px}}
 .pinsvg{{display:block;width:100%;height:100%;overflow:visible}}
 .pinsvg .pb{{fill:#3a3c37}} .pinsvg .pw{{fill:#fff}}
@@ -621,7 +625,7 @@ addEventListener('load',()=>{{ try{{
   document.getElementById('zin').onclick=()=>map.zoomIn(); document.getElementById('zout').onclick=()=>map.zoomOut(); document.getElementById('zhome').onclick=()=>home();
   L.tileLayer('https://tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png',{{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}}).addTo(map);
   map.attributionControl.setPrefix(false);
-  L.marker(HOME,{{icon:L.divIcon({{className:'',iconSize:[34,44],iconAnchor:[17,44],html:'<div class="pinH"><svg class="pinsvg" viewBox="0 0 40 52" aria-hidden="true"><path class="pb" d="M20 51C14.5 40.5 2 31 2 19A18 18 0 0 1 38 19C38 31 25.5 40.5 20 51Z"/><circle class="pw" cx="20" cy="19" r="14.5"/><g transform="translate(20 19) scale(1.12)"><path class="pr" d="M-5.31 7.88A9.5 9.5 0 1 1 5.31 7.88"/><path class="pa" transform="rotate(90)" d="M5.4 0L-4.6 -4.9L-2.2 0L-4.6 4.9Z"/><text x="0" y="9.5">H</text></g></svg><div class="plab"><b>dasein-design</b><br>Neulerchenfelderstrasse 42/6<br>A-1160 Wien</div></div>'}})}}).addTo(map);
+  L.marker(HOME,{{icon:L.divIcon({{className:'',iconSize:[34,44],iconAnchor:[17,44],html:'<div class="pinH"><svg class="pinsvg" viewBox="0 0 40 52" aria-hidden="true"><path class="pb" d="M20 51C14.5 40.5 2 31 2 19A18 18 0 0 1 38 19C38 31 25.5 40.5 20 51Z"/><circle class="pw" cx="20" cy="19" r="14.5"/><g transform="translate(20 19) scale(1.12)"><path class="pr" d="M-5.31 7.88A9.5 9.5 0 1 1 5.31 7.88"/><path class="pa" transform="rotate(90)" d="M5.4 0L-4.6 -4.9L-2.2 0L-4.6 4.9Z"/><text x="0" y="9.5">H</text></g></svg><div class="plab"><b class="dd">dasein-design</b><br>Neulerchenfelderstrasse 42/6<br>A-1160 Wien</div></div>'}})}}).addTo(map);
 }}catch(err){{ console.warn('map not available',err); }} }});
 </script>
 </body>

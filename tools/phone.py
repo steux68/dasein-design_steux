@@ -107,7 +107,7 @@ LINKS = [('https://ost.zt.at/', 'downloads-imgImage.webp', 'zt: Kammer Ost', 'Zi
 DOWNLOADS = ('<p class="lab first">INFORMATION FOR CLIENTS</p><p class="intro">' + LATIN + '</p><ul class="pdfs">'
              + ''.join(f'<li><img src="../img/pdf.svg" alt="PDF"><span>dd – {t}<small>PDF follows</small></span></li>' for t in PDFS)
              + '</ul><p class="lab">LINKS FOR CLIENTS</p><p class="intro">' + LATIN + '</p><div class="links">'
-             + ''.join(f'<a class="lk" href="{u}" target="_blank" rel="noopener"><span class="lg"><img src="../img/{im}" alt="" loading="lazy"></span>'
+             + ''.join(f'<a class="lk" href="{u}" target="_blank" rel="noopener"><span class="lg"><img src="../img/m-lg-{im.replace('downloads-img', '')}" alt="" loading="lazy"></span>'
                        f'<b>{n}</b><small>{d}</small></a>' for u, im, n, d in LINKS)
              + '</div>')
 
@@ -441,8 +441,8 @@ dialog .top{{flex:none}}
 .pdfs span{{font-size:15px}} .pdfs small{{display:block;font-size:11px;color:#999;letter-spacing:.04em}}
 .links{{display:grid;grid-template-columns:1fr 1fr;gap:14px 10px;margin-top:12px}}
 .lk{{display:flex;flex-direction:column;text-decoration:none;-webkit-tap-highlight-color:transparent}}
-.lg{{display:flex;align-items:center;justify-content:center;aspect-ratio:3/2;background:#fff;position:relative}}
-.lg img{{max-width:80%;max-height:70%;object-fit:contain}}
+.lg{{display:flex;align-items:center;justify-content:center;height:50px;padding:9px 12px;background:#fff;position:relative}}   /* low rectangles: each logo (trimmed to its edges, m-lg-*) at most 32 px high, a small margin all round */
+.lg img{{display:block;max-width:100%;max-height:32px;width:auto;height:auto;object-fit:contain}}
 .lg::after{{content:"";position:absolute;inset:0;pointer-events:none;
   background:repeating-linear-gradient(to right,var(--dot) 0 1px,transparent 1px 3px) left top/100% 1px no-repeat,repeating-linear-gradient(to right,var(--dot) 0 1px,transparent 1px 3px) left bottom/100% 1px no-repeat,
   repeating-linear-gradient(to bottom,var(--dot) 0 1px,transparent 1px 3px) left top/1px 100% no-repeat,repeating-linear-gradient(to bottom,var(--dot) 0 1px,transparent 1px 3px) right top/1px 100% no-repeat}}

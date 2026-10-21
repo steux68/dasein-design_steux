@@ -288,6 +288,12 @@ body{{position:relative}}
 .rule{{position:fixed;top:0;bottom:0;width:1px;z-index:45;pointer-events:none;
   background:repeating-linear-gradient(to bottom,var(--line) 0 4px,transparent 4px 7px)}}
 .rule.l{{left:calc(var(--side) - 1px)}} .rule.r{{right:7px}}
+/* trial (?mid=1): a third guide line down the middle, between the two columns; pictures and boxes lie over it, text runs over it */
+.rule.m{{display:none;z-index:0;left:calc((var(--side) + 100vw - 8px) / 2 - .5px)}}
+.mid .rule.m{{display:block}}
+.mid main{{position:relative;z-index:1}}
+.mid .tile,.mid .lg,.mid .who,.mid .box,.mid .mapw,.mid .phw{{background-color:#fff}}
+.mid .tile{{background-color:#f4f4f4}}
 .side.rail .sidebar,.side.rail header{{border-right:0!important}}
 /* section bar: same size, type and thickness as a tab in the side strip, a muted version of the lit tab's yellow-lime */
 .sbar{{position:relative;height:30px;margin:15px 10px 15px}}   /* nothing written in it: the band is the gap between two pages */
@@ -502,7 +508,8 @@ dialog .top{{flex:none}}
 <script>/* three versions: logo and tabs all down the side (default) · logo on the side, tabs on top · logo and tabs across the top
    ?logo=rail / side / top, remembered on this phone */
 (function(){{ let m='rail'; try{{ m=new URLSearchParams(location.search).get('logo')||localStorage.getItem('ddlogo2')||'rail'; }}catch(e){{}}
-  if(m!=='top') document.body.classList.add('side'); if(m==='rail') document.body.classList.add('rail'); }})();</script>
+  if(m!=='top') document.body.classList.add('side'); if(m==='rail') document.body.classList.add('rail');
+  try{{ if(new URLSearchParams(location.search).get('mid')==='1') document.body.classList.add('mid'); }}catch(e){{}} }})();</script>
 <a class="sidebar" href="#start" aria-label="dasein-design, start"><img src="../img/m-mark.png" alt=""><span>dasein<b>-design</b></span></a>
 <header>
 <div class="row1"><a class="logo" href="#start" aria-label="dasein-design, start"><img src="../img/m-mark.png" alt=""><span>dasein<b>-design</b></span></a><span class="note">preview · <button type="button" data-logo="rail">all side</button>/<button type="button" data-logo="side">logo side</button>/<button type="button" data-logo="top">top</button> · <a href="../">full site</a></span></div>
@@ -517,7 +524,7 @@ dialog .top{{flex:none}}
 {section("bits", "bits & bats", "04", BITSHTML)}
 {section("contact", "contact", "05", CONTACT)}
 </main>
-<i class="rule l" aria-hidden="true"></i><i class="rule r" aria-hidden="true"></i>
+<i class="rule l" aria-hidden="true"></i><i class="rule m" aria-hidden="true"></i><i class="rule r" aria-hidden="true"></i>
 <div class="bar btop"><button type="button" id="goN" aria-label="previous page">{ARN}</button></div>
 <div class="bar bbot"><button type="button" id="goS" aria-label="next page"><span class="dn">{ARS}</span><span class="up">{ARN}<i>back to the top</i></span></button></div>
 <dialog id="lb" aria-labelledby="lt">

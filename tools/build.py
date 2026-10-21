@@ -352,5 +352,7 @@ html,body,button,input,select,textarea,dialog{{font-family:Calibri,Carlito,sans-
 '''
 html = html.replace('img/services-imgPdf.webp', 'img/pdf.svg')   # Steuart's PDF symbol, redrawn without the shadow
 html = html.replace('> 2022<', '>© 2026<')   # copyright year, with © as real text instead of Figma's little picture
+import fromphone   # the changes first made on the phone version (21 Oct 2026)
+html = fromphone.patch(html)
 open('site/index.html', 'w').write(html)
 print(len(html))

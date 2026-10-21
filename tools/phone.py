@@ -231,7 +231,7 @@ nav{{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px}}
 main{{padding-top:calc(var(--head) + var(--bar));padding-bottom:var(--bar);padding-right:8px}}
 body{{position:relative}}
 /* every page */
-.pg{{position:relative;min-height:calc(100svh - var(--head) - 2 * var(--bar));border-bottom:1px dashed var(--line)}}
+.pg{{position:relative;min-height:calc(100svh - var(--head) - 2 * var(--bar))}}
 /* thin white bars at the top and bottom of the screen with the N and S arrows: previous / next page */
 .bar{{position:fixed;left:var(--side);right:8px;z-index:15;height:var(--bar);display:flex;align-items:center;justify-content:center;background:#fff}}
 .bar.btop{{top:var(--head);border-bottom:1px dashed var(--line)}}
@@ -257,10 +257,14 @@ body{{position:relative}}
 #start{{display:block;min-height:calc(100svh - var(--head) - 2 * var(--bar));overflow:clip}}
 html,body{{overflow-x:clip}}
 .stage{{position:relative;height:calc(100svh - var(--head) - 2 * var(--bar) - 6px);min-height:430px;margin:0 auto}}
-.beetle{{position:absolute;left:50%;top:10px;bottom:10px;aspect-ratio:{BW}/{BH};transform:translateX(-50%);max-width:52vw}}
+.beetle{{cursor:pointer;-webkit-tap-highlight-color:transparent;position:absolute;left:50%;top:10px;bottom:10px;aspect-ratio:{BW}/{BH};transform:translateX(-50%);max-width:52vw}}
 .beetle .whole{{position:absolute;inset:0;background:url(../img/m-bug-up.webp) center/100% 100% no-repeat}}
 .bp{{position:absolute;display:none;background-image:url(../img/m-bug-up.webp);background-repeat:no-repeat;will-change:transform}}
 .play .bp{{display:block}} .play .whole{{visibility:hidden}}
+/* three taps on the beetle: a red heart pops out, zooms up to fill the screen and bursts into little hearts */
+.heartfx{{position:fixed;inset:0;z-index:60;pointer-events:none;overflow:hidden}}
+.heartfx svg{{position:absolute;left:0;top:0;width:60px;height:60px;margin:-30px 0 0 -30px;fill:var(--red);will-change:transform,opacity}}
+.heartfx .sm{{width:16px;height:16px;margin:-8px 0 0 -8px}}
 .pin{{position:absolute;display:flex;flex-direction:column;align-items:center;gap:3px;width:25vw;max-width:110px;text-decoration:none;text-align:center;-webkit-tap-highlight-color:transparent}}
 .pin.l{{left:6px}} .pin.r{{right:6px}}
 .pin b{{display:flex;align-items:center;justify-content:center;width:23px;height:23px;border-radius:50%;background:#bfbfbf;font-weight:400;font-size:11.5px;
@@ -493,9 +497,9 @@ dialog .top{{flex:none}}
   addEventListener('scroll',mark,{{passive:true}}); addEventListener('resize',mark); mark();
   /* the upright beetle arrives as square-cut pieces, lands apart, pauses, locks */
   const bug=document.getElementById('beetle'), ps=[...bug.querySelectorAll('.bp')], R=(a,b)=>a+Math.random()*(b-a);
-  let anims=[], run=0;
+  let anims=[], run=0, flying=false;
   function play(){{
-    if(reduce||!bug.animate) return; anims.forEach(a=>a.cancel()); const me=++run; bug.classList.add('play');
+    if(reduce||!bug.animate) return; anims.forEach(a=>a.cancel()); const me=++run; flying=true; bug.classList.add('play');
     const W=bug.offsetWidth, T=3600, LOCK=3150, SNAP=260;
     anims=ps.map(p=>{{
       const ang=R(0,Math.PI*2), dist=R(1.6,2.6)*W, r=R(-160,160), d=R(0,750), fly=R(1500,1850);
@@ -509,9 +513,47 @@ dialog .top{{flex:none}}
         {{offset:LOCK/T,transform:`translate(${{ax}}px,${{ay}}px)`,opacity:1,easing:'cubic-bezier(.6,0,.4,1.4)'}},
         {{offset:(LOCK+SNAP)/T,transform:'none',opacity:1}},{{offset:1,transform:'none',opacity:1}}],{{duration:T,fill:'both'}});
     }});
-    Promise.all(anims.map(a=>a.finished)).then(()=>{{ if(me===run) bug.classList.remove('play'); }}).catch(()=>{{}});
+    Promise.all(anims.map(a=>a.finished)).then(()=>{{ if(me===run){{ flying=false; bug.classList.remove('play'); }} }}).catch(()=>{{}});
   }}
   play();
+  /* one tap: the beetle opens to the moment before the pieces lock - uneven white gaps - holds, then snaps shut */
+  function openUp(){{
+    if(flying||!bug.animate) return; anims.forEach(a=>a.cancel()); const me=++run; bug.classList.add('play'); const W=bug.offsetWidth;
+    anims=ps.map(p=>{{ const dx=+p.dataset.dx, dy=+p.dataset.dy, n=Math.hypot(dx,dy)||1, g=R(.025,.075)*W, k=Math.max(.55,Math.min(1,n*1.4)), t=`translate(${{dx/n*g*k}}px,${{dy/n*g*k}}px)`;
+      return p.animate([{{transform:'none',offset:0,easing:'cubic-bezier(.2,.7,.3,1)'}},{{transform:t,offset:.2}},{{transform:t,offset:.78,easing:'cubic-bezier(.6,0,.4,1.4)'}},{{transform:'none',offset:1}}],{{duration:1900,fill:'both'}}); }});
+    Promise.all(anims.map(a=>a.finished)).then(()=>{{ if(me===run) bug.classList.remove('play'); }}).catch(()=>{{}});
+  }}
+  /* three taps: a red heart pops out of the beetle, zooms right in until it fills the screen, bursts into little hearts, and the page is back */
+  const HEART='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.3s-7.6-4.7-10.1-9.4C.3 8.6 1.9 4.6 5.6 4.2c2.4-.3 4 1.1 6.4 3.5 2.4-2.4 4-3.8 6.4-3.5 3.7.4 5.3 4.4 3.7 7.7C19.6 16.6 12 21.3 12 21.3z"/></svg>';
+  let hearting=false;
+  function heart(){{
+    if(hearting||!document.body.animate) return; hearting=true;
+    const b=bug.getBoundingClientRect(), cx=b.left+b.width/2, cy=b.top+b.height*.42;
+    const fx=document.createElement('div'); fx.className='heartfx'; fx.innerHTML=HEART; document.body.appendChild(fx);
+    const h=fx.firstChild, big=Math.hypot(innerWidth,innerHeight)/60*2.8, at=`translate(${{cx}}px,${{cy}}px)`;
+    const zoom=h.animate([
+      {{transform:at+' scale(0)',opacity:1}},
+      {{transform:at+' scale(1.3)',opacity:1,offset:.16,easing:'ease-out'}},
+      {{transform:at+' scale(1)',opacity:1,offset:.24}},
+      {{transform:at+' scale(1.12)',opacity:1,offset:.32}},
+      {{transform:at+' scale(1)',opacity:1,offset:.4,easing:'cubic-bezier(.5,0,.9,.6)'}},
+      {{transform:`translate(${{innerWidth/2}}px,${{innerHeight*.6}}px) scale(${{big}})`,opacity:1,offset:1}}],{{duration:reduce?600:1500,fill:'forwards'}});
+    fx.animate([{{background:'rgba(227,6,19,0)',offset:0}},{{background:'rgba(227,6,19,0)',offset:.8}},{{background:'rgba(227,6,19,1)',offset:1}}],{{duration:reduce?600:1500,fill:'forwards'}});   /* fully red at the peak */
+    zoom.finished.then(()=>{{
+      fx.animate([{{background:'rgba(227,6,19,1)'}},{{background:'rgba(227,6,19,0)'}}],{{duration:reduce?300:420,easing:'ease-in',fill:'forwards'}});
+      h.animate([{{opacity:1}},{{opacity:0}}],{{duration:reduce?300:420,easing:'ease-in',fill:'forwards'}});   /* the big heart breaks up */
+      /* the burst: little hearts fly out from the middle of the screen and fade */
+      const n=reduce?0:40, mx=innerWidth/2, my=innerHeight/2, bits=[];
+      for(let i=0;i<n;i++){{ const d=document.createElement('div'); d.innerHTML=HEART; const sv=d.firstChild; sv.classList.add('sm'); fx.appendChild(sv);
+        const a=R(0,Math.PI*2), r=R(.35,.8)*Math.max(innerWidth,innerHeight), sc=R(.6,1.6), rot=R(-90,90);
+        bits.push(sv.animate([{{transform:`translate(${{mx}}px,${{my}}px) scale(${{sc*2}}) rotate(0deg)`,opacity:1}},
+          {{transform:`translate(${{mx+Math.cos(a)*r}}px,${{my+Math.sin(a)*r}}px) scale(${{sc}}) rotate(${{rot}}deg)`,opacity:0}}],{{duration:R(700,1200),easing:'cubic-bezier(.1,.8,.3,1)',fill:'forwards'}}).finished); }}
+      return Promise.all(bits);
+    }}).catch(()=>{{}}).then(()=>{{ fx.remove(); hearting=false; }});
+  }}
+  let taps=[];
+  bug.addEventListener('click',()=>{{ const t=performance.now(); taps=taps.filter(x=>t-x<900); taps.push(t);
+    if(taps.length>=3){{ taps=[]; heart(); }} else if(taps.length===1) openUp(); }});
   let away=false; new IntersectionObserver(es=>es.forEach(e=>{{ if(!e.isIntersecting) away=true; else if(away){{ away=false; play(); }} }}),{{threshold:.6}}).observe(document.getElementById('start'));
   /* project pop-up */
   const P={json.dumps(P)}, F={json.dumps(FIELDS)};

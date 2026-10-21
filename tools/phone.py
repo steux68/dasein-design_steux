@@ -62,7 +62,7 @@ TABHTML = ''.join(f'<a class="tab{" half" if i in ("us", "contact") else ""}" hr
 # circles beside the beetle: left and right, top to bottom (five, 21 Oct)
 # where each circle's dotted line ends on the upright beetle (fractions of its box): mouth, right front leg (claw), left middle leg, right back leg
 AIM = [(.51, .245), (.715, .365), (.258, .53), (.80, .605), (.31, .905)]
-PINS = ''.join(f'<a class="pin {"l" if k % 2 == 0 else "r"}" href="#{i}" data-fx="{AIM[k][0]}" data-fy="{AIM[k][1]}" style="top:{6 + k * 18.5}%;--k:{k}"><b>{num}</b><span>{n.replace("&", "&amp;")}</span></a>'
+PINS = ''.join(f'<a class="pin {"l" if k % 2 == 0 else "r"}" href="#{i}" data-fx="{AIM[k][0]}" data-fy="{AIM[k][1]}" style="top:{10.5 + k * 17.6}%;--k:{k}"><b>{num}</b><span>{n.replace("&", "&amp;")}</span></a>'
                for k, (i, n, num) in enumerate(TABS))
 
 P = [{'t': p['t'], 'x': p['x'], 'd': p['d'], 'imgs': ['../' + s for s in p['imgs']]} for p in LB.PROJECTS]
@@ -158,20 +158,39 @@ PARTNERS = [
              ('Berufliche Tätigkeiten', ['1989 – 2005 Mitarbeit in diversen Architekturbüros in Wien, London &amp; Glasgow, darunter Atelier Ernst Hoffmann, Büro Geiswinkler, Atelier Artec, Büro Hagmüller, Tim Bushe Associates, E.C. Riach Architects'])])]
 
 
-def partner(p):
+PLUS = ('<svg class="cvx" viewBox="-12 -12 24 24" aria-hidden="true"><circle class="r1" r="8"/><circle class="r2" r="8"/>'
+        '<circle class="c" r="8"/><path class="v" d="M0 -4.2V4.2"/><path d="M-4.2 0H4.2"/></svg>')
+# short text about the practice (draft, to be replaced by Steuart's) and the full bio (placeholder)
+INTRO = ('<b class="dd">dasein-design</b> is an architecture and design partnership in Vienna, founded in 2003. '
+         'We work at every scale – houses, courtyards, interiors, exhibitions, furniture and identity – looking for the simple idea that makes a place work for the people who use it.')
+BIO = ['Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+       'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+       'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.']
+
+
+def partner(n, p):
+    """one architect: a column of the two-column block (ID card on its grey tile, name, letters, phone, e-mail, CV button)"""
+    tel = p['tel'].replace(' ', '').replace('(0)', '')
+    return (f'<article class="who"><span class="idw"><img class="idc" src="../img/{p["idimg"]}" alt="{p["idalt"]} (Nummer, Geburtsdatum und Unterschrift unkenntlich)" loading="lazy"></span>'
+            f'<p class="role">» {p["role"]}</p><h3>{p["first"]}<br><b>{p["last"]}</b></h3><p class="q">{p["q"]}</p>'
+            f'<p class="kt"><a href="tel:{tel}">{p["tel"]}</a><a href="mailto:{p["mail"]}">{p["mail"]}</a></p>'
+            f'<button type="button" class="cvb" aria-expanded="false" aria-controls="cv{n}">{PLUS}<span class="cvt">full</span><b>CV</b></button></article>')
+
+
+def cvpanel(n, p):
+    """the CV, opened under both columns, full width"""
     secs = p['cv'] + ([('Sprachen', [p['extra'].replace('Sprachen: ', '')])] if p['extra'] else [])
     cv = ''.join(f'<h4>{h}</h4><ul>' + ''.join(f'<li>{x}</li>' for x in xs) + '</ul>' for h, xs in secs)
-    tel = p['tel'].replace(' ', '').replace('(0)', '')
-    return (f'<article class="who"><p class="role">» {p["role"]}</p><h3>{p["first"]} <b>{p["last"]}</b> <span class="q">{p["q"]}</span></h3>'
-            f'<span class="idw"><img class="idc" src="../img/{p["idimg"]}" alt="{p["idalt"]} (Nummer, Geburtsdatum und Unterschrift unkenntlich)" loading="lazy"></span>'
-            f'<p class="kt"><a href="tel:{tel}">{p["tel"]}</a><i class="sep"></i><a href="mailto:{p["mail"]}">{p["mail"]}</a></p>'
-            + f'<details><summary><svg class="cvx" viewBox="-12 -12 24 24" aria-hidden="true"><circle class="r1" r="8"/><circle class="r2" r="8"/>'
-            f'<circle class="c" r="8"/><path class="v" d="M0 -4.2V4.2"/><path d="M-4.2 0H4.2"/></svg><span class="cvt">full</span><b>CV</b></summary>{cv}</details></article>')
+    return (f'<details class="cvp" id="cv{n}"><summary></summary><div class="box"><p class="lab first">CV</p>'
+            f'<h3 class="cvn">{p["first"]} <b>{p["last"]}</b> <span class="q">{p["q"]}</span></h3>{cv}'
+            f'<button type="button" class="cvb" aria-expanded="true" aria-controls="cv{n}">{PLUS}<span class="cvt">full</span><b>CV</b></button></div></details>')
 
 
-US = ('<div class="box"><p class="lab first">PARTNERSHIP</p><p class="firm"><b class="dd">dasein-design</b> [architecture+design] [Wien]<br><span>» Jan.’03 – bis dato</span></p></div>'
-      + ''.join(partner(p) for p in PARTNERS)
-      )
+US = ('<div class="box"><p class="lab first">PARTNERSHIP</p><p class="firm"><b class="dd">dasein-design</b> [architecture+design] [Wien]<br><span>» Jan.’03 – bis dato</span></p>'
+      f'<p class="intro2">{INTRO}</p>'
+      '<details class="bio"><summary>' + PLUS + '<span class="cvt">full</span><b>bio</b></summary>' + ''.join(f'<p>{t}</p>' for t in BIO) + '</details></div>'
+      '<div class="duo">' + ''.join(partner(n, p) for n, p in enumerate(PARTNERS)) + '</div>'
+      + ''.join(cvpanel(n, p) for n, p in enumerate(PARTNERS)))
 CONTACT = ('<div class="box"><p class="lab first">OFFICE</p><p class="addr"><b class="dd">dasein-design</b><br>Neulerchenfelderstrasse 42/6<br>A-1160 Wien · Austria · EU</p>'
       '<div class="mapw"><div class="map" id="map"></div><div class="mz"><button type="button" id="zin" aria-label="zoom in">' + SEARCH.ZOOM_IN + '</button><button type="button" id="zout" aria-label="zoom out">' + SEARCH.ZOOM_OUT + '</button><button type="button" id="zhome" aria-label="back to the start view">' + SEARCH.ZOOM_HOME + '</button></div></div>'
       '<p class="mapl"><a href="https://www.openstreetmap.org/?mlat=48.211431&amp;mlon=16.333964#map=18/48.211431/16.333964">open the map</a></p></div>')
@@ -265,7 +284,7 @@ body{{position:relative}}
 #start{{display:block;min-height:calc(100svh - var(--head) - 2 * var(--bar));overflow:clip}}
 html,body{{overflow-x:clip}}
 .stage{{position:relative;height:calc(100svh - var(--head) - 2 * var(--bar) - 6px);min-height:430px;margin:0 auto}}
-.beetle{{cursor:pointer;-webkit-tap-highlight-color:transparent;position:absolute;left:50%;top:10px;bottom:10px;aspect-ratio:{BW}/{BH};transform:translateX(-50%);max-width:52vw}}
+.beetle{{cursor:pointer;-webkit-tap-highlight-color:transparent;position:absolute;left:50%;top:calc(10px + 5%);bottom:4px;aspect-ratio:{BW}/{BH};transform:translateX(-50%);max-width:52vw}}
 .beetle .whole{{position:absolute;inset:0;background:url(../img/m-bug-up.webp) center/100% 100% no-repeat}}
 .bp{{position:absolute;display:none;background-image:url(../img/m-bug-up.webp);background-repeat:no-repeat;will-change:transform}}
 .play .bp{{display:block}} .play .whole{{visibility:hidden}}
@@ -318,29 +337,34 @@ html,body{{overflow-x:clip}}
 #contact .body > .box:first-child{{margin-top:0}}
 .lab{{margin:6px 0 4px;font-size:11px;letter-spacing:.12em;color:var(--red)}}
 .firm{{margin:0 0 6px;font-size:16px}} .firm span{{font-size:13px;color:#666}}
-.who{{margin:8px 0 0;padding:10px;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat}}
-.who + .who{{margin-top:8px}}
-.who .role{{margin:0;font-size:12px;color:#666}}
-.who h3{{margin:2px 0 0;font-weight:400;font-size:min(16px,4.05vw);line-height:1.2;white-space:nowrap;color:var(--red)}} .who h3 b{{font-weight:700}}
-.who .q{{font-size:11.5px;font-style:italic;font-weight:400;color:#555;margin-left:3px;white-space:nowrap}}
-/* ID card under the name, to identify the partner (number, birth date and signature blurred) */
-.who .idw{{display:block;position:relative;margin:8px 0 2px;padding:10px 0;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat #f4f4f4}}
-.who .idc{{display:block;width:78%;max-width:300px;height:auto;margin:0 auto;border-radius:9px}}
-.who .kt{{display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px;margin:8px 0 0;font-size:min(13.5px,3.42vw);line-height:1.5;white-space:nowrap}}
-.who .sep{{display:block;width:2.5px;height:1.15em;background:#3a3c37}} .who .kt a{{text-decoration:none;padding-bottom:1px;background:var(--dh) left bottom/100% 1px no-repeat}}
-.who .ex{{margin:6px 0 0;font-size:12.5px;color:#555}}
-details{{margin:4px 0 0}}
+.duo{{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 0}}
+.who{{min-width:0;display:flex;flex-direction:column;align-items:flex-start;padding:8px;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat}}
+/* ID card on top, on a light grey tile with a dotted frame, like a photo that doesn't fill its square (number, birth date and signature blurred) */
+.who .idw{{display:block;align-self:stretch;position:relative;padding:8px 0;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat #f4f4f4}}
+.who .idc{{display:block;width:88%;height:auto;margin:0 auto;border-radius:6px}}
+.who .role{{margin:8px 0 0;font-size:11.5px;color:#666}}
+.who h3,.cvn{{margin:1px 0 0;font-weight:400;font-size:15px;line-height:1.15;color:var(--red)}} .who h3 b,.cvn b{{font-weight:700}}
+.who .q,.cvn .q{{margin:2px 0 0;font-size:11.5px;font-style:italic;font-weight:400;color:#555}}
+.cvn .q{{margin-left:3px}}
+.who .kt{{display:flex;flex-direction:column;align-items:flex-start;gap:3px;margin:auto 0 0;padding-top:7px;font-size:min(12px,3.05vw);line-height:1.35;white-space:nowrap}}
+.who .kt a{{text-decoration:none;padding-bottom:1px;background:var(--dh) left bottom/100% 1px no-repeat}}
+/* short text about the practice */
+.intro2{{margin:8px 0 0;font-size:13.5px;line-height:1.4;color:#222}}
+.bio p{{margin:8px 0 0;font-size:13.5px;line-height:1.4;color:#222}}
+/* the CVs open under both columns */
+.cvp > summary{{display:none}} .cvp{{margin:0}} .cvp .box{{margin-top:8px}} .cvp .cvb{{margin-top:10px}}
+details,.cvb{{margin:4px 0 0}}
 /* "CV (+) full CV": a red cross in a circle that sends out pulsing yellow-lime rings; open, it becomes a minus and reads "close" */
-summary{{display:inline-flex;align-items:center;gap:7px;cursor:pointer;list-style:none;font-size:14px;letter-spacing:.04em;padding:1px 0;-webkit-tap-highlight-color:transparent}}
+summary,.cvb{{border:0;background:none;font-family:inherit;color:inherit;display:inline-flex;align-items:center;gap:7px;cursor:pointer;list-style:none;font-size:14px;letter-spacing:.04em;padding:1px 0;-webkit-tap-highlight-color:transparent}}
 summary::-webkit-details-marker{{display:none}}
-summary b{{color:var(--red);font-weight:700;font-size:15px;margin-left:-3px}} .cvt{{color:#000;font-weight:300;font-size:13px}}
+summary b,.cvb b{{color:var(--red);font-weight:700;font-size:15px;margin-left:-3px}} .cvt{{color:#000;font-weight:300;font-size:13px}}
 .cvx{{width:20px;height:20px;overflow:visible}}
 .cvx .c{{fill:#fff;stroke:var(--red);stroke-width:1.5}} .cvx path{{stroke:var(--red);stroke-width:1.6;stroke-linecap:round}}
 .cvx .r1,.cvx .r2{{fill:none;stroke:#cdff3e;stroke-width:2.2;transform-box:fill-box;transform-origin:center;animation:cvp 1.8s ease-out infinite}}
 .cvx .r2{{animation-delay:.9s}}
 @keyframes cvp{{0%{{transform:scale(1);opacity:.95}}100%{{transform:scale(1.9);opacity:0}}}}
-details[open] .cvx .v{{display:none}} details[open] .cvx .r1,details[open] .cvx .r2{{display:none}}
-details[open] .cvt{{font-size:0}} details[open] .cvt::after{{content:"close";font-size:13px}}
+details[open] > summary .cvx .v,[aria-expanded=true] .cvx .v{{display:none}} details[open] > summary .cvx .r1,details[open] > summary .cvx .r2,[aria-expanded=true] .cvx .r1,[aria-expanded=true] .cvx .r2{{display:none}}
+details[open] > summary .cvt,[aria-expanded=true] .cvt{{font-size:0}} details[open] > summary .cvt::after,[aria-expanded=true] .cvt::after{{content:"close";font-size:13px}}
 @media (prefers-reduced-motion:reduce){{.cvx .r1,.cvx .r2{{display:none}}}}
 details h4{{margin:12px 0 2px;font-size:13px;color:var(--red);font-weight:700}}
 details ul{{margin:0;padding:0 0 0 14px;font-size:13px;line-height:1.4;color:#222}} details li{{margin:2px 0}}
@@ -481,7 +505,13 @@ dialog .top{{flex:none}}
     /* keep what is on screen where it is: measure a page that is in view before and after closing (some browsers do this by themselves) */
     const tp=parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop)||0, anchor=document.elementFromPoint(innerWidth*.6,tp+6), y0=anchor&&anchor.getBoundingClientRect().top;
     d.open=false; if(anchor){{ const dy=anchor.getBoundingClientRect().top-y0; if(Math.abs(dy)>1) scrollBy({{top:dy,behavior:'instant'}}); }} }}));
-  document.querySelectorAll('.who details').forEach(d=>cvio.observe(d));
+  document.querySelectorAll('.cvp, .bio').forEach(d=>cvio.observe(d));
+  document.querySelectorAll('.cvp').forEach(d=>d.addEventListener('toggle',()=>{{
+    document.querySelectorAll('.cvb[aria-controls="'+d.id+'"]').forEach(b=>b.setAttribute('aria-expanded',String(d.open))); }}));
+  document.querySelectorAll('.cvb').forEach(b=>b.addEventListener('click',()=>{{ const d=document.getElementById(b.getAttribute('aria-controls')), op=!d.open;
+    document.querySelectorAll('.cvp[open]').forEach(x=>{{ if(x!==d) x.open=false; }});
+    d.open=op; if(op) requestAnimationFrame(()=>d.scrollIntoView({{behavior:'smooth',block:'start'}}));
+    else if(b.closest('.cvp')) document.getElementById('us').scrollIntoView({{behavior:'smooth'}}); }}));
   /* logo switch */
   const B=document.body;
   const setLogo=m=>{{ B.classList.toggle('side',m!=='top'); B.classList.toggle('rail',m==='rail'); try{{ localStorage.setItem('ddlogo2',m); }}catch(e){{}}

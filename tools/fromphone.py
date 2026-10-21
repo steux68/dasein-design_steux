@@ -10,6 +10,7 @@ build.py also calls patch() before writing, so a full rebuild keeps them.
   and send out coloured rings
 - project pop-up: close drawn like the compass signs; the counter sits between previous and next at the bottom
 - link logos trimmed to their edges (img/m-lg-*), with a small margin in their boxes
+- the two long CVs fold to just over half the page, with a "full CV" opener
 - three quick clicks on the beetle: the red heart, as on the phone
 - menu: the first tab reads "about us [01]" (half tabs were tried and dropped)
 """
@@ -94,6 +95,23 @@ a[href^="tel:"]{color:#1e8e3e;text-decoration:none} a[href^="mailto:"]{color:#1a
 .lbm{align-items:center}
 .lbm .lbkc{font:400 13px/25px Calibri,Carlito,sans-serif;color:#666;letter-spacing:.06em}
 .lbm .lbkc b{color:#e30613;font-weight:400}
+/* the two long CVs on the us & our services page end just over half way down, faded, with a "full CV" opener; open, they run to the foot as designed */
+[data-node-id="1:622"],[data-node-id="1:623"]{max-height:190px;overflow:hidden;transition:max-height .45s ease;
+  -webkit-mask-image:linear-gradient(#000 70%,transparent);mask-image:linear-gradient(#000 70%,transparent)}
+.frame.cvo1 [data-node-id="1:623"],.frame.cvo2 [data-node-id="1:622"]{max-height:600px;-webkit-mask-image:none;mask-image:none}
+.dcv{position:absolute;z-index:6;display:flex;align-items:center;gap:6px;border:0;background:none;padding:0;cursor:pointer;font:400 13px/1 Calibri,Carlito,sans-serif;letter-spacing:.04em;color:#000}
+.dcv b{color:#e30613;font-weight:700;font-size:14px;margin-left:-2px} .dcv .cvt{font-weight:300}
+.dcv svg{width:20px;height:20px;overflow:visible}
+.dcv .c{fill:#fff;stroke:#e30613;stroke-width:1.5} .dcv path{stroke:#e30613;stroke-width:1.6;stroke-linecap:round}
+.dcv .r1,.dcv .r2{fill:none;stroke:#cdff3e;stroke-width:2.2;transform-box:fill-box;transform-origin:center;animation:cvp 1.8s ease-out infinite}
+.dcv .r2{animation-delay:.9s}
+@keyframes cvp{0%{transform:scale(1);opacity:.95}100%{transform:scale(1.9);opacity:0}}
+.dcv[aria-expanded=true] .v,.dcv[aria-expanded=true] .r1,.dcv[aria-expanded=true] .r2{display:none}
+.dcv .cl{display:none} .dcv[aria-expanded=true] .cl{display:inline} .dcv[aria-expanded=true] .op{display:none}
+.dcv:hover .cvt,.dcv:focus-visible .cvt{color:#e30613} .dcv:focus-visible{outline:none}
+/* open: the opener moves up beside the top of its CV and reads "close CV" */
+.frame.cvo1 .dcv1,.frame.cvo2 .dcv2{top:432px!important;left:var(--xo)!important}
+@media (prefers-reduced-motion:reduce){.dcv .r1,.dcv .r2{display:none} [data-node-id="1:622"],[data-node-id="1:623"]{transition:none}}
 /* three clicks on the beetle: the heart */
 .heartfx{position:fixed;inset:0;z-index:9999;pointer-events:none;overflow:hidden}
 .heartfx svg{position:absolute;left:0;top:0;width:60px;height:60px;margin:-30px 0 0 -30px;fill:#e30613;will-change:transform,opacity}
@@ -104,6 +122,15 @@ img[src^="img/m-lg-"]{box-sizing:border-box;padding:6px 12px}
 
 
 HEART_JS = r"""<script>
+/* the two CVs: "full CV" opens one, "close CV" folds it again; both fold when you leave the page */
+(function(){
+  const fr=document.querySelector('#services .frame'); if(!fr) return;
+  const bs=[...fr.querySelectorAll('.dcv')];
+  bs.forEach(b=>b.addEventListener('click',()=>{ const k=b.dataset.k, on=!fr.classList.contains('cvo'+k);
+    fr.classList.toggle('cvo'+k,on); b.setAttribute('aria-expanded',String(on)); }));
+  document.addEventListener('pagechange',e=>{ if(e.detail!=='services'){ fr.classList.remove('cvo1','cvo2'); bs.forEach(b=>b.setAttribute('aria-expanded','false')); } });
+})();
+</script><script>
 /* three quick clicks on the beetle (within 0.9 s): a red heart pops out, zooms up until the screen is red and bursts into little hearts (as on the phone) */
 (function(){
   const bug=document.getElementById('bug'); if(!bug||!document.body.animate) return;
@@ -171,6 +198,11 @@ def patch(s):
     about = (f'<div class="ptx" style="left:235px;top:57px;width:420px"><p class="lab2">ABOUT US</p><p>{INTRO}</p></div>'
              f'<div class="ptx bio" style="left:895px;top:57px;width:420px"><p class="lab2">BIO</p>' + ''.join(f'<p>{t}</p>' for t in BIO) + '</div>')
     s = _rep('<section class="pg" id="services"><div class="bg-white relative frame">', '<section class="pg" id="services"><div class="bg-white relative frame">' + about, s)
+    PLUS = ('<svg viewBox="-12 -12 24 24" aria-hidden="true"><circle class="r1" r="8"/><circle class="r2" r="8"/><circle class="c" r="8"/>'
+            '<path class="v" d="M0 -4.2V4.2"/><path d="M-4.2 0H4.2"/></svg>')
+    cvb = ''.join(f'<button type="button" class="dcv dcv{k}" data-k="{k}" aria-expanded="false" style="left:{x}px;top:654px;--xo:{x + 330}px">{PLUS}'
+                  f'<span class="cvt"><span class="op">full</span><span class="cl">close</span></span><b>CV</b></button>' for k, x in ((1, 236), (2, 896)))
+    s = _rep('<section class="pg" id="services"><div class="bg-white relative frame">', '<section class="pg" id="services"><div class="bg-white relative frame">' + cvb, s)
     end = f'<div class="ptx end" style="left:235px;top:930px;width:205px">{CONTACT_TXT.replace("<br>", " ")}</div>'
     s = _rep('<section class="pg" id="contact"><div class="bg-white relative frame">', '<section class="pg" id="contact"><div class="bg-white relative frame">' + end, s)
     # ---- dasein-design in red, phone / e-mail links

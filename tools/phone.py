@@ -12,7 +12,7 @@ import os
 import random
 from PIL import Image
 import lightbox as LB
-from texts import INTRO, BIO, INFO_TXT, LINKS_TXT, CONTACT_TXT   # shared with the desktop site
+from texts import INTRO, BIO, INFO_TXT, LINKS_TXT, CONTACT_TXT, SERVICES   # shared with the desktop site
 import search as SEARCH
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -184,7 +184,11 @@ def cvpanel(n, p):
 
 US = ('<div class="box"><p class="lab first">PARTNERSHIP</p><p class="firm"><b class="dd">dasein-design</b> [architecture+design] [Wien]<br><span>» Jan.’03 – bis dato</span></p>'
       f'<p class="intro2">{INTRO}</p>'
-      '<details class="bio"><summary>' + PLUS + '<span class="cvt">full</span><b>bio</b></summary>' + ''.join(f'<p>{t}</p>' for t in BIO) + '</details></div>'
+      '<div class="opn"><button type="button" class="cvb" aria-expanded="false" aria-controls="bio">' + PLUS + '<span class="cvt">full</span><b>bio</b></button>'
+      '<button type="button" class="cvb" aria-expanded="false" aria-controls="svc">' + PLUS + '<span class="cvt">our</span><b>services</b></button></div>'
+      '<details class="bio fold" id="bio"><summary></summary>' + ''.join(f'<p>{t}</p>' for t in BIO) + '</details>'
+      '<details class="svc fold" id="svc"><summary></summary>' + ''.join(
+          f'<h4><img src="../img/{ic}" alt="">{h}</h4>' + ''.join(f'<p>» {x}</p>' for x in xs) for h, ic, xs in SERVICES) + '</details></div>'
       '<div class="duo">' + ''.join(partner(n, p) for n, p in enumerate(PARTNERS)) + '</div>'
       + ''.join(cvpanel(n, p) for n, p in enumerate(PARTNERS)))
 CONTACT = ('<div class="box"><p class="lab first">OFFICE</p><p class="addr"><b class="dd">dasein-design</b> · Neulerchenfelderstrasse 42/6<br>A-1160 Wien · Austria · EU</p>'
@@ -352,6 +356,12 @@ html,body{{overflow-x:clip}}
 /* short text about the practice */
 .intro2{{margin:8px 0 0;font-size:13.5px;line-height:1.4;color:#222}}
 .bio p{{margin:8px 0 0;font-size:13.5px;line-height:1.4;color:#222}}
+/* full bio and our services: two openers side by side, each unfolding underneath (one at a time) */
+.opn{{display:flex;gap:18px;flex-wrap:wrap}}
+.fold > summary{{display:none}} .fold{{margin:0}}
+.svc h4{{display:flex;align-items:center;gap:7px;margin:12px 0 2px;font-size:14px;font-weight:700;color:var(--red);letter-spacing:.02em}}
+.svc h4 img{{width:20px;height:20px}}
+.svc p{{margin:3px 0 0;font-size:13px;line-height:1.4;color:#222}}
 /* the CVs open under both columns */
 .cvp > summary{{display:none}} .cvp{{margin:0}} .cvp .box{{margin-top:8px}} .cvp .cvb{{margin-top:10px}}
 details,.cvb{{margin:4px 0 0}}
@@ -508,12 +518,12 @@ dialog .top{{flex:none}}
     /* keep what is on screen where it is: measure a page that is in view before and after closing (some browsers do this by themselves) */
     const tp=parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop)||0, anchor=document.elementFromPoint(innerWidth*.6,tp+6), y0=anchor&&anchor.getBoundingClientRect().top;
     d.open=false; if(anchor){{ const dy=anchor.getBoundingClientRect().top-y0; if(Math.abs(dy)>1) scrollBy({{top:dy,behavior:'instant'}}); }} }}));
-  document.querySelectorAll('.cvp, .bio').forEach(d=>cvio.observe(d));
-  document.querySelectorAll('.cvp').forEach(d=>d.addEventListener('toggle',()=>{{
+  document.querySelectorAll('.cvp, .fold').forEach(d=>cvio.observe(d));
+  document.querySelectorAll('.cvp, .fold').forEach(d=>d.addEventListener('toggle',()=>{{
     document.querySelectorAll('.cvb[aria-controls="'+d.id+'"]').forEach(b=>b.setAttribute('aria-expanded',String(d.open))); }}));
   document.querySelectorAll('.cvb').forEach(b=>b.addEventListener('click',()=>{{ const d=document.getElementById(b.getAttribute('aria-controls')), op=!d.open;
-    document.querySelectorAll('.cvp[open]').forEach(x=>{{ if(x!==d) x.open=false; }});
-    d.open=op; if(op) requestAnimationFrame(()=>d.scrollIntoView({{behavior:'smooth',block:'start'}}));
+    document.querySelectorAll(d.classList.contains('fold')?'.fold[open]':'.cvp[open]').forEach(x=>{{ if(x!==d) x.open=false; }});
+    d.open=op; if(op&&!d.classList.contains('fold')) requestAnimationFrame(()=>d.scrollIntoView({{behavior:'smooth',block:'start'}}));
     else if(b.closest('.cvp')) document.getElementById('us').scrollIntoView({{behavior:'smooth'}}); }}));
   /* logo switch */
   const B=document.body;

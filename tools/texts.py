@@ -15,3 +15,10 @@ BIO = ['Both partners studied at the Mackintosh School of Architecture in Glasgo
        'Steuart Harrison taught design for fifteen years at TU Wien and for several years at New Design University St. Pölten.',
        'We work in German and English. The partners run every project themselves, from the first sketch to the last detail on site – '
        'for private clients, small businesses, communities and cultural institutions.']
+
+# the three service blocks from the desktop "us & our services" page (Figma text; SKILLS still repeats PROJEKTE there)
+SERVICES = [('IT', 'services-imgWorkstation.webp', ['Experte: Archicad',
+             'gute Kenntnisse: AutoCAD, Microstation V8 &amp; Triforma, 3d Studio MAX+VRAY, Adobe Paket, Microsoft Office Paket, FormZ, Bentley Generative Components, Solibri Modelchecker, Vectorworks.',
+             'Grundkenntnisse: Autodesk Revit, Rhinoceros, SidounWinAVA, NBS Building.']),
+            ('PROJEKTE', 'services-imgExterior.webp', ['Vorentwurf bis Ausführungsplanung, Möbeldesign, örtl. Bauaufsicht für diverse Projekte, darunter eine Hotel Pension, Kleingartenhäuser, Wohnungen, Klavierübungsstudio, Büro, Ausstellungen, Ateliers / Café-Bar &amp; Einfamilienhäuser hauptsächlich in Wien.']),
+            ('SKILLS', 'services-imgBrainstormSkill.webp', ['Vorentwurf bis Ausführungsplanung, Möbeldesign, örtl. Bauaufsicht für diverse Projekte, darunter eine Hotel Pension, Kleingartenhäuser, Wohnungen, Klavierübungsstudio, Büro, Ausstellungen, Ateliers / Café-Bar &amp; Einfamilienhäuser hauptsächlich in Wien.'])]

@@ -135,7 +135,7 @@ BCAPS = [c.replace('&amp;', '&') for im, t, c in BITS]
 
 # ---------- us & contact: the partnership, the two partners (CV folds open), the office with the map ----------
 PARTNERS = [
-    dict(role='Architekt', first='Cuong', last='TRAN-VIET', q='BArch DipArch', idimg='m-id-cuong.webp', idalt='Personalausweis Cuong Tran-Viet', tel='+43 (0)676 4822 464', mail='cuong@dasein-design.net', extra='',
+    dict(role='Architekt', first='Cuong', last='TRAN-VIET', q='BArch DipArch', idimg='m-id-cuong.webp', idalt='Personalausweis Cuong Tran-Viet', tel='+43 (0)676 4822 464', mail='cuong@dasein-design.net', extra='', nat='Österreich [EU]', lang='Deutsch &amp; Vietnamesisch [Muttersprache], English [verhandlungssicher]',
          cv=[('Professional', ['2010 ZT: Arch+Ing, Bundeskammer der ZiviltechnikerInnen, Österreich [EU]',
                                '2005 ARB: Architects Registration Board of the United Kingdom [UK]']),
              ('Academic', ['Sep.’00 – Jun.’02 » Bartlett School of Architecture, UCL, London – Dip. Arch',
@@ -146,7 +146,7 @@ PARTNERS = [
                                          'Sep.’19 – Mai.’20 » BWM Architekten, Wien',
                                          'Mar.’10 – Aug.’19 » BEHF Architects, Wien',
                                          'Jun.’99 – Feb.’10 » Aedas, Ian Simpson, David Morley, Arthur Collin &amp; Gregory Phillips, London'])]),
-    dict(role='Architect', first='Steuart', last='J Mackenzie HARRISON', q='BArch MArch ARB', idimg='m-id-steuart.webp', idalt='Führerschein Steuart J Mackenzie Harrison', tel='+43 (0)699 1941 9240', mail='steuart@dasein-design.net',
+    dict(role='Architect', first='Steuart', last='J Mackenzie HARRISON', q='BArch MArch ARB', idimg='m-id-steuart.webp', idalt='Führerschein Steuart J Mackenzie Harrison', tel='+43 (0)699 1941 9240', mail='steuart@dasein-design.net', nat='Schottland [Europäisch!]', lang='Englisch [Muttersprache], Deutsch [B2]',
          extra='Sprachen: Englisch [Muttersprache] &amp; Deutsch [B2]',
          cv=[('Professional', ['2019 ZT: Arch+Ing, Bundeskammer der ZiviltechnikerInnen, Österreich [EU]',
                                '2004 ARB: Architects Registration Board of the United Kingdom [UK]',
@@ -169,6 +169,7 @@ def partner(n, p):
     tel = p['tel'].replace(' ', '').replace('(0)', '')
     return (f'<article class="who"><span class="idw"><img class="idc" src="../img/{p["idimg"]}" alt="{p["idalt"]} (Nummer, Geburtsdatum und Unterschrift unkenntlich)" loading="lazy"></span>'
             f'<p class="role">» {p["role"]}</p><h3>{p["first"]}<br><b>{p["last"]}</b></h3><p class="q">{p["q"]}</p>'
+            f'<p class="fx"><b>Staatsbürgerschaft:</b> {p["nat"]}<br><b>Sprachen:</b> {p["lang"]}</p>'
             f'<p class="kt"><a href="tel:{tel}">{p["tel"]}</a><a href="mailto:{p["mail"]}">{p["mail"]}</a></p>'
             f'<button type="button" class="cvb" aria-expanded="false" aria-controls="cv{n}">{PLUS}<span class="cvt">full</span><b>CV</b></button></article>')
 
@@ -358,6 +359,7 @@ html,body{{overflow-x:clip}}
 .who h3,.cvn{{margin:1px 0 0;font-weight:400;font-size:15px;line-height:1.15;color:var(--red)}} .who h3 b,.cvn b{{font-weight:700}}
 .who .q,.cvn .q{{margin:2px 0 0;font-size:11.5px;font-style:italic;font-weight:400;color:#555}}
 .cvn .q{{margin-left:3px}}
+.who .fx{{margin:6px 0 0;font-size:11px;line-height:1.3;color:#444}} .who .fx b{{font-weight:700;color:#222}}
 .who .kt{{display:flex;flex-direction:column;align-items:flex-start;gap:3px;margin:auto 0 0;padding-top:7px;font-size:min(12px,3.05vw);line-height:1.35;white-space:nowrap}}
 .who .kt a{{text-decoration:none;padding-bottom:1px;background:var(--dh) left bottom/100% 1px no-repeat}}
 /* short text about the practice */

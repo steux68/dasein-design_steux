@@ -105,12 +105,14 @@ LINKS = [('https://ost.zt.at/', 'downloads-imgImage.webp', 'zt: Kammer Ost', 'Zi
          ('https://www.bda.gv.at/', 'downloads-imgRectangle336.webp', 'Bundesdenkmalamt', 'Bundesdenkmalamt Österreich [Ö]'),
          ('https://www.ig-architektur.at/', 'downloads-imgRectangle338.webp', 'IG Architektur', 'Interessensgemeinschaft der Architekturschaffenden [Ö]'),
          ('https://www.wien.gv.at/stadtentwicklung/flaechenwidmung/', 'downloads-imgRectangle337.webp', 'MA 21 A/B', 'Stadtteilplanung und Flächenwidmung, Wien [W]')]
+PLUS = ('<svg class="cvx" viewBox="-12 -12 24 24" aria-hidden="true"><circle class="r1" r="8"/><circle class="r2" r="8"/>'
+        '<circle class="c" r="8"/><path class="v" d="M0 -4.2V4.2"/><path d="M-4.2 0H4.2"/></svg>')
 DOWNLOADS = ('<p class="lab first">INFORMATION FOR CLIENTS</p><p class="intro">' + INFO_TXT + '</p><ul class="pdfs">'
              + ''.join(f'<li><img src="../img/pdf.svg" alt="PDF"><span>dd – {t}<small>PDF follows</small></span></li>' for t in PDFS)
-             + '</ul><p class="lab">LINKS FOR CLIENTS</p><p class="intro">' + LINKS_TXT + '</p><div class="links">'
+             + '</ul><p class="lab">LINKS FOR CLIENTS</p><p class="intro">' + LINKS_TXT + '</p><div class="links cut" id="g-links">'
              + ''.join(f'<a class="lk" href="{u}" target="_blank" rel="noopener"><span class="lg"><img src="../img/m-lg-{im.replace('downloads-img', '')}" alt="" loading="lazy"></span>'
                        f'<b>{n}</b><small>{d}</small></a>' for u, im, n, d in LINKS)
-             + '</div>')
+             + '</div>' + '<button type="button" class="cvb more" aria-expanded="false" data-g="g-links">' + PLUS + '<span class="cvt"><span class="op">more</span><span class="cl">fewer</span></span><b>links</b></button>')
 
 # ---------- bits & bats: the 21 pictures with their captions (tall ones span two rows); a tap opens them full screen ----------
 BITS = [('bits-imgImage.webp', 0, 'The DILLON Shelf Plans'), ('p-drawing-grille.webp', 1, 'dd - NEW LOGO &amp; IDENTITY'),
@@ -124,9 +126,9 @@ BITS = [('bits-imgImage.webp', 0, 'The DILLON Shelf Plans'), ('p-drawing-grille.
         ('bits-imgImage14.webp', 0, 'MEESHHHA'), ('bits-imgImage15.webp', 0, 'THE “DUDE” IN VENICE'),
         ('bits-imgImage16.webp', 0, 'A. N. HARKESS'), ('p-streaks-orange.webp', 0, 'LIGHT AT THE END OF THE TUNNEL'),
         ('p-akh-crate.webp', 1, 'WHO IS THIS GUY?')]
-BITSHTML = ('<div class="bgrid">' + ''.join(
+BITSHTML = ('<div class="bgrid cut" id="g-bits">' + ''.join(
     f'<button type="button" class="tile bt{" tall" if t else ""}" data-b="{k}"><img src="../img/{im}" alt="" loading="lazy">'
-    f'<span class="cap"><b>{c}</b><small>smaller text example</small></span></button>' for k, (im, t, c) in enumerate(BITS)) + '</div>')
+    f'<span class="cap"><b>{c}</b><small>smaller text example</small></span></button>' for k, (im, t, c) in enumerate(BITS)) + '</div>' + '<button type="button" class="cvb more" aria-expanded="false" data-g="g-bits">' + PLUS + '<span class="cvt"><span class="op">more</span><span class="cl">fewer</span></span><b>bits &amp; bats</b></button>')
 BIMGS = ['../img/' + im for im, t, c in BITS]
 BCAPS = [c.replace('&amp;', '&') for im, t, c in BITS]
 
@@ -159,8 +161,6 @@ PARTNERS = [
              ('Berufliche Tätigkeiten', ['1989 – 2005 Mitarbeit in diversen Architekturbüros in Wien, London &amp; Glasgow, darunter Atelier Ernst Hoffmann, Büro Geiswinkler, Atelier Artec, Büro Hagmüller, Tim Bushe Associates, E.C. Riach Architects'])])]
 
 
-PLUS = ('<svg class="cvx" viewBox="-12 -12 24 24" aria-hidden="true"><circle class="r1" r="8"/><circle class="r2" r="8"/>'
-        '<circle class="c" r="8"/><path class="v" d="M0 -4.2V4.2"/><path d="M-4.2 0H4.2"/></svg>')
 # short text about the practice (draft, to be replaced by Steuart's) and the full bio (placeholder)
 
 
@@ -460,6 +460,13 @@ dialog .top{{flex:none}}
 .pdfs img{{width:26px;height:auto}}
 .pdfs span{{font-size:15px}} .pdfs small{{display:block;font-size:11px;color:#999;letter-spacing:.04em}}
 .links{{display:grid;grid-template-columns:1fr 1fr;gap:14px 10px;margin-top:12px}}
+/* long grids (links, bits & bats) show about six at first, fading out greyed; "more …" shows the rest */
+.cut{{overflow:hidden;transition:max-height .45s ease}}
+.cut.shut{{-webkit-mask-image:linear-gradient(#000 55%,rgba(0,0,0,.18));mask-image:linear-gradient(#000 55%,rgba(0,0,0,.18))}}
+.more{{margin-top:8px}}
+.more .cl{{display:none}} .more[aria-expanded=true] .cl{{display:inline}} .more[aria-expanded=true] .op{{display:none}}
+.more[aria-expanded=true] .cvt::after{{content:none}} .more[aria-expanded=true] .cvt{{font-size:13px}}
+@media (prefers-reduced-motion:reduce){{.cut{{transition:none}}}}
 .lk{{display:flex;flex-direction:column;text-decoration:none;-webkit-tap-highlight-color:transparent}}
 .lg{{display:flex;align-items:center;justify-content:center;height:50px;padding:9px 12px;background:#fff;position:relative}}   /* low rectangles: each logo (trimmed to its edges, m-lg-*) at most 32 px high, a small margin all round */
 .lg img{{display:block;max-width:100%;max-height:32px;width:auto;height:auto;object-fit:contain}}
@@ -532,6 +539,15 @@ dialog .top{{flex:none}}
     document.querySelectorAll(d.classList.contains('fold')?'.fold[open]:not(#'+d.id+')':'.cvp[open]').forEach(x=>{{ if(x!==d) x.open=false; }});
     d.open=op; if(op&&!d.classList.contains('fold')) requestAnimationFrame(()=>d.scrollIntoView({{behavior:'smooth',block:'start'}}));
     else if(b.closest('.cvp')) document.getElementById('us').scrollIntoView({{behavior:'smooth'}}); }}));
+  /* long grids: cut after the first six, with "more links" / "more bits & bats" */
+  const cuts=[...document.querySelectorAll('.cut')];
+  const cutH=g=>{{ const top=g.getBoundingClientRect().top; let b=0; [...g.children].slice(0,6).forEach(c=>{{ b=Math.max(b,c.getBoundingClientRect().bottom); }}); return b-top; }};
+  const setCut=(g,open)=>{{ g.classList.toggle('shut',!open); g.style.maxHeight=open?g.scrollHeight+'px':cutH(g)+'px';
+    const b=document.querySelector('.more[data-g="'+g.id+'"]'); if(b) b.setAttribute('aria-expanded',String(open)); }};
+  cuts.forEach(g=>setCut(g,false));
+  addEventListener('resize',()=>cuts.forEach(g=>setCut(g,!g.classList.contains('shut'))));
+  document.querySelectorAll('.more').forEach(b=>b.addEventListener('click',()=>{{ const g=document.getElementById(b.dataset.g), op=g.classList.contains('shut');
+    setCut(g,op); if(!op) g.scrollIntoView({{behavior:'smooth',block:'start'}}); }}));
   /* logo switch */
   const B=document.body;
   const setLogo=m=>{{ B.classList.toggle('side',m!=='top'); B.classList.toggle('rail',m==='rail'); try{{ localStorage.setItem('ddlogo2',m); }}catch(e){{}}

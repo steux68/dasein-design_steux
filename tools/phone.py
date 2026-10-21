@@ -12,7 +12,7 @@ import os
 import random
 from PIL import Image
 import lightbox as LB
-from texts import INTRO, BIO, INFO_TXT, LINKS_TXT, CONTACT_TXT, SERVICES   # shared with the desktop site
+from texts import INTRO, BIO, INFO_TXT, LINKS_TXT, CONTACT_TXT, SERVICES, SERVICES_SHORT   # shared with the desktop site
 import search as SEARCH
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -185,8 +185,11 @@ def cvpanel(n, p):
 US = ('<div class="box"><p class="lab first">PARTNERSHIP</p><p class="firm"><b class="dd">dasein-design</b> [architecture+design] [Wien]<br><span>» Jan.’03 – bis dato</span></p>'
       f'<p class="intro2">{INTRO}</p>'
       '<div class="opn"><button type="button" class="cvb" aria-expanded="false" aria-controls="bio">' + PLUS + '<span class="cvt">full</span><b>bio</b></button>'
-      '<button type="button" class="cvb" aria-expanded="false" aria-controls="svc">' + PLUS + '<span class="cvt">our</span><b>services</b></button></div>'
-      '<details class="bio fold" id="bio"><summary></summary>' + ''.join(f'<p>{t}</p>' for t in BIO) + '</details>'
+      '</div><details class="bio fold" id="bio"><summary></summary>' + ''.join(f'<p>{t}</p>' for t in BIO) + '</details></div>'
+      # OUR SERVICES: its own box, the three blocks side by side in short, "full services" unfolds the whole text
+      '<div class="box"><p class="lab first">OUR SERVICES</p><div class="sv3">' + ''.join(
+          f'<div><img src="../img/{ic}" alt=""><b>{h}</b><span>{SERVICES_SHORT[h]}</span></div>' for h, ic, xs in SERVICES) + '</div>'
+      '<div class="opn"><button type="button" class="cvb" aria-expanded="false" aria-controls="svc">' + PLUS + '<span class="cvt">full</span><b>services</b></button></div>'
       '<details class="svc fold" id="svc"><summary></summary>' + ''.join(
           f'<h4><img src="../img/{ic}" alt="">{h}</h4>' + ''.join(f'<p>» {x}</p>' for x in xs) for h, ic, xs in SERVICES) + '</details></div>'
       '<div class="duo">' + ''.join(partner(n, p) for n, p in enumerate(PARTNERS)) + '</div>'
@@ -361,6 +364,10 @@ html,body{{overflow-x:clip}}
 .fold > summary{{display:none}} .fold{{margin:0}}
 .svc h4{{display:flex;align-items:center;gap:7px;margin:12px 0 2px;font-size:14px;font-weight:700;color:var(--red);letter-spacing:.02em}}
 .svc h4 img{{width:20px;height:20px}}
+.sv3{{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0 6px}}
+.sv3 div{{display:flex;flex-direction:column;align-items:center;text-align:center;gap:3px}}
+.sv3 img{{width:28px;height:28px}} .sv3 b{{font-size:13px;color:var(--red);letter-spacing:.03em}}
+.sv3 span{{font-size:11.5px;line-height:1.3;color:#444}}
 .svc p{{margin:3px 0 0;font-size:13px;line-height:1.4;color:#222}}
 /* the CVs open under both columns */
 .cvp > summary{{display:none}} .cvp{{margin:0}} .cvp .box{{margin-top:8px}} .cvp .cvb{{margin-top:10px}}
@@ -522,7 +529,7 @@ dialog .top{{flex:none}}
   document.querySelectorAll('.cvp, .fold').forEach(d=>d.addEventListener('toggle',()=>{{
     document.querySelectorAll('.cvb[aria-controls="'+d.id+'"]').forEach(b=>b.setAttribute('aria-expanded',String(d.open))); }}));
   document.querySelectorAll('.cvb').forEach(b=>b.addEventListener('click',()=>{{ const d=document.getElementById(b.getAttribute('aria-controls')), op=!d.open;
-    document.querySelectorAll(d.classList.contains('fold')?'.fold[open]':'.cvp[open]').forEach(x=>{{ if(x!==d) x.open=false; }});
+    document.querySelectorAll(d.classList.contains('fold')?'.fold[open]:not(#'+d.id+')':'.cvp[open]').forEach(x=>{{ if(x!==d) x.open=false; }});
     d.open=op; if(op&&!d.classList.contains('fold')) requestAnimationFrame(()=>d.scrollIntoView({{behavior:'smooth',block:'start'}}));
     else if(b.closest('.cvp')) document.getElementById('us').scrollIntoView({{behavior:'smooth'}}); }}));
   /* logo switch */

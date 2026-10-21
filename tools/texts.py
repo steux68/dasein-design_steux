@@ -16,6 +16,10 @@ BIO = ['Both partners studied at the Mackintosh School of Architecture in Glasgo
        'We work in German and English. The partners run every project themselves, from the first sketch to the last detail on site – '
        'for private clients, small businesses, communities and cultural institutions.']
 
+# compact lines for the phone's OUR SERVICES box (drafts by Claude, from the Figma blocks)
+SERVICES_SHORT = {'IT': 'Archicad, AutoCAD, Revit &amp; more',
+                  'PROJEKTE': 'Vorentwurf bis Ausführung, örtl. Bauaufsicht',
+                  'SKILLS': 'Möbeldesign, Wohnen, Ateliers, Ausstellungen'}
 # the three service blocks from the desktop "us & our services" page (Figma text; SKILLS still repeats PROJEKTE there)
 SERVICES = [('IT', 'services-imgWorkstation.webp', ['Experte: Archicad',
              'gute Kenntnisse: AutoCAD, Microstation V8 &amp; Triforma, 3d Studio MAX+VRAY, Adobe Paket, Microsoft Office Paket, FormZ, Bentley Generative Components, Solibri Modelchecker, Vectorworks.',

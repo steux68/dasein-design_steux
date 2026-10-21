@@ -108,7 +108,7 @@ INFO_TXT = ('Building is a big step, and it helps to know what to expect. These 
             'how a project runs from first idea to finished building, what it costs and who takes part along the way. Have a look – then simply get in touch.')
 LINKS_TXT = ('Useful addresses for anyone planning to build in Vienna or Austria: the chambers that register architects, '
              'the city offices for permits and building rules, and good places to see and learn more about architecture.')
-CONTACT_TXT = 'Write, call or come visit us! We are happy to talk about your project, large or small.'
+CONTACT_TXT = 'Write, call or come visit us! We’d be happy to discuss your project, large or small.'   # Steuart's wording, 21 Oct
 DOWNLOADS = ('<p class="lab first">INFORMATION FOR CLIENTS</p><p class="intro">' + INFO_TXT + '</p><ul class="pdfs">'
              + ''.join(f'<li><img src="../img/pdf.svg" alt="PDF"><span>dd – {t}<small>PDF follows</small></span></li>' for t in PDFS)
              + '</ul><p class="lab">LINKS FOR CLIENTS</p><p class="intro">' + LINKS_TXT + '</p><div class="links">'
@@ -200,9 +200,10 @@ US = ('<div class="box"><p class="lab first">PARTNERSHIP</p><p class="firm"><b c
       '<details class="bio"><summary>' + PLUS + '<span class="cvt">full</span><b>bio</b></summary>' + ''.join(f'<p>{t}</p>' for t in BIO) + '</details></div>'
       '<div class="duo">' + ''.join(partner(n, p) for n, p in enumerate(PARTNERS)) + '</div>'
       + ''.join(cvpanel(n, p) for n, p in enumerate(PARTNERS)))
-CONTACT = ('<div class="box"><p class="lab first">OFFICE</p><p class="ctx">' + CONTACT_TXT + '</p><p class="addr"><b class="dd">dasein-design</b> · Neulerchenfelderstrasse 42/6<br>A-1160 Wien · Austria · EU</p>'
+CONTACT = ('<div class="box"><p class="lab first">OFFICE</p><p class="addr"><b class="dd">dasein-design</b> · Neulerchenfelderstrasse 42/6<br>A-1160 Wien · Austria · EU</p>'
       '<div class="mapw"><div class="map" id="map"></div><div class="mz"><button type="button" id="zin" aria-label="zoom in">' + SEARCH.ZOOM_IN + '</button><button type="button" id="zout" aria-label="zoom out">' + SEARCH.ZOOM_OUT + '</button><button type="button" id="zhome" aria-label="back to the start view">' + SEARCH.ZOOM_HOME + '</button></div></div>'
-      '<p class="mapl"><a href="https://www.openstreetmap.org/?mlat=48.211431&amp;mlon=16.333964#map=18/48.211431/16.333964">open the map</a></p></div>')
+      '<p class="mapl"><a href="https://www.openstreetmap.org/?mlat=48.211431&amp;mlon=16.333964#map=18/48.211431/16.333964">open the map</a></p></div>'
+           '<p class="ctx">' + CONTACT_TXT + '</p>')   # the closing line of the site, after the map
 
 HTML = f'''<!doctype html>
 <html lang="de">
@@ -274,6 +275,8 @@ body{{position:relative}}
 .bar.bbot{{bottom:0;height:calc(var(--bar) + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);border-top:1px dashed var(--line)}}
 .bar button{{border:0;background:none;padding:3px 24px;display:flex;-webkit-tap-highlight-color:transparent;transition:opacity .2s}}
 .bar button:disabled{{opacity:.2}}
+#goS .up{{display:none;align-items:center;gap:6px}} #goS.top .dn{{display:none}} #goS.top .up{{display:flex}}
+#goS .up i{{font-style:normal;font-size:12px;letter-spacing:.06em;color:#3a3c37}}
 /* pulsing thin dark rings round an arrow, as on the desktop */
 .ar.pulse .tr,.bar .go .tr{{display:block;fill:none;stroke:#3a3c37;stroke-width:.7;transform-box:fill-box;transform-origin:center;animation:ring 2.2s ease-out infinite}}
 .ar.pulse .tr2,.bar .go .tr2{{animation-delay:1.1s}}
@@ -379,8 +382,8 @@ details[open] > summary .cvt,[aria-expanded=true] .cvt{{font-size:0}} details[op
 @media (prefers-reduced-motion:reduce){{.cvx .r1,.cvx .r2{{display:none}}}}
 details h4{{margin:12px 0 2px;font-size:13px;color:var(--red);font-weight:700}}
 details ul{{margin:0;padding:0 0 0 14px;font-size:13px;line-height:1.4;color:#222}} details li{{margin:2px 0}}
-.addr{{margin:6px 0 0;font-size:13.5px;line-height:1.35}}   /* compact: two short lines */
-.ctx{{margin:0;font-size:13.5px;line-height:1.4;color:#222}}
+.addr{{margin:0;font-size:13.5px;line-height:1.35}}   /* compact: two short lines */
+.ctx{{margin:22px 6px 0;text-align:center;font-size:15px;line-height:1.4;color:#222}}   /* closing line, like a full stop */
 p.lab:not(.first){{margin-top:22px;padding-top:12px;background:var(--dh) left top/100% 1px no-repeat}}
 .box .lab.first{{margin-top:0}}
 .mapw{{position:relative;z-index:0;isolation:isolate;margin:10px 0 0}}
@@ -491,7 +494,7 @@ dialog .top{{flex:none}}
 </main>
 <i class="rule l" aria-hidden="true"></i><i class="rule r" aria-hidden="true"></i>
 <div class="bar btop"><button type="button" id="goN" aria-label="previous page">{ARN}</button></div>
-<div class="bar bbot"><button type="button" id="goS" aria-label="next page">{ARS}</button></div>
+<div class="bar bbot"><button type="button" id="goS" aria-label="next page"><span class="dn">{ARS}</span><span class="up">{ARN}<i>back to the top</i></span></button></div>
 <dialog id="lb" aria-labelledby="lt">
 <div class="top"><span></span>
 <button type="button" class="x" id="lx" aria-label="close">{XC}</button></div>
@@ -648,8 +651,8 @@ dialog .top{{flex:none}}
   const top0=()=>parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop)||0;
   const curIdx=()=>{{ const y=top0()+4; let i=0; pages.forEach((p,k)=>{{ if(p.getBoundingClientRect().top<=y) i=k; }}); return i; }};
   const barUpd=()=>{{ const i=curIdx(), atTop=scrollY<4, atEnd=innerHeight+scrollY>=document.documentElement.scrollHeight-4;
-    gN.disabled=atTop; gS.disabled=atEnd; gS.classList.toggle('go',i===0&&atTop); }};
-  gS.onclick=()=>{{ const i=curIdx(); if(pages[i+1]) pages[i+1].scrollIntoView({{behavior:'smooth'}}); }};
+    gN.disabled=atTop; gS.classList.toggle('top',atEnd); gS.setAttribute('aria-label',atEnd?'back to the top':'next page'); gS.classList.toggle('go',i===0&&atTop); }};
+  gS.onclick=()=>{{ if(gS.classList.contains('top')){{ scrollTo({{top:0,behavior:'smooth'}}); return; }} const i=curIdx(); if(pages[i+1]) pages[i+1].scrollIntoView({{behavior:'smooth'}}); }};
   gN.onclick=()=>{{ const i=curIdx(), off=pages[i].getBoundingClientRect().top-top0(); (off<-8?pages[i]:pages[Math.max(0,i-1)]).scrollIntoView({{behavior:'smooth'}}); }};
   addEventListener('scroll',barUpd,{{passive:true}}); addEventListener('resize',barUpd); barUpd();
   document.querySelectorAll('.tile[data-p]').forEach(t=>t.addEventListener('click',()=>{{ show(+t.dataset.p); openDlg(lb); }}));

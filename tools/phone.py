@@ -199,6 +199,9 @@ CONTACT = ('<div class="box"><p class="lab first">OFFICE</p><p class="addr"><b c
       '<p class="mapl"><a href="https://www.openstreetmap.org/?mlat=48.211431&amp;mlon=16.333964#map=18/48.211431/16.333964">open the map</a></p></div>'
            '<p class="ctx">' + CONTACT_TXT + '</p>')   # the closing line of the site, after the map
 
+MOREP = ('<button type="button" class="cvb more" aria-expanded="false" data-g="g-proj">' + PLUS
+         + '<span class="cvt"><span class="op">more</span><span class="cl">fewer</span></span><b>projects</b></button>')
+
 HTML = f'''<!doctype html>
 <html lang="de">
 <head>
@@ -499,7 +502,7 @@ dialog .top{{flex:none}}
 <section class="pg" id="start"><div class="stage"><div class="beetle" id="beetle"><div class="whole"></div>{PIECES}</div><svg class="leads" id="leads" aria-hidden="true"></svg><svg class="leads" id="leadots" aria-hidden="true"></svg>{PINS}</div>
 </section>
 {section("us", "about us", "01", US)}
-{section("projects", "projects", "02", '<div class="grid">' + TILES + '</div>')}
+{section("projects", "projects", "02", '<div class="grid cut" id="g-proj">' + TILES + '</div>' + MOREP)}
 {section("downloads", "downloads & links", "03", DOWNLOADS)}
 {section("bits", "bits & bats", "04", BITSHTML)}
 {section("contact", "contact", "05", CONTACT)}

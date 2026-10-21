@@ -129,7 +129,18 @@ BCAPS = [c.replace('&amp;', '&') for im, t, c in BITS]
 
 # ---------- us & contact: the partnership, the two partners (CV folds open), the office with the map ----------
 PARTNERS = [
-    dict(role='Architect', first='Steuart', last='J Mackenzie HARRISON', q='BArch MArch ARB', tel='+43 (0)699 1941 9240', mail='steuart@dasein-design.net',
+    dict(role='Architekt', first='Cuong', last='TRAN-VIET', q='BArch DipArch', idimg='m-id-cuong.webp', idalt='Personalausweis Cuong Tran-Viet', tel='+43 (0)676 4822 464', mail='cuong@dasein-design.net', extra='',
+         cv=[('Professional', ['2010 ZT: Arch+Ing, Bundeskammer der ZiviltechnikerInnen, Österreich [EU]',
+                               '2005 ARB: Architects Registration Board of the United Kingdom [UK]']),
+             ('Academic', ['Sep.’00 – Jun.’02 » Bartlett School of Architecture, UCL, London – Dip. Arch',
+                           '2002 RIBA Part II · 1998 RIBA Part I',
+                           'Okt.’96 – Jun.’98 » Mackintosh School of Architecture, Glasgow – B. Arch',
+                           'Okt.’90 – Dez.’95 » Technische Universität Wien, Fakultät Architektur']),
+             ('Berufliche Tätigkeiten', ['Jan.’21 – Mai.’21 » Franz und Sue Architekten, Wien',
+                                         'Sep.’19 – Mai.’20 » BWM Architekten, Wien',
+                                         'Mar.’10 – Aug.’19 » BEHF Architects, Wien',
+                                         'Jun.’99 – Feb.’10 » Aedas, Ian Simpson, David Morley, Arthur Collin &amp; Gregory Phillips, London'])]),
+    dict(role='Architect', first='Steuart', last='J Mackenzie HARRISON', q='BArch MArch ARB', idimg='m-id-steuart.webp', idalt='Führerschein Steuart J Mackenzie Harrison', tel='+43 (0)699 1941 9240', mail='steuart@dasein-design.net',
          extra='Sprachen: Englisch [Muttersprache] &amp; Deutsch [B2]',
          cv=[('Professional', ['2019 ZT: Arch+Ing, Bundeskammer der ZiviltechnikerInnen, Österreich [EU]',
                                '2004 ARB: Architects Registration Board of the United Kingdom [UK]',
@@ -141,24 +152,14 @@ PARTNERS = [
                                         'Sep.’06 – Aug.’12 &amp; Mar.’14 – Sep.’14 » New Design University, St. Pölten: co-Leiter, Major Project Tutor, Leiter des Internationalen Büros',
                                         'Gastkritiker: Universität Belgrad (Jul.’09), Ryerson University, Toronto (Dez.’08)',
                                         'Berater: NDU St. Pölten – Curricula / Akkreditierung (2003–04, Jun.’19)']),
-             ('Berufliche Tätigkeiten', ['1989 – 2005 Mitarbeit in diversen Architekturbüros in Wien, London &amp; Glasgow, darunter Atelier Ernst Hoffmann, Büro Geiswinkler, Atelier Artec, Büro Hagmüller, Tim Bushe Associates, E.C. Riach Architects'])]),
-    dict(role='Architekt', first='Cuong', last='TRAN-VIET', q='BArch DipArch', tel='+43 (0)676 4822 464', mail='cuong@dasein-design.net', extra='',
-         cv=[('Professional', ['2010 ZT: Arch+Ing, Bundeskammer der ZiviltechnikerInnen, Österreich [EU]',
-                               '2005 ARB: Architects Registration Board of the United Kingdom [UK]']),
-             ('Academic', ['Sep.’00 – Jun.’02 » Bartlett School of Architecture, UCL, London – Dip. Arch',
-                           '2002 RIBA Part II · 1998 RIBA Part I',
-                           'Okt.’96 – Jun.’98 » Mackintosh School of Architecture, Glasgow – B. Arch',
-                           'Okt.’90 – Dez.’95 » Technische Universität Wien, Fakultät Architektur']),
-             ('Berufliche Tätigkeiten', ['Jan.’21 – Mai.’21 » Franz und Sue Architekten, Wien',
-                                         'Sep.’19 – Mai.’20 » BWM Architekten, Wien',
-                                         'Mar.’10 – Aug.’19 » BEHF Architects, Wien',
-                                         'Jun.’99 – Feb.’10 » Aedas, Ian Simpson, David Morley, Arthur Collin &amp; Gregory Phillips, London'])])]
+             ('Berufliche Tätigkeiten', ['1989 – 2005 Mitarbeit in diversen Architekturbüros in Wien, London &amp; Glasgow, darunter Atelier Ernst Hoffmann, Büro Geiswinkler, Atelier Artec, Büro Hagmüller, Tim Bushe Associates, E.C. Riach Architects'])])]
 
 
 def partner(p):
     cv = ''.join(f'<h4>{h}</h4><ul>' + ''.join(f'<li>{x}</li>' for x in xs) + '</ul>' for h, xs in p['cv'])
     tel = p['tel'].replace(' ', '').replace('(0)', '')
     return (f'<article class="who"><p class="role">» {p["role"]}</p><h3>{p["first"]} <b>{p["last"]}</b></h3><p class="q">{p["q"]}</p>'
+            f'<img class="idc" src="../img/{p["idimg"]}" alt="{p["idalt"]} (Nummer, Geburtsdatum und Unterschrift unkenntlich)" loading="lazy">'
             f'<p class="kt"><a href="tel:{tel}">{p["tel"]}</a><br><a href="mailto:{p["mail"]}">{p["mail"]}</a></p>'
             + (f'<p class="ex">{p["extra"]}</p>' if p['extra'] else '')
             + f'<details><summary>CV</summary>{cv}</details></article>')
@@ -282,8 +283,10 @@ html,body{{overflow-x:clip}}
 .firm{{margin:0 0 6px;font-size:16px}} .firm span{{font-size:13px;color:#666}}
 .who{{margin:14px 0 0;padding:12px 0 0;border-top:1px dotted var(--dot)}}
 .who .role{{margin:0;font-size:12px;color:#666}}
-.who h3{{margin:2px 0 0;font-weight:400;font-size:21px;line-height:1.15;color:var(--red)}} .who h3 b{{font-weight:700}}
+.who h3{{margin:2px 0 0;font-weight:400;font-size:16px;line-height:1.2;color:var(--red)}} .who h3 b{{font-weight:700}}
 .who .q{{margin:2px 0 0;font-size:13px;color:#444}}
+/* ID card under the name, to identify the partner (number, birth date and signature blurred) */
+.who .idc{{display:block;width:78%;max-width:300px;height:auto;margin:8px 0 2px;border-radius:9px;outline:1px dotted var(--dot);outline-offset:2px}}
 .who .kt{{margin:8px 0 0;font-size:15px;line-height:1.5}} .who .kt a{{text-decoration:none;border-bottom:1px dotted var(--dot)}}
 .who .ex{{margin:6px 0 0;font-size:12.5px;color:#555}}
 details{{margin:8px 0 0}}

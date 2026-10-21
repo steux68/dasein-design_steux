@@ -230,7 +230,7 @@ nav{{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px}}
 .tab.cur small{{font-weight:400}}
 main{{padding-top:calc(var(--head) + var(--bar));padding-bottom:var(--bar);padding-right:8px}}
 body{{position:relative}}
-/* every page: its title sticks just under the header and is pushed up by the next page's title as that one arrives */
+/* every page */
 .pg{{position:relative;min-height:calc(100svh - var(--head) - 2 * var(--bar));border-bottom:1px dashed var(--line)}}
 /* thin white bars at the top and bottom of the screen with the N and S arrows: previous / next page */
 .bar{{position:fixed;left:var(--side);right:8px;z-index:15;height:var(--bar);display:flex;align-items:center;justify-content:center;background:#fff}}
@@ -244,14 +244,10 @@ body{{position:relative}}
 @keyframes ring{{0%{{transform:scale(1);opacity:.55}}100%{{transform:scale(1.7);opacity:0}}}}
 @media (prefers-reduced-motion:reduce){{.ar .tr{{animation:none!important;display:none!important}}}}
 .body{{min-width:0;padding:12px 10px 28px}}
-/* guide lines down both sides, as on the desktop: a light dashed vertical line with pairs of short ticks */
+/* guide lines down both sides, as on the desktop: a light dashed vertical line */
 .rule{{position:fixed;top:0;bottom:0;width:1px;z-index:45;pointer-events:none;
   background:repeating-linear-gradient(to bottom,var(--line) 0 4px,transparent 4px 7px)}}
 .rule.l{{left:calc(var(--side) - 1px)}} .rule.r{{right:7px}}
-/* short dotted ticks on the inner side of the two lines, level with the top and bottom of the boxes on the page; they scroll with them */
-#ticks{{position:absolute;left:0;top:0;width:100%;height:0;z-index:12;pointer-events:none}}
-.tk{{position:absolute;width:9px;height:0;border-top:1px dotted var(--dot)}}
-.tk.l{{left:var(--side)}} .tk.r{{right:8px}}
 .side.rail .sidebar,.side.rail header{{border-right:0!important}}
 /* section bar: same size, type and thickness as a tab in the side strip, a muted version of the lit tab's yellow-lime */
 .sbar{{display:flex;align-items:center;justify-content:center;gap:4px;height:30px;margin:8px 10px 0;background:rgba(205,255,62,.42);color:rgba(0,0,0,.78);
@@ -348,8 +344,7 @@ p.lab:not(.first){{margin-top:22px;padding-top:12px;border-top:1px dotted var(--
 .leaflet-container{{font-family:Calibri,Carlito,sans-serif}} .leaflet-control-attribution{{font-size:10px!important}} .soon a{{color:var(--red)}}
 /* project pop-up: full screen, swipe through the photos */
 /* pop-ups leave the side strip (and in the other versions the header) free, so the logo and the tabs stay in reach */
-dialog{{position:fixed;inset:var(--head) 0 0 var(--side);z-index:40;width:auto;height:auto;max-width:none;max-height:none;margin:0;padding:0;border:0;background:#fff;overflow-y:auto;color:#000;
-  box-shadow:-1px 0 0 var(--line)}}
+dialog{{position:fixed;inset:var(--head) 8px 0 var(--side);z-index:40;width:auto;height:auto;max-width:none;max-height:none;margin:0;padding:0;border:0;background:#fff;overflow-y:auto;color:#000}}
 html.dlg{{overflow:hidden}}
 .top{{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top,0px) + 8px) 10px 8px;background:rgba(255,255,255,.94)}}
 .cnt{{display:flex;align-items:center;gap:6px;font-size:13px;color:#666;letter-spacing:.06em}}
@@ -358,13 +353,13 @@ html.dlg{{overflow:hidden}}
 .x svg{{width:22px;height:22px;stroke:#000;stroke-width:1.3}}
 .ar{{overflow:visible}} .ar .rg{{fill:none;stroke:#3a3c37;stroke-width:var(--hp)}} .ar .dt{{fill:#4d4f4a;stroke:#1a1a1a;stroke-width:var(--hp);stroke-linejoin:round}}
 .ar text{{fill:#3a3c37;font:700 6.4px Calibri,Carlito,sans-serif;text-anchor:middle;dominant-baseline:central}} .ar .tr{{display:none}}
-.photos{{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;background:#f6f6f6}}
+.photos{{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;background:#f6f6f6;border:1px dotted var(--dot)}}
 .photos::-webkit-scrollbar{{display:none}}
 .photos img{{flex:none;width:100%;height:44svh;object-fit:contain;scroll-snap-align:center}}
 /* the pop-ups fill exactly one screen; nothing scrolls up and down */
 dialog[open]{{display:flex;flex-direction:column;overflow:hidden}}
 dialog .top{{flex:none}}
-.phw{{position:relative;flex:none}}
+.phw{{position:relative;flex:none;margin:0 10px}}
 .phw button{{position:absolute;top:50%;margin-top:-21px;width:42px;height:42px;border:0;padding:0;border-radius:50%;background:rgba(255,255,255,.82);display:flex;align-items:center;justify-content:center;
   -webkit-tap-highlight-color:transparent;transition:opacity .2s}}
 .phw .pw{{left:6px}} .phw .pe{{right:6px}}
@@ -372,13 +367,13 @@ dialog .top{{flex:none}}
 .pcount{{font-size:11px;color:#888;letter-spacing:.06em;padding:6px 12px 0}}
 .dots{{display:flex;gap:5px;justify-content:center;padding:6px 0 0}}
 .dots i{{width:6px;height:6px;border-radius:50%;background:#ccc}} .dots i.on{{background:var(--red)}}
-.txt{{flex:1;min-height:0;overflow:hidden;position:relative;padding:4px 14px 0}}
+.txt{{flex:1;min-height:0;overflow:hidden;position:relative;padding:4px 10px 0}}
 .txt::after{{content:"";position:absolute;left:0;right:0;bottom:0;height:14px;background:linear-gradient(rgba(255,255,255,0),rgba(255,255,255,.96))}}
 .txt h2{{margin:4px 0 0;color:var(--red);font-size:18px;line-height:1.15}}
 .txt p{{margin:5px 0 0;font-size:13.5px;line-height:1.36;color:#222}}
 .txt dl{{margin:8px 0 0;padding-top:6px;border-top:1px dotted var(--dot);display:grid;grid-template-columns:auto 1fr auto 1fr;gap:2px 8px;font-size:12px;line-height:1.3}}
 .txt dt{{color:#888}} .txt dd{{margin:0}}
-.nav2{{flex:none;display:flex;justify-content:space-between;padding:4px 14px calc(env(safe-area-inset-bottom,0px) + 8px);border-top:1px dotted var(--dot)}}
+.nav2{{flex:none;display:flex;justify-content:space-between;margin:0 10px;padding:4px 0 calc(env(safe-area-inset-bottom,0px) + 8px);border-top:1px dotted var(--dot)}}
 .nav2 button{{display:flex;align-items:center;gap:6px;border:0;background:none;font:400 12px Calibri,Carlito,sans-serif;letter-spacing:.06em;color:#666;padding:6px 0}}
 .note{{margin-left:auto;padding-left:8px;align-self:flex-start;text-align:right;font-size:10px;line-height:1.35;color:#888;letter-spacing:.03em}}
 .note a{{color:var(--red)}}
@@ -405,7 +400,7 @@ dialog .top{{flex:none}}
 .bgrid .tall{{grid-row:span 2}}
 /* one picture full screen, swipe to the next */
 #iv .photos img{{height:70svh}}
-.ivcap{{padding:10px 14px 30px;color:var(--red);font-size:17px;font-weight:700}}
+.ivcap{{padding:10px 10px 30px;color:var(--red);font-size:17px;font-weight:700}}
 .ivcap small{{display:block;margin-top:4px;color:#888;font-weight:400;font-size:12px;letter-spacing:.06em}}
 </style>
 </head>
@@ -427,7 +422,7 @@ dialog .top{{flex:none}}
 {section("downloads", "downloads & links", "03", DOWNLOADS)}
 {section("bits", "bits & bats", "04", BITSHTML)}
 </main>
-<i class="rule l" aria-hidden="true"></i><i class="rule r" aria-hidden="true"></i><div id="ticks" aria-hidden="true"></div>
+<i class="rule l" aria-hidden="true"></i><i class="rule r" aria-hidden="true"></i>
 <div class="bar btop"><button type="button" id="goN" aria-label="previous page">{ARN}</button></div>
 <div class="bar bbot"><button type="button" id="goS" aria-label="next page">{ARS}</button></div>
 <dialog id="lb" aria-labelledby="lt">
@@ -450,12 +445,6 @@ dialog .top{{flex:none}}
   document.querySelectorAll('dialog').forEach(d=>d.addEventListener('close',()=>{{ if(!document.querySelector('dialog[open]')) document.documentElement.classList.remove('dlg'); }}));
   document.querySelectorAll('.sidebar,.tab,.logo').forEach(a=>a.addEventListener('click',closeDlgs));
   addEventListener('keydown',e=>{{ if(e.key==='Escape') closeDlgs(); }});
-  /* ticks: one pair (left and right) at the top and the bottom edge of every box - section bars, architects, tiles, logos, the map */
-  const tkBox=document.getElementById('ticks');
-  function ticks(){{ const ys=[]; document.querySelectorAll('.sbar,.who,.grid .tile,.bgrid .tile,.lg,.mapw,.pdfs').forEach(e=>{{ const r=e.getBoundingClientRect(); if(!r.height) return; ys.push(r.top+scrollY,r.bottom+scrollY-1); }});
-    ys.sort((a,b)=>a-b); const u=ys.filter((y,i)=>!i||y-ys[i-1]>3).map(Math.round);
-    tkBox.innerHTML=u.map(y=>'<i class="tk l" style="top:'+y+'px"></i><i class="tk r" style="top:'+y+'px"></i>').join(''); }}
-  new ResizeObserver(()=>requestAnimationFrame(ticks)).observe(document.querySelector('main'));
   /* an open CV closes by itself when it has been scrolled out of view */
   const cvio=new IntersectionObserver(es=>es.forEach(e=>{{ const d=e.target; if(e.isIntersecting||!d.open) return;
     /* keep what is on screen where it is: measure a page that is in view before and after closing (some browsers do this by themselves) */

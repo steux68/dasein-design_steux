@@ -108,7 +108,7 @@ INFO_TXT = ('Building is a big step, and it helps to know what to expect. These 
             'how a project runs from first idea to finished building, what it costs and who takes part along the way. Have a look – then simply get in touch.')
 LINKS_TXT = ('Useful addresses for anyone planning to build in Vienna or Austria: the chambers that register architects, '
              'the city offices for permits and building rules, and good places to see and learn more about architecture.')
-CONTACT_TXT = 'Write, call or come by – we are happy to talk about your project, large or small.'
+CONTACT_TXT = 'Write, call or come visit us! We are happy to talk about your project, large or small.'
 DOWNLOADS = ('<p class="lab first">INFORMATION FOR CLIENTS</p><p class="intro">' + INFO_TXT + '</p><ul class="pdfs">'
              + ''.join(f'<li><img src="../img/pdf.svg" alt="PDF"><span>dd – {t}<small>PDF follows</small></span></li>' for t in PDFS)
              + '</ul><p class="lab">LINKS FOR CLIENTS</p><p class="intro">' + LINKS_TXT + '</p><div class="links">'

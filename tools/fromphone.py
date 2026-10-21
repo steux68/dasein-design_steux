@@ -113,6 +113,8 @@ a[href^="tel:"]{color:#1e8e3e;text-decoration:none} a[href^="mailto:"]{color:#1a
 /* open: the opener moves up beside the top of its CV and reads "close CV" */
 .frame.cvo1 .dcv1,.frame.cvo2 .dcv2{top:432px!important;left:var(--xo)!important}
 @media (prefers-reduced-motion:reduce){.dcv .r1,.dcv .r2{display:none} [data-node-id="1:622"],[data-node-id="1:623"]{transition:none}}
+/* the four service icons, drawn in the compass style, a touch smaller (90 %) */
+img[src^="img/ic-"]{transform:scale(.9)}
 /* three clicks on the beetle: the heart */
 .heartfx{position:fixed;inset:0;z-index:9999;pointer-events:none;overflow:hidden}
 .heartfx svg{position:absolute;left:0;top:0;width:60px;height:60px;margin:-30px 0 0 -30px;fill:#e30613;will-change:transform,opacity}
@@ -242,7 +244,7 @@ def patch(s):
     # ---- menu: first tab renamed
     s = _tab_names(s)
     # ---- service icons: drawn in the compass style (img/ic-*.svg) instead of the red Figma pictograms
-    for old, new in (('services-imgWorkstation.webp', 'ic-it.svg'), ('services-imgExterior.webp', 'ic-projekte.svg'), ('services-imgBrainstormSkill.webp', 'ic-skills.svg')):
+    for old, new in (('services-imgWorkstation.webp', 'ic-it.svg'), ('services-imgExterior.webp', 'ic-projekte.svg'), ('services-imgBrainstormSkill.webp', 'ic-skills.svg'), ('services-imgGroups.svg', 'ic-partnership.svg')):
         s = _rep('src="img/' + old + '"', 'src="img/' + new + '"', s)
     # ---- styles
     s = _rep('</style>', CSS + '</style>', s)

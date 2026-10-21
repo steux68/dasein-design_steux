@@ -186,14 +186,15 @@ US = ('<div class="box"><p class="lab first">PARTNERSHIP</p><p class="firm"><b c
       f'<p class="intro2">{INTRO}</p>'
       '<div class="opn"><button type="button" class="cvb" aria-expanded="false" aria-controls="bio">' + PLUS + '<span class="cvt">full</span><b>bio</b></button>'
       '</div><details class="bio fold" id="bio"><summary></summary>' + ''.join(f'<p>{t}</p>' for t in BIO) + '</details></div>'
+
+      '<div class="duo">' + ''.join(partner(n, p) for n, p in enumerate(PARTNERS)) + '</div>'
+      + ''.join(cvpanel(n, p) for n, p in enumerate(PARTNERS))
       # OUR SERVICES: its own box, the three blocks side by side in short, "full services" unfolds the whole text
-      '<div class="box"><p class="lab first">OUR SERVICES</p><div class="sv3">' + ''.join(
+      + '<div class="box"><p class="lab first">OUR SERVICES</p><div class="sv3">' + ''.join(
           f'<div><img src="../img/{ic}" alt=""><b>{h}</b><span>{SERVICES_SHORT[h]}</span></div>' for h, ic, xs in SERVICES) + '</div>'
       '<div class="opn"><button type="button" class="cvb" aria-expanded="false" aria-controls="svc">' + PLUS + '<span class="cvt">full</span><b>services</b></button></div>'
       '<details class="svc fold" id="svc"><summary></summary>' + ''.join(
-          f'<h4><img src="../img/{ic}" alt="">{h}</h4>' + ''.join(f'<p>» {x}</p>' for x in xs) for h, ic, xs in SERVICES) + '</details></div>'
-      '<div class="duo">' + ''.join(partner(n, p) for n, p in enumerate(PARTNERS)) + '</div>'
-      + ''.join(cvpanel(n, p) for n, p in enumerate(PARTNERS)))
+          f'<h4><img src="../img/{ic}" alt="">{h}</h4>' + ''.join(f'<p>» {x}</p>' for x in xs) for h, ic, xs in SERVICES) + '</details></div>')
 CONTACT = ('<div class="box"><p class="lab first">OFFICE</p><p class="addr"><b class="dd">dasein-design</b> · Neulerchenfelderstrasse 42/6<br>A-1160 Wien · Austria · EU</p>'
       '<div class="mapw"><div class="map" id="map"></div><div class="mz"><button type="button" id="zin" aria-label="zoom in">' + SEARCH.ZOOM_IN + '</button><button type="button" id="zout" aria-label="zoom out">' + SEARCH.ZOOM_OUT + '</button><button type="button" id="zhome" aria-label="back to the start view">' + SEARCH.ZOOM_HOME + '</button></div></div>'
       '<p class="mapl"><a href="https://www.openstreetmap.org/?mlat=48.211431&amp;mlon=16.333964#map=18/48.211431/16.333964">open the map</a></p></div>'
@@ -366,10 +367,11 @@ html,body{{overflow-x:clip}}
 .opn{{display:flex;gap:18px;flex-wrap:wrap}}
 .fold > summary{{display:none}} .fold{{margin:0}}
 .svc h4{{display:flex;align-items:center;gap:7px;margin:12px 0 2px;font-size:14px;font-weight:700;color:var(--red);letter-spacing:.02em}}
-.svc h4 img{{width:20px;height:20px}}
+.svc h4 img{{width:18px;height:18px}}
 .sv3{{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0 6px}}
+#us .duo + .cvp + .cvp + .box,#us .cvp + .box{{margin-top:8px}}
 .sv3 div{{display:flex;flex-direction:column;align-items:center;text-align:center;gap:3px}}
-.sv3 img{{width:28px;height:28px}} .sv3 b{{font-size:13px;color:var(--red);letter-spacing:.03em}}
+.sv3 img{{width:25px;height:25px}} .sv3 b{{font-size:13px;color:var(--red);letter-spacing:.03em}}
 .sv3 span{{font-size:11.5px;line-height:1.3;color:#444}}
 .svc p{{margin:3px 0 0;font-size:13px;line-height:1.4;color:#222}}
 /* the CVs open under both columns */

@@ -197,9 +197,10 @@ US = ('<div class="box"><p class="lab first">PARTNERSHIP</p><p class="firm"><b c
       '<details class="svc fold" id="svc"><summary></summary>' + ''.join(
           f'<h4><img src="../img/{ic}" alt="">{h}</h4>' + ''.join(f'<p>» {x}</p>' for x in xs) for h, ic, xs in SERVICES) + '</details></div>')
 CONTACT = ('<div class="box"><p class="lab first">OFFICE</p><p class="addr"><b class="dd">dasein-design</b> · Neulerchenfelderstrasse 42/6<br>A-1160 Wien · Austria · EU</p>'
+      + '<div class="pcs">' + ''.join(f'<p><b>{p["first"]} {p["last"]}</b><br><a href="tel:{p["tel"].replace(" ", "").replace("(0)", "")}">{p["tel"]}</a> · <a href="mailto:{p["mail"]}">{p["mail"]}</a></p>' for p in PARTNERS) + '</div>'
       '<div class="mapw"><div class="map" id="map"></div><div class="mz"><button type="button" id="zin" aria-label="zoom in">' + SEARCH.ZOOM_IN + '</button><button type="button" id="zout" aria-label="zoom out">' + SEARCH.ZOOM_OUT + '</button><button type="button" id="zhome" aria-label="back to the start view">' + SEARCH.ZOOM_HOME + '</button></div></div>'
       '<p class="mapl"><a href="https://www.openstreetmap.org/?mlat=48.211431&amp;mlon=16.333964#map=18/48.211431/16.333964">open the map</a></p></div>'
-           '<p class="ctx">' + CONTACT_TXT + '</p>')   # the closing line of the site, after the map
+           '<p class="ctx">' + CONTACT_TXT + '</p><p class="copy">© 2026 [ dasein-design &amp; steux ]</p>')   # the closing line of the site, after the map
 
 MOREP = ('<button type="button" class="cvb more" aria-expanded="false" data-g="g-proj">' + PLUS
          + '<span class="cvt"><span class="op">more</span><span class="cl">fewer</span></span><b>projects</b></button>')
@@ -405,7 +406,11 @@ details h4{{margin:12px 0 2px;font-size:13px;color:var(--red);font-weight:700}}
 details ul{{margin:0;padding:0 0 0 14px;font-size:13px;line-height:1.4;color:#222}} details li{{margin:2px 0}}
 .addr{{margin:0;font-size:13.5px;line-height:1.35}}   /* compact: two short lines */
 .ctx{{margin:22px 0 0;text-align:center;font-style:italic;font-size:min(14.5px,3.5vw);line-height:1.45;color:#222;white-space:nowrap}}   /* closing line, like a full stop: two centred lines, italic, a dash before and after */
-.ctx .hd{{font-style:normal;margin:0 .4em}}   /* closing line, like a full stop */
+.ctx .hd{{font-style:normal;margin:0 .4em}}
+/* the partners on the contact page too (as on the desktop), compact */
+.pcs{{margin:12px 0 0;font-size:min(13px,3.4vw);line-height:1.4}} .pcs p{{margin:0 0 8px}} .pcs b{{font-weight:700}} .pcs a{{text-decoration:none}}
+/* copyright, as at the foot of the desktop side bar */
+.copy{{margin:18px 0 0;text-align:center;font-size:10.5px;letter-spacing:.06em;color:#888}}   /* closing line, like a full stop */
 p.lab:not(.first){{margin-top:26px}}
 .box .lab.first{{margin-top:0}}
 .mapw{{position:relative;z-index:0;isolation:isolate;margin:10px 0 0}}

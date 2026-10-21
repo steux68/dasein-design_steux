@@ -13,6 +13,7 @@ build.py also calls patch() before writing, so a full rebuild keeps them.
 - the two long CVs fold to just over half the page, with a "full CV" opener
 - IT, PROJEKTE and SKILLS icons drawn in the compass style (img/ic-*.svg)
 - one job per line: no white dashed edges on the tabs, no --- text dividers, no e-mail underlines
+- synchronised with the phone: vertical title "about us", no placeholder captions on the ID cards, one address and phone format, red client subtitles
 - three quick clicks on the beetle: the red heart, as on the phone
 - menu: the first tab reads "about us [01]" (half tabs were tried and dropped)
 """
@@ -122,6 +123,7 @@ img[src^="img/ic-"]{transform:scale(.9)}
 a[href^="mailto:"],a[href^="mailto:"] span{text-decoration:none!important}
 /* services: a dotted line across each partner's column at the tick y 440, in place of the red bars above the names */
 .pline{position:absolute;top:620px;width:420px;height:1px;z-index:3;background:repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px)}
+.sub2{color:#e30613;font-size:11px;letter-spacing:.12em;margin-bottom:3px!important}
 /* three clicks on the beetle: the heart */
 .heartfx{position:fixed;inset:0;z-index:9999;pointer-events:none;overflow:hidden}
 .heartfx svg{position:absolute;left:0;top:0;width:60px;height:60px;margin:-30px 0 0 -30px;fill:#e30613;will-change:transform,opacity}
@@ -281,6 +283,26 @@ def patch(s):
         s = _sub1(r'(data-node-id="' + nid + r'" data-name="IMAGE" style="left:\d+px;)top:290px', r'\1top:440px', s)
     for nid, y in (('1:601', 558), ('1:603', 558), ('1:602', 574), ('1:604', 574), ('1:626', 440), ('1:627', 440), ('1:622', 630), ('1:623', 630)):
         s = _sub1(r'class="([^"]*)" data-node-id="' + nid + '"', lambda m: f'class="{m.group(1)}" data-node-id="{nid}" style="top:{y}px"', s)
+    # ---- synchronised with the phone (22 Oct)
+    # the big vertical title of page 01 reads "about us", like its tab and circle
+    s, n = re.subn(r'<span class="fcal-b leading-\[normal\] text-\[50px\]">us </span><span class="fcal-l leading-\[normal\] text-\[50px\]">&amp;</span><span class="fcal-b leading-\[normal\] text-\[50px\]"> our services </span>',
+                   '<span class="fcal-b leading-[normal] text-[50px]">about us </span>', s)
+    assert n >= 1, n
+    # no placeholder caption over the two ID cards
+    for nid in ('1:601', '1:602', '1:603', '1:604'):
+        s = _sub1(r'<div class="[^"]*" data-node-id="' + nid + r'"[^>]*>(?:(?!<div).)*?</div>' if nid in ('1:601', '1:603') else
+                  r'<div class="[^"]*" data-node-id="' + nid + r'"[^>]*>.*?</p></div>', '', s, re.S)
+    # one way of writing the address and the phone numbers
+    s = _rep('<p class="leading-[normal] mb-0">NEULERCHENFELDERSTRASSE 42/6</p><p class="leading-[normal] mb-0">VIENNA. A-1160</p><p class="leading-[normal] mb-0">AUSTRIA </p><p class="leading-[normal] mb-0">EUROPE (EU)</p>',
+             '<p class="leading-[normal] mb-0">Neulerchenfelderstrasse 42/6</p><p class="leading-[normal] mb-0">A-1160 Wien · Austria · EU</p>', s)
+    s = _rep('>TRAN-VIET CUONG</p>', '>Cuong TRAN-VIET</p>', s)
+    s = _rep('>STEUART J. MACKENZIE HARRISON</p>', '>Steuart J Mackenzie HARRISON</p>', s)
+    s = s.replace('+43 [0] 699 1941 9240', '+43 (0)699 1941 9240').replace('+43 [0] 676 4822 464', '+43 (0)676 4822 464')
+    # Figma typo
+    s = s.replace('Ausfuhrungsplannung', 'Ausführungsplanung')
+    # client subtitles in the small bold red capitals used everywhere else
+    for t in ('INFORMATION FOR CLIENTS', 'LINKS FOR CLIENTS'):
+        s = _rep(f'<p class="leading-[normal] mb-0">{t}</p>', f'<p class="leading-[normal] mb-0 sub2">{t}</p>', s)
     # ---- styles
     s = _rep('</style>', CSS + '</style>', s)
     return s.replace('</body>', HEART_JS + MARK + '</body>', 1)

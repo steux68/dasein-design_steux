@@ -59,7 +59,9 @@ TABS = [('us', 'us & contact', '01'), ('projects', 'projects', '02'), ('download
         ('bits', 'bits & bats', '04')]
 TABHTML = ''.join(f'<a class="tab" href="#{i}" data-pg="{i}"><span>{n}</span> <small>[{k}]</small></a>' for i, n, k in TABS)
 # circles beside the beetle: left and right, top to bottom
-PINS = ''.join(f'<a class="pin {"l" if k % 2 == 0 else "r"}" href="#{i}" style="top:{10 + k * 23}%"><b>{num}</b><span>{n}</span></a>'
+# where each circle's dotted line ends on the upright beetle (fractions of its box): antler, front leg, body, back leg
+AIM = [(.30, .16), (.72, .40), (.30, .62), (.66, .84)]
+PINS = ''.join(f'<a class="pin {"l" if k % 2 == 0 else "r"}" href="#{i}" data-fx="{AIM[k][0]}" data-fy="{AIM[k][1]}" style="top:{10 + k * 23}%"><b>{num}</b><span>{n}</span></a>'
                for k, (i, n, num) in enumerate(TABS))
 
 P = [{'t': p['t'], 'x': p['x'], 'd': p['d'], 'imgs': ['../' + s for s in p['imgs']]} for p in LB.PROJECTS]
@@ -183,6 +185,17 @@ HTML = f'''<!doctype html>
 .sidebar span{{margin-top:14px;writing-mode:vertical-rl;transform:rotate(180deg);font-size:27px;line-height:1;white-space:nowrap}}
 .sidebar b{{font-weight:700}}
 .side .row1 .logo{{display:none}}
+/* all on the side: the mark and name in one narrow column, the four tabs running down a second one; no bar across the top */
+.side.rail{{--side:78px}}
+.side.rail .sidebar{{width:40px}}
+.side.rail .sidebar span{{font-size:25px}}
+.side.rail header{{left:40px;right:auto;top:0;bottom:0;width:38px;padding:calc(env(safe-area-inset-top,0px) + 6px) 4px 6px;border-bottom:0;border-right:1px dashed var(--line)}}
+.side.rail .row1{{min-height:0;height:0}}
+.side.rail nav{{display:flex;flex-direction:column;height:100%;margin:0;gap:6px}}
+.side.rail .tab{{flex:1;height:auto;writing-mode:vertical-rl;transform:rotate(180deg);padding:4px 0;font-size:14px;gap:4px}}
+.side.rail .stage{{height:calc(100svh - 64px)}}
+.side.rail .hint{{padding-bottom:30px}}
+.side.rail .note{{position:fixed;right:6px;bottom:calc(env(safe-area-inset-bottom,0px) + 6px);z-index:30;background:rgba(255,255,255,.94);padding:2px 6px;border:1px dotted var(--dot)}}
 .side header{{left:var(--side)}}
 .side main{{padding-left:var(--side)}}
 *{{box-sizing:border-box}}
@@ -223,9 +236,13 @@ html,body{{overflow-x:clip}}
 .play .bp{{display:block}} .play .whole{{visibility:hidden}}
 .pin{{position:absolute;display:flex;flex-direction:column;align-items:center;gap:3px;width:25vw;max-width:110px;text-decoration:none;text-align:center;-webkit-tap-highlight-color:transparent}}
 .pin.l{{left:6px}} .pin.r{{right:6px}}
-.pin b{{display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;background:#bfbfbf;font-weight:400;font-size:19px;
+.pin b{{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:#bfbfbf;font-weight:400;font-size:13.5px;
   box-shadow:inset 0 0 0 1px #000;transition:background .15s}}
-.pin span{{font-size:13px;line-height:1.15;background:rgba(255,255,255,.85);padding:1px 3px}}
+.pin span{{font-size:12px;line-height:1.15;background:rgba(255,255,255,.85);padding:1px 3px}}
+/* thin dotted leader lines from the circles to the beetle, as on the desktop start page */
+.leads{{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}}
+.leads path{{fill:none;stroke:#3a3c37;stroke-width:1;stroke-dasharray:1 2.2}}
+.leads .tip{{stroke-dasharray:none;stroke-linecap:round;stroke-linejoin:round}}
 .pin:active b{{background:var(--green);box-shadow:inset 0 0 0 1px var(--red)}}
 .pin:active span{{color:var(--red)}}
 .hint{{text-align:center;font-size:12px;color:#666;letter-spacing:.06em;margin:0;padding:4px 0 10px}}
@@ -330,16 +347,17 @@ dialog::backdrop{{background:rgba(255,255,255,.4);-webkit-backdrop-filter:blur(4
 </style>
 </head>
 <body>
-<script>/* logo on the side (default) or across the top: ?logo=top / ?logo=side, remembered on this phone */
-(function(){{ let m='side'; try{{ m=new URLSearchParams(location.search).get('logo')||localStorage.getItem('ddlogo')||'side'; }}catch(e){{}}
-  if(m!=='top') document.body.classList.add('side'); }})();</script>
+<script>/* three versions: logo and tabs all down the side (default) · logo on the side, tabs on top · logo and tabs across the top
+   ?logo=rail / side / top, remembered on this phone */
+(function(){{ let m='rail'; try{{ m=new URLSearchParams(location.search).get('logo')||localStorage.getItem('ddlogo2')||'rail'; }}catch(e){{}}
+  if(m!=='top') document.body.classList.add('side'); if(m==='rail') document.body.classList.add('rail'); }})();</script>
 <a class="sidebar" href="#start" aria-label="dasein-design, start"><img src="../img/m-mark.png" alt=""><span>dasein<b>-design</b></span></a>
 <header>
-<div class="row1"><a class="logo" href="#start" aria-label="dasein-design, start"><img src="../img/m-mark.png" alt=""><span>dasein<b>-design</b></span></a><span class="note">preview · logo <button type="button" data-logo="side">side</button>/<button type="button" data-logo="top">top</button> · <a href="../">full site</a></span></div>
+<div class="row1"><a class="logo" href="#start" aria-label="dasein-design, start"><img src="../img/m-mark.png" alt=""><span>dasein<b>-design</b></span></a><span class="note">preview · <button type="button" data-logo="rail">all side</button>/<button type="button" data-logo="side">logo side</button>/<button type="button" data-logo="top">top</button> · <a href="../">full site</a></span></div>
 <nav>{TABHTML}</nav>
 </header>
 <main>
-<section class="pg" id="start"><div class="stage"><div class="beetle" id="beetle"><div class="whole"></div>{PIECES}</div>{PINS}</div>
+<section class="pg" id="start"><div class="stage"><div class="beetle" id="beetle"><div class="whole"></div>{PIECES}</div><svg class="leads" id="leads" aria-hidden="true"></svg>{PINS}</div>
 <p class="hint">tap a number or the menu</p></section>
 {section("us", "us & contact", "01", US)}
 {section("projects", "projects", "02", '<div class="grid">' + TILES + '</div>')}
@@ -361,12 +379,26 @@ dialog::backdrop{{background:rgba(255,255,255,.4);-webkit-backdrop-filter:blur(4
 <script>
 (function(){{
   /* logo switch */
-  const setLogo=m=>{{ document.body.classList.toggle('side',m!=='top'); try{{ localStorage.setItem('ddlogo',m); }}catch(e){{}}
-    document.querySelectorAll('[data-logo]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.logo===(m==='top'?'top':'side')))); }};
-  const fitHead=()=>document.documentElement.style.setProperty('--head',document.querySelector('header').offsetHeight+'px');
-  addEventListener('resize',fitHead);
-  document.querySelectorAll('[data-logo]').forEach(b=>b.addEventListener('click',()=>{{ setLogo(b.dataset.logo); fitHead(); }}));
-  setLogo(document.body.classList.contains('side')?'side':'top'); fitHead();
+  const B=document.body;
+  const setLogo=m=>{{ B.classList.toggle('side',m!=='top'); B.classList.toggle('rail',m==='rail'); try{{ localStorage.setItem('ddlogo2',m); }}catch(e){{}}
+    document.querySelectorAll('[data-logo]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.logo===m))); }};
+  const fitHead=()=>document.documentElement.style.setProperty('--head',(B.classList.contains('rail')?0:document.querySelector('header').offsetHeight)+'px');
+  /* dotted leader lines: from the inner side of each circle across, then up or down onto the beetle, with a small arrowhead */
+  const stage=document.querySelector('.stage'), leads=document.getElementById('leads'), btl=document.getElementById('beetle');
+  function drawLeads(){{
+    const S=stage.getBoundingClientRect(), Bt=btl.getBoundingClientRect(); let h='';
+    stage.querySelectorAll('.pin').forEach(p=>{{
+      const c=p.querySelector('b').getBoundingClientRect(), left=p.classList.contains('l');
+      const sx=(left?c.right+4:c.left-4)-S.left, sy=c.top+c.height/2-S.top;
+      const tx=Bt.left+Bt.width*p.dataset.fx-S.left, ty=Bt.top+Bt.height*p.dataset.fy-S.top, d=ty>sy?1:-1, a=4;
+      h+=`<path d="M${{sx}} ${{sy}}H${{tx}}V${{ty-d*1}}"/><path class="tip" d="M${{tx-a*.8}} ${{ty-d*a}}L${{tx}} ${{ty}}L${{tx+a*.8}} ${{ty-d*a}}"/>`;
+    }});
+    leads.innerHTML=h;
+  }}
+  const relayout=()=>{{ fitHead(); requestAnimationFrame(drawLeads); }};
+  addEventListener('resize',relayout);
+  document.querySelectorAll('[data-logo]').forEach(b=>b.addEventListener('click',()=>{{ setLogo(b.dataset.logo); relayout(); }}));
+  setLogo(B.classList.contains('rail')?'rail':B.classList.contains('side')?'side':'top'); relayout();
   /* bits & bats: one picture full screen, swipe to the next */
   const BI={json.dumps(BIMGS)}, BC={json.dumps(BCAPS)}, iv=document.getElementById('iv'), iph=document.getElementById('iph');
   const tw=n=>String(n).padStart(2,'0');

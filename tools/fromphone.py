@@ -112,7 +112,7 @@ a[href^="tel:"]{color:#1e8e3e;text-decoration:none} a[href^="mailto:"]{color:#1a
 .dcv .cl{display:none} .dcv[aria-expanded=true] .cl{display:inline} .dcv[aria-expanded=true] .op{display:none}
 .dcv:hover .cvt,.dcv:focus-visible .cvt{color:#e30613} .dcv:focus-visible{outline:none}
 /* open: the opener moves up beside the top of its CV and reads "close CV" */
-.frame.cvo1 .dcv1,.frame.cvo2 .dcv2{top:432px!important;left:var(--xo)!important}
+.frame.cvo1 .dcv1,.frame.cvo2 .dcv2{top:408px!important;left:var(--xo)!important}
 @media (prefers-reduced-motion:reduce){.dcv .r1,.dcv .r2{display:none} [data-node-id="1:622"],[data-node-id="1:623"]{transition:none}}
 /* the four service icons, drawn in the compass style, a touch smaller (90 %) */
 img[src^="img/ic-"]{transform:scale(.9)}
@@ -120,6 +120,8 @@ img[src^="img/ic-"]{transform:scale(.9)}
    No white dashed edge on the menu tabs, no underlines under e-mail addresses */
 .border-dashed.border-white{border-color:transparent!important}
 a[href^="mailto:"],a[href^="mailto:"] span{text-decoration:none!important}
+/* services: a dotted line across each partner's column at the tick y 440, in place of the red bars above the names */
+.pline{position:absolute;top:440px;width:420px;height:1px;z-index:3;background:repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px)}
 /* three clicks on the beetle: the heart */
 .heartfx{position:fixed;inset:0;z-index:9999;pointer-events:none;overflow:hidden}
 .heartfx svg{position:absolute;left:0;top:0;width:60px;height:60px;margin:-30px 0 0 -30px;fill:#e30613;will-change:transform,opacity}
@@ -253,6 +255,18 @@ def patch(s):
         s = _rep('src="img/' + old + '"', 'src="img/' + new + '"', s)
     # ---- one job per line (22 Oct): the "---" text dividers become empty lines (spacing kept, no line)
     s = s.replace('>---</p>', '>\u200b</p>')
+    # ---- red bars (22 Oct): gone on downloads (x2) and contact, with the "dasein-design" heading under them on downloads
+    #      (contact keeps it as the first line of the address); on services the two bars above the partners become a dotted line
+    #      across each partner's column, moved down to the tick at y 440, between the ID card / contact block and the CV
+    for n in ('9:93', '16:360', '9:92'):
+        s = _sub1(r'<div class="[^"]*" data-node-id="' + n + r'"></div>', '', s)
+    for n in ('9:91', '16:359'):
+        s = _sub1(r'(data-node-id="' + n + r'"><p class="leading-\[normal\] mb-0 text-\[red\]">dasein-design</p><p class="leading-\[normal\] mb-0">\u200b</p>)',
+                  lambda m: m.group(0).split('>', 1)[0] + '>', s)
+    s = _sub1(r'<div class="[^"]*" data-node-id="9:94"></div>', '', s)
+    s = _sub1(r'<div class="[^"]*" data-node-id="9:95"><img[^>]*></div>', '', s)
+    s = _rep('<section class="pg" id="services"><div class="bg-white relative frame">',
+             '<section class="pg" id="services"><div class="bg-white relative frame"><i class="pline" style="left:235px"></i><i class="pline" style="left:895px"></i>', s)
     # ---- styles
     s = _rep('</style>', CSS + '</style>', s)
     return s.replace('</body>', HEART_JS + MARK + '</body>', 1)

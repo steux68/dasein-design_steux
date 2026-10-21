@@ -78,7 +78,7 @@ XC = '<svg viewBox="-12 -12 24 24" aria-hidden="true"><circle class="rg" r="9.5"
 
 def section(i, name, num, body):
     """a page; it opens with a muted yellow-lime bar across, in the tab style, naming it (scrolls away with the page)"""
-    return (f'<section class="pg" id="{i}" aria-label="{name} [{num}]"><div class="sbar" aria-hidden="true"></div>'
+    return (f'<section class="pg" id="{i}" aria-label="{name} [{num}]"><div class="pbar"><b>{name.replace("&", "&amp;")}</b><small>[{num}]</small></div><div class="sbar" aria-hidden="true"></div>'
             f'<div class="body">{body}</div></section>')
 
 
@@ -290,6 +290,9 @@ body{{position:relative}}
 .rule.l{{left:calc(var(--side) - 1px)}} .rule.r{{right:7px}}
 .side.rail .sidebar,.side.rail header{{border-right:0!important}}
 /* section bar: same size, type and thickness as a tab in the side strip, a muted version of the lit tab's yellow-lime */
+.pbar{{display:flex;align-items:center;justify-content:center;height:30px;margin:10px 10px 0;background:#eaffae;outline:1px dashed #fff;outline-offset:-1px;
+  font-size:12.5px;color:rgba(0,0,0,.78);white-space:nowrap}}   /* page name in yellow-lime, as thick as the side tabs, above the dotted line */
+.pbar b{{font-weight:700}} .pbar small{{font-size:8.5px;margin-left:4px}}
 .sbar{{position:relative;height:1px;margin:10px 10px}}   /* one line between two pages, 10 px clear each side (the same as from the side lines to the content) */
 /* page boundary (21 Oct): the desktop's double edge ticks, pointing inwards from both guide lines, each running on as a dotted line right across;
    the two lines are the old title bar's height apart */

@@ -205,8 +205,8 @@ def patch(s):
     s = _sub1(r'(<p class="leading-\[normal\] mb-0">INFORMATION FOR CLIENTS</p><p class="fcal-r leading-\[normal\] mb-0">)Saepissime.*?(</p>)', r'\g<1>' + INFO_TXT + r'\2', s, re.S)
     s = _sub1(r'(<p class="leading-\[normal\] mb-0">LINKS FOR CLIENTS</p><p class="fcal-r leading-\[normal\] mb-0">)Saepissime.*?</p><p class="leading-\[normal\] mb-0">​</p><p class="fcal-r leading-\[normal\] mb-0">Amor enim.*?</p><p class="fcal-r leading-\[normal\] mb-0">Inter quos.*?(</p>)',
               r'\g<1>' + LINKS_TXT + r'\2', s, re.S)
-    about = (f'<div class="ptx" style="left:235px;top:57px;width:420px"><p class="lab2">ABOUT US</p><p>{INTRO}</p></div>'
-             f'<div class="ptx bio" style="left:895px;top:57px;width:420px"><p class="lab2">BIO</p>' + ''.join(f'<p>{t}</p>' for t in BIO) + '</div>')
+    about = (f'<div class="ptx" style="left:235px;top:60px;width:420px"><p class="lab2">ABOUT US</p><p>{INTRO}</p></div>'
+             f'<div class="ptx bio" style="left:895px;top:60px;width:420px"><p class="lab2">BIO</p>' + ''.join(f'<p>{t}</p>' for t in BIO) + '</div>')
     s = _rep('<section class="pg" id="services"><div class="bg-white relative frame">', '<section class="pg" id="services"><div class="bg-white relative frame">' + about, s)
     PLUS = ('<svg viewBox="-12 -12 24 24" aria-hidden="true"><circle class="r1" r="8"/><circle class="r2" r="8"/><circle class="c" r="8"/>'
             '<path class="v" d="M0 -4.2V4.2"/><path d="M-4.2 0H4.2"/></svg>')
@@ -267,6 +267,14 @@ def patch(s):
     s = _sub1(r'<div class="[^"]*" data-node-id="9:95"><img[^>]*></div>', '', s)
     s = _rep('<section class="pg" id="services"><div class="bg-white relative frame">',
              '<section class="pg" id="services"><div class="bg-white relative frame"><i class="pline" style="left:235px"></i><i class="pline" style="left:895px"></i>', s)
+    # ---- snap to the side-bar ticks (22 Oct): a block's top sits on the lower tick of the pair above it (y 60, 250, 440, 630, 820, 1010)
+    SNAP = [('services', 'top-[255px] w-[420px]', 250), ('services', 'top-[254px] w-[200px]', 250), ('services', 'top-[57px] w-[200px]', 60),
+            ('downloads', 'top-[65px] w-[420px]', 60), ('downloads', 'top-[445px] w-[420px]', 440), ('contact', 'top-[445px] w-[200px]', 440)]
+    for sec, cls, y in SNAP:
+        i = s.index('<section class="pg" id="' + sec + '"'); j = s.index('</section>', i); t = s[i:j]
+        n = t.count(cls); assert n >= 1, (sec, cls)
+        t = re.sub(r'class="([^"]*' + re.escape(cls) + r'[^"]*)"', lambda m: f'class="{m.group(1)}" style="top:{y}px"', t)
+        s = s[:i] + t + s[j:]
     # ---- styles
     s = _rep('</style>', CSS + '</style>', s)
     return s.replace('</body>', HEART_JS + MARK + '</body>', 1)

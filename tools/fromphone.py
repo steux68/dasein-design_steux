@@ -10,7 +10,7 @@ build.py also calls patch() before writing, so a full rebuild keeps them.
   and send out coloured rings
 - project pop-up: close drawn like the compass signs; the counter sits between previous and next at the bottom
 - link logos trimmed to their edges (img/m-lg-*), with a small margin in their boxes
-- menu: "about us [01]" and "contact [05]" are half tabs at the two ends
+- menu: the first tab reads "about us [01]" (half tabs were tried and dropped)
 """
 import re
 from texts import INTRO, BIO, INFO_TXT, LINKS_TXT, CONTACT_TXT
@@ -93,8 +93,6 @@ a[href^="tel:"]{color:#1e8e3e;text-decoration:none} a[href^="mailto:"]{color:#1a
 .lbm{align-items:center}
 .lbm .lbkc{font:400 13px/25px Calibri,Carlito,sans-serif;color:#666;letter-spacing:.06em}
 .lbm .lbkc b{color:#e30613;font-weight:400}
-/* half tabs: positions not in figma.css */
-.left-\\[285px\\]{left:285px} .left-\\[1265px\\]{left:1265px} .w-\\[96px\\]{width:96px}
 /* link logos trimmed to their edges, with a small margin in their boxes */
 img[src^="img/m-lg-"]{box-sizing:border-box;padding:6px 12px}
 '''
@@ -104,27 +102,15 @@ XC = ('<svg viewBox="-12 -12 24 24" aria-hidden="true"><circle class="rg" r="9.5
 RINGS = [('#ffd400', '#2f8cff'), ('#2fbf4a', '#ffd400'), ('#2f8cff', '#cdff3e'), ('#e30613', '#2fbf4a'), ('#cdff3e', '#e30613')]
 
 
-def _half_tabs(s):
-    """in every page's menu: tab 1 = "about us [01]", left half of its column; tab 5 = "contact [05]", right half of its"""
-    s, n1 = re.subn(r'h-\[25px\] left-\[235px\] (top-\[?-?\d*p?x?\]?|top-0) w-\[200px\]', r'h-[25px] left-[235px] \1 w-[100px]', s)
-    s, n5 = re.subn(r'h-\[25px\] left-\[1115px\] (top-\[?-?\d*p?x?\]?|top-0) w-\[200px\]', r'h-[25px] left-[1215px] \1 w-[100px]', s)
-    assert n1 == 6 and n5 == 6, (n1, n5)
-
-    def label(name, num):
-        def lab(m):
-            spans = re.findall(r'<span class="([^"]*)">([^<]*)</span>', m.group(3))
-            first = next(c for c, t in spans if t.strip() and t.strip() != '&amp;')
-            return f'{m.group(1)}w-[96px]{m.group(2)}<span class="{first}">{name} </span><span class="{spans[-1][0]}">[{num}]</span></p>'
-        return lab
-    s, t1 = re.subn(r'(h-\[25px\] justify-center leading-\[0\] )left-\[335px\]([^"]*?)w-\[190px\]', r'\1left-[285px]\2w-[190px]', s)
-    s, t5 = re.subn(r'(h-\[25px\] justify-center leading-\[0\] )left-\[1215px\]([^"]*?)w-\[190px\]', r'\1left-[1265px]\2w-[190px]', s)
-    assert t1 == 6 and t5 == 6, (t1, t5)
-    s, c1 = re.subn(r'(left-\[285px\][^"]*?)w-\[190px\](" data-node-id="[^"]+"><p[^>]*>)(.*?)</p>', label('about us', '01'), s, flags=re.S)
-    s, c5 = re.subn(r'(left-\[1265px\][^"]*?)w-\[190px\](" data-node-id="[^"]+"><p[^>]*>)(.*?)</p>', label('contact', '05'), s, flags=re.S)
-    assert c1 == 6 and c5 == 6, (c1, c5)
-    s = _rep('style="left:235px;top:0;width:200px;height:25px" aria-label="us &amp; our services"', 'style="left:235px;top:0;width:100px;height:25px" aria-label="about us"', s)
-    s = _rep('style="left:1115px;top:0;width:200px;height:25px" aria-label="contact"', 'style="left:1215px;top:0;width:100px;height:25px" aria-label="contact"', s)
-    return s
+def _tab_names(s):
+    """in every page's menu the first tab reads "about us [01]" (full-size tabs; half tabs were tried and dropped, 21 Oct)"""
+    def lab(m):
+        spans = re.findall(r'<span class="([^"]*)">([^<]*)</span>', m.group(2))
+        first = next(c for c, t in spans if t.strip() and t.strip() != '&amp;')
+        return f'{m.group(1)}<span class="{first}">about us </span><span class="{spans[-1][0]}">[01]</span></p>'
+    s, n = re.subn(r'(left-\[335px\][^"]*?w-\[190px\]" data-node-id="[^"]+"><p[^>]*>)(.*?)</p>', lab, s, flags=re.S)
+    assert n == 6, n
+    return _rep('aria-label="us &amp; our services"', 'aria-label="about us"', s)
 
 
 def patch(s):
@@ -172,8 +158,8 @@ def patch(s):
     for n in sorted(os.listdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'img'))):
         if n.startswith('m-lg-'):
             s = s.replace('src="img/downloads-img' + n[5:] + '"', 'src="img/' + n + '"')
-    # ---- menu: half tabs at both ends
-    s = _half_tabs(s)
+    # ---- menu: first tab renamed
+    s = _tab_names(s)
     # ---- styles
     s = _rep('</style>', CSS + '</style>', s)
     return s.replace('</body>', MARK + '</body>', 1)

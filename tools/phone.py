@@ -259,7 +259,7 @@ header{{position:fixed;left:0;right:0;top:0;z-index:20;background:#fff;padding:c
 .logo b{{font-weight:700}}
 nav{{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px}}
 .tab{{display:flex;align-items:center;justify-content:center;gap:3px;height:28px;padding:0 4px;background:var(--grey);text-decoration:none;
-  font-size:13.5px;white-space:nowrap;outline:1px dashed #fff;outline-offset:-1px;-webkit-tap-highlight-color:transparent;transition:background .15s}}
+  font-size:13.5px;white-space:nowrap;-webkit-tap-highlight-color:transparent;transition:background .15s}}
 .tab small{{font-size:9px}}
 .tab:active{{background:var(--green)}}
 .tab.cur{{background:var(--lime);font-weight:700}}
@@ -290,7 +290,7 @@ body{{position:relative}}
 .rule.l{{left:calc(var(--side) - 1px)}} .rule.r{{right:7px}}
 .side.rail .sidebar,.side.rail header{{border-right:0!important}}
 /* section bar: same size, type and thickness as a tab in the side strip, a muted version of the lit tab's yellow-lime */
-.pbar{{display:flex;align-items:center;justify-content:center;height:30px;margin:0 10px 10px;background:#eaffae;outline:1px dashed #fff;outline-offset:-1px;
+.pbar{{display:flex;align-items:center;justify-content:center;height:30px;margin:0 10px 10px;background:#eaffae;
   font-size:12.5px;color:rgba(0,0,0,.78);white-space:nowrap}}   /* page name in yellow-lime, as thick as the side tabs; the dotted line runs flush across its top edge */
 .pbar b{{font-weight:700}} .pbar small{{font-size:8.5px;margin-left:4px}}
 .sbar{{position:relative;z-index:1;height:1px;margin:10px 10px -1px}}   /* one line between two pages, 10 px clear each side (the same as from the side lines to the content) */
@@ -353,14 +353,15 @@ html,body{{overflow-x:clip}}
 .tile:active{{outline:1px solid var(--red);outline-offset:-1px}}
 .soon{{margin:20px 4px;color:#555}}
 /* about us & contact: every block in a dotted box, 8 px apart, like the project tiles */
-.box{{margin:8px 0 0;padding:10px;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat}}
-#us .body > .box:first-child{{margin-top:0}}
+/* one job per line (22 Oct): dashed = page structure, dotted = round pictures only; text blocks are never boxed - their red subtitle and the space hold them together */
+.box{{margin:26px 0 0}}
+.body > .box:first-child{{margin-top:4px}}
 .box .firm{{margin:0}}
 #contact .body > .box:first-child{{margin-top:0}}
-.lab{{margin:6px 0 4px;font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--red)}}   /* small red subtitles, bold like the current tab */
+.lab{{margin:6px 0 6px;font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--red)}}   /* small red subtitles, bold like the current tab */
 .firm{{margin:0 0 6px;font-size:16px}} .firm span{{font-size:13px;color:#666}}
-.duo{{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 0}}
-.who{{min-width:0;display:flex;flex-direction:column;align-items:flex-start;padding:8px;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat}}
+.duo{{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:26px 0 0}}
+.who{{min-width:0;display:flex;flex-direction:column;align-items:flex-start}}
 /* ID card on top, filling the column (number, birth date and signature blurred) */
 .who .idw{{display:block;align-self:stretch;position:relative}}   /* the ID card fills the column, no frame of its own (Steuart, 21 Oct) */
 .who .idc{{display:block;width:100%;height:auto;border-radius:6px}}
@@ -369,8 +370,8 @@ html,body{{overflow-x:clip}}
 .who .q,.cvn .q{{margin:2px 0 0;font-size:11.5px;font-style:italic;font-weight:400;color:#555}}
 .cvn .q{{margin-left:3px}}
 .who .fx{{margin:6px 0 0;font-size:11px;line-height:1.3;color:#444}} .who .fx b{{font-weight:700;color:#222}}
-.who .kt{{display:flex;flex-direction:column;align-items:flex-start;gap:3px;margin:auto 0 0;padding-top:7px;font-size:min(12px,3.05vw);line-height:1.35;white-space:nowrap}}
-.who .kt a{{text-decoration:none;padding-bottom:1px;background:var(--dh) left bottom/100% 1px no-repeat}}
+.who .kt{{display:flex;flex-direction:column;align-items:flex-start;gap:2px;margin:auto 0 0;padding-top:7px;font-size:min(12px,3.05vw);line-height:1.35;white-space:nowrap}}
+.who .kt a{{text-decoration:none}}
 /* short text about the practice */
 .intro2{{margin:8px 0 0;font-size:13.5px;line-height:1.4;color:#222}}
 .bio p{{margin:8px 0 0;font-size:13.5px;line-height:1.4;color:#222}}
@@ -380,13 +381,13 @@ html,body{{overflow-x:clip}}
 .svc h4{{display:flex;align-items:center;gap:7px;margin:12px 0 2px;font-size:14px;font-weight:700;color:var(--red);letter-spacing:.02em}}
 .svc h4 img{{width:18px;height:18px}}
 .sv3{{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0 6px}}
-#us .duo + .cvp + .cvp + .box,#us .cvp + .box{{margin-top:8px}}
+#us .cvp + .box{{margin-top:26px}}
 .sv3 div{{display:flex;flex-direction:column;align-items:center;text-align:center;gap:3px}}
 .sv3 img{{width:25px;height:25px}} .sv3 b{{font-size:13px;color:var(--red);letter-spacing:.03em}}
 .sv3 span{{font-size:11.5px;line-height:1.3;color:#444}}
 .svc p{{margin:3px 0 0;font-size:13px;line-height:1.4;color:#222}}
 /* the CVs open under both columns */
-.cvp > summary{{display:none}} .cvp{{margin:0}} .cvp .box{{margin-top:8px}} .cvp .cvb{{margin-top:10px}}
+.cvp > summary{{display:none}} .cvp{{margin:0}} .cvp .box{{margin-top:26px}} .cvp .cvb{{margin-top:10px}}
 details,.cvb{{margin:4px 0 0}}
 /* "CV (+) full CV": a red cross in a circle that sends out pulsing yellow-lime rings; open, it becomes a minus and reads "close" */
 summary,.cvb{{border:0;background:none;font-family:inherit;color:inherit;display:inline-flex;align-items:center;gap:7px;cursor:pointer;list-style:none;font-size:14px;letter-spacing:.04em;padding:1px 0;-webkit-tap-highlight-color:transparent}}
@@ -405,7 +406,7 @@ details ul{{margin:0;padding:0 0 0 14px;font-size:13px;line-height:1.4;color:#22
 .addr{{margin:0;font-size:13.5px;line-height:1.35}}   /* compact: two short lines */
 .ctx{{margin:22px 0 0;text-align:center;font-style:italic;font-size:min(14.5px,3.5vw);line-height:1.45;color:#222;white-space:nowrap}}   /* closing line, like a full stop: two centred lines, italic, a dash before and after */
 .ctx .hd{{font-style:normal;margin:0 .4em}}   /* closing line, like a full stop */
-p.lab:not(.first){{margin-top:22px;padding-top:12px;background:var(--dh) left top/100% 1px no-repeat}}
+p.lab:not(.first){{margin-top:26px}}
 .box .lab.first{{margin-top:0}}
 .mapw{{position:relative;z-index:0;isolation:isolate;margin:10px 0 0}}
 .map{{height:56svh;min-height:300px;background:#eee}}
@@ -471,7 +472,7 @@ dialog .top{{flex:none}}
 /* downloads & links */
 .intro{{margin:0 0 8px;font-size:14px;line-height:1.45;color:#333}}
 .pdfs{{list-style:none;margin:10px 0 0;padding:0}}
-.pdfs li{{display:flex;align-items:center;gap:10px;padding:7px 0;background:var(--dh) left bottom/100% 1px no-repeat}}
+.pdfs li{{display:flex;align-items:center;gap:10px;padding:6px 0}}
 .pdfs li:last-child{{background:none}}
 .pdfs img{{width:26px;height:auto}}
 .pdfs span{{font-size:15px}} .pdfs small{{display:block;font-size:11px;color:#999;letter-spacing:.04em}}

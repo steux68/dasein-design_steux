@@ -104,9 +104,14 @@ LINKS = [('https://ost.zt.at/', 'downloads-imgImage.webp', 'zt: Kammer Ost', 'Zi
          ('https://www.bda.gv.at/', 'downloads-imgRectangle336.webp', 'Bundesdenkmalamt', 'Bundesdenkmalamt Österreich [Ö]'),
          ('https://www.ig-architektur.at/', 'downloads-imgRectangle338.webp', 'IG Architektur', 'Interessensgemeinschaft der Architekturschaffenden [Ö]'),
          ('https://www.wien.gv.at/stadtentwicklung/flaechenwidmung/', 'downloads-imgRectangle337.webp', 'MA 21 A/B', 'Stadtteilplanung und Flächenwidmung, Wien [W]')]
-DOWNLOADS = ('<p class="lab first">INFORMATION FOR CLIENTS</p><p class="intro">' + LATIN + '</p><ul class="pdfs">'
+INFO_TXT = ('Building is a big step, and it helps to know what to expect. These short guides explain why it pays to work with an architect, '
+            'how a project runs from first idea to finished building, what it costs and who takes part along the way. Have a look – then simply get in touch.')
+LINKS_TXT = ('Useful addresses for anyone planning to build in Vienna or Austria: the chambers that register architects, '
+             'the city offices for permits and building rules, and good places to see and learn more about architecture.')
+CONTACT_TXT = 'Write, call or come by – we are happy to talk about your project, large or small.'
+DOWNLOADS = ('<p class="lab first">INFORMATION FOR CLIENTS</p><p class="intro">' + INFO_TXT + '</p><ul class="pdfs">'
              + ''.join(f'<li><img src="../img/pdf.svg" alt="PDF"><span>dd – {t}<small>PDF follows</small></span></li>' for t in PDFS)
-             + '</ul><p class="lab">LINKS FOR CLIENTS</p><p class="intro">' + LATIN + '</p><div class="links">'
+             + '</ul><p class="lab">LINKS FOR CLIENTS</p><p class="intro">' + LINKS_TXT + '</p><div class="links">'
              + ''.join(f'<a class="lk" href="{u}" target="_blank" rel="noopener"><span class="lg"><img src="../img/m-lg-{im.replace('downloads-img', '')}" alt="" loading="lazy"></span>'
                        f'<b>{n}</b><small>{d}</small></a>' for u, im, n, d in LINKS)
              + '</div>')
@@ -161,11 +166,15 @@ PARTNERS = [
 PLUS = ('<svg class="cvx" viewBox="-12 -12 24 24" aria-hidden="true"><circle class="r1" r="8"/><circle class="r2" r="8"/>'
         '<circle class="c" r="8"/><path class="v" d="M0 -4.2V4.2"/><path d="M-4.2 0H4.2"/></svg>')
 # short text about the practice (draft, to be replaced by Steuart's) and the full bio (placeholder)
-INTRO = ('<b class="dd">dasein-design</b> is an architecture and design partnership in Vienna, founded in 2003. '
-         'We work at every scale – houses, courtyards, interiors, exhibitions, furniture and identity – looking for the simple idea that makes a place work for the people who use it.')
-BIO = ['Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-       'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-       'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.']
+INTRO = ('<b class="dd">dasein-design</b> is a small architecture and design practice in Vienna, run as a partnership since 2003. '
+         'We design homes, courtyards and interiors – and the furniture, exhibitions and graphics that go with them. '
+         'We listen first, keep things simple and build for the people who will live with the result.')
+BIO = ['Both partners studied at the Mackintosh School of Architecture in Glasgow and are registered architects in Austria (Ziviltechniker) and in the United Kingdom (ARB). '
+       'Between them they have worked for practices in Vienna, London and Glasgow on everything from small conversions to large city buildings.',
+       'Cuong Tran-Viet also studied at TU Wien and at the Bartlett in London, spent ten years with Aedas in London and nine with BEHF Architects in Vienna. '
+       'Steuart Harrison taught design for fifteen years at TU Wien and for several years at New Design University St. Pölten.',
+       'We work in German and English. The partners run every project themselves, from the first sketch to the last detail on site – '
+       'for private clients, small businesses, communities and cultural institutions.']
 
 
 def partner(n, p):
@@ -191,7 +200,7 @@ US = ('<div class="box"><p class="lab first">PARTNERSHIP</p><p class="firm"><b c
       '<details class="bio"><summary>' + PLUS + '<span class="cvt">full</span><b>bio</b></summary>' + ''.join(f'<p>{t}</p>' for t in BIO) + '</details></div>'
       '<div class="duo">' + ''.join(partner(n, p) for n, p in enumerate(PARTNERS)) + '</div>'
       + ''.join(cvpanel(n, p) for n, p in enumerate(PARTNERS)))
-CONTACT = ('<div class="box"><p class="lab first">OFFICE</p><p class="addr"><b class="dd">dasein-design</b><br>Neulerchenfelderstrasse 42/6<br>A-1160 Wien · Austria · EU</p>'
+CONTACT = ('<div class="box"><p class="lab first">OFFICE</p><p class="ctx">' + CONTACT_TXT + '</p><p class="addr"><b class="dd">dasein-design</b> · Neulerchenfelderstrasse 42/6<br>A-1160 Wien · Austria · EU</p>'
       '<div class="mapw"><div class="map" id="map"></div><div class="mz"><button type="button" id="zin" aria-label="zoom in">' + SEARCH.ZOOM_IN + '</button><button type="button" id="zout" aria-label="zoom out">' + SEARCH.ZOOM_OUT + '</button><button type="button" id="zhome" aria-label="back to the start view">' + SEARCH.ZOOM_HOME + '</button></div></div>'
       '<p class="mapl"><a href="https://www.openstreetmap.org/?mlat=48.211431&amp;mlon=16.333964#map=18/48.211431/16.333964">open the map</a></p></div>')
 
@@ -368,7 +377,8 @@ details[open] > summary .cvt,[aria-expanded=true] .cvt{{font-size:0}} details[op
 @media (prefers-reduced-motion:reduce){{.cvx .r1,.cvx .r2{{display:none}}}}
 details h4{{margin:12px 0 2px;font-size:13px;color:var(--red);font-weight:700}}
 details ul{{margin:0;padding:0 0 0 14px;font-size:13px;line-height:1.4;color:#222}} details li{{margin:2px 0}}
-.addr{{margin:0;font-size:15px;line-height:1.45}}
+.addr{{margin:6px 0 0;font-size:13.5px;line-height:1.35}}   /* compact: two short lines */
+.ctx{{margin:0;font-size:13.5px;line-height:1.4;color:#222}}
 p.lab:not(.first){{margin-top:22px;padding-top:12px;background:var(--dh) left top/100% 1px no-repeat}}
 .box .lab.first{{margin-top:0}}
 .mapw{{position:relative;z-index:0;isolation:isolate;margin:10px 0 0}}

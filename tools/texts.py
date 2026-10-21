@@ -21,8 +21,8 @@ SERVICES_SHORT = {'IT': 'Archicad, AutoCAD, Revit &amp; more',
                   'PROJEKTE': 'Vorentwurf bis Ausführung, örtl. Bauaufsicht',
                   'SKILLS': 'Möbeldesign, Wohnen, Ateliers, Ausstellungen'}
 # the three service blocks from the desktop "us & our services" page (Figma text; SKILLS still repeats PROJEKTE there)
-SERVICES = [('IT', 'services-imgWorkstation.webp', ['Experte: Archicad',
+SERVICES = [('IT', 'ic-it.svg', ['Experte: Archicad',
              'gute Kenntnisse: AutoCAD, Microstation V8 &amp; Triforma, 3d Studio MAX+VRAY, Adobe Paket, Microsoft Office Paket, FormZ, Bentley Generative Components, Solibri Modelchecker, Vectorworks.',
              'Grundkenntnisse: Autodesk Revit, Rhinoceros, SidounWinAVA, NBS Building.']),
-            ('PROJEKTE', 'services-imgExterior.webp', ['Vorentwurf bis Ausführungsplanung, Möbeldesign, örtl. Bauaufsicht für diverse Projekte, darunter eine Hotel Pension, Kleingartenhäuser, Wohnungen, Klavierübungsstudio, Büro, Ausstellungen, Ateliers / Café-Bar &amp; Einfamilienhäuser hauptsächlich in Wien.']),
-            ('SKILLS', 'services-imgBrainstormSkill.webp', ['Vorentwurf bis Ausführungsplanung, Möbeldesign, örtl. Bauaufsicht für diverse Projekte, darunter eine Hotel Pension, Kleingartenhäuser, Wohnungen, Klavierübungsstudio, Büro, Ausstellungen, Ateliers / Café-Bar &amp; Einfamilienhäuser hauptsächlich in Wien.'])]
+            ('PROJEKTE', 'ic-projekte.svg', ['Vorentwurf bis Ausführungsplanung, Möbeldesign, örtl. Bauaufsicht für diverse Projekte, darunter eine Hotel Pension, Kleingartenhäuser, Wohnungen, Klavierübungsstudio, Büro, Ausstellungen, Ateliers / Café-Bar &amp; Einfamilienhäuser hauptsächlich in Wien.']),
+            ('SKILLS', 'ic-skills.svg', ['Vorentwurf bis Ausführungsplanung, Möbeldesign, örtl. Bauaufsicht für diverse Projekte, darunter eine Hotel Pension, Kleingartenhäuser, Wohnungen, Klavierübungsstudio, Büro, Ausstellungen, Ateliers / Café-Bar &amp; Einfamilienhäuser hauptsächlich in Wien.'])]

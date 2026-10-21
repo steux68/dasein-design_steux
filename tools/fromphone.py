@@ -11,6 +11,7 @@ build.py also calls patch() before writing, so a full rebuild keeps them.
 - project pop-up: close drawn like the compass signs; the counter sits between previous and next at the bottom
 - link logos trimmed to their edges (img/m-lg-*), with a small margin in their boxes
 - the two long CVs fold to just over half the page, with a "full CV" opener
+- IT, PROJEKTE and SKILLS icons drawn in the compass style (img/ic-*.svg)
 - three quick clicks on the beetle: the red heart, as on the phone
 - menu: the first tab reads "about us [01]" (half tabs were tried and dropped)
 """
@@ -240,6 +241,9 @@ def patch(s):
             s = s.replace('src="img/downloads-img' + n[5:] + '"', 'src="img/' + n + '"')
     # ---- menu: first tab renamed
     s = _tab_names(s)
+    # ---- service icons: drawn in the compass style (img/ic-*.svg) instead of the red Figma pictograms
+    for old, new in (('services-imgWorkstation.webp', 'ic-it.svg'), ('services-imgExterior.webp', 'ic-projekte.svg'), ('services-imgBrainstormSkill.webp', 'ic-skills.svg')):
+        s = _rep('src="img/' + old + '"', 'src="img/' + new + '"', s)
     # ---- styles
     s = _rep('</style>', CSS + '</style>', s)
     return s.replace('</body>', HEART_JS + MARK + '</body>', 1)

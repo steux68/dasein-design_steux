@@ -339,9 +339,9 @@ html,body{{overflow-x:clip}}
 .firm{{margin:0 0 6px;font-size:16px}} .firm span{{font-size:13px;color:#666}}
 .duo{{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 0}}
 .who{{min-width:0;display:flex;flex-direction:column;align-items:flex-start;padding:8px;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat}}
-/* ID card on top, on a light grey tile with a dotted frame, like a photo that doesn't fill its square (number, birth date and signature blurred) */
-.who .idw{{display:block;align-self:stretch;position:relative;padding:8px 0;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat #f4f4f4}}
-.who .idc{{display:block;width:88%;height:auto;margin:0 auto;border-radius:6px}}
+/* ID card on top, filling the column (number, birth date and signature blurred) */
+.who .idw{{display:block;align-self:stretch;position:relative}}   /* the ID card fills the column, no frame of its own (Steuart, 21 Oct) */
+.who .idc{{display:block;width:100%;height:auto;border-radius:6px}}
 .who .role{{margin:8px 0 0;font-size:11.5px;color:#666}}
 .who h3,.cvn{{margin:1px 0 0;font-weight:400;font-size:15px;line-height:1.15;color:var(--red)}} .who h3 b,.cvn b{{font-weight:700}}
 .who .q,.cvn .q{{margin:2px 0 0;font-size:11.5px;font-style:italic;font-weight:400;color:#555}}

@@ -78,7 +78,7 @@ XC = '<svg viewBox="-12 -12 24 24" aria-hidden="true"><circle class="rg" r="9.5"
 
 def section(i, name, num, body):
     """a page; it opens with a muted yellow-lime bar across, in the tab style, naming it (scrolls away with the page)"""
-    return (f'<section class="pg" id="{i}" aria-label="{name} [{num}]"><div class="sbar" aria-hidden="true"></div><div class="stk"><span class="st"><b>{name.replace("&", "&amp;")}</b> <small>[{num}]</small></span></div>'
+    return (f'<section class="pg" id="{i}" aria-label="{name} [{num}]"><div class="sbar" aria-hidden="true"></div>'
             f'<div class="body">{body}</div></section>')
 
 
@@ -281,7 +281,7 @@ body{{position:relative}}
 .ar.pulse .tr2,.bar .go .tr2{{animation-delay:1.1s}}
 @keyframes ring{{0%{{transform:scale(1);opacity:.55}}100%{{transform:scale(1.7);opacity:0}}}}
 @media (prefers-reduced-motion:reduce){{.ar .tr{{animation:none!important;display:none!important}}}}
-.body{{min-width:0;padding:12px 10px 0}} .pg:last-child .body{{padding-bottom:28px}}
+.body{{min-width:0;padding:0 10px}} .pg:last-child .body{{padding-bottom:28px}}
 /* the last page (contact) is at least one screen tall, so the S arrow and the tab can bring its bar right to the top (largest viewport, for phones whose toolbar hides) */
 .pg:last-child{{min-height:calc(100lvh - var(--head) - 2 * var(--bar))}}
 /* guide lines down both sides, as on the desktop: a light dashed vertical line */
@@ -290,7 +290,7 @@ body{{position:relative}}
 .rule.l{{left:calc(var(--side) - 1px)}} .rule.r{{right:7px}}
 .side.rail .sidebar,.side.rail header{{border-right:0!important}}
 /* section bar: same size, type and thickness as a tab in the side strip, a muted version of the lit tab's yellow-lime */
-.sbar{{position:relative;height:30px;margin:15px 10px 15px}}
+.sbar{{position:relative;height:30px;margin:15px 10px 15px}}   /* nothing written in it: the band is the gap between two pages */
 /* page boundary (21 Oct): the desktop's double edge ticks, pointing inwards from both guide lines, each running on as a dotted line right across;
    the two lines are the old title bar's height apart */
 .sbar::before,.sbar::after{{content:"";position:absolute;left:-10px;right:-11px;height:1px;
@@ -298,15 +298,7 @@ body{{position:relative}}
     repeating-linear-gradient(to right,#b8b8b8 0 4px,transparent 4px 6px) right top/18px 1px no-repeat,
     repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) 18px top/calc(100% - 36px) 1px no-repeat}}
 .sbar::before{{top:0}} .sbar::after{{bottom:0}}
-/* the page name in yellow-lime: it stays at the top of the screen while you are in that page, and the next page's name pushes it up;
-   each time a new name reaches the top it flips in */
-.stk{{position:sticky;top:calc(var(--head) + var(--bar));z-index:5;display:flex;align-items:center;justify-content:center;height:30px;margin:0 10px;
-  background:#eaffae;color:rgba(0,0,0,.78);outline:1px dashed #fff;outline-offset:-1px;font-size:12.5px;white-space:nowrap;perspective:300px}}
-.stk b{{font-weight:700}} .stk small{{font-size:8.5px;margin-left:4px}}
-.stk .st{{display:inline-block;transform-origin:50% 50%}}
-.stk.flip .st{{animation:stflip .55s cubic-bezier(.3,.7,.3,1)}}
-@keyframes stflip{{0%{{transform:rotateX(-90deg);opacity:0}}100%{{transform:none;opacity:1}}}}
-@media (prefers-reduced-motion:reduce){{.stk.flip .st{{animation:none}}}}
+
 /* start page: the upright beetle with the five circles beside it */
 #start{{display:block;overflow:clip}}
 html,body{{overflow-x:clip}}
@@ -569,11 +561,7 @@ dialog .top{{flex:none}}
   addEventListener('resize',()=>cuts.forEach(g=>setCut(g,!g.classList.contains('shut'))));
   document.querySelectorAll('.more').forEach(b=>b.addEventListener('click',()=>{{ const g=document.getElementById(b.dataset.g), op=g.classList.contains('shut');
     setCut(g,op); if(!op) g.scrollIntoView({{behavior:'smooth',block:'start'}}); }}));
-  const stks=[...document.querySelectorAll('.stk')]; let stuck=null;
-  const stkUpd=()=>{{ const t=(parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop)||0)+1; let now=null;
-    stks.forEach(k=>{{ const r=k.getBoundingClientRect(), sec=k.parentElement.getBoundingClientRect(); if(r.top<=t&&sec.bottom>r.bottom+2) now=k; }});
-    if(now!==stuck){{ stuck=now; if(now){{ now.classList.remove('flip'); void now.offsetWidth; now.classList.add('flip'); }} }} }};
-  addEventListener('scroll',stkUpd,{{passive:true}}); stkUpd();
+
   /* logo switch */
   const B=document.body;
   const setLogo=m=>{{ B.classList.toggle('side',m!=='top'); B.classList.toggle('rail',m==='rail'); try{{ localStorage.setItem('ddlogo2',m); }}catch(e){{}}
@@ -609,7 +597,19 @@ dialog .top{{flex:none}}
   const tabs=[...document.querySelectorAll('.tab')];
   const secs=[...document.querySelectorAll('.pg')];
   function mark(){{ const y=innerHeight*.45; let id='start'; secs.forEach(s=>{{ if(s.getBoundingClientRect().top<=y) id=s.id; }});
-    tabs.forEach(t=>t.classList.toggle('cur',t.dataset.pg===id)); }}
+    tabs.forEach(t=>t.classList.toggle('cur',t.dataset.pg===id)); rotTabs(id); }}
+  /* the tabs take turns: the current page's tab moves to the top and the rest follow in order (03, 04, 05, 01, 02);
+     back on the start page they return to 01 … 05. They slide to their new places */
+  let rotFor='start';
+  function rotTabs(id){{
+    if(id===rotFor) return; rotFor=id;
+    const n=tabs.length, c=Math.max(0,tabs.findIndex(t=>t.dataset.pg===id));
+    const before=tabs.map(t=>t.getBoundingClientRect());
+    tabs.forEach((t,k)=>{{ t.style.order=id==='start'?k:(k-c+n)%n; }});
+    if(reduce) return;
+    tabs.forEach((t,k)=>{{ const a=t.getBoundingClientRect(), dx=before[k].left-a.left, dy=before[k].top-a.top;
+      if(dx||dy) t.animate([{{transform:`translate(${{dx}}px,${{dy}}px)`}},{{transform:'none'}}],{{duration:450,easing:'cubic-bezier(.3,.7,.3,1)'}}); }});
+  }}
   addEventListener('scroll',mark,{{passive:true}}); addEventListener('resize',mark); mark();
   /* the upright beetle arrives as square-cut pieces, lands apart, pauses, locks */
   const bug=document.getElementById('beetle'), ps=[...bug.querySelectorAll('.bp')], R=(a,b)=>a+Math.random()*(b-a);

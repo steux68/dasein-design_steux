@@ -270,7 +270,7 @@ def patch(s):
     s = _rep('<section class="pg" id="services"><div class="bg-white relative frame">',
              '<section class="pg" id="services"><div class="bg-white relative frame"><i class="pline" style="left:235px"></i><i class="pline" style="left:895px"></i>', s)
     # ---- snap to the side-bar ticks (22 Oct): a block's top sits on the lower tick of the pair above it (y 60, 250, 440, 630, 820, 1010)
-    SNAP = [('services', 'top-[255px] w-[420px]', 405), ('services', 'top-[254px] w-[200px]', 250), ('services', 'top-[57px] w-[200px]', 60),
+    SNAP = [('services', 'top-[255px] w-[420px]', 421), ('services', 'top-[254px] w-[200px]', 250), ('services', 'top-[57px] w-[200px]', 60),
             ('downloads', 'top-[65px] w-[420px]', 60), ('downloads', 'top-[445px] w-[420px]', 440), ('contact', 'top-[445px] w-[200px]', 440)]
     for sec, cls, y in SNAP:
         i = s.index('<section class="pg" id="' + sec + '"'); j = s.index('</section>', i); t = s[i:j]
@@ -280,8 +280,8 @@ def patch(s):
     # ---- services (22 Oct): more white under the names - the ID cards with their captions and the contact details move down to the tick y 440,
     #      the CVs to the tick y 630 (the dotted line between them on the tick y 620)
     for nid in ('1:555', '1:600'):
-        s = _sub1(r'(data-node-id="' + nid + r'" data-name="IMAGE" style="left:\d+px;)top:290px', r'\1top:440px', s)
-    for nid, y in (('1:601', 558), ('1:603', 558), ('1:602', 574), ('1:604', 574), ('1:626', 440), ('1:627', 440), ('1:622', 630), ('1:623', 630)):
+        s = _sub1(r'(data-node-id="' + nid + r'" data-name="IMAGE" style="left:\d+px;)top:290px', r'\1top:455px', s)
+    for nid, y in (('1:601', 558), ('1:603', 558), ('1:602', 574), ('1:604', 574), ('1:626', 455), ('1:627', 455), ('1:622', 630), ('1:623', 630)):
         s = _sub1(r'class="([^"]*)" data-node-id="' + nid + '"', lambda m: f'class="{m.group(1)}" data-node-id="{nid}" style="top:{y}px"', s)
     # ---- synchronised with the phone (22 Oct)
     # the big vertical title of page 01 reads "about us", like its tab and circle

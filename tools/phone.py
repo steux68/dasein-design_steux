@@ -55,9 +55,13 @@ PIECES = ''.join(
     for x, y, w, h in pieces)
 
 # ---------- four sections: "us & our services" and "contact" are one page on the phone (trial, 21 Oct) ----------
-TABS = [('us', 'us & contact', '01'), ('projects', 'projects', '02'), ('downloads', 'downloads & links', '03'),
+TABS = [('us', 'us &amp; contact', '01'), ('projects', 'projects', '02'), ('downloads', 'downloads & links', '03'),
         ('bits', 'bits & bats', '04')]
 TABHTML = ''.join(f'<a class="tab" href="#{i}" data-pg="{i}"><span>{n}</span> <small>[{k}]</small></a>' for i, n, k in TABS)
+# the first tab is split in two (Steuart, 21 Oct): "about us" over "contact", together the size of one tab
+TABHTML = TABHTML.replace('<a class="tab" href="#us" data-pg="us"><span>us &amp; contact</span> <small>[01]</small></a>',
+                          '<div class="tabs2"><a class="tab" href="#us" data-pg="us"><span>about us</span> <small>[01]</small></a>'
+                          '<a class="tab" href="#contact" data-pg="contact"><span>contact</span></a></div>')
 # circles beside the beetle: left and right, top to bottom
 # where each circle's dotted line ends on the upright beetle (fractions of its box): mouth, right front leg (claw), left middle leg, right back leg
 AIM = [(.51, .245), (.715, .365), (.258, .53), (.545, .875)]
@@ -168,11 +172,12 @@ def partner(p):
             f'<circle class="c" r="8"/><path class="v" d="M0 -4.2V4.2"/><path d="M-4.2 0H4.2"/></svg><span class="cvt">full</span><b>CV</b></summary>{cv}</details></article>')
 
 
-US = ('<p class="lab first">PARTNERSHIP</p><p class="firm"><b>dasein-design</b> [architecture+design] [Wien]<br><span>» Jan.’03 – bis dato</span></p>'
+US = ('<div class="box"><p class="lab first">PARTNERSHIP</p><p class="firm"><b>dasein-design</b> [architecture+design] [Wien]<br><span>» Jan.’03 – bis dato</span></p></div>'
       + ''.join(partner(p) for p in PARTNERS)
-      + '<p class="lab">OFFICE</p><p class="addr"><b>dasein-design</b><br>Neulerchenfelderstrasse 42/6<br>A-1160 Wien · Austria · EU</p>'
+      + '<div class="sbar sub" id="contact"><b>contact</b> <small>[01]</small></div>'
+      '<div class="box"><p class="lab first">OFFICE</p><p class="addr"><b>dasein-design</b><br>Neulerchenfelderstrasse 42/6<br>A-1160 Wien · Austria · EU</p>'
       '<div class="mapw"><div class="map" id="map"></div><div class="mz"><button type="button" id="zin" aria-label="zoom in">' + SEARCH.ZOOM_IN + '</button><button type="button" id="zout" aria-label="zoom out">' + SEARCH.ZOOM_OUT + '</button><button type="button" id="zhome" aria-label="back to the start view">' + SEARCH.ZOOM_HOME + '</button></div></div>'
-      '<p class="mapl"><a href="https://www.openstreetmap.org/?mlat=48.211431&amp;mlon=16.333964#map=18/48.211431/16.333964">open the map</a></p>')
+      '<p class="mapl"><a href="https://www.openstreetmap.org/?mlat=48.211431&amp;mlon=16.333964#map=18/48.211431/16.333964">open the map</a></p></div>')
 
 HTML = f'''<!doctype html>
 <html lang="de">
@@ -204,6 +209,10 @@ HTML = f'''<!doctype html>
 .side.rail nav{{display:flex;flex-direction:column;height:100%;margin:0;gap:5px}}
 .side.rail .tab{{flex:1;min-height:0;height:auto;writing-mode:vertical-rl;transform:rotate(180deg);padding:3px 0;font-size:min(12.5px,1.75svh);gap:3px;overflow:hidden}}
 .side.rail .tab small{{font-size:8.5px}}
+/* the split first tab: two halves, 2 px apart, sharing one tab's place */
+.tabs2{{display:flex;gap:2px;min-width:0}} .tabs2 .tab{{flex:1;min-width:0}}
+.side.rail .tabs2{{flex:1;min-height:0;flex-direction:column}}
+@media (max-height:740px){{.side.rail .tabs2 small{{display:none}}}}   /* small phones: the halves too short for the [01] */
 .note2{{display:none}}
 .side.rail .row1 .note{{display:none}}
 .side.rail .note2{{display:block;text-align:center;margin:-6px 0 0;padding-bottom:8px}}
@@ -302,17 +311,22 @@ html,body{{overflow-x:clip}}
 .cap b{{display:block;font-size:11.5px}} .cap small{{font-size:10px}}
 .tile:active{{outline:1px solid var(--red);outline-offset:-1px}}
 .soon{{margin:20px 4px;color:#555}}
-/* us & contact */
+/* about us & contact: every block in a dotted box, 8 px apart, like the project tiles */
+.box{{margin:8px 0 0;padding:10px;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat}}
+#us .body > .box:first-child{{margin-top:0}}
+.box .firm{{margin:0}}
+/* the contact bar inside the page: same as the page bar */
+.sbar.sub{{margin:18px 0 0;scroll-margin-top:calc(var(--head) + var(--bar) + 6px)}}
 .lab{{margin:6px 0 4px;font-size:11px;letter-spacing:.12em;color:var(--red)}}
 .firm{{margin:0 0 6px;font-size:16px}} .firm span{{font-size:13px;color:#666}}
-.who{{margin:10px 0 0;padding:10px;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat}}
+.who{{margin:8px 0 0;padding:10px;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat}}
 .who + .who{{margin-top:8px}}
 .who .role{{margin:0;font-size:12px;color:#666}}
 .who h3{{margin:2px 0 0;font-weight:400;font-size:16px;line-height:1.2;color:var(--red)}} .who h3 b{{font-weight:700}}
 .who .q{{font-size:13px;font-weight:400;color:#555;margin-left:4px;white-space:nowrap}}
 /* ID card under the name, to identify the partner (number, birth date and signature blurred) */
-.who .idw{{display:block;position:relative;width:78%;max-width:300px;margin:8px 0 2px;padding:3px;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat}}
-.who .idc{{display:block;width:100%;height:auto;border-radius:9px}}
+.who .idw{{display:block;position:relative;margin:8px 0 2px;padding:10px 0;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat #f4f4f4}}
+.who .idc{{display:block;width:78%;max-width:300px;height:auto;margin:0 auto;border-radius:9px}}
 .who .kt{{display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px;margin:8px 0 0;font-size:min(13.5px,3.42vw);line-height:1.5;white-space:nowrap}}
 .who .sep{{display:block;width:2.5px;height:1.15em;background:#3a3c37}} .who .kt a{{text-decoration:none;padding-bottom:1px;background:var(--dh) left bottom/100% 1px no-repeat}}
 .who .ex{{margin:6px 0 0;font-size:12.5px;color:#555}}
@@ -333,6 +347,7 @@ details h4{{margin:12px 0 2px;font-size:13px;color:var(--red);font-weight:700}}
 details ul{{margin:0;padding:0 0 0 14px;font-size:13px;line-height:1.4;color:#222}} details li{{margin:2px 0}}
 .addr{{margin:0;font-size:15px;line-height:1.45}}
 p.lab:not(.first){{margin-top:22px;padding-top:12px;background:var(--dh) left top/100% 1px no-repeat}}
+.box .lab.first{{margin-top:0}}
 .mapw{{position:relative;z-index:0;isolation:isolate;margin:10px 0 0}}
 .map{{height:56svh;min-height:300px;background:#eee}}
 .mz{{position:absolute;right:9px;top:9px;z-index:500;display:flex;flex-direction:column;gap:5px}}
@@ -429,7 +444,7 @@ dialog .top{{flex:none}}
 <main>
 <section class="pg" id="start"><div class="stage"><div class="beetle" id="beetle"><div class="whole"></div>{PIECES}</div><svg class="leads" id="leads" aria-hidden="true"></svg><svg class="leads" id="leadots" aria-hidden="true"></svg>{PINS}</div>
 </section>
-{section("us", "us & contact", "01", US)}
+{section("us", "about us", "01", US)}
 {section("projects", "projects", "02", '<div class="grid">' + TILES + '</div>')}
 {section("downloads", "downloads & links", "03", DOWNLOADS)}
 {section("bits", "bits & bats", "04", BITSHTML)}
@@ -496,7 +511,7 @@ dialog .top{{flex:none}}
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   /* current page: tab in yellow-lime, as on the desktop */
   const tabs=[...document.querySelectorAll('.tab')];
-  const secs=[...document.querySelectorAll('.pg')];
+  const secs=[...document.querySelectorAll('.pg, #contact')];   /* the contact bar counts too, for the split first tab */
   function mark(){{ const y=innerHeight*.45; let id='start'; secs.forEach(s=>{{ if(s.getBoundingClientRect().top<=y) id=s.id; }});
     tabs.forEach(t=>t.classList.toggle('cur',t.dataset.pg===id)); }}
   addEventListener('scroll',mark,{{passive:true}}); addEventListener('resize',mark); mark();

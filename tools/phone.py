@@ -70,10 +70,55 @@ TILES = ''.join(f'<button type="button" class="tile" data-p="{n}"><img src="../{
 ARW, ARE = LB.compass('W', 26), LB.compass('E', 26)
 
 
-def placeholder(i, name, num):
-    return (f'<section class="pg" id="{i}"><div class="vt"><span><b>{name.replace("&", "<em>&amp;</em>")}</b> <i>[{num}]</i></span></div>'
-            f'<div class="body"><p class="soon">The phone version of <b>{name}</b> follows. '
-            f'<a href="../#{i}">Open this page on the full site</a></p></div></section>')
+def section(i, name, num, body):
+    """a page: its title sticks under the header while you scroll through it and is pushed up by the next page's title"""
+    return (f'<section class="pg" id="{i}"><h2 class="ttl"><b>{name.replace("&", "<em>&amp;</em>")}</b> <i>[{num}]</i></h2>'
+            f'<div class="body">{body}</div></section>')
+
+
+# ---------- downloads & links: client information (the four PDFs) and the 15 links with their logos ----------
+LATIN = ('Saepissime igitur mihi de amicitia cogitanti maxime illud considerandum videri solet, utrum propter imbecillitatem atque inopiam '
+         'desiderata sit amicitia, ut dandis recipiendisque meritis quod quisque minus per se ipse posset, id acciperet ab alio vicissimque redderet.')
+PDFS = ['Why use an Architect', 'From Idea to Finish', 'Costs of Building', 'Partners in the Process']
+LINKS = [('https://ost.zt.at/', 'downloads-imgImage.webp', 'zt: Kammer Ost', 'Ziviltechniker:innen Wien, Niederösterreich &amp; Burgenland [Ö]'),
+         ('https://arb.org.uk/', 'downloads-imgImage1.webp', 'arb', 'Architects Registration Board of the United Kingdom [UK]'),
+         ('https://www.wien.gv.at/wohnen/baupolizei/', 'downloads-imgRectangle329.webp', 'MA 37 – Baupolizei', 'Baubehörde der Stadt Wien [W]'),
+         ('https://www.rauchfangkehrer.wien/', 'downloads-imgRectangle332.webp', 'Rauchfangkehrer', 'Wiener Rauchfangkehrer [Ö]'),
+         ('https://www.azw.at/', 'downloads-imgRectangle331.webp', 'Az W', 'Architekturzentrum Wien [Ö]'),
+         ('https://www.nextroom.at/', 'downloads-imgImage2.webp', 'next room', 'Verein für Architektur, Wien [Ö]'),
+         ('https://www.wohnfonds.wien.at/', 'downloads-imgImage3.webp', 'wohnfonds_wien', 'Fonds für Wohnbau und Stadterneuerung [Ö]'),
+         ('https://www.oib.or.at/', 'downloads-imgRectangle333.webp', 'OIB', 'Österreichisches Institut für Bautechnik [Ö]'),
+         ('https://www.austrian-standards.at/', 'downloads-imgRectangle335.webp', 'Austrian Standards', 'Österreichische Organisation für Standardisierung und Innovation [Ö]'),
+         ('https://www.oegfa.at/', 'downloads-imgRectangle334.webp', 'ÖGFA', 'Österreichische Gesellschaft für Architektur [Ö]'),
+         ('https://www.gbstern.at/', 'downloads-imgRectangle345.webp', 'GB* Gebietsbetreuungen', 'Service-Einrichtung der Stadt Wien [Ö]'),
+         ('https://www.kleingaertner.at/', 'downloads-imgRectangle346.webp', 'Kleingärtner', 'Zentralverband der Kleingärtner und Siedler Österreichs [Ö]'),
+         ('https://www.bda.gv.at/', 'downloads-imgRectangle336.webp', 'Bundesdenkmalamt', 'Bundesdenkmalamt Österreich [Ö]'),
+         ('https://www.ig-architektur.at/', 'downloads-imgRectangle338.webp', 'IG Architektur', 'Interessensgemeinschaft der Architekturschaffenden [Ö]'),
+         ('https://www.wien.gv.at/stadtentwicklung/flaechenwidmung/', 'downloads-imgRectangle337.webp', 'MA 21 A/B', 'Stadtteilplanung und Flächenwidmung, Wien [W]')]
+DOWNLOADS = ('<p class="lab first">INFORMATION FOR CLIENTS</p><p class="intro">' + LATIN + '</p><ul class="pdfs">'
+             + ''.join(f'<li><img src="../img/pdf.svg" alt="PDF"><span>dd – {t}<small>PDF follows</small></span></li>' for t in PDFS)
+             + '</ul><p class="lab">LINKS FOR CLIENTS</p><p class="intro">' + LATIN + '</p><div class="links">'
+             + ''.join(f'<a class="lk" href="{u}" target="_blank" rel="noopener"><span class="lg"><img src="../img/{im}" alt="" loading="lazy"></span>'
+                       f'<b>{n}</b><small>{d}</small></a>' for u, im, n, d in LINKS)
+             + '</div>')
+
+# ---------- bits & bats: the 21 pictures with their captions (tall ones span two rows); a tap opens them full screen ----------
+BITS = [('bits-imgImage.webp', 0, 'The DILLON Shelf Plans'), ('p-drawing-grille.webp', 1, 'dd - NEW LOGO &amp; IDENTITY'),
+        ('p-pocket-watch.webp', 0, 'INTERIOR COURTYARDS'), ('p-barriers-night.webp', 0, 'MIRROR BALL &amp; DISCO HALLS'),
+        ('p-cages-night.webp', 0, 'SKI SLOPES IN SUMMER'), ('bits-imgImage3.webp', 0, 'PAPPI IN THE MIRROR'),
+        ('p-plastic-sheet.webp', 0, 'dd - OUR OLD LOGO'), ('p-section-grey.webp', 0, 'AIDA - THE BEST COFFEE CHAIN'),
+        ('bits-imgImage6.webp', 0, 'PAINT IT BLACK'), ('bits-imgImage7.webp', 0, 'CAFE PRÜCKEL...THE GHOSTS OF'),
+        ('p-scaffolding.webp', 1, 'Hr. KARL SCHWANZER'), ('bits-imgImage9.webp', 0, 'BOLLOCKS BOLLOCKS!...Goat*'),
+        ('p-streaks-white-blue.webp', 1, 'dd - NEW BUSINESS CARDS'), ('bits-imgImage11.webp', 0, 'VERTICAL ACCESS or STAIRS'),
+        ('p-tower-drawing-blue.webp', 0, 'MUSEUMS QUARTIER'), ('bits-imgImage13.webp', 0, 'MMEEELLLAAA'),
+        ('bits-imgImage14.webp', 0, 'MEESHHHA'), ('bits-imgImage15.webp', 0, 'THE “DUDE” IN VENICE'),
+        ('bits-imgImage16.webp', 0, 'A. N. HARKESS'), ('p-streaks-orange.webp', 0, 'LIGHT AT THE END OF THE TUNNEL'),
+        ('p-akh-crate.webp', 1, 'WHO IS THIS GUY?')]
+BITSHTML = ('<div class="bgrid">' + ''.join(
+    f'<button type="button" class="tile bt{" tall" if t else ""}" data-b="{k}"><img src="../img/{im}" alt="" loading="lazy">'
+    f'<span class="cap"><b>{c}</b><small>smaller text example</small></span></button>' for k, (im, t, c) in enumerate(BITS)) + '</div>')
+BIMGS = ['../img/' + im for im, t, c in BITS]
+BCAPS = [c.replace('&amp;', '&') for im, t, c in BITS]
 
 
 # ---------- us & contact: the partnership, the two partners (CV folds open), the office with the map ----------
@@ -113,13 +158,11 @@ def partner(p):
             + f'<details><summary>CV</summary>{cv}</details></article>')
 
 
-US = ('<section class="pg" id="us"><div class="vt"><span><b>us <em>&amp;</em> contact</b> <i>[01]</i></span></div><div class="body">'
-      '<p class="lab">PARTNERSHIP</p><p class="firm"><b>dasein-design</b> [architecture+design] [Wien]<br><span>» Jan.’03 – bis dato</span></p>'
+US = ('<p class="lab first">PARTNERSHIP</p><p class="firm"><b>dasein-design</b> [architecture+design] [Wien]<br><span>» Jan.’03 – bis dato</span></p>'
       + ''.join(partner(p) for p in PARTNERS)
       + '<p class="lab">OFFICE</p><p class="addr"><b>dasein-design</b><br>Neulerchenfelderstrasse 42/6<br>A-1160 Wien · Austria · EU</p>'
       '<div class="mapw"><div class="map" id="map"></div><div class="mz"><button type="button" id="zin" aria-label="zoom in">' + SEARCH.ZOOM_IN + '</button><button type="button" id="zout" aria-label="zoom out">' + SEARCH.ZOOM_OUT + '</button><button type="button" id="zhome" aria-label="back to the start view">' + SEARCH.ZOOM_HOME + '</button></div></div>'
-      '<p class="mapl"><a href="https://www.openstreetmap.org/?mlat=48.211431&amp;mlon=16.333964#map=18/48.211431/16.333964">open the map</a></p>'
-      '</div></section>')
+      '<p class="mapl"><a href="https://www.openstreetmap.org/?mlat=48.211431&amp;mlon=16.333964#map=18/48.211431/16.333964">open the map</a></p>')
 
 HTML = f'''<!doctype html>
 <html lang="de">
@@ -130,7 +173,18 @@ HTML = f'''<!doctype html>
 <link rel="stylesheet" href="../fonts.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
-:root{{--red:#e30613;--lime:rgba(205,255,62,.86);--green:#a5e35a;--grey:#ebebeb;--line:#c4c4c4;--dot:#b8b8b8;--hp:1px;--head:118px}}
+:root{{--red:#e30613;--lime:rgba(205,255,62,.86);--green:#a5e35a;--grey:#ebebeb;--line:#c4c4c4;--dot:#b8b8b8;--hp:1px;--head:118px;--side:0px;--ttl:44px}}
+/* logo on the side: a narrow strip down the left with the mark and the name, the header only holds the tabs */
+.side{{--side:42px}}
+.sidebar{{display:none}}
+.side .sidebar{{display:flex;position:fixed;left:0;top:0;bottom:0;width:var(--side);z-index:21;background:#fff;border-right:1px dashed var(--line);
+  flex-direction:column;align-items:center;padding:calc(env(safe-area-inset-top,0px) + 10px) 0 14px;text-decoration:none;color:var(--red)}}
+.sidebar img{{width:28px;height:28px;flex:none}}
+.sidebar span{{margin-top:14px;writing-mode:vertical-rl;transform:rotate(180deg);font-size:27px;line-height:1;white-space:nowrap}}
+.sidebar b{{font-weight:700}}
+.side .row1 .logo{{display:none}}
+.side header{{left:var(--side)}}
+.side main{{padding-left:var(--side)}}
 *{{box-sizing:border-box}}
 html{{scroll-behavior:smooth;scroll-padding-top:var(--head)}}
 @media (prefers-reduced-motion:reduce){{html{{scroll-behavior:auto}}}}
@@ -140,6 +194,7 @@ a{{color:inherit}}
 header{{position:fixed;left:0;right:0;top:0;z-index:20;background:#fff;padding:calc(env(safe-area-inset-top,0px) + 8px) max(10px,env(safe-area-inset-right,0px)) 8px max(10px,env(safe-area-inset-left,0px));
   border-bottom:1px dashed var(--line)}}
 .row1{{display:flex;align-items:center}}
+.side .row1{{min-height:14px}}
 .logo{{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--red);height:34px}}
 .logo img{{width:30px;height:30px}}
 .logo span{{font-size:27px;line-height:1;letter-spacing:-.01em}}
@@ -152,13 +207,12 @@ nav{{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px}}
 .tab.cur{{background:var(--lime);font-weight:700}}
 .tab.cur small{{font-weight:400}}
 main{{padding-top:var(--head)}}
-/* every page: a narrow strip on the left with the vertical title, the content beside it */
-.pg{{position:relative;display:flex;min-height:calc(100svh - var(--head));border-bottom:1px dashed var(--line)}}
-.vt{{flex:none;width:44px;border-right:1px dashed var(--line);position:relative}}
-.vt span{{position:sticky;top:calc(var(--head) + 12px);display:block;writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;
-  font-size:30px;line-height:44px;height:max-content;margin-top:12px;color:rgba(0,0,0,.8)}}
-.vt b{{font-weight:700}} .vt em{{font-style:normal;font-weight:300;color:var(--red)}} .vt i{{font-style:normal;color:var(--red);font-size:24px}}
-.body{{flex:1;min-width:0;padding:12px 10px 28px}}
+/* every page: its title sticks just under the header and is pushed up by the next page's title as that one arrives */
+.pg{{position:relative;min-height:calc(100svh - var(--head));border-bottom:1px dashed var(--line)}}
+.ttl{{position:sticky;top:var(--head);z-index:10;margin:0;height:var(--ttl);display:flex;align-items:center;gap:6px;padding:0 10px;background:#fff;
+  border-bottom:1px dashed var(--line);font-weight:400;font-size:27px;line-height:1;white-space:nowrap;color:rgba(0,0,0,.8)}}
+.ttl b{{font-weight:700}} .ttl em{{font-style:normal;font-weight:300;color:var(--red)}} .ttl i{{font-style:normal;color:var(--red);font-size:21px}}
+.body{{min-width:0;padding:12px 10px 28px}}
 /* start page: the upright beetle with the five circles beside it */
 #start{{display:block;min-height:calc(100svh - var(--head));overflow:clip}}
 html,body{{overflow-x:clip}}
@@ -203,8 +257,8 @@ details[open] summary{{background:var(--lime)}}
 details h4{{margin:12px 0 2px;font-size:13px;color:var(--red);font-weight:700}}
 details ul{{margin:0;padding:0 0 0 14px;font-size:13px;line-height:1.4;color:#222}} details li{{margin:2px 0}}
 .addr{{margin:0;font-size:15px;line-height:1.45}}
-p.lab:not(:first-child){{margin-top:22px;padding-top:12px;border-top:1px dotted var(--dot)}}
-.mapw{{position:relative;margin:10px 0 0}}
+p.lab:not(.first){{margin-top:22px;padding-top:12px;border-top:1px dotted var(--dot)}}
+.mapw{{position:relative;z-index:0;isolation:isolate;margin:10px 0 0}}
 .map{{height:56svh;min-height:300px;background:#eee}}
 .mz{{position:absolute;right:9px;top:9px;z-index:500;display:flex;flex-direction:column;gap:5px}}
 .mz button{{width:36px;height:36px;border:0;border-radius:50%;background:none;padding:0;-webkit-tap-highlight-color:transparent}}
@@ -248,20 +302,49 @@ dialog::backdrop{{background:rgba(255,255,255,.4);-webkit-backdrop-filter:blur(4
 .nav2 button{{display:flex;align-items:center;gap:6px;border:0;background:none;font:400 12px Calibri,Carlito,sans-serif;letter-spacing:.06em;color:#666;padding:6px 0}}
 .note{{margin-left:auto;align-self:flex-start;font-size:10.5px;color:#888;letter-spacing:.04em;white-space:nowrap}}
 .note a{{color:var(--red)}}
+.note button{{border:0;background:none;padding:0 2px;font:inherit;color:#888;letter-spacing:inherit}}
+.note button[aria-pressed="true"]{{color:var(--red);text-decoration:underline}}
+/* downloads & links */
+.intro{{margin:0 0 8px;font-size:14px;line-height:1.45;color:#333}}
+.pdfs{{list-style:none;margin:10px 0 0;padding:0}}
+.pdfs li{{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px dotted var(--dot)}}
+.pdfs img{{width:26px;height:auto}}
+.pdfs span{{font-size:15px}} .pdfs small{{display:block;font-size:11px;color:#999;letter-spacing:.04em}}
+.links{{display:grid;grid-template-columns:1fr 1fr;gap:14px 10px;margin-top:12px}}
+.lk{{display:flex;flex-direction:column;text-decoration:none;-webkit-tap-highlight-color:transparent}}
+.lg{{display:flex;align-items:center;justify-content:center;aspect-ratio:3/2;background:#fff;position:relative}}
+.lg img{{max-width:80%;max-height:70%;object-fit:contain}}
+.lg::after{{content:"";position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(to right,var(--dot) 0 1px,transparent 1px 3px) left top/100% 1px no-repeat,repeating-linear-gradient(to right,var(--dot) 0 1px,transparent 1px 3px) left bottom/100% 1px no-repeat,
+  repeating-linear-gradient(to bottom,var(--dot) 0 1px,transparent 1px 3px) left top/1px 100% no-repeat,repeating-linear-gradient(to bottom,var(--dot) 0 1px,transparent 1px 3px) right top/1px 100% no-repeat}}
+.lk b{{margin-top:5px;font-size:13.5px;color:var(--red)}} .lk small{{font-size:11.5px;line-height:1.25;color:#555}}
+.lk:active .lg{{background:var(--green)}}
+/* bits & bats: two columns, the tall pictures over two rows */
+.bgrid{{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:calc((100vw - var(--side) - 28px) / 2 * .9);grid-auto-flow:dense;gap:8px}}
+.bgrid .tile{{aspect-ratio:auto;height:100%}}
+.bgrid .tall{{grid-row:span 2}}
+/* one picture full screen, swipe to the next */
+#iv .photos img{{height:72svh}}
+.ivcap{{padding:10px 14px 30px;color:var(--red);font-size:17px;font-weight:700}}
+.ivcap small{{display:block;margin-top:4px;color:#888;font-weight:400;font-size:12px;letter-spacing:.06em}}
 </style>
 </head>
 <body>
+<script>/* logo on the side (default) or across the top: ?logo=top / ?logo=side, remembered on this phone */
+(function(){{ let m='side'; try{{ m=new URLSearchParams(location.search).get('logo')||localStorage.getItem('ddlogo')||'side'; }}catch(e){{}}
+  if(m!=='top') document.body.classList.add('side'); }})();</script>
+<a class="sidebar" href="#start" aria-label="dasein-design, start"><img src="../img/m-mark.png" alt=""><span>dasein<b>-design</b></span></a>
 <header>
-<div class="row1"><a class="logo" href="#start" aria-label="dasein-design, start"><img src="../img/m-mark.png" alt=""><span>dasein<b>-design</b></span></a><span class="note">phone preview · <a href="../">full site</a></span></div>
+<div class="row1"><a class="logo" href="#start" aria-label="dasein-design, start"><img src="../img/m-mark.png" alt=""><span>dasein<b>-design</b></span></a><span class="note">preview · logo <button type="button" data-logo="side">side</button>/<button type="button" data-logo="top">top</button> · <a href="../">full site</a></span></div>
 <nav>{TABHTML}</nav>
 </header>
 <main>
 <section class="pg" id="start"><div class="stage"><div class="beetle" id="beetle"><div class="whole"></div>{PIECES}</div>{PINS}</div>
 <p class="hint">tap a number or the menu</p></section>
-{US}
-<section class="pg" id="projects"><div class="vt"><span><b>projects</b> <i>[02]</i></span></div><div class="body"><div class="grid">{TILES}</div></div></section>
-{placeholder("downloads", "downloads & links", "03")}
-{placeholder("bits", "bits & bats", "04")}
+{section("us", "us & contact", "01", US)}
+{section("projects", "projects", "02", '<div class="grid">' + TILES + '</div>')}
+{section("downloads", "downloads & links", "03", DOWNLOADS)}
+{section("bits", "bits & bats", "04", BITSHTML)}
 </main>
 <dialog id="lb" aria-labelledby="lt">
 <div class="top"><div class="cnt"><button type="button" id="pp" aria-label="previous project">{ARW}</button><span id="lk"></span><button type="button" id="np" aria-label="next project">{ARE}</button></div>
@@ -270,8 +353,29 @@ dialog::backdrop{{background:rgba(255,255,255,.4);-webkit-backdrop-filter:blur(4
 <div class="txt"><h2 id="lt"></h2><div id="tx"></div><dl id="dl"></dl></div>
 <div class="nav2"><button type="button" id="pp2">{ARW}previous project</button><button type="button" id="np2">next project{ARE}</button></div>
 </dialog>
+<dialog id="iv" aria-label="bits &amp; bats">
+<div class="top"><div class="cnt"><span id="ik"></span></div>
+<button type="button" class="x" id="ix" aria-label="close"><svg viewBox="0 0 16 16" fill="none"><path d="M2 2L14 14M14 2L2 14"/></svg></button></div>
+<div class="photos" id="iph"></div><div class="ivcap" id="icap"></div>
+</dialog>
 <script>
 (function(){{
+  /* logo switch */
+  const setLogo=m=>{{ document.body.classList.toggle('side',m!=='top'); try{{ localStorage.setItem('ddlogo',m); }}catch(e){{}}
+    document.querySelectorAll('[data-logo]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.logo===(m==='top'?'top':'side')))); }};
+  const fitHead=()=>document.documentElement.style.setProperty('--head',document.querySelector('header').offsetHeight+'px');
+  addEventListener('resize',fitHead);
+  document.querySelectorAll('[data-logo]').forEach(b=>b.addEventListener('click',()=>{{ setLogo(b.dataset.logo); fitHead(); }}));
+  setLogo(document.body.classList.contains('side')?'side':'top'); fitHead();
+  /* bits & bats: one picture full screen, swipe to the next */
+  const BI={json.dumps(BIMGS)}, BC={json.dumps(BCAPS)}, iv=document.getElementById('iv'), iph=document.getElementById('iph');
+  const tw=n=>String(n).padStart(2,'0');
+  iph.innerHTML=BI.map(s=>'<img src="'+s+'" alt="" loading="lazy">').join('');
+  const ishow=()=>{{ const k=Math.round(iph.scrollLeft/iph.clientWidth); document.getElementById('ik').innerHTML='bits &amp; bats <b>'+tw(k+1)+'</b> / '+tw(BI.length);
+    document.getElementById('icap').innerHTML=BC[k].replace(/&/g,'&amp;')+'<small>smaller text example</small>'; }};
+  iph.addEventListener('scroll',ishow,{{passive:true}});
+  document.querySelectorAll('.bt').forEach(t=>t.addEventListener('click',()=>{{ iv.showModal(); iph.scrollLeft=+t.dataset.b*iph.clientWidth; ishow(); }}));
+  document.getElementById('ix').onclick=()=>iv.close();
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   /* current page: tab in yellow-lime, as on the desktop */
   const tabs=[...document.querySelectorAll('.tab')];
@@ -316,7 +420,7 @@ dialog::backdrop{{background:rgba(255,255,255,.4);-webkit-backdrop-filter:blur(4
     lb.scrollTop=0;
   }}
   ph.addEventListener('scroll',()=>{{ const k=Math.round(ph.scrollLeft/ph.clientWidth); [...dots.children].forEach((d,i)=>d.classList.toggle('on',i===k)); }},{{passive:true}});
-  document.querySelectorAll('.tile').forEach(t=>t.addEventListener('click',()=>{{ show(+t.dataset.p); lb.showModal(); }}));
+  document.querySelectorAll('.tile[data-p]').forEach(t=>t.addEventListener('click',()=>{{ show(+t.dataset.p); lb.showModal(); }}));
   $('lx').onclick=()=>lb.close();
   $('pp').onclick=$('pp2').onclick=()=>show(pi-1); $('np').onclick=$('np2').onclick=()=>show(pi+1);
 }})();

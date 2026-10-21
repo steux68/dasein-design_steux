@@ -335,7 +335,7 @@ html,body{{overflow-x:clip}}
 #us .body > .box:first-child{{margin-top:0}}
 .box .firm{{margin:0}}
 #contact .body > .box:first-child{{margin-top:0}}
-.lab{{margin:6px 0 4px;font-size:11px;letter-spacing:.12em;color:var(--red)}}
+.lab{{margin:6px 0 4px;font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--red)}}   /* small red subtitles, bold like the current tab */
 .firm{{margin:0 0 6px;font-size:16px}} .firm span{{font-size:13px;color:#666}}
 .duo{{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 0}}
 .who{{min-width:0;display:flex;flex-direction:column;align-items:flex-start;padding:8px;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat}}

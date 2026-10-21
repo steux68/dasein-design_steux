@@ -86,8 +86,8 @@ a[href^="tel:"]{color:#1e8e3e;text-decoration:none} a[href^="mailto:"]{color:#1a
 .ptx{position:absolute;font:400 12px/1.4 Calibri,Carlito,sans-serif;color:#222;margin:0}
 .ptx p{margin:0 0 6px} .ptx .lab2{font-weight:700;font-size:11px;letter-spacing:.12em;color:#e30613;margin-bottom:4px}
 .ptx.bio{font-size:11px;line-height:1.35} .ptx.bio p{margin-bottom:4px}
-.ptx.end{font-style:italic;font-size:13px;line-height:1.45}
-.ptx.end .hd{font-style:normal;margin:0 .35em}
+.ptx.end{font-family:Calibri,Carlito,sans-serif;font-weight:700;font-size:12px;line-height:normal;color:#000}   /* in the contact address type */
+.ptx.end .hd{font-style:normal;font-weight:700;margin:0 .35em}
 .ptx.end .hd:first-child{margin-left:0}
 /* pop-up: close like the compass signs; the counter between previous and next */
 .lbx{width:24px;height:24px}
@@ -215,7 +215,7 @@ def patch(s):
     cvb = ''.join(f'<button type="button" class="dcv dcv{k}" data-k="{k}" aria-expanded="false" style="left:{x}px;top:803px;--xo:{x + 330}px">{PLUS}'
                   f'<span class="cvt"><span class="op">full</span><span class="cl">close</span></span><b>CV</b></button>' for k, x in ((1, 236), (2, 896)))
     s = _rep('<section class="pg" id="services"><div class="bg-white relative frame">', '<section class="pg" id="services"><div class="bg-white relative frame">' + cvb, s)
-    end = f'<div class="ptx end" style="left:235px;top:930px;width:205px">{CONTACT_TXT.replace("<br>", " ")}</div>'
+    end = f'<div class="ptx end" style="left:235px;top:930px;width:205px">{CONTACT_TXT}</div>'
     s = _rep('<section class="pg" id="contact"><div class="bg-white relative frame">', '<section class="pg" id="contact"><div class="bg-white relative frame">' + end, s)
     # ---- dasein-design in red, phone / e-mail links
     s = _rep('<p class="fcal-r leading-[normal] mb-0 text-[10px]">dasein-design [architecture+design] [Wien]</p>',

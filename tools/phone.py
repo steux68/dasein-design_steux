@@ -108,7 +108,7 @@ INFO_TXT = ('Building is a big step, and it helps to know what to expect. These 
             'how a project runs from first idea to finished building, what it costs and who takes part along the way. Have a look – then simply get in touch.')
 LINKS_TXT = ('Useful addresses for anyone planning to build in Vienna or Austria: the chambers that register architects, '
              'the city offices for permits and building rules, and good places to see and learn more about architecture.')
-CONTACT_TXT = 'Write, call or come visit us! We’d be happy to discuss your project, large or small.'   # Steuart's wording, 21 Oct
+CONTACT_TXT = '<i class="hd">–</i>Write, call or come visit us!<br>We’d be happy to discuss your project, large or small.<i class="hd">–</i>'   # Steuart's wording, 21 Oct
 DOWNLOADS = ('<p class="lab first">INFORMATION FOR CLIENTS</p><p class="intro">' + INFO_TXT + '</p><ul class="pdfs">'
              + ''.join(f'<li><img src="../img/pdf.svg" alt="PDF"><span>dd – {t}<small>PDF follows</small></span></li>' for t in PDFS)
              + '</ul><p class="lab">LINKS FOR CLIENTS</p><p class="intro">' + LINKS_TXT + '</p><div class="links">'
@@ -383,7 +383,8 @@ details[open] > summary .cvt,[aria-expanded=true] .cvt{{font-size:0}} details[op
 details h4{{margin:12px 0 2px;font-size:13px;color:var(--red);font-weight:700}}
 details ul{{margin:0;padding:0 0 0 14px;font-size:13px;line-height:1.4;color:#222}} details li{{margin:2px 0}}
 .addr{{margin:0;font-size:13.5px;line-height:1.35}}   /* compact: two short lines */
-.ctx{{margin:22px 6px 0;text-align:center;font-size:15px;line-height:1.4;color:#222}}   /* closing line, like a full stop */
+.ctx{{margin:22px 0 0;text-align:center;font-style:italic;font-size:min(14.5px,3.5vw);line-height:1.45;color:#222;white-space:nowrap}}   /* closing line, like a full stop: two centred lines, italic, a dash before and after */
+.ctx .hd{{font-style:normal;margin:0 .4em}}   /* closing line, like a full stop */
 p.lab:not(.first){{margin-top:22px;padding-top:12px;background:var(--dh) left top/100% 1px no-repeat}}
 .box .lab.first{{margin-top:0}}
 .mapw{{position:relative;z-index:0;isolation:isolate;margin:10px 0 0}}

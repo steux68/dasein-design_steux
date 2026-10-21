@@ -59,8 +59,8 @@ TABS = [('us', 'us & contact', '01'), ('projects', 'projects', '02'), ('download
         ('bits', 'bits & bats', '04')]
 TABHTML = ''.join(f'<a class="tab" href="#{i}" data-pg="{i}"><span>{n}</span> <small>[{k}]</small></a>' for i, n, k in TABS)
 # circles beside the beetle: left and right, top to bottom
-# where each circle's dotted line ends on the upright beetle (fractions of its box): antler, front leg, body, back leg
-AIM = [(.30, .16), (.72, .40), (.30, .62), (.66, .84)]
+# where each circle's dotted line ends on the upright beetle (fractions of its box): mouth, right front leg (claw), left middle leg, right back leg
+AIM = [(.51, .245), (.715, .365), (.258, .53), (.545, .875)]
 PINS = ''.join(f'<a class="pin {"l" if k % 2 == 0 else "r"}" href="#{i}" data-fx="{AIM[k][0]}" data-fy="{AIM[k][1]}" style="top:{10 + k * 23}%;--k:{k}"><b>{num}</b><span>{n}</span></a>'
                for k, (i, n, num) in enumerate(TABS))
 
@@ -70,6 +70,8 @@ TILES = ''.join(f'<button type="button" class="tile" data-p="{n}"><img src="../{
                 f'<span class="cap"><b>{LB.esc(p["t"])}</b><small>smaller text example</small></span></button>'
                 for n, p in enumerate(LB.PROJECTS))
 ARW, ARE = LB.compass('W', 26), LB.compass('E', 26)
+# close: drawn like the compass signs (thin open circle), with a small cross in place of the arrow
+XC = '<svg viewBox="-12 -12 24 24" aria-hidden="true"><circle class="rg" r="9.5"/><path class="xx" d="M-3.6 -3.6L3.6 3.6M3.6 -3.6L-3.6 3.6"/></svg>'
 
 
 def section(i, name, num, body):
@@ -281,8 +283,11 @@ html,body{{overflow-x:clip}}
 .pin span{{font-size:12px;line-height:1.15;background:rgba(255,255,255,.85);padding:1px 3px}}
 /* thin dotted leader lines from the circles to the beetle, as on the desktop start page */
 .leads{{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}}
-.leads path{{fill:none;stroke:#3a3c37;stroke-width:1;stroke-dasharray:1 2.2}}
-.leads .tip{{stroke-dasharray:none;stroke-linecap:round;stroke-linejoin:round}}
+/* the lines are white drawn in "difference": black over the white page, white where they cross the dark beetle, so they always show */
+#leads{{mix-blend-mode:difference}}
+.leads path{{fill:none;stroke:#fff;stroke-width:1.2;stroke-dasharray:1.2 2.2}}
+/* each line ends on the beetle in a big yellow dot with a black ring */
+.leads circle{{fill:#ffd400;stroke:#000;stroke-width:1.4}}
 .pin:active b{{background:var(--green);box-shadow:inset 0 0 0 1px var(--red)}}
 .pin:active span{{color:var(--red)}}
 .hint{{text-align:center;font-size:12px;color:#666;letter-spacing:.06em;margin:0;padding:4px 0 10px}}
@@ -355,7 +360,7 @@ html.dlg{{overflow:hidden}}
 .cnt{{display:flex;align-items:center;gap:6px;font-size:13px;color:#666;letter-spacing:.06em}}
 .cnt b{{color:var(--red);font-weight:400}}
 .cnt button,.x{{border:0;background:none;padding:6px;margin:-6px;display:flex}}
-.x svg{{width:22px;height:22px;stroke:#000;stroke-width:1.3}}
+.x{{outline:none;-webkit-tap-highlight-color:transparent}} .x svg{{width:22px;height:22px}} .x .rg{{fill:none;stroke:#3a3c37;stroke-width:var(--hp)}} .x .xx{{fill:none;stroke:#1a1a1a;stroke-width:1.15;stroke-linecap:round}}
 .ar{{overflow:visible}} .ar .rg{{fill:none;stroke:#3a3c37;stroke-width:var(--hp)}} .ar .dt{{fill:#4d4f4a;stroke:#1a1a1a;stroke-width:var(--hp);stroke-linejoin:round}}
 .ar text{{fill:#3a3c37;font:700 6.4px Calibri,Carlito,sans-serif;text-anchor:middle;dominant-baseline:central}} .ar .tr{{display:none}}
 .photos{{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;background:#f6f6f6}}
@@ -379,7 +384,7 @@ dialog .top{{flex:none}}
 .txt p{{margin:5px 0 0;font-size:13.5px;line-height:1.36;color:#222}}
 .txt dl{{margin:8px 0 0;padding-top:6px;background:var(--dh) left top/100% 1px no-repeat;display:grid;grid-template-columns:auto 1fr auto 1fr;gap:2px 8px;font-size:12px;line-height:1.3}}
 .txt dt{{color:#888}} .txt dd{{margin:0}}
-.nav2{{flex:none;display:flex;justify-content:space-between;margin:0 10px;padding:4px 0 calc(env(safe-area-inset-bottom,0px) + 8px);background:var(--dh) left top/100% 1px no-repeat}}
+.nav2{{flex:none;display:flex;justify-content:space-between;align-items:center;margin:0 10px;padding:4px 0 calc(env(safe-area-inset-bottom,0px) + 8px);background:var(--dh) left top/100% 1px no-repeat}}
 .nav2 button{{display:flex;align-items:center;gap:6px;border:0;background:none;font:400 12px Calibri,Carlito,sans-serif;letter-spacing:.06em;color:#666;padding:6px 0}}
 .note{{margin-left:auto;padding-left:8px;align-self:flex-start;text-align:right;font-size:10px;line-height:1.35;color:#888;letter-spacing:.03em}}
 .note a{{color:var(--red)}}
@@ -422,7 +427,7 @@ dialog .top{{flex:none}}
 <nav>{TABHTML}</nav>
 </header>
 <main>
-<section class="pg" id="start"><div class="stage"><div class="beetle" id="beetle"><div class="whole"></div>{PIECES}</div><svg class="leads" id="leads" aria-hidden="true"></svg>{PINS}</div>
+<section class="pg" id="start"><div class="stage"><div class="beetle" id="beetle"><div class="whole"></div>{PIECES}</div><svg class="leads" id="leads" aria-hidden="true"></svg><svg class="leads" id="leadots" aria-hidden="true"></svg>{PINS}</div>
 </section>
 {section("us", "us & contact", "01", US)}
 {section("projects", "projects", "02", '<div class="grid">' + TILES + '</div>')}
@@ -433,15 +438,15 @@ dialog .top{{flex:none}}
 <div class="bar btop"><button type="button" id="goN" aria-label="previous page">{ARN}</button></div>
 <div class="bar bbot"><button type="button" id="goS" aria-label="next page">{ARS}</button></div>
 <dialog id="lb" aria-labelledby="lt">
-<div class="top"><div class="cnt"><span id="lk"></span></div>
-<button type="button" class="x" id="lx" aria-label="close"><svg viewBox="0 0 16 16" fill="none"><path d="M2 2L14 14M14 2L2 14"/></svg></button></div>
+<div class="top"><span></span>
+<button type="button" class="x" id="lx" aria-label="close">{XC}</button></div>
 <div class="phw"><div class="photos" id="ph"></div><button type="button" class="pw" id="phw" aria-label="previous photo">{ARW2}</button><button type="button" class="pe" id="phe" aria-label="next photo">{ARE2}</button></div><div class="dots" id="dots"></div>
 <div class="txt"><h2 id="lt"></h2><div id="tx"></div><dl id="dl"></dl></div>
-<div class="nav2"><button type="button" id="pp2">{ARW}previous project</button><button type="button" id="np2">next project{ARE}</button></div>
+<div class="nav2"><button type="button" id="pp2">{ARW}previous</button><div class="cnt"><span id="lk"></span></div><button type="button" id="np2">next{ARE}</button></div>
 </dialog>
 <dialog id="iv" aria-label="bits &amp; bats">
 <div class="top"><div class="cnt"><span id="ik"></span></div>
-<button type="button" class="x" id="ix" aria-label="close"><svg viewBox="0 0 16 16" fill="none"><path d="M2 2L14 14M14 2L2 14"/></svg></button></div>
+<button type="button" class="x" id="ix" aria-label="close">{XC}</button></div>
 <div class="phw"><div class="photos" id="iph"></div><button type="button" class="pw" id="iw" aria-label="previous picture">{ARW2}</button><button type="button" class="pe" id="ie" aria-label="next picture">{ARE2}</button></div><div class="ivcap" id="icap"></div>
 </dialog>
 <script>
@@ -466,14 +471,14 @@ dialog .top{{flex:none}}
   /* dotted leader lines: from the inner side of each circle across, then up or down onto the beetle, with a small arrowhead */
   const stage=document.querySelector('.stage'), leads=document.getElementById('leads'), btl=document.getElementById('beetle');
   function drawLeads(){{
-    const S=stage.getBoundingClientRect(), Bt=btl.getBoundingClientRect(); let h='';
+    const S=stage.getBoundingClientRect(), Bt=btl.getBoundingClientRect(); let h='', g='';
     stage.querySelectorAll('.pin').forEach(p=>{{
       const c=p.querySelector('b').getBoundingClientRect(), left=p.classList.contains('l');
       const sx=(left?c.right+4:c.left-4)-S.left, sy=c.top+c.height/2-S.top;
-      const tx=Bt.left+Bt.width*p.dataset.fx-S.left, ty=Bt.top+Bt.height*p.dataset.fy-S.top, d=ty>sy?1:-1, a=4;
-      h+=`<path d="M${{sx}} ${{sy}}H${{tx}}V${{ty-d*1}}"/><path class="tip" d="M${{tx-a*.8}} ${{ty-d*a}}L${{tx}} ${{ty}}L${{tx+a*.8}} ${{ty-d*a}}"/>`;
+      const tx=Bt.left+Bt.width*p.dataset.fx-S.left, ty=Bt.top+Bt.height*p.dataset.fy-S.top, d=ty>sy?1:-1, r=6;
+      h+=`<path d="M${{sx}} ${{sy}}H${{tx}}V${{ty-d*r}}"/>`; g+=`<circle cx="${{tx}}" cy="${{ty}}" r="${{r}}"/>`;
     }});
-    leads.innerHTML=h;
+    leads.innerHTML=h; document.getElementById('leadots').innerHTML=g;
   }}
   const relayout=()=>{{ fitHead(); requestAnimationFrame(drawLeads); }};
   addEventListener('resize',relayout);

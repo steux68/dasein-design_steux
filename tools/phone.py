@@ -73,8 +73,9 @@ ARW, ARE = LB.compass('W', 26), LB.compass('E', 26)
 
 
 def section(i, name, num, body):
-    """a page; no title bar - the lit tab in the side strip shows where you are"""
-    return f'<section class="pg" id="{i}" aria-label="{name} [{num}]"><div class="body">{body}</div></section>'
+    """a page; it opens with a muted yellow-lime bar across, in the tab style, naming it (scrolls away with the page)"""
+    return (f'<section class="pg" id="{i}" aria-label="{name} [{num}]"><div class="sbar"><b>{name.replace("&", "&amp;")}</b> <small>[{num}]</small></div>'
+            f'<div class="body">{body}</div></section>')
 
 
 ARN, ARS = LB.compass('N', 24), LB.compass('S', 24)
@@ -241,6 +242,10 @@ main{{padding-top:calc(var(--head) + var(--bar));padding-bottom:var(--bar)}}
 @keyframes ring{{0%{{transform:scale(1);opacity:.55}}100%{{transform:scale(1.7);opacity:0}}}}
 @media (prefers-reduced-motion:reduce){{.ar .tr{{animation:none!important;display:none!important}}}}
 .body{{min-width:0;padding:12px 10px 28px}}
+/* section bar: same size, type and thickness as a tab in the side strip, a muted version of the lit tab's yellow-lime */
+.sbar{{display:flex;align-items:center;justify-content:center;gap:4px;height:30px;margin:8px 10px 0;background:rgba(205,255,62,.42);color:rgba(0,0,0,.78);
+  outline:1px dashed #fff;outline-offset:-1px;font-size:12.5px;white-space:nowrap}}
+.sbar b{{font-weight:700}} .sbar small{{font-size:8.5px}}
 /* start page: the upright beetle with the five circles beside it */
 #start{{display:block;min-height:calc(100svh - var(--head) - 2 * var(--bar));overflow:clip}}
 html,body{{overflow-x:clip}}

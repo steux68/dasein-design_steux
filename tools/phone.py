@@ -228,11 +228,12 @@ nav{{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px}}
 .tab:active{{background:var(--green)}}
 .tab.cur{{background:var(--lime);font-weight:700}}
 .tab.cur small{{font-weight:400}}
-main{{padding-top:calc(var(--head) + var(--bar));padding-bottom:var(--bar)}}
+main{{padding-top:calc(var(--head) + var(--bar));padding-bottom:var(--bar);padding-right:8px}}
+body{{position:relative}}
 /* every page: its title sticks just under the header and is pushed up by the next page's title as that one arrives */
 .pg{{position:relative;min-height:calc(100svh - var(--head) - 2 * var(--bar));border-bottom:1px dashed var(--line)}}
 /* thin white bars at the top and bottom of the screen with the N and S arrows: previous / next page */
-.bar{{position:fixed;left:var(--side);right:0;z-index:15;height:var(--bar);display:flex;align-items:center;justify-content:center;background:#fff}}
+.bar{{position:fixed;left:var(--side);right:8px;z-index:15;height:var(--bar);display:flex;align-items:center;justify-content:center;background:#fff}}
 .bar.btop{{top:var(--head);border-bottom:1px dashed var(--line)}}
 .bar.bbot{{bottom:0;height:calc(var(--bar) + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);border-top:1px dashed var(--line)}}
 .bar button{{border:0;background:none;padding:3px 24px;display:flex;-webkit-tap-highlight-color:transparent;transition:opacity .2s}}
@@ -242,12 +243,15 @@ main{{padding-top:calc(var(--head) + var(--bar));padding-bottom:var(--bar)}}
 .ar.pulse .tr2,.bar .go .tr2{{animation-delay:1.1s}}
 @keyframes ring{{0%{{transform:scale(1);opacity:.55}}100%{{transform:scale(1.7);opacity:0}}}}
 @media (prefers-reduced-motion:reduce){{.ar .tr{{animation:none!important;display:none!important}}}}
-.body{{min-width:0;padding:12px 14px 28px 10px}}
+.body{{min-width:0;padding:12px 10px 28px}}
 /* guide lines down both sides, as on the desktop: a light dashed vertical line with pairs of short ticks */
-.rule{{position:fixed;top:0;bottom:0;width:11px;z-index:45;pointer-events:none;
-  background:repeating-linear-gradient(to bottom,var(--line) 0 4px,transparent 4px 7px) center top/1px 100% no-repeat,
-  repeating-linear-gradient(to bottom,transparent 0 172px,var(--line) 172px 173px,transparent 173px 182px,var(--line) 182px 183px,transparent 183px 190px)}}
-.rule.l{{left:calc(var(--side) - 6px)}} .rule.r{{right:1px}}
+.rule{{position:fixed;top:0;bottom:0;width:1px;z-index:45;pointer-events:none;
+  background:repeating-linear-gradient(to bottom,var(--line) 0 4px,transparent 4px 7px)}}
+.rule.l{{left:calc(var(--side) - 1px)}} .rule.r{{right:7px}}
+/* short dotted ticks on the inner side of the two lines, level with the top and bottom of the boxes on the page; they scroll with them */
+#ticks{{position:absolute;left:0;top:0;width:100%;height:0;z-index:12;pointer-events:none}}
+.tk{{position:absolute;width:9px;height:0;border-top:1px dotted var(--dot)}}
+.tk.l{{left:var(--side)}} .tk.r{{right:8px}}
 .side.rail .sidebar,.side.rail header{{border-right:0!important}}
 /* section bar: same size, type and thickness as a tab in the side strip, a muted version of the lit tab's yellow-lime */
 .sbar{{display:flex;align-items:center;justify-content:center;gap:4px;height:30px;margin:8px 10px 0;background:rgba(205,255,62,.42);color:rgba(0,0,0,.78);
@@ -303,7 +307,7 @@ html,body{{overflow-x:clip}}
 .who .q{{font-size:13px;font-weight:400;color:#555;margin-left:4px;white-space:nowrap}}
 /* ID card under the name, to identify the partner (number, birth date and signature blurred) */
 .who .idc{{display:block;width:78%;max-width:300px;height:auto;margin:8px 0 2px;border-radius:9px;outline:1px dotted var(--dot);outline-offset:2px}}
-.who .kt{{display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px;margin:8px 0 0;font-size:min(14px,3.75vw);line-height:1.5;white-space:nowrap}}
+.who .kt{{display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px;margin:8px 0 0;font-size:min(13.5px,3.42vw);line-height:1.5;white-space:nowrap}}
 .who .sep{{display:block;width:2.5px;height:1.15em;background:#3a3c37}} .who .kt a{{text-decoration:none;border-bottom:1px dotted var(--dot)}}
 .who .ex{{margin:6px 0 0;font-size:12.5px;color:#555}}
 details{{margin:8px 0 0}}
@@ -423,7 +427,7 @@ dialog .top{{flex:none}}
 {section("downloads", "downloads & links", "03", DOWNLOADS)}
 {section("bits", "bits & bats", "04", BITSHTML)}
 </main>
-<i class="rule l" aria-hidden="true"></i><i class="rule r" aria-hidden="true"></i>
+<i class="rule l" aria-hidden="true"></i><i class="rule r" aria-hidden="true"></i><div id="ticks" aria-hidden="true"></div>
 <div class="bar btop"><button type="button" id="goN" aria-label="previous page">{ARN}</button></div>
 <div class="bar bbot"><button type="button" id="goS" aria-label="next page">{ARS}</button></div>
 <dialog id="lb" aria-labelledby="lt">
@@ -446,6 +450,12 @@ dialog .top{{flex:none}}
   document.querySelectorAll('dialog').forEach(d=>d.addEventListener('close',()=>{{ if(!document.querySelector('dialog[open]')) document.documentElement.classList.remove('dlg'); }}));
   document.querySelectorAll('.sidebar,.tab,.logo').forEach(a=>a.addEventListener('click',closeDlgs));
   addEventListener('keydown',e=>{{ if(e.key==='Escape') closeDlgs(); }});
+  /* ticks: one pair (left and right) at the top and the bottom edge of every box - section bars, architects, tiles, logos, the map */
+  const tkBox=document.getElementById('ticks');
+  function ticks(){{ const ys=[]; document.querySelectorAll('.sbar,.who,.grid .tile,.bgrid .tile,.lg,.mapw,.pdfs').forEach(e=>{{ const r=e.getBoundingClientRect(); if(!r.height) return; ys.push(r.top+scrollY,r.bottom+scrollY-1); }});
+    ys.sort((a,b)=>a-b); const u=ys.filter((y,i)=>!i||y-ys[i-1]>3).map(Math.round);
+    tkBox.innerHTML=u.map(y=>'<i class="tk l" style="top:'+y+'px"></i><i class="tk r" style="top:'+y+'px"></i>').join(''); }}
+  new ResizeObserver(()=>requestAnimationFrame(ticks)).observe(document.querySelector('main'));
   /* an open CV closes by itself when it has been scrolled out of view */
   const cvio=new IntersectionObserver(es=>es.forEach(e=>{{ const d=e.target; if(e.isIntersecting||!d.open) return;
     /* keep what is on screen where it is: measure a page that is in view before and after closing (some browsers do this by themselves) */

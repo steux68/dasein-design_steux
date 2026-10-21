@@ -290,14 +290,14 @@ body{{position:relative}}
 .rule.l{{left:calc(var(--side) - 1px)}} .rule.r{{right:7px}}
 .side.rail .sidebar,.side.rail header{{border-right:0!important}}
 /* section bar: same size, type and thickness as a tab in the side strip, a muted version of the lit tab's yellow-lime */
-.sbar{{position:relative;height:30px;margin:15px 10px 15px}}   /* nothing written in it: the band is the gap between two pages */
+.sbar{{position:relative;height:1px;margin:10px 10px}}   /* one line between two pages, 10 px clear each side (the same as from the side lines to the content) */
 /* page boundary (21 Oct): the desktop's double edge ticks, pointing inwards from both guide lines, each running on as a dotted line right across;
    the two lines are the old title bar's height apart */
 .sbar::before,.sbar::after{{content:"";position:absolute;left:-10px;right:-11px;height:1px;
   background:repeating-linear-gradient(to right,#b8b8b8 0 4px,transparent 4px 6px) left top/18px 1px no-repeat,
     repeating-linear-gradient(to right,#b8b8b8 0 4px,transparent 4px 6px) right top/18px 1px no-repeat,
     repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) 18px top/calc(100% - 36px) 1px no-repeat}}
-.sbar::before{{top:0}} .sbar::after{{bottom:0}}
+.sbar::before{{top:0}} .sbar::after{{content:none}}
 
 /* start page: the upright beetle with the five circles beside it */
 #start{{display:block;overflow:clip}}

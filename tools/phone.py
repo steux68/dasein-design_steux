@@ -258,7 +258,7 @@ nav{{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px}}
 main{{padding-top:calc(var(--head) + var(--bar));padding-bottom:var(--bar);padding-right:8px}}
 body{{position:relative}}
 /* every page */
-.pg{{position:relative;min-height:calc(100svh - var(--head) - 2 * var(--bar))}}
+.pg{{position:relative}}   /* pages are as tall as their content, so the white above each page bar is always the same */
 /* thin white bars at the top and bottom of the screen with the N and S arrows: previous / next page */
 .bar{{position:fixed;left:var(--side);right:8px;z-index:15;height:var(--bar);display:flex;align-items:center;justify-content:center;background:#fff}}
 .bar.btop{{top:var(--head);border-bottom:1px dashed var(--line)}}
@@ -270,21 +270,21 @@ body{{position:relative}}
 .ar.pulse .tr2,.bar .go .tr2{{animation-delay:1.1s}}
 @keyframes ring{{0%{{transform:scale(1);opacity:.55}}100%{{transform:scale(1.7);opacity:0}}}}
 @media (prefers-reduced-motion:reduce){{.ar .tr{{animation:none!important;display:none!important}}}}
-.body{{min-width:0;padding:12px 10px 28px}}
+.body{{min-width:0;padding:12px 10px 0}} .pg:last-child .body{{padding-bottom:28px}}
 /* guide lines down both sides, as on the desktop: a light dashed vertical line */
 .rule{{position:fixed;top:0;bottom:0;width:1px;z-index:45;pointer-events:none;
   background:repeating-linear-gradient(to bottom,var(--line) 0 4px,transparent 4px 7px)}}
 .rule.l{{left:calc(var(--side) - 1px)}} .rule.r{{right:7px}}
 .side.rail .sidebar,.side.rail header{{border-right:0!important}}
 /* section bar: same size, type and thickness as a tab in the side strip, a muted version of the lit tab's yellow-lime */
-.sbar{{display:flex;align-items:center;justify-content:center;gap:4px;height:30px;margin:8px 10px 0;background:rgba(205,255,62,.42);color:rgba(0,0,0,.78);
+.sbar{{display:flex;align-items:center;justify-content:center;gap:4px;height:30px;margin:60px 10px 0;background:rgba(205,255,62,.42);color:rgba(0,0,0,.78);
   outline:1px dashed #fff;outline-offset:-1px;font-size:12.5px;white-space:nowrap}}
 .sbar b{{font-weight:700}} .sbar small{{font-size:8.5px}}
 /* start page: the upright beetle with the five circles beside it */
-#start{{display:block;min-height:calc(100svh - var(--head) - 2 * var(--bar));overflow:clip}}
+#start{{display:block;overflow:clip}}
 html,body{{overflow-x:clip}}
 .stage{{position:relative;height:calc(100svh - var(--head) - 2 * var(--bar) - 6px);min-height:430px;margin:0 auto}}
-.beetle{{cursor:pointer;-webkit-tap-highlight-color:transparent;position:absolute;left:50%;top:calc(10px + 5%);bottom:4px;aspect-ratio:{BW}/{BH};transform:translateX(-50%);max-width:52vw}}
+.beetle{{cursor:pointer;-webkit-tap-highlight-color:transparent;position:absolute;left:50%;top:calc(10px + 5%);bottom:0;aspect-ratio:{BW}/{BH};transform:translateX(-50%);max-width:52vw}}
 .beetle .whole{{position:absolute;inset:0;background:url(../img/m-bug-up.webp) center/100% 100% no-repeat}}
 .bp{{position:absolute;display:none;background-image:url(../img/m-bug-up.webp);background-repeat:no-repeat;will-change:transform}}
 .play .bp{{display:block}} .play .whole{{visibility:hidden}}

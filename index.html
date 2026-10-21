@@ -337,6 +337,10 @@ a[href^="tel:"]{color:#1e8e3e;text-decoration:none} a[href^="mailto:"]{color:#1a
 .lbm{align-items:center}
 .lbm .lbkc{font:400 13px/25px Calibri,Carlito,sans-serif;color:#666;letter-spacing:.06em}
 .lbm .lbkc b{color:#e30613;font-weight:400}
+/* three clicks on the beetle: the heart */
+.heartfx{position:fixed;inset:0;z-index:9999;pointer-events:none;overflow:hidden}
+.heartfx svg{position:absolute;left:0;top:0;width:60px;height:60px;margin:-30px 0 0 -30px;fill:#e30613;will-change:transform,opacity}
+.heartfx .sm{width:16px;height:16px;margin:-8px 0 0 -8px}
 /* link logos trimmed to their edges, with a small margin in their boxes */
 img[src^="img/m-lg-"]{box-sizing:border-box;padding:6px 12px}
 </style>
@@ -660,5 +664,45 @@ img[src^="img/m-lg-"]{box-sizing:border-box;padding:6px 12px}
   }catch(err){ console.warn('map not available',err); clip.hidden=true; map=null; }
 })();
 </script>
-<!--fromphone--></body>
+<script>
+/* three quick clicks on the beetle (within 0.9 s): a red heart pops out, zooms up until the screen is red and bursts into little hearts (as on the phone) */
+(function(){
+  const bug=document.getElementById('bug'); if(!bug||!document.body.animate) return;
+  const fr=bug.parentElement, X0=parseFloat(bug.style.left), Y0=parseFloat(bug.style.top);
+  const RECTS=[...bug.querySelectorAll('.bp')].map(p=>[X0+parseFloat(p.style.left),Y0+parseFloat(p.style.top),parseFloat(p.style.width),parseFloat(p.style.height)]);
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches, R=(a,b)=>a+Math.random()*(b-a);
+  const HEART='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.3s-7.6-4.7-10.1-9.4C.3 8.6 1.9 4.6 5.6 4.2c2.4-.3 4 1.1 6.4 3.5 2.4-2.4 4-3.8 6.4-3.5 3.7.4 5.3 4.4 3.7 7.7C19.6 16.6 12 21.3 12 21.3z"/></svg>';
+  const onBug=e=>{ const r=fr.getBoundingClientRect(), s=r.width/1440, x=(e.clientX-r.left)/s, y=(e.clientY-r.top)/s;
+    return RECTS.some(q=>x>=q[0]&&x<q[0]+q[2]&&y>=q[1]&&y<q[1]+q[3]); };
+  let hearting=false, taps=[];
+  function heart(cx,cy){
+    if(hearting) return; hearting=true;
+    const fx=document.createElement('div'); fx.className='heartfx'; fx.innerHTML=HEART; document.body.appendChild(fx);
+    const h=fx.firstChild, big=Math.hypot(innerWidth,innerHeight)/60*2.8, at=`translate(${cx}px,${cy}px)`;
+    const zoom=h.animate([
+      {transform:at+' scale(0)',opacity:1},
+      {transform:at+' scale(1.3)',opacity:1,offset:.16,easing:'ease-out'},
+      {transform:at+' scale(1)',opacity:1,offset:.24},
+      {transform:at+' scale(1.12)',opacity:1,offset:.32},
+      {transform:at+' scale(1)',opacity:1,offset:.4,easing:'cubic-bezier(.5,0,.9,.6)'},
+      {transform:`translate(${innerWidth/2}px,${innerHeight*.6}px) scale(${big})`,opacity:1,offset:1}],{duration:reduce?600:1500,fill:'forwards'});
+    fx.animate([{background:'rgba(227,6,19,0)',offset:0},{background:'rgba(227,6,19,0)',offset:.8},{background:'rgba(227,6,19,1)',offset:1}],{duration:reduce?600:1500,fill:'forwards'});
+    zoom.finished.then(()=>{
+      fx.animate([{background:'rgba(227,6,19,1)'},{background:'rgba(227,6,19,0)'}],{duration:reduce?300:420,easing:'ease-in',fill:'forwards'});
+      h.animate([{opacity:1},{opacity:0}],{duration:reduce?300:420,easing:'ease-in',fill:'forwards'});
+      const n=reduce?0:60, mx=innerWidth/2, my=innerHeight/2, bits=[];
+      for(let i=0;i<n;i++){ const d=document.createElement('div'); d.innerHTML=HEART; const sv=d.firstChild; sv.classList.add('sm'); fx.appendChild(sv);
+        const a=R(0,Math.PI*2), r=R(.35,.8)*Math.max(innerWidth,innerHeight), sc=R(.6,1.6), rot=R(-90,90);
+        bits.push(sv.animate([{transform:`translate(${mx}px,${my}px) scale(${sc*2}) rotate(0deg)`,opacity:1},
+          {transform:`translate(${mx+Math.cos(a)*r}px,${my+Math.sin(a)*r}px) scale(${sc}) rotate(${rot}deg)`,opacity:0}],{duration:R(700,1200),easing:'cubic-bezier(.1,.8,.3,1)',fill:'forwards'}).finished); }
+      return Promise.all(bits);
+    }).catch(()=>{}).then(()=>{ fx.remove(); hearting=false; });
+  }
+  document.addEventListener('click',e=>{
+    if(e.target.closest('a,button,dialog')||!onBug(e)) return;
+    const t=performance.now(); taps=taps.filter(x=>t-x<900); taps.push(t);
+    if(taps.length>=3){ taps=[]; heart(e.clientX,e.clientY); }
+  });
+})();
+</script><!--fromphone--></body>
 </html>

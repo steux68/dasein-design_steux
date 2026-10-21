@@ -280,6 +280,8 @@ body{{position:relative}}
 @keyframes ring{{0%{{transform:scale(1);opacity:.55}}100%{{transform:scale(1.7);opacity:0}}}}
 @media (prefers-reduced-motion:reduce){{.ar .tr{{animation:none!important;display:none!important}}}}
 .body{{min-width:0;padding:12px 10px 0}} .pg:last-child .body{{padding-bottom:28px}}
+/* the last page (contact) is at least one screen tall, so the S arrow and the tab can bring its bar right to the top (largest viewport, for phones whose toolbar hides) */
+.pg:last-child{{min-height:calc(100lvh - var(--head) - 2 * var(--bar))}}
 /* guide lines down both sides, as on the desktop: a light dashed vertical line */
 .rule{{position:fixed;top:0;bottom:0;width:1px;z-index:45;pointer-events:none;
   background:repeating-linear-gradient(to bottom,var(--line) 0 4px,transparent 4px 7px)}}

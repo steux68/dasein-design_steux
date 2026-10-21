@@ -54,18 +54,15 @@ PIECES = ''.join(
     f'background-size:{BW / w * 100:.2f}% {BH / h * 100:.2f}%;background-position:{(x / (BW - w) * 100) if BW != w else 0:.3f}% {(y / (BH - h) * 100) if BH != h else 0:.3f}%"></i>'
     for x, y, w, h in pieces)
 
-# ---------- four sections: "us & our services" and "contact" are one page on the phone (trial, 21 Oct) ----------
-TABS = [('us', 'us &amp; contact', '01'), ('projects', 'projects', '02'), ('downloads', 'downloads & links', '03'),
-        ('bits', 'bits & bats', '04')]
-TABHTML = ''.join(f'<a class="tab" href="#{i}" data-pg="{i}"><span>{n}</span> <small>[{k}]</small></a>' for i, n, k in TABS)
-# the first tab is split in two (Steuart, 21 Oct): "about us" over "contact", together the size of one tab
-TABHTML = TABHTML.replace('<a class="tab" href="#us" data-pg="us"><span>us &amp; contact</span> <small>[01]</small></a>',
-                          '<div class="tabs2"><a class="tab" href="#us" data-pg="us"><span>about us</span> <small>[01]</small></a>'
-                          '<a class="tab" href="#contact" data-pg="contact"><span>contact</span></a></div>')
-# circles beside the beetle: left and right, top to bottom
+# ---------- five pages: about us · projects · downloads & links · bits & bats · contact (contact moved to the end, 21 Oct) ----------
+TABS = [('us', 'about us', '01'), ('projects', 'projects', '02'), ('downloads', 'downloads & links', '03'),
+        ('bits', 'bits & bats', '04'), ('contact', 'contact', '05')]
+# about us (top) and contact (bottom) are half tabs (Steuart, 21 Oct): together they take one tab's height
+TABHTML = ''.join(f'<a class="tab{" half" if i in ("us", "contact") else ""}" href="#{i}" data-pg="{i}"><span>{n.replace("&", "&amp;")}</span> <small>[{k}]</small></a>' for i, n, k in TABS)
+# circles beside the beetle: left and right, top to bottom (five, 21 Oct)
 # where each circle's dotted line ends on the upright beetle (fractions of its box): mouth, right front leg (claw), left middle leg, right back leg
-AIM = [(.51, .245), (.715, .365), (.258, .53), (.545, .875)]
-PINS = ''.join(f'<a class="pin {"l" if k % 2 == 0 else "r"}" href="#{i}" data-fx="{AIM[k][0]}" data-fy="{AIM[k][1]}" style="top:{10 + k * 23}%;--k:{k}"><b>{num}</b><span>{n}</span></a>'
+AIM = [(.51, .245), (.715, .365), (.258, .53), (.80, .605), (.31, .905)]
+PINS = ''.join(f'<a class="pin {"l" if k % 2 == 0 else "r"}" href="#{i}" data-fx="{AIM[k][0]}" data-fy="{AIM[k][1]}" style="top:{6 + k * 18.5}%;--k:{k}"><b>{num}</b><span>{n.replace("&", "&amp;")}</span></a>'
                for k, (i, n, num) in enumerate(TABS))
 
 P = [{'t': p['t'], 'x': p['x'], 'd': p['d'], 'imgs': ['../' + s for s in p['imgs']]} for p in LB.PROJECTS]
@@ -174,8 +171,8 @@ def partner(p):
 
 US = ('<div class="box"><p class="lab first">PARTNERSHIP</p><p class="firm"><b>dasein-design</b> [architecture+design] [Wien]<br><span>» Jan.’03 – bis dato</span></p></div>'
       + ''.join(partner(p) for p in PARTNERS)
-      + '<div class="sbar sub" id="contact"><b>contact</b> <small>[01]</small></div>'
-      '<div class="box"><p class="lab first">OFFICE</p><p class="addr"><b>dasein-design</b><br>Neulerchenfelderstrasse 42/6<br>A-1160 Wien · Austria · EU</p>'
+      )
+CONTACT = ('<div class="box"><p class="lab first">OFFICE</p><p class="addr"><b>dasein-design</b><br>Neulerchenfelderstrasse 42/6<br>A-1160 Wien · Austria · EU</p>'
       '<div class="mapw"><div class="map" id="map"></div><div class="mz"><button type="button" id="zin" aria-label="zoom in">' + SEARCH.ZOOM_IN + '</button><button type="button" id="zout" aria-label="zoom out">' + SEARCH.ZOOM_OUT + '</button><button type="button" id="zhome" aria-label="back to the start view">' + SEARCH.ZOOM_HOME + '</button></div></div>'
       '<p class="mapl"><a href="https://www.openstreetmap.org/?mlat=48.211431&amp;mlon=16.333964#map=18/48.211431/16.333964">open the map</a></p></div>')
 
@@ -210,9 +207,9 @@ HTML = f'''<!doctype html>
 .side.rail .tab{{flex:1;min-height:0;height:auto;writing-mode:vertical-rl;transform:rotate(180deg);padding:3px 0;font-size:min(12.5px,1.75svh);gap:3px;overflow:hidden}}
 .side.rail .tab small{{font-size:8.5px}}
 /* the split first tab: two halves, 2 px apart, sharing one tab's place */
-.tabs2{{display:flex;gap:2px;min-width:0}} .tabs2 .tab{{flex:1;min-width:0}}
-.side.rail .tabs2{{flex:1;min-height:0;flex-direction:column}}
-@media (max-height:740px){{.side.rail .tabs2 small{{display:none}}}}   /* small phones: the halves too short for the [01] */
+.side.rail .tab.half{{flex:.5}}   /* about us at the top and contact at the bottom are half tabs */
+@media (max-height:740px){{.side.rail .tab.half small{{display:none}}}}   /* small phones: the halves too short for the number */
+nav .tab:last-child:nth-child(odd){{grid-column:span 2}}
 .note2{{display:none}}
 .side.rail .row1 .note{{display:none}}
 .side.rail .note2{{display:block;text-align:center;margin:-6px 0 0;padding-bottom:8px}}
@@ -283,12 +280,15 @@ html,body{{overflow-x:clip}}
 .pin b{{position:relative}}
 /* thin red rings ripple out of the circles one after another - 01, 02, 03, 04, then from the start - to show they can be tapped */
 .pin b::before,.pin b::after{{content:"";position:absolute;inset:-1px;border-radius:50%;border:1.6px solid var(--c1,var(--red));opacity:0;pointer-events:none;
-  animation:pinring 4.8s ease-out infinite;animation-delay:calc(var(--k) * 1.2s)}}
-.pin b::after{{border-color:var(--c2,var(--red));animation-delay:calc(var(--k) * 1.2s + .3s)}}
+  animation:pinring 7.5s ease-out infinite;animation-delay:calc(var(--k) * 1.5s + .3s)}}
+.pin b::after{{border-color:var(--c2,var(--red));animation-delay:calc(var(--k) * 1.5s + .6s)}}
+/* in turn each circle lights up yellow-lime (as if activated), sends out its rings, then turns grey again before the next one */
+.pin b{{animation:pinon 7.5s ease-in-out infinite;animation-delay:calc(var(--k) * 1.5s)}}
+@keyframes pinon{{0%{{background:#bfbfbf}}3%{{background:#cdff3e}}17%{{background:#cdff3e}}20%{{background:#bfbfbf}}100%{{background:#bfbfbf}}}}
 .pin:nth-of-type(1){{--c1:#ffd400;--c2:#2f8cff}} .pin:nth-of-type(2){{--c1:#2fbf4a;--c2:#ffd400}}
-.pin:nth-of-type(3){{--c1:#2f8cff;--c2:#cdff3e}} .pin:nth-of-type(4){{--c1:#e30613;--c2:#2fbf4a}}
-@keyframes pinring{{0%{{transform:scale(1);opacity:.9}}24%{{transform:scale(2.3);opacity:0}}100%{{transform:scale(2.3);opacity:0}}}}
-@media (prefers-reduced-motion:reduce){{.pin b::before,.pin b::after{{animation:none}}}}
+.pin:nth-of-type(3){{--c1:#2f8cff;--c2:#cdff3e}} .pin:nth-of-type(4){{--c1:#e30613;--c2:#2fbf4a}} .pin:nth-of-type(5){{--c1:#cdff3e;--c2:#e30613}}
+@keyframes pinring{{0%{{transform:scale(1);opacity:.9}}15%{{transform:scale(2.3);opacity:0}}100%{{transform:scale(2.3);opacity:0}}}}
+@media (prefers-reduced-motion:reduce){{.pin b,.pin b::before,.pin b::after{{animation:none}}}}
 .pin span{{font-size:12px;line-height:1.15;background:rgba(255,255,255,.85);padding:1px 3px}}
 /* thin dotted leader lines from the circles to the beetle, as on the desktop start page */
 .leads{{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}}
@@ -296,8 +296,8 @@ html,body{{overflow-x:clip}}
 #leads{{mix-blend-mode:difference}}
 .leads path{{fill:none;stroke:#fff;stroke-width:1.2;stroke-dasharray:1.2 2.2}}
 /* each line ends on the beetle in a big yellow dot with a black ring */
-.leads circle{{fill:#ffd400;stroke:#000;stroke-width:1.4}}
-.pin:active b{{background:var(--green);box-shadow:inset 0 0 0 1px var(--red)}}
+.leads circle{{fill:#ffd400;stroke:#000;stroke-width:1.2}}
+.pin:active b{{animation:none;background:var(--green);box-shadow:inset 0 0 0 1px var(--red)}}
 .pin:active span{{color:var(--red)}}
 .hint{{text-align:center;font-size:12px;color:#666;letter-spacing:.06em;margin:0;padding:4px 0 10px}}
 /* projects: tiles in two columns */
@@ -315,8 +315,7 @@ html,body{{overflow-x:clip}}
 .box{{margin:8px 0 0;padding:10px;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat}}
 #us .body > .box:first-child{{margin-top:0}}
 .box .firm{{margin:0}}
-/* the contact bar inside the page: same as the page bar */
-.sbar.sub{{margin:18px 0 0;scroll-margin-top:calc(var(--head) + var(--bar) + 6px)}}
+#contact .body > .box:first-child{{margin-top:0}}
 .lab{{margin:6px 0 4px;font-size:11px;letter-spacing:.12em;color:var(--red)}}
 .firm{{margin:0 0 6px;font-size:16px}} .firm span{{font-size:13px;color:#666}}
 .who{{margin:8px 0 0;padding:10px;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat}}
@@ -448,6 +447,7 @@ dialog .top{{flex:none}}
 {section("projects", "projects", "02", '<div class="grid">' + TILES + '</div>')}
 {section("downloads", "downloads & links", "03", DOWNLOADS)}
 {section("bits", "bits & bats", "04", BITSHTML)}
+{section("contact", "contact", "05", CONTACT)}
 </main>
 <i class="rule l" aria-hidden="true"></i><i class="rule r" aria-hidden="true"></i>
 <div class="bar btop"><button type="button" id="goN" aria-label="previous page">{ARN}</button></div>
@@ -490,7 +490,7 @@ dialog .top{{flex:none}}
     stage.querySelectorAll('.pin').forEach(p=>{{
       const c=p.querySelector('b').getBoundingClientRect(), left=p.classList.contains('l');
       const sx=(left?c.right+4:c.left-4)-S.left, sy=c.top+c.height/2-S.top;
-      const tx=Bt.left+Bt.width*p.dataset.fx-S.left, ty=Bt.top+Bt.height*p.dataset.fy-S.top, d=ty>sy?1:-1, r=6;
+      const tx=Bt.left+Bt.width*p.dataset.fx-S.left, ty=Bt.top+Bt.height*p.dataset.fy-S.top, d=ty>sy?1:-1, r=4.5;
       h+=`<path d="M${{sx}} ${{sy}}H${{tx}}V${{ty-d*r}}"/>`; g+=`<circle cx="${{tx}}" cy="${{ty}}" r="${{r}}"/>`;
     }});
     leads.innerHTML=h; document.getElementById('leadots').innerHTML=g;
@@ -511,7 +511,7 @@ dialog .top{{flex:none}}
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   /* current page: tab in yellow-lime, as on the desktop */
   const tabs=[...document.querySelectorAll('.tab')];
-  const secs=[...document.querySelectorAll('.pg, #contact')];   /* the contact bar counts too, for the split first tab */
+  const secs=[...document.querySelectorAll('.pg')];
   function mark(){{ const y=innerHeight*.45; let id='start'; secs.forEach(s=>{{ if(s.getBoundingClientRect().top<=y) id=s.id; }});
     tabs.forEach(t=>t.classList.toggle('cur',t.dataset.pg===id)); }}
   addEventListener('scroll',mark,{{passive:true}}); addEventListener('resize',mark); mark();

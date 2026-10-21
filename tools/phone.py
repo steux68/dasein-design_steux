@@ -186,13 +186,16 @@ HTML = f'''<!doctype html>
 .sidebar b{{font-weight:700}}
 .side .row1 .logo{{display:none}}
 /* all on the side: the mark and name in one narrow column, the four tabs running down a second one; no bar across the top */
-.side.rail{{--side:78px}}
-.side.rail .sidebar{{width:40px}}
-.side.rail .sidebar span{{font-size:25px}}
-.side.rail header{{left:40px;right:auto;top:0;bottom:0;width:38px;padding:calc(env(safe-area-inset-top,0px) + 6px) 4px 6px;border-bottom:0;border-right:1px dashed var(--line)}}
+.side.rail{{--side:40px;--logoh:168px}}
+/* all side: ONE narrow strip down the left - the mark and "dasein-design" (a little smaller) at the top, the four tabs below it, sharing the rest of the height */
+.side.rail .sidebar{{width:var(--side);bottom:auto;height:calc(env(safe-area-inset-top,0px) + var(--logoh));padding-top:calc(env(safe-area-inset-top,0px) + 8px);padding-bottom:0;border-right:1px dashed var(--line)}}
+.side.rail .sidebar img{{width:24px;height:24px}}
+.side.rail .sidebar span{{margin-top:9px;font-size:20px}}
+.side.rail header{{left:0;right:auto;top:calc(env(safe-area-inset-top,0px) + var(--logoh));bottom:0;width:var(--side);padding:6px 5px calc(env(safe-area-inset-bottom,0px) + 6px);border-bottom:0;border-right:1px dashed var(--line)}}
 .side.rail .row1{{min-height:0;height:0}}
-.side.rail nav{{display:flex;flex-direction:column;height:100%;margin:0;gap:6px}}
-.side.rail .tab{{flex:1;height:auto;writing-mode:vertical-rl;transform:rotate(180deg);padding:4px 0;font-size:14px;gap:4px}}
+.side.rail nav{{display:flex;flex-direction:column;height:100%;margin:0;gap:5px}}
+.side.rail .tab{{flex:1;min-height:0;height:auto;writing-mode:vertical-rl;transform:rotate(180deg);padding:3px 0;font-size:min(12.5px,1.75svh);gap:3px;overflow:hidden}}
+.side.rail .tab small{{font-size:8.5px}}
 .side.rail .stage{{height:calc(100svh - 64px)}}
 .side.rail .hint{{padding-bottom:30px}}
 .side.rail .note{{position:fixed;right:6px;bottom:calc(env(safe-area-inset-bottom,0px) + 6px);z-index:30;background:rgba(255,255,255,.94);padding:2px 6px;border:1px dotted var(--dot)}}

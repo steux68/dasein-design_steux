@@ -78,7 +78,7 @@ XC = '<svg viewBox="-12 -12 24 24" aria-hidden="true"><circle class="rg" r="9.5"
 
 def section(i, name, num, body):
     """a page; it opens with a muted yellow-lime bar across, in the tab style, naming it (scrolls away with the page)"""
-    return (f'<section class="pg" id="{i}" aria-label="{name} [{num}]"><div class="sbar"><b>{name.replace("&", "&amp;")}</b> <small>[{num}]</small></div>'
+    return (f'<section class="pg" id="{i}" aria-label="{name} [{num}]"><div class="sbar"><i class="tk l"></i><i class="tk r"></i><span class="st"><b>{name.replace("&", "&amp;")}</b> <small>[{num}]</small></span></div>'
             f'<div class="body">{body}</div></section>')
 
 
@@ -290,9 +290,17 @@ body{{position:relative}}
 .rule.l{{left:calc(var(--side) - 1px)}} .rule.r{{right:7px}}
 .side.rail .sidebar,.side.rail header{{border-right:0!important}}
 /* section bar: same size, type and thickness as a tab in the side strip, a muted version of the lit tab's yellow-lime */
-.sbar{{display:flex;align-items:center;justify-content:center;gap:4px;height:30px;margin:60px 10px 0;background:rgba(205,255,62,.42);color:rgba(0,0,0,.78);
-  outline:1px dashed #fff;outline-offset:-1px;font-size:12.5px;white-space:nowrap}}
-.sbar b{{font-weight:700}} .sbar small{{font-size:8.5px}}
+.sbar{{position:relative;display:flex;align-items:center;justify-content:center;height:30px;margin:60px 10px 0;color:#000;font-size:14px;white-space:nowrap}}
+.sbar b{{font-weight:700}} .sbar small{{font-size:9px;color:#555;margin-left:4px}}
+/* page boundary (21 Oct, no yellow bar any more): the desktop's double edge ticks, here pointing inwards from both guide lines */
+.sbar .tk{{position:absolute;top:9px;width:18px;height:12px;pointer-events:none;
+  background:repeating-linear-gradient(to right,#b8b8b8 0 4px,transparent 4px 6px) left top/100% 1px no-repeat,repeating-linear-gradient(to right,#b8b8b8 0 4px,transparent 4px 6px) left bottom/100% 1px no-repeat}}
+.sbar .tk.l{{left:-10px}} .sbar .tk.r{{right:-11px}}
+/* the page name glides in between the ticks each time the boundary comes into view */
+.sbar .st{{display:inline-block}}
+.sbar.in .st{{animation:stin 1.1s cubic-bezier(.2,.7,.2,1) both}}
+@keyframes stin{{0%{{opacity:0;transform:translateX(-36px);letter-spacing:.35em}}60%{{opacity:1}}100%{{opacity:1;transform:none;letter-spacing:0}}}}
+@media (prefers-reduced-motion:reduce){{.sbar.in .st{{animation:none}}}}
 /* start page: the upright beetle with the five circles beside it */
 #start{{display:block;overflow:clip}}
 html,body{{overflow-x:clip}}
@@ -555,6 +563,9 @@ dialog .top{{flex:none}}
   addEventListener('resize',()=>cuts.forEach(g=>setCut(g,!g.classList.contains('shut'))));
   document.querySelectorAll('.more').forEach(b=>b.addEventListener('click',()=>{{ const g=document.getElementById(b.dataset.g), op=g.classList.contains('shut');
     setCut(g,op); if(!op) g.scrollIntoView({{behavior:'smooth',block:'start'}}); }}));
+  /* page names glide in between their ticks each time they come into view */
+  const stio=new IntersectionObserver(es=>es.forEach(e=>{{ if(e.isIntersecting){{ e.target.classList.remove('in'); void e.target.offsetWidth; e.target.classList.add('in'); }} }}),{{threshold:1}});
+  document.querySelectorAll('.sbar').forEach(b=>stio.observe(b));
   /* logo switch */
   const B=document.body;
   const setLogo=m=>{{ B.classList.toggle('side',m!=='top'); B.classList.toggle('rail',m==='rail'); try{{ localStorage.setItem('ddlogo2',m); }}catch(e){{}}

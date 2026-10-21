@@ -78,7 +78,7 @@ XC = '<svg viewBox="-12 -12 24 24" aria-hidden="true"><circle class="rg" r="9.5"
 
 def section(i, name, num, body):
     """a page; it opens with a muted yellow-lime bar across, in the tab style, naming it (scrolls away with the page)"""
-    return (f'<section class="pg" id="{i}" aria-label="{name} [{num}]"><div class="sbar"><i class="tk l"></i><i class="tk r"></i><span class="st"><b>{name.replace("&", "&amp;")}</b> <small>[{num}]</small></span></div>'
+    return (f'<section class="pg" id="{i}" aria-label="{name} [{num}]"><div class="sbar" aria-hidden="true"></div><div class="stk"><span class="st"><b>{name.replace("&", "&amp;")}</b> <small>[{num}]</small></span></div>'
             f'<div class="body">{body}</div></section>')
 
 
@@ -290,17 +290,23 @@ body{{position:relative}}
 .rule.l{{left:calc(var(--side) - 1px)}} .rule.r{{right:7px}}
 .side.rail .sidebar,.side.rail header{{border-right:0!important}}
 /* section bar: same size, type and thickness as a tab in the side strip, a muted version of the lit tab's yellow-lime */
-.sbar{{position:relative;display:flex;align-items:center;justify-content:center;height:30px;margin:60px 10px 0;color:#000;font-size:14px;white-space:nowrap}}
-.sbar b{{font-weight:700}} .sbar small{{font-size:9px;color:#555;margin-left:4px}}
-/* page boundary (21 Oct, no yellow bar any more): the desktop's double edge ticks, here pointing inwards from both guide lines */
-.sbar .tk{{position:absolute;top:9px;width:18px;height:12px;pointer-events:none;
-  background:repeating-linear-gradient(to right,#b8b8b8 0 4px,transparent 4px 6px) left top/100% 1px no-repeat,repeating-linear-gradient(to right,#b8b8b8 0 4px,transparent 4px 6px) left bottom/100% 1px no-repeat}}
-.sbar .tk.l{{left:-10px}} .sbar .tk.r{{right:-11px}}
-/* the page name glides in between the ticks each time the boundary comes into view */
-.sbar .st{{display:inline-block}}
-.sbar.in .st{{animation:stin 1.1s cubic-bezier(.2,.7,.2,1) both}}
-@keyframes stin{{0%{{opacity:0;transform:translateX(-36px);letter-spacing:.35em}}60%{{opacity:1}}100%{{opacity:1;transform:none;letter-spacing:0}}}}
-@media (prefers-reduced-motion:reduce){{.sbar.in .st{{animation:none}}}}
+.sbar{{position:relative;height:30px;margin:15px 10px 15px}}
+/* page boundary (21 Oct): the desktop's double edge ticks, pointing inwards from both guide lines, each running on as a dotted line right across;
+   the two lines are the old title bar's height apart */
+.sbar::before,.sbar::after{{content:"";position:absolute;left:-10px;right:-11px;height:1px;
+  background:repeating-linear-gradient(to right,#b8b8b8 0 4px,transparent 4px 6px) left top/18px 1px no-repeat,
+    repeating-linear-gradient(to right,#b8b8b8 0 4px,transparent 4px 6px) right top/18px 1px no-repeat,
+    repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) 18px top/calc(100% - 36px) 1px no-repeat}}
+.sbar::before{{top:0}} .sbar::after{{bottom:0}}
+/* the page name in yellow-lime: it stays at the top of the screen while you are in that page, and the next page's name pushes it up;
+   each time a new name reaches the top it flips in */
+.stk{{position:sticky;top:calc(var(--head) + var(--bar));z-index:5;display:flex;align-items:center;justify-content:center;height:30px;margin:0 10px;
+  background:#eaffae;color:rgba(0,0,0,.78);outline:1px dashed #fff;outline-offset:-1px;font-size:12.5px;white-space:nowrap;perspective:300px}}
+.stk b{{font-weight:700}} .stk small{{font-size:8.5px;margin-left:4px}}
+.stk .st{{display:inline-block;transform-origin:50% 50%}}
+.stk.flip .st{{animation:stflip .55s cubic-bezier(.3,.7,.3,1)}}
+@keyframes stflip{{0%{{transform:rotateX(-90deg);opacity:0}}100%{{transform:none;opacity:1}}}}
+@media (prefers-reduced-motion:reduce){{.stk.flip .st{{animation:none}}}}
 /* start page: the upright beetle with the five circles beside it */
 #start{{display:block;overflow:clip}}
 html,body{{overflow-x:clip}}
@@ -563,9 +569,11 @@ dialog .top{{flex:none}}
   addEventListener('resize',()=>cuts.forEach(g=>setCut(g,!g.classList.contains('shut'))));
   document.querySelectorAll('.more').forEach(b=>b.addEventListener('click',()=>{{ const g=document.getElementById(b.dataset.g), op=g.classList.contains('shut');
     setCut(g,op); if(!op) g.scrollIntoView({{behavior:'smooth',block:'start'}}); }}));
-  /* page names glide in between their ticks each time they come into view */
-  const stio=new IntersectionObserver(es=>es.forEach(e=>{{ if(e.isIntersecting){{ e.target.classList.remove('in'); void e.target.offsetWidth; e.target.classList.add('in'); }} }}),{{threshold:1}});
-  document.querySelectorAll('.sbar').forEach(b=>stio.observe(b));
+  const stks=[...document.querySelectorAll('.stk')]; let stuck=null;
+  const stkUpd=()=>{{ const t=(parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop)||0)+1; let now=null;
+    stks.forEach(k=>{{ const r=k.getBoundingClientRect(), sec=k.parentElement.getBoundingClientRect(); if(r.top<=t&&sec.bottom>r.bottom+2) now=k; }});
+    if(now!==stuck){{ stuck=now; if(now){{ now.classList.remove('flip'); void now.offsetWidth; now.classList.add('flip'); }} }} }};
+  addEventListener('scroll',stkUpd,{{passive:true}}); stkUpd();
   /* logo switch */
   const B=document.body;
   const setLogo=m=>{{ B.classList.toggle('side',m!=='top'); B.classList.toggle('rail',m==='rail'); try{{ localStorage.setItem('ddlogo2',m); }}catch(e){{}}

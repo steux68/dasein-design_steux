@@ -160,7 +160,7 @@ def partner(p):
     cv = ''.join(f'<h4>{h}</h4><ul>' + ''.join(f'<li>{x}</li>' for x in xs) + '</ul>' for h, xs in secs)
     tel = p['tel'].replace(' ', '').replace('(0)', '')
     return (f'<article class="who"><p class="role">» {p["role"]}</p><h3>{p["first"]} <b>{p["last"]}</b> <span class="q">{p["q"]}</span></h3>'
-            f'<img class="idc" src="../img/{p["idimg"]}" alt="{p["idalt"]} (Nummer, Geburtsdatum und Unterschrift unkenntlich)" loading="lazy">'
+            f'<span class="idw"><img class="idc" src="../img/{p["idimg"]}" alt="{p["idalt"]} (Nummer, Geburtsdatum und Unterschrift unkenntlich)" loading="lazy"></span>'
             f'<p class="kt"><a href="tel:{tel}">{p["tel"]}</a><i class="sep"></i><a href="mailto:{p["mail"]}">{p["mail"]}</a></p>'
             + f'<details><summary><svg class="cvx" viewBox="-12 -12 24 24" aria-hidden="true"><circle class="r1" r="8"/><circle class="r2" r="8"/>'
             f'<circle class="c" r="8"/><path class="v" d="M0 -4.2V4.2"/><path d="M-4.2 0H4.2"/></svg><span class="cvt">full</span><b>CV</b></summary>{cv}</details></article>')
@@ -181,7 +181,7 @@ HTML = f'''<!doctype html>
 <link rel="stylesheet" href="../fonts.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
-:root{{--bar:30px;--red:#e30613;--lime:rgba(205,255,62,.86);--green:#a5e35a;--grey:#ebebeb;--line:#c4c4c4;--dot:#b8b8b8;--hp:1px;--head:118px;--side:0px;--ttl:44px}}
+:root{{--dh:repeating-linear-gradient(to right,var(--dot) 0 1px,transparent 1px 3px);--dv:repeating-linear-gradient(to bottom,var(--dot) 0 1px,transparent 1px 3px);--bar:30px;--red:#e30613;--lime:rgba(205,255,62,.86);--green:#a5e35a;--grey:#ebebeb;--line:#c4c4c4;--dot:#b8b8b8;--hp:1px;--head:118px;--side:0px;--ttl:44px}}
 /* logo on the side: a narrow strip down the left with the mark and the name, the header only holds the tabs */
 .side{{--side:42px}}
 .sidebar{{display:none}}
@@ -296,15 +296,16 @@ html,body{{overflow-x:clip}}
 /* us & contact */
 .lab{{margin:6px 0 4px;font-size:11px;letter-spacing:.12em;color:var(--red)}}
 .firm{{margin:0 0 6px;font-size:16px}} .firm span{{font-size:13px;color:#666}}
-.who{{margin:10px 0 0;padding:10px;border:1px dotted var(--dot)}}
+.who{{margin:10px 0 0;padding:10px;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat}}
 .who + .who{{margin-top:8px}}
 .who .role{{margin:0;font-size:12px;color:#666}}
 .who h3{{margin:2px 0 0;font-weight:400;font-size:16px;line-height:1.2;color:var(--red)}} .who h3 b{{font-weight:700}}
 .who .q{{font-size:13px;font-weight:400;color:#555;margin-left:4px;white-space:nowrap}}
 /* ID card under the name, to identify the partner (number, birth date and signature blurred) */
-.who .idc{{display:block;width:78%;max-width:300px;height:auto;margin:8px 0 2px;border-radius:9px;outline:1px dotted var(--dot);outline-offset:2px}}
+.who .idw{{display:block;position:relative;width:78%;max-width:300px;margin:8px 0 2px;padding:3px;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat}}
+.who .idc{{display:block;width:100%;height:auto;border-radius:9px}}
 .who .kt{{display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px;margin:8px 0 0;font-size:min(13.5px,3.42vw);line-height:1.5;white-space:nowrap}}
-.who .sep{{display:block;width:2.5px;height:1.15em;background:#3a3c37}} .who .kt a{{text-decoration:none;border-bottom:1px dotted var(--dot)}}
+.who .sep{{display:block;width:2.5px;height:1.15em;background:#3a3c37}} .who .kt a{{text-decoration:none;padding-bottom:1px;background:var(--dh) left bottom/100% 1px no-repeat}}
 .who .ex{{margin:6px 0 0;font-size:12.5px;color:#555}}
 details{{margin:8px 0 0}}
 /* "CV (+) full CV": a red cross in a circle that sends out pulsing yellow-lime rings; open, it becomes a minus and reads "close" */
@@ -322,7 +323,7 @@ details[open] .cvt{{font-size:0}} details[open] .cvt::after{{content:"close";fon
 details h4{{margin:12px 0 2px;font-size:13px;color:var(--red);font-weight:700}}
 details ul{{margin:0;padding:0 0 0 14px;font-size:13px;line-height:1.4;color:#222}} details li{{margin:2px 0}}
 .addr{{margin:0;font-size:15px;line-height:1.45}}
-p.lab:not(.first){{margin-top:22px;padding-top:12px;border-top:1px dotted var(--dot)}}
+p.lab:not(.first){{margin-top:22px;padding-top:12px;background:var(--dh) left top/100% 1px no-repeat}}
 .mapw{{position:relative;z-index:0;isolation:isolate;margin:10px 0 0}}
 .map{{height:56svh;min-height:300px;background:#eee}}
 .mz{{position:absolute;right:9px;top:9px;z-index:500;display:flex;flex-direction:column;gap:5px}}
@@ -353,7 +354,8 @@ html.dlg{{overflow:hidden}}
 .x svg{{width:22px;height:22px;stroke:#000;stroke-width:1.3}}
 .ar{{overflow:visible}} .ar .rg{{fill:none;stroke:#3a3c37;stroke-width:var(--hp)}} .ar .dt{{fill:#4d4f4a;stroke:#1a1a1a;stroke-width:var(--hp);stroke-linejoin:round}}
 .ar text{{fill:#3a3c37;font:700 6.4px Calibri,Carlito,sans-serif;text-anchor:middle;dominant-baseline:central}} .ar .tr{{display:none}}
-.photos{{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;background:#f6f6f6;border:1px dotted var(--dot)}}
+.photos{{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;background:#f6f6f6}}
+.phw::after{{content:"";position:absolute;inset:0;pointer-events:none;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat}}
 .photos::-webkit-scrollbar{{display:none}}
 .photos img{{flex:none;width:100%;height:44svh;object-fit:contain;scroll-snap-align:center}}
 /* the pop-ups fill exactly one screen; nothing scrolls up and down */
@@ -371,9 +373,9 @@ dialog .top{{flex:none}}
 .txt::after{{content:"";position:absolute;left:0;right:0;bottom:0;height:14px;background:linear-gradient(rgba(255,255,255,0),rgba(255,255,255,.96))}}
 .txt h2{{margin:4px 0 0;color:var(--red);font-size:18px;line-height:1.15}}
 .txt p{{margin:5px 0 0;font-size:13.5px;line-height:1.36;color:#222}}
-.txt dl{{margin:8px 0 0;padding-top:6px;border-top:1px dotted var(--dot);display:grid;grid-template-columns:auto 1fr auto 1fr;gap:2px 8px;font-size:12px;line-height:1.3}}
+.txt dl{{margin:8px 0 0;padding-top:6px;background:var(--dh) left top/100% 1px no-repeat;display:grid;grid-template-columns:auto 1fr auto 1fr;gap:2px 8px;font-size:12px;line-height:1.3}}
 .txt dt{{color:#888}} .txt dd{{margin:0}}
-.nav2{{flex:none;display:flex;justify-content:space-between;margin:0 10px;padding:4px 0 calc(env(safe-area-inset-bottom,0px) + 8px);border-top:1px dotted var(--dot)}}
+.nav2{{flex:none;display:flex;justify-content:space-between;margin:0 10px;padding:4px 0 calc(env(safe-area-inset-bottom,0px) + 8px);background:var(--dh) left top/100% 1px no-repeat}}
 .nav2 button{{display:flex;align-items:center;gap:6px;border:0;background:none;font:400 12px Calibri,Carlito,sans-serif;letter-spacing:.06em;color:#666;padding:6px 0}}
 .note{{margin-left:auto;padding-left:8px;align-self:flex-start;text-align:right;font-size:10px;line-height:1.35;color:#888;letter-spacing:.03em}}
 .note a{{color:var(--red)}}
@@ -382,7 +384,8 @@ dialog .top{{flex:none}}
 /* downloads & links */
 .intro{{margin:0 0 8px;font-size:14px;line-height:1.45;color:#333}}
 .pdfs{{list-style:none;margin:10px 0 0;padding:0}}
-.pdfs li{{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px dotted var(--dot)}}
+.pdfs li{{display:flex;align-items:center;gap:10px;padding:7px 0;background:var(--dh) left bottom/100% 1px no-repeat}}
+.pdfs li:last-child{{background:none}}
 .pdfs img{{width:26px;height:auto}}
 .pdfs span{{font-size:15px}} .pdfs small{{display:block;font-size:11px;color:#999;letter-spacing:.04em}}
 .links{{display:grid;grid-template-columns:1fr 1fr;gap:14px 10px;margin-top:12px}}
@@ -426,7 +429,7 @@ dialog .top{{flex:none}}
 <div class="bar btop"><button type="button" id="goN" aria-label="previous page">{ARN}</button></div>
 <div class="bar bbot"><button type="button" id="goS" aria-label="next page">{ARS}</button></div>
 <dialog id="lb" aria-labelledby="lt">
-<div class="top"><div class="cnt"><button type="button" id="pp" aria-label="previous project">{ARW}</button><span id="lk"></span><button type="button" id="np" aria-label="next project">{ARE}</button></div>
+<div class="top"><div class="cnt"><span id="lk"></span></div>
 <button type="button" class="x" id="lx" aria-label="close"><svg viewBox="0 0 16 16" fill="none"><path d="M2 2L14 14M14 2L2 14"/></svg></button></div>
 <div class="phw"><div class="photos" id="ph"></div><button type="button" class="pw" id="phw" aria-label="previous photo">{ARW2}</button><button type="button" class="pe" id="phe" aria-label="next photo">{ARE2}</button></div><div class="dots" id="dots"></div>
 <div class="txt"><h2 id="lt"></h2><div id="tx"></div><dl id="dl"></dl></div>
@@ -543,7 +546,7 @@ dialog .top{{flex:none}}
   addEventListener('scroll',barUpd,{{passive:true}}); addEventListener('resize',barUpd); barUpd();
   document.querySelectorAll('.tile[data-p]').forEach(t=>t.addEventListener('click',()=>{{ show(+t.dataset.p); openDlg(lb); }}));
   $('lx').onclick=()=>lb.close();
-  $('pp').onclick=$('pp2').onclick=()=>show(pi-1); $('np').onclick=$('np2').onclick=()=>show(pi+1);
+  $('pp2').onclick=()=>show(pi-1); $('np2').onclick=()=>show(pi+1);
 }})();
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>

@@ -12,6 +12,7 @@ import os
 import random
 from PIL import Image
 import lightbox as LB
+import search as SEARCH
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.join(HERE, '..')
@@ -53,12 +54,12 @@ PIECES = ''.join(
     f'background-size:{BW / w * 100:.2f}% {BH / h * 100:.2f}%;background-position:{(x / (BW - w) * 100) if BW != w else 0:.3f}% {(y / (BH - h) * 100) if BH != h else 0:.3f}%"></i>'
     for x, y, w, h in pieces)
 
-# ---------- the five sections, as on the desktop ----------
-TABS = [('services', 'us & our services', '01'), ('projects', 'projects', '02'), ('downloads', 'downloads & links', '03'),
-        ('bits', 'bits & bats', '04'), ('contact', 'contact', '05')]
+# ---------- four sections: "us & our services" and "contact" are one page on the phone (trial, 21 Oct) ----------
+TABS = [('us', 'us & contact', '01'), ('projects', 'projects', '02'), ('downloads', 'downloads & links', '03'),
+        ('bits', 'bits & bats', '04')]
 TABHTML = ''.join(f'<a class="tab" href="#{i}" data-pg="{i}"><span>{n}</span> <small>[{k}]</small></a>' for i, n, k in TABS)
 # circles beside the beetle: left and right, top to bottom
-PINS = ''.join(f'<a class="pin {"l" if k % 2 == 0 else "r"}" href="#{i}" style="top:{9 + k * 19}%"><b>{num}</b><span>{n}</span></a>'
+PINS = ''.join(f'<a class="pin {"l" if k % 2 == 0 else "r"}" href="#{i}" style="top:{10 + k * 23}%"><b>{num}</b><span>{n}</span></a>'
                for k, (i, n, num) in enumerate(TABS))
 
 P = [{'t': p['t'], 'x': p['x'], 'd': p['d'], 'imgs': ['../' + s for s in p['imgs']]} for p in LB.PROJECTS]
@@ -75,6 +76,51 @@ def placeholder(i, name, num):
             f'<a href="../#{i}">Open this page on the full site</a></p></div></section>')
 
 
+# ---------- us & contact: the partnership, the two partners (CV folds open), the office with the map ----------
+PARTNERS = [
+    dict(role='Architect', first='Steuart', last='J Mackenzie HARRISON', q='BArch MArch ARB', tel='+43 (0)699 1941 9240', mail='steuart@dasein-design.net',
+         extra='Sprachen: Englisch [Muttersprache] &amp; Deutsch [B2]',
+         cv=[('Professional', ['2019 ZT: Arch+Ing, Bundeskammer der ZiviltechnikerInnen, Österreich [EU]',
+                               '2004 ARB: Architects Registration Board of the United Kingdom [UK]',
+                               '2004 RIAS: Royal Incorporation of Architects in Scotland [SCO]']),
+             ('Academic', ['Mackintosh School of Architecture, Glasgow School of Art &amp; Glasgow University',
+                           '1994 Master of Architecture [M. Arch]', '1993 Diploma of Architecture [Dip. Arch]',
+                           '1992 RIBA Part II · 1989 RIBA Part I', '1989 Bachelor of Architecture [B. Arch]']),
+             ('Akademische Tätigkeit', ['Mär.’02 – Aug.’17 » TU Wien, Institut für Architektur &amp; Entwerfen [E253/1]: Universitätslektor, Studio &amp; MA/BA Tutor',
+                                        'Sep.’06 – Aug.’12 &amp; Mar.’14 – Sep.’14 » New Design University, St. Pölten: co-Leiter, Major Project Tutor, Leiter des Internationalen Büros',
+                                        'Gastkritiker: Universität Belgrad (Jul.’09), Ryerson University, Toronto (Dez.’08)',
+                                        'Berater: NDU St. Pölten – Curricula / Akkreditierung (2003–04, Jun.’19)']),
+             ('Berufliche Tätigkeiten', ['1989 – 2005 Mitarbeit in diversen Architekturbüros in Wien, London &amp; Glasgow, darunter Atelier Ernst Hoffmann, Büro Geiswinkler, Atelier Artec, Büro Hagmüller, Tim Bushe Associates, E.C. Riach Architects'])]),
+    dict(role='Architekt', first='Cuong', last='TRAN-VIET', q='BArch DipArch', tel='+43 (0)676 4822 464', mail='cuong@dasein-design.net', extra='',
+         cv=[('Professional', ['2010 ZT: Arch+Ing, Bundeskammer der ZiviltechnikerInnen, Österreich [EU]',
+                               '2005 ARB: Architects Registration Board of the United Kingdom [UK]']),
+             ('Academic', ['Sep.’00 – Jun.’02 » Bartlett School of Architecture, UCL, London – Dip. Arch',
+                           '2002 RIBA Part II · 1998 RIBA Part I',
+                           'Okt.’96 – Jun.’98 » Mackintosh School of Architecture, Glasgow – B. Arch',
+                           'Okt.’90 – Dez.’95 » Technische Universität Wien, Fakultät Architektur']),
+             ('Berufliche Tätigkeiten', ['Jan.’21 – Mai.’21 » Franz und Sue Architekten, Wien',
+                                         'Sep.’19 – Mai.’20 » BWM Architekten, Wien',
+                                         'Mar.’10 – Aug.’19 » BEHF Architects, Wien',
+                                         'Jun.’99 – Feb.’10 » Aedas, Ian Simpson, David Morley, Arthur Collin &amp; Gregory Phillips, London'])])]
+
+
+def partner(p):
+    cv = ''.join(f'<h4>{h}</h4><ul>' + ''.join(f'<li>{x}</li>' for x in xs) + '</ul>' for h, xs in p['cv'])
+    tel = p['tel'].replace(' ', '').replace('(0)', '')
+    return (f'<article class="who"><p class="role">» {p["role"]}</p><h3>{p["first"]} <b>{p["last"]}</b></h3><p class="q">{p["q"]}</p>'
+            f'<p class="kt"><a href="tel:{tel}">{p["tel"]}</a><br><a href="mailto:{p["mail"]}">{p["mail"]}</a></p>'
+            + (f'<p class="ex">{p["extra"]}</p>' if p['extra'] else '')
+            + f'<details><summary>CV</summary>{cv}</details></article>')
+
+
+US = ('<section class="pg" id="us"><div class="vt"><span><b>us <em>&amp;</em> contact</b> <i>[01]</i></span></div><div class="body">'
+      '<p class="lab">PARTNERSHIP</p><p class="firm"><b>dasein-design</b> [architecture+design] [Wien]<br><span>» Jan.’03 – bis dato</span></p>'
+      + ''.join(partner(p) for p in PARTNERS)
+      + '<p class="lab">OFFICE</p><p class="addr"><b>dasein-design</b><br>Neulerchenfelderstrasse 42/6<br>A-1160 Wien · Austria · EU</p>'
+      '<div class="mapw"><div class="map" id="map"></div><div class="mz"><button type="button" id="zin" aria-label="zoom in">' + SEARCH.ZOOM_IN + '</button><button type="button" id="zout" aria-label="zoom out">' + SEARCH.ZOOM_OUT + '</button><button type="button" id="zhome" aria-label="back to the start view">' + SEARCH.ZOOM_HOME + '</button></div></div>'
+      '<p class="mapl"><a href="https://www.openstreetmap.org/?mlat=48.211431&amp;mlon=16.333964#map=18/48.211431/16.333964">open the map</a></p>'
+      '</div></section>')
+
 HTML = f'''<!doctype html>
 <html lang="de">
 <head>
@@ -82,6 +128,7 @@ HTML = f'''<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>dasein-design · phone preview</title>
 <link rel="stylesheet" href="../fonts.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
 :root{{--red:#e30613;--lime:rgba(205,255,62,.86);--green:#a5e35a;--grey:#ebebeb;--line:#c4c4c4;--dot:#b8b8b8;--hp:1px;--head:118px}}
 *{{box-sizing:border-box}}
@@ -97,10 +144,9 @@ header{{position:fixed;left:0;right:0;top:0;z-index:20;background:#fff;padding:c
 .logo img{{width:30px;height:30px}}
 .logo span{{font-size:27px;line-height:1;letter-spacing:-.01em}}
 .logo b{{font-weight:700}}
-nav{{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin-top:8px}}
-.tab{{grid-column:span 2;display:flex;align-items:center;justify-content:center;gap:3px;height:28px;padding:0 4px;background:var(--grey);text-decoration:none;
+nav{{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px}}
+.tab{{display:flex;align-items:center;justify-content:center;gap:3px;height:28px;padding:0 4px;background:var(--grey);text-decoration:none;
   font-size:13.5px;white-space:nowrap;outline:1px dashed #fff;outline-offset:-1px;-webkit-tap-highlight-color:transparent;transition:background .15s}}
-.tab:nth-child(4){{grid-column:2 / span 2}}
 .tab small{{font-size:9px}}
 .tab:active{{background:var(--green)}}
 .tab.cur{{background:var(--lime);font-weight:700}}
@@ -139,7 +185,44 @@ html,body{{overflow-x:clip}}
 .cap{{position:absolute;left:0;right:0;bottom:0;padding:4px 6px 5px;background:rgba(68,68,68,.7);color:#fff;text-align:left;line-height:1.15}}
 .cap b{{display:block;font-size:11.5px}} .cap small{{font-size:10px}}
 .tile:active{{outline:1px solid var(--red);outline-offset:-1px}}
-.soon{{margin:20px 4px;color:#555}} .soon a{{color:var(--red)}}
+.soon{{margin:20px 4px;color:#555}}
+/* us & contact */
+.lab{{margin:6px 0 4px;font-size:11px;letter-spacing:.12em;color:var(--red)}}
+.firm{{margin:0 0 6px;font-size:16px}} .firm span{{font-size:13px;color:#666}}
+.who{{margin:14px 0 0;padding:12px 0 0;border-top:1px dotted var(--dot)}}
+.who .role{{margin:0;font-size:12px;color:#666}}
+.who h3{{margin:2px 0 0;font-weight:400;font-size:21px;line-height:1.15;color:var(--red)}} .who h3 b{{font-weight:700}}
+.who .q{{margin:2px 0 0;font-size:13px;color:#444}}
+.who .kt{{margin:8px 0 0;font-size:15px;line-height:1.5}} .who .kt a{{text-decoration:none;border-bottom:1px dotted var(--dot)}}
+.who .ex{{margin:6px 0 0;font-size:12.5px;color:#555}}
+details{{margin:8px 0 0}}
+summary{{display:inline-flex;align-items:center;gap:6px;cursor:pointer;list-style:none;font-size:13px;letter-spacing:.06em;padding:5px 12px;background:var(--grey);outline:1px dashed #fff;outline-offset:-1px}}
+summary::-webkit-details-marker{{display:none}}
+summary::after{{content:"+";color:var(--red)}} details[open] summary::after{{content:"–"}}
+details[open] summary{{background:var(--lime)}}
+details h4{{margin:12px 0 2px;font-size:13px;color:var(--red);font-weight:700}}
+details ul{{margin:0;padding:0 0 0 14px;font-size:13px;line-height:1.4;color:#222}} details li{{margin:2px 0}}
+.addr{{margin:0;font-size:15px;line-height:1.45}}
+p.lab:not(:first-child){{margin-top:22px;padding-top:12px;border-top:1px dotted var(--dot)}}
+.mapw{{position:relative;margin:10px 0 0}}
+.map{{height:56svh;min-height:300px;background:#eee}}
+.mz{{position:absolute;right:9px;top:9px;z-index:500;display:flex;flex-direction:column;gap:5px}}
+.mz button{{width:36px;height:36px;border:0;border-radius:50%;background:none;padding:0;-webkit-tap-highlight-color:transparent}}
+.mz #zhome{{margin-top:9px}}
+.mz svg{{display:block;width:100%;height:100%;overflow:visible}}
+.mz circle{{fill:rgba(255,255,255,.9);stroke:#e30613;stroke-width:2}}
+.mz path{{fill:none;stroke:#e30613;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}}
+.mz button:active circle{{fill:var(--green)}}
+.mapl{{margin:6px 0 0;font-size:12px}} .mapl a{{color:var(--red)}}
+.pinH{{position:relative;width:34px;height:44px;font-size:12px}}
+.pinsvg{{display:block;width:100%;height:100%;overflow:visible}}
+.pinsvg .pb{{fill:#3a3c37}} .pinsvg .pw{{fill:#fff}}
+.pinsvg .pr{{fill:none;stroke:#3a3c37;stroke-width:1;vector-effect:non-scaling-stroke}}
+.pinsvg .pa{{fill:#4d4f4a;stroke:#1a1a1a;stroke-width:1;vector-effect:non-scaling-stroke;stroke-linejoin:round}}
+.pinsvg text{{fill:#3a3c37;font:700 6.4px Calibri,Carlito,sans-serif;text-anchor:middle;dominant-baseline:central}}
+.plab{{position:absolute;left:calc(100% + .35em);bottom:62%;white-space:nowrap;background:rgba(255,255,255,.92);color:#000;font:400 12px/1.25 Calibri,Carlito,sans-serif;padding:.3em .55em}}
+.plab b{{font-weight:700}}
+.leaflet-container{{font-family:Calibri,Carlito,sans-serif}} .leaflet-control-attribution{{font-size:10px!important}} .soon a{{color:var(--red)}}
 /* project pop-up: full screen, swipe through the photos */
 dialog{{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;background:rgba(255,255,255,.96);overflow-y:auto;color:#000}}
 dialog::backdrop{{background:rgba(255,255,255,.4);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}}
@@ -175,11 +258,10 @@ dialog::backdrop{{background:rgba(255,255,255,.4);-webkit-backdrop-filter:blur(4
 <main>
 <section class="pg" id="start"><div class="stage"><div class="beetle" id="beetle"><div class="whole"></div>{PIECES}</div>{PINS}</div>
 <p class="hint">tap a number or the menu</p></section>
+{US}
 <section class="pg" id="projects"><div class="vt"><span><b>projects</b> <i>[02]</i></span></div><div class="body"><div class="grid">{TILES}</div></div></section>
-{placeholder("services", "us & our services", "01")}
 {placeholder("downloads", "downloads & links", "03")}
 {placeholder("bits", "bits & bats", "04")}
-{placeholder("contact", "contact", "05")}
 </main>
 <dialog id="lb" aria-labelledby="lt">
 <div class="top"><div class="cnt"><button type="button" id="pp" aria-label="previous project">{ARW}</button><span id="lk"></span><button type="button" id="np" aria-label="next project">{ARE}</button></div>
@@ -238,6 +320,19 @@ dialog::backdrop{{background:rgba(255,255,255,.4);-webkit-backdrop-filter:blur(4
   $('lx').onclick=()=>lb.close();
   $('pp').onclick=$('pp2').onclick=()=>show(pi-1); $('np').onclick=$('np2').onclick=()=>show(pi+1);
 }})();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
+<script>
+/* live map with the H pin; loaded last so it can never stop the page */
+addEventListener('load',()=>{{ try{{
+  const HOME=[48.211431,16.333964], el=document.getElementById('map');
+  const map=L.map(el,{{zoomControl:false,scrollWheelZoom:false,dragging:!L.Browser.mobile,tap:false,attributionControl:true}});
+  const home=a=>{{ map.setView(HOME,17,{{animate:false}}); map.panBy([Math.min(110,el.clientWidth*.28),-30],{{animate:false}}); }}; home();   /* pin left of centre so its address label fits */
+  document.getElementById('zin').onclick=()=>map.zoomIn(); document.getElementById('zout').onclick=()=>map.zoomOut(); document.getElementById('zhome').onclick=()=>home();
+  L.tileLayer('https://tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png',{{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}}).addTo(map);
+  map.attributionControl.setPrefix(false);
+  L.marker(HOME,{{icon:L.divIcon({{className:'',iconSize:[34,44],iconAnchor:[17,44],html:'<div class="pinH"><svg class="pinsvg" viewBox="0 0 40 52" aria-hidden="true"><path class="pb" d="M20 51C14.5 40.5 2 31 2 19A18 18 0 0 1 38 19C38 31 25.5 40.5 20 51Z"/><circle class="pw" cx="20" cy="19" r="14.5"/><g transform="translate(20 19) scale(1.12)"><path class="pr" d="M-5.31 7.88A9.5 9.5 0 1 1 5.31 7.88"/><path class="pa" transform="rotate(90)" d="M5.4 0L-4.6 -4.9L-2.2 0L-4.6 4.9Z"/><text x="0" y="9.5">H</text></g></svg><div class="plab"><b>dasein-design</b><br>Neulerchenfelderstrasse 42/6<br>A-1160 Wien</div></div>'}})}}).addTo(map);
+}}catch(err){{ console.warn('map not available',err); }} }});
 </script>
 </body>
 </html>

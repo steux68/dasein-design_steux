@@ -156,13 +156,14 @@ PARTNERS = [
 
 
 def partner(p):
-    cv = ''.join(f'<h4>{h}</h4><ul>' + ''.join(f'<li>{x}</li>' for x in xs) + '</ul>' for h, xs in p['cv'])
+    secs = p['cv'] + ([('Sprachen', [p['extra'].replace('Sprachen: ', '')])] if p['extra'] else [])
+    cv = ''.join(f'<h4>{h}</h4><ul>' + ''.join(f'<li>{x}</li>' for x in xs) + '</ul>' for h, xs in secs)
     tel = p['tel'].replace(' ', '').replace('(0)', '')
-    return (f'<article class="who"><p class="role">» {p["role"]}</p><h3>{p["first"]} <b>{p["last"]}</b></h3><p class="q">{p["q"]}</p>'
+    return (f'<article class="who"><p class="role">» {p["role"]}</p><h3>{p["first"]} <b>{p["last"]}</b> <span class="q">{p["q"]}</span></h3>'
             f'<img class="idc" src="../img/{p["idimg"]}" alt="{p["idalt"]} (Nummer, Geburtsdatum und Unterschrift unkenntlich)" loading="lazy">'
             f'<p class="kt"><a href="tel:{tel}">{p["tel"]}</a><br><a href="mailto:{p["mail"]}">{p["mail"]}</a></p>'
-            + (f'<p class="ex">{p["extra"]}</p>' if p['extra'] else '')
-            + f'<details><summary>CV</summary>{cv}</details></article>')
+            + f'<details><summary><b>CV</b><svg class="cvx" viewBox="-12 -12 24 24" aria-hidden="true"><circle class="r1" r="8"/><circle class="r2" r="8"/>'
+            f'<circle class="c" r="8"/><path class="v" d="M0 -4.2V4.2"/><path d="M-4.2 0H4.2"/></svg><span class="cvt">full CV</span></summary>{cv}</details></article>')
 
 
 US = ('<p class="lab first">PARTNERSHIP</p><p class="firm"><b>dasein-design</b> [architecture+design] [Wien]<br><span>» Jan.’03 – bis dato</span></p>'
@@ -202,7 +203,6 @@ HTML = f'''<!doctype html>
 .side.rail .tab{{flex:1;min-height:0;height:auto;writing-mode:vertical-rl;transform:rotate(180deg);padding:3px 0;font-size:min(12.5px,1.75svh);gap:3px;overflow:hidden}}
 .side.rail .tab small{{font-size:8.5px}}
 .note2{{display:none}}
-.side.rail .stage{{height:calc(100svh - 2 * var(--bar) - 50px)}}
 .side.rail .row1 .note{{display:none}}
 .side.rail .note2{{display:block;text-align:center;margin:-6px 0 0;padding-bottom:8px}}
 .side header{{left:var(--side)}}
@@ -250,11 +250,19 @@ main{{padding-top:calc(var(--head) + var(--bar));padding-bottom:var(--bar)}}
 /* start page: the upright beetle with the five circles beside it */
 #start{{display:block;min-height:calc(100svh - var(--head) - 2 * var(--bar));overflow:clip}}
 html,body{{overflow-x:clip}}
-.stage{{position:relative;height:calc(100svh - var(--head) - 2 * var(--bar) - 30px);min-height:430px;margin:0 auto}}
+.stage{{position:relative;height:calc(100svh - var(--head) - 2 * var(--bar) - 6px);min-height:430px;margin:0 auto}}
 .beetle{{position:absolute;left:50%;top:10px;bottom:10px;aspect-ratio:{BW}/{BH};transform:translateX(-50%);max-width:52vw}}
 .beetle .whole{{position:absolute;inset:0;background:url(../img/m-bug-up.webp) center/100% 100% no-repeat}}
 .bp{{position:absolute;display:none;background-image:url(../img/m-bug-up.webp);background-repeat:no-repeat;will-change:transform}}
 .play .bp{{display:block}} .play .whole{{visibility:hidden}}
+/* round dd mark above the beetle's mouth: the red disc with the white circle of the logo, sending out yellow-lime rings; appears once the beetle has locked */
+.ddm{{position:absolute;left:50%;top:21.5%;width:30px;height:30px;margin:-15px 0 0 -15px;padding:0;border:0;background:none;z-index:3;transition:opacity .4s;-webkit-tap-highlight-color:transparent}}
+.play .ddm{{opacity:0}}
+.ddm svg{{width:100%;height:100%;overflow:visible;display:block}}
+.ddm .o{{fill:var(--red);stroke:#fff;stroke-width:1.4}} .ddm .i{{fill:#fff}}
+.ddm .p1,.ddm .p2{{fill:none;stroke:#cdff3e;stroke-width:2.6;transform-box:fill-box;transform-origin:center;animation:cvp 2s ease-out infinite}}
+.ddm .p2{{animation-delay:1s}}
+@media (prefers-reduced-motion:reduce){{.ddm .p1,.ddm .p2{{display:none}}}}
 .pin{{position:absolute;display:flex;flex-direction:column;align-items:center;gap:3px;width:25vw;max-width:110px;text-decoration:none;text-align:center;-webkit-tap-highlight-color:transparent}}
 .pin.l{{left:6px}} .pin.r{{right:6px}}
 .pin b{{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:#bfbfbf;font-weight:400;font-size:13.5px;
@@ -284,16 +292,24 @@ html,body{{overflow-x:clip}}
 .who{{margin:14px 0 0;padding:12px 0 0;border-top:1px dotted var(--dot)}}
 .who .role{{margin:0;font-size:12px;color:#666}}
 .who h3{{margin:2px 0 0;font-weight:400;font-size:16px;line-height:1.2;color:var(--red)}} .who h3 b{{font-weight:700}}
-.who .q{{margin:2px 0 0;font-size:13px;color:#444}}
+.who .q{{font-size:13px;font-weight:400;color:#555;margin-left:4px;white-space:nowrap}}
 /* ID card under the name, to identify the partner (number, birth date and signature blurred) */
 .who .idc{{display:block;width:78%;max-width:300px;height:auto;margin:8px 0 2px;border-radius:9px;outline:1px dotted var(--dot);outline-offset:2px}}
 .who .kt{{margin:8px 0 0;font-size:15px;line-height:1.5}} .who .kt a{{text-decoration:none;border-bottom:1px dotted var(--dot)}}
 .who .ex{{margin:6px 0 0;font-size:12.5px;color:#555}}
 details{{margin:8px 0 0}}
-summary{{display:inline-flex;align-items:center;gap:6px;cursor:pointer;list-style:none;font-size:13px;letter-spacing:.06em;padding:5px 12px;background:var(--grey);outline:1px dashed #fff;outline-offset:-1px}}
+/* "CV (+) full CV": a red cross in a circle that sends out pulsing yellow-lime rings; open, it becomes a minus and reads "close" */
+summary{{display:inline-flex;align-items:center;gap:7px;cursor:pointer;list-style:none;font-size:14px;letter-spacing:.04em;padding:4px 0;-webkit-tap-highlight-color:transparent}}
 summary::-webkit-details-marker{{display:none}}
-summary::after{{content:"+";color:var(--red)}} details[open] summary::after{{content:"–"}}
-details[open] summary{{background:var(--lime)}}
+summary b{{color:var(--red)}} .cvt{{color:#555;font-size:13px}}
+.cvx{{width:24px;height:24px;overflow:visible}}
+.cvx .c{{fill:#fff;stroke:var(--red);stroke-width:1.5}} .cvx path{{stroke:var(--red);stroke-width:1.6;stroke-linecap:round}}
+.cvx .r1,.cvx .r2{{fill:none;stroke:#cdff3e;stroke-width:2.2;transform-box:fill-box;transform-origin:center;animation:cvp 1.8s ease-out infinite}}
+.cvx .r2{{animation-delay:.9s}}
+@keyframes cvp{{0%{{transform:scale(1);opacity:.95}}100%{{transform:scale(1.9);opacity:0}}}}
+details[open] .cvx .v{{display:none}} details[open] .cvx .r1,details[open] .cvx .r2{{display:none}}
+details[open] .cvt{{font-size:0}} details[open] .cvt::after{{content:"close";font-size:13px}}
+@media (prefers-reduced-motion:reduce){{.cvx .r1,.cvx .r2{{display:none}}}}
 details h4{{margin:12px 0 2px;font-size:13px;color:var(--red);font-weight:700}}
 details ul{{margin:0;padding:0 0 0 14px;font-size:13px;line-height:1.4;color:#222}} details li{{margin:2px 0}}
 .addr{{margin:0;font-size:15px;line-height:1.45}}
@@ -391,8 +407,8 @@ dialog .top{{flex:none}}
 <nav>{TABHTML}</nav>
 </header>
 <main>
-<section class="pg" id="start"><div class="stage"><div class="beetle" id="beetle"><div class="whole"></div>{PIECES}</div><svg class="leads" id="leads" aria-hidden="true"></svg>{PINS}</div>
-<p class="hint">tap a number or the menu</p><span class="note note2">preview · <button type="button" data-logo="rail">all side</button>/<button type="button" data-logo="side">logo side</button>/<button type="button" data-logo="top">top</button> · <a href="../">full site</a></span></section>
+<section class="pg" id="start"><div class="stage"><div class="beetle" id="beetle"><div class="whole"></div>{PIECES}<button type="button" class="ddm" id="ddm" aria-label="dasein-design"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="p1" r="11"/><circle class="p2" r="11"/><circle class="o" r="11"/><circle class="i" cx="3.4" cy="-3.4" r="4.4"/></svg></button></div><svg class="leads" id="leads" aria-hidden="true"></svg>{PINS}</div>
+</section>
 {section("us", "us & contact", "01", US)}
 {section("projects", "projects", "02", '<div class="grid">' + TILES + '</div>')}
 {section("downloads", "downloads & links", "03", DOWNLOADS)}
@@ -478,6 +494,7 @@ dialog .top{{flex:none}}
     Promise.all(anims.map(a=>a.finished)).then(()=>{{ if(me===run) bug.classList.remove('play'); }}).catch(()=>{{}});
   }}
   play();
+  document.getElementById('ddm').addEventListener('click',play);   /* a tap on the mark plays the collage again */
   let away=false; new IntersectionObserver(es=>es.forEach(e=>{{ if(!e.isIntersecting) away=true; else if(away){{ away=false; play(); }} }}),{{threshold:.6}}).observe(document.getElementById('start'));
   /* project pop-up */
   const P={json.dumps(P)}, F={json.dumps(FIELDS)};

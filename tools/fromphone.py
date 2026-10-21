@@ -12,6 +12,7 @@ build.py also calls patch() before writing, so a full rebuild keeps them.
 - link logos trimmed to their edges (img/m-lg-*), with a small margin in their boxes
 - the two long CVs fold to just over half the page, with a "full CV" opener
 - IT, PROJEKTE and SKILLS icons drawn in the compass style (img/ic-*.svg)
+- one job per line: no white dashed edges on the tabs, no --- text dividers, no e-mail underlines
 - three quick clicks on the beetle: the red heart, as on the phone
 - menu: the first tab reads "about us [01]" (half tabs were tried and dropped)
 """
@@ -115,6 +116,10 @@ a[href^="tel:"]{color:#1e8e3e;text-decoration:none} a[href^="mailto:"]{color:#1a
 @media (prefers-reduced-motion:reduce){.dcv .r1,.dcv .r2{display:none} [data-node-id="1:622"],[data-node-id="1:623"]{transition:none}}
 /* the four service icons, drawn in the compass style, a touch smaller (90 %) */
 img[src^="img/ic-"]{transform:scale(.9)}
+/* one job per line (22 Oct, as on the phone): dashed = page structure, dotted = round pictures only.
+   No white dashed edge on the menu tabs, no underlines under e-mail addresses */
+.border-dashed.border-white{border-color:transparent!important}
+a[href^="mailto:"],a[href^="mailto:"] span{text-decoration:none!important}
 /* three clicks on the beetle: the heart */
 .heartfx{position:fixed;inset:0;z-index:9999;pointer-events:none;overflow:hidden}
 .heartfx svg{position:absolute;left:0;top:0;width:60px;height:60px;margin:-30px 0 0 -30px;fill:#e30613;will-change:transform,opacity}
@@ -246,6 +251,8 @@ def patch(s):
     # ---- service icons: drawn in the compass style (img/ic-*.svg) instead of the red Figma pictograms
     for old, new in (('services-imgWorkstation.webp', 'ic-it.svg'), ('services-imgExterior.webp', 'ic-projekte.svg'), ('services-imgBrainstormSkill.webp', 'ic-skills.svg'), ('services-imgGroups.svg', 'ic-partnership.svg')):
         s = _rep('src="img/' + old + '"', 'src="img/' + new + '"', s)
+    # ---- one job per line (22 Oct): the "---" text dividers become empty lines (spacing kept, no line)
+    s = s.replace('>---</p>', '>\u200b</p>')
     # ---- styles
     s = _rep('</style>', CSS + '</style>', s)
     return s.replace('</body>', HEART_JS + MARK + '</body>', 1)

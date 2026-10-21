@@ -215,7 +215,7 @@ header{{position:fixed;left:0;right:0;top:0;z-index:20;background:#fff;padding:c
   border-bottom:1px dashed var(--line)}}
 .row1{{display:flex;align-items:center}}
 .side .row1{{min-height:14px}}
-.logo{{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--red);height:34px}}
+.logo{{flex:none;white-space:nowrap;display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--red);height:34px}}
 .logo img{{width:30px;height:30px}}
 .logo span{{font-size:27px;line-height:1;letter-spacing:-.01em}}
 .logo b{{font-weight:700}}
@@ -310,8 +310,10 @@ p.lab:not(.first){{margin-top:22px;padding-top:12px;border-top:1px dotted var(--
 .plab b{{font-weight:700}}
 .leaflet-container{{font-family:Calibri,Carlito,sans-serif}} .leaflet-control-attribution{{font-size:10px!important}} .soon a{{color:var(--red)}}
 /* project pop-up: full screen, swipe through the photos */
-dialog{{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;background:rgba(255,255,255,.96);overflow-y:auto;color:#000}}
-dialog::backdrop{{background:rgba(255,255,255,.4);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}}
+/* pop-ups leave the side strip (and in the other versions the header) free, so the logo and the tabs stay in reach */
+dialog{{position:fixed;inset:var(--head) 0 0 var(--side);z-index:40;width:auto;height:auto;max-width:none;max-height:none;margin:0;padding:0;border:0;background:#fff;overflow-y:auto;color:#000;
+  box-shadow:-1px 0 0 var(--line)}}
+html.dlg{{overflow:hidden}}
 .top{{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top,0px) + 8px) 10px 8px;background:rgba(255,255,255,.94)}}
 .cnt{{display:flex;align-items:center;gap:6px;font-size:13px;color:#666;letter-spacing:.06em}}
 .cnt b{{color:var(--red);font-weight:400}}
@@ -341,7 +343,7 @@ dialog .top{{flex:none}}
 .txt dt{{color:#888}} .txt dd{{margin:0}}
 .nav2{{flex:none;display:flex;justify-content:space-between;padding:4px 14px calc(env(safe-area-inset-bottom,0px) + 8px);border-top:1px dotted var(--dot)}}
 .nav2 button{{display:flex;align-items:center;gap:6px;border:0;background:none;font:400 12px Calibri,Carlito,sans-serif;letter-spacing:.06em;color:#666;padding:6px 0}}
-.note{{margin-left:auto;align-self:flex-start;font-size:10.5px;color:#888;letter-spacing:.04em;white-space:nowrap}}
+.note{{margin-left:auto;padding-left:8px;align-self:flex-start;text-align:right;font-size:10px;line-height:1.35;color:#888;letter-spacing:.03em}}
 .note a{{color:var(--red)}}
 .note button{{border:0;background:none;padding:0 2px;font:inherit;color:#888;letter-spacing:inherit}}
 .note button[aria-pressed="true"]{{color:var(--red);text-decoration:underline}}
@@ -404,6 +406,12 @@ dialog .top{{flex:none}}
 </dialog>
 <script>
 (function(){{
+  /* pop-ups: opened without blocking the page, so the side strip stays usable; a tap on the logo or a tab closes them and goes there */
+  function openDlg(d){{ d.show(); document.documentElement.classList.add('dlg'); }}
+  function closeDlgs(){{ document.querySelectorAll('dialog[open]').forEach(d=>d.close()); document.documentElement.classList.remove('dlg'); }}
+  document.querySelectorAll('dialog').forEach(d=>d.addEventListener('close',()=>{{ if(!document.querySelector('dialog[open]')) document.documentElement.classList.remove('dlg'); }}));
+  document.querySelectorAll('.sidebar,.tab,.logo').forEach(a=>a.addEventListener('click',closeDlgs));
+  addEventListener('keydown',e=>{{ if(e.key==='Escape') closeDlgs(); }});
   /* logo switch */
   const B=document.body;
   const setLogo=m=>{{ B.classList.toggle('side',m!=='top'); B.classList.toggle('rail',m==='rail'); try{{ localStorage.setItem('ddlogo2',m); }}catch(e){{}}
@@ -432,7 +440,7 @@ dialog .top{{flex:none}}
   const ishow=()=>{{ const k=Math.round(iph.scrollLeft/iph.clientWidth); document.getElementById('ik').innerHTML='bits &amp; bats <b>'+tw(k+1)+'</b> / '+tw(BI.length);
     document.getElementById('icap').innerHTML=BC[k].replace(/&/g,'&amp;')+'<small>smaller text example</small>'; }};
   iph.addEventListener('scroll',ishow,{{passive:true}});
-  document.querySelectorAll('.bt').forEach(t=>t.addEventListener('click',()=>{{ iv.showModal(); iph.scrollLeft=+t.dataset.b*iph.clientWidth; ishow(); }}));
+  document.querySelectorAll('.bt').forEach(t=>t.addEventListener('click',()=>{{ openDlg(iv); iph.scrollLeft=+t.dataset.b*iph.clientWidth; ishow(); }}));
   document.getElementById('ix').onclick=()=>iv.close();
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   /* current page: tab in yellow-lime, as on the desktop */
@@ -494,7 +502,7 @@ dialog .top{{flex:none}}
   gS.onclick=()=>{{ const i=curIdx(); if(pages[i+1]) pages[i+1].scrollIntoView({{behavior:'smooth'}}); }};
   gN.onclick=()=>{{ const i=curIdx(), off=pages[i].getBoundingClientRect().top-top0(); (off<-8?pages[i]:pages[Math.max(0,i-1)]).scrollIntoView({{behavior:'smooth'}}); }};
   addEventListener('scroll',barUpd,{{passive:true}}); addEventListener('resize',barUpd); barUpd();
-  document.querySelectorAll('.tile[data-p]').forEach(t=>t.addEventListener('click',()=>{{ show(+t.dataset.p); lb.showModal(); }}));
+  document.querySelectorAll('.tile[data-p]').forEach(t=>t.addEventListener('click',()=>{{ show(+t.dataset.p); openDlg(lb); }}));
   $('lx').onclick=()=>lb.close();
   $('pp').onclick=$('pp2').onclick=()=>show(pi-1); $('np').onclick=$('np2').onclick=()=>show(pi+1);
 }})();

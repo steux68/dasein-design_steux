@@ -242,7 +242,13 @@ main{{padding-top:calc(var(--head) + var(--bar));padding-bottom:var(--bar)}}
 .ar.pulse .tr2,.bar .go .tr2{{animation-delay:1.1s}}
 @keyframes ring{{0%{{transform:scale(1);opacity:.55}}100%{{transform:scale(1.7);opacity:0}}}}
 @media (prefers-reduced-motion:reduce){{.ar .tr{{animation:none!important;display:none!important}}}}
-.body{{min-width:0;padding:12px 10px 28px}}
+.body{{min-width:0;padding:12px 14px 28px 10px}}
+/* guide lines down both sides, as on the desktop: a light dashed vertical line with pairs of short ticks */
+.rule{{position:fixed;top:0;bottom:0;width:11px;z-index:45;pointer-events:none;
+  background:repeating-linear-gradient(to bottom,var(--line) 0 4px,transparent 4px 7px) center top/1px 100% no-repeat,
+  repeating-linear-gradient(to bottom,transparent 0 172px,var(--line) 172px 173px,transparent 173px 182px,var(--line) 182px 183px,transparent 183px 190px)}}
+.rule.l{{left:calc(var(--side) - 6px)}} .rule.r{{right:1px}}
+.side.rail .sidebar,.side.rail header{{border-right:0!important}}
 /* section bar: same size, type and thickness as a tab in the side strip, a muted version of the lit tab's yellow-lime */
 .sbar{{display:flex;align-items:center;justify-content:center;gap:4px;height:30px;margin:8px 10px 0;background:rgba(205,255,62,.42);color:rgba(0,0,0,.78);
   outline:1px dashed #fff;outline-offset:-1px;font-size:12.5px;white-space:nowrap}}
@@ -257,14 +263,16 @@ html,body{{overflow-x:clip}}
 .play .bp{{display:block}} .play .whole{{visibility:hidden}}
 .pin{{position:absolute;display:flex;flex-direction:column;align-items:center;gap:3px;width:25vw;max-width:110px;text-decoration:none;text-align:center;-webkit-tap-highlight-color:transparent}}
 .pin.l{{left:6px}} .pin.r{{right:6px}}
-.pin b{{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:#bfbfbf;font-weight:400;font-size:13.5px;
+.pin b{{display:flex;align-items:center;justify-content:center;width:23px;height:23px;border-radius:50%;background:#bfbfbf;font-weight:400;font-size:11.5px;
   box-shadow:inset 0 0 0 1px #000;transition:background .15s}}
 .pin b{{position:relative}}
 /* thin red rings ripple out of the circles one after another - 01, 02, 03, 04, then from the start - to show they can be tapped */
-.pin b::before,.pin b::after{{content:"";position:absolute;inset:-1px;border-radius:50%;border:1.2px solid var(--red);opacity:0;pointer-events:none;
+.pin b::before,.pin b::after{{content:"";position:absolute;inset:-1px;border-radius:50%;border:1.6px solid var(--c1,var(--red));opacity:0;pointer-events:none;
   animation:pinring 4.8s ease-out infinite;animation-delay:calc(var(--k) * 1.2s)}}
-.pin b::after{{animation-delay:calc(var(--k) * 1.2s + .3s)}}
-@keyframes pinring{{0%{{transform:scale(1);opacity:.75}}22%{{transform:scale(2.1);opacity:0}}100%{{transform:scale(2.1);opacity:0}}}}
+.pin b::after{{border-color:var(--c2,var(--red));animation-delay:calc(var(--k) * 1.2s + .3s)}}
+.pin:nth-of-type(1){{--c1:#ffd400;--c2:#2f8cff}} .pin:nth-of-type(2){{--c1:#2fbf4a;--c2:#ffd400}}
+.pin:nth-of-type(3){{--c1:#2f8cff;--c2:#cdff3e}} .pin:nth-of-type(4){{--c1:#e30613;--c2:#2fbf4a}}
+@keyframes pinring{{0%{{transform:scale(1);opacity:.9}}24%{{transform:scale(2.3);opacity:0}}100%{{transform:scale(2.3);opacity:0}}}}
 @media (prefers-reduced-motion:reduce){{.pin b::before,.pin b::after{{animation:none}}}}
 .pin span{{font-size:12px;line-height:1.15;background:rgba(255,255,255,.85);padding:1px 3px}}
 /* thin dotted leader lines from the circles to the beetle, as on the desktop start page */
@@ -288,7 +296,8 @@ html,body{{overflow-x:clip}}
 /* us & contact */
 .lab{{margin:6px 0 4px;font-size:11px;letter-spacing:.12em;color:var(--red)}}
 .firm{{margin:0 0 6px;font-size:16px}} .firm span{{font-size:13px;color:#666}}
-.who{{margin:14px 0 0;padding:12px 0 0;border-top:1px dotted var(--dot)}}
+.who{{margin:10px 0 0;padding:10px;border:1px dotted var(--dot)}}
+.who + .who{{margin-top:8px}}
 .who .role{{margin:0;font-size:12px;color:#666}}
 .who h3{{margin:2px 0 0;font-weight:400;font-size:16px;line-height:1.2;color:var(--red)}} .who h3 b{{font-weight:700}}
 .who .q{{font-size:13px;font-weight:400;color:#555;margin-left:4px;white-space:nowrap}}
@@ -414,6 +423,7 @@ dialog .top{{flex:none}}
 {section("downloads", "downloads & links", "03", DOWNLOADS)}
 {section("bits", "bits & bats", "04", BITSHTML)}
 </main>
+<i class="rule l" aria-hidden="true"></i><i class="rule r" aria-hidden="true"></i>
 <div class="bar btop"><button type="button" id="goN" aria-label="previous page">{ARN}</button></div>
 <div class="bar bbot"><button type="button" id="goS" aria-label="next page">{ARS}</button></div>
 <dialog id="lb" aria-labelledby="lt">
@@ -436,6 +446,12 @@ dialog .top{{flex:none}}
   document.querySelectorAll('dialog').forEach(d=>d.addEventListener('close',()=>{{ if(!document.querySelector('dialog[open]')) document.documentElement.classList.remove('dlg'); }}));
   document.querySelectorAll('.sidebar,.tab,.logo').forEach(a=>a.addEventListener('click',closeDlgs));
   addEventListener('keydown',e=>{{ if(e.key==='Escape') closeDlgs(); }});
+  /* an open CV closes by itself when it has been scrolled out of view */
+  const cvio=new IntersectionObserver(es=>es.forEach(e=>{{ const d=e.target; if(e.isIntersecting||!d.open) return;
+    /* keep what is on screen where it is: measure a page that is in view before and after closing (some browsers do this by themselves) */
+    const tp=parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop)||0, anchor=document.elementFromPoint(innerWidth*.6,tp+6), y0=anchor&&anchor.getBoundingClientRect().top;
+    d.open=false; if(anchor){{ const dy=anchor.getBoundingClientRect().top-y0; if(Math.abs(dy)>1) scrollBy({{top:dy,behavior:'instant'}}); }} }}));
+  document.querySelectorAll('.who details').forEach(d=>cvio.observe(d));
   /* logo switch */
   const B=document.body;
   const setLogo=m=>{{ B.classList.toggle('side',m!=='top'); B.classList.toggle('rail',m==='rail'); try{{ localStorage.setItem('ddlogo2',m); }}catch(e){{}}

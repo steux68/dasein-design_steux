@@ -436,7 +436,7 @@ body{{position:relative}}
 .wcard .top{{position:static;background:none;padding:8px 10px 4px}}
 .wonder .wpbody{{flex:1 1 auto;overflow-y:auto;padding:0 12px 6px}}
 .wonder .wpop .wpnav{{border-top:1px dashed var(--line);padding:6px 10px 8px}}
-.wpbody .wpi{{display:block;width:100%;aspect-ratio:1/1;object-fit:cover;margin:0;outline:1px dotted #b8b8b8;outline-offset:-1px}}
+.wpbody .wpi{{display:block;width:100%;aspect-ratio:1/1;object-fit:contain;background:#f6f6f6;margin:0;outline:1px dotted #b8b8b8;outline-offset:-1px}}   /* the whole photo, whatever its format; grey fills the rest of the square, as in the project pop-up */
 .wpbody .wpq{{margin-top:0}}
 .wsq{{aspect-ratio:1/1;display:flex;flex-direction:column;justify-content:center;gap:8px;padding:18px;background:#f4f4f2;box-sizing:border-box;outline:1px dotted #b8b8b8;outline-offset:-1px}}
 .wsq.n{{background:#fffbd6}} .wsq small{{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--red)}} .wsq .wpl{{font-size:20px;line-height:1.35}}

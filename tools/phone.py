@@ -315,6 +315,8 @@ body{{position:relative}}
 .pin.hit b{{animation:none!important;background:#cdff3e!important;box-shadow:inset 0 0 0 1px var(--red)}} .pin.hit span{{color:var(--red)}}
 .stack .body{{padding-top:10px}}
 .stack .stage{{height:calc(100svh - var(--head) - 2 * var(--bar) - 104px);min-height:330px}}
+/* the start page fills the whole screen (largest viewport), so all five bars wait together at the bottom however the phone's toolbar is showing */
+.stack #start{{min-height:calc(100lvh - var(--head) - var(--bar))}}
 .stack .pg:last-child{{min-height:calc(100lvh - var(--head) - 2 * var(--bar) - 110px)}}
 .sbar{{position:relative;z-index:1;height:1px;margin:10px 10px -1px}}   /* one line between two pages, 10 px clear each side (the same as from the side lines to the content) */
 /* page boundary (21 Oct): the desktop's double edge ticks, pointing inwards from both guide lines, each running on as a dotted line right across;

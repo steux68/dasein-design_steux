@@ -346,6 +346,11 @@ body:not(.side) .socs{{display:flex}}   /* in the top layouts (and the stack tri
 .stack main > .hb{{position:sticky;z-index:14;display:flex;align-items:center;height:23px;padding:0 10px;font-size:12px;color:#000;cursor:pointer;-webkit-tap-highlight-color:transparent;
   transition:background-color .15s;
   background:repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left top/100% 1px no-repeat,repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left bottom/100% 1px no-repeat,#fff}}
+/* trials (22 Oct): make each section read as one piece - ?sec=1 pale ground on every other section, ?sec=2 a dotted frame round each, ?sec=3 the section you are in turns pale lime */
+.sec1 main > section.pg:not(#start):nth-of-type(odd){{background:#f4f4f2}}
+.sec1 main > section.pg:not(#start),.sec2 main > section.pg:not(#start),.sec3 main > section.pg:not(#start){{padding-top:12px;padding-bottom:16px}}
+.sec2 main > section.pg:not(#start){{margin-left:10px;margin-right:10px;padding-left:0;padding-right:0;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat}}
+.sec3 main > section.pg:not(#start){{transition:background-color .35s}} .sec3 main > section.pg.cur{{background-color:#f6ffde}}
 .stack main > .hb.hl{{margin:39px 50% -1px 10px}}
 .stack main > .hb.hr{{margin:39px 10px -1px 50%;
   background:repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left top/100% 1px no-repeat,repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left bottom/100% 1px no-repeat,
@@ -625,7 +630,7 @@ dialog .top{{flex:none}}
 <script>/* three versions: logo and tabs all down the side (default) · logo on the side, tabs on top · logo and tabs across the top
    ?logo=rail / side / top, remembered on this phone */
 (function(){{ let m='rail'; try{{ m=new URLSearchParams(location.search).get('logo')||localStorage.getItem('ddlogo2')||'rail';
-    const sk=new URLSearchParams(location.search).get('stack'); if(sk==='1'||sk==='2'){{ document.body.classList.add('stack'); m='top'; }} if(sk==='2') document.body.classList.add('pairs'); }}catch(e){{}}
+    const sk=new URLSearchParams(location.search).get('stack'); if(sk==='1'||sk==='2'){{ document.body.classList.add('stack'); m='top'; }} if(sk==='2') document.body.classList.add('pairs'); const sc=new URLSearchParams(location.search).get('sec'); if(['1','2','3'].includes(sc)) document.body.classList.add('sec'+sc); }}catch(e){{}}
   if(m!=='top') document.body.classList.add('side'); if(m==='rail') document.body.classList.add('rail'); }})();</script>
 <a class="sidebar" href="#start" aria-label="dasein-design, start"><img src="../img/m-mark.png" alt=""><span>dasein<b>-design</b></span></a>
 <header>
@@ -922,6 +927,9 @@ dialog .top{{flex:none}}
       bars.forEach((b,k)=>b.classList.toggle('on',k===c)); document.body.classList.toggle('inpg',c>=0); }};
     addEventListener('scroll',cur,{{passive:true}}); cur();
   }}
+  if(document.body.classList.contains('sec3')){{ const secs=[...document.querySelectorAll('main > section.pg:not(#start)')];
+    const mark=()=>{{ const y=innerHeight*.45; let c=null; secs.forEach(x=>{{ if(x.getBoundingClientRect().top<y) c=x; }}); secs.forEach(x=>x.classList.toggle('cur',x===c)); }};
+    addEventListener('scroll',mark,{{passive:true}}); mark(); }}
   const pages=[...document.querySelectorAll('.pg')], gN=$('goN'), gS=$('goS');
   const top0=()=>parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop)||0;
   const sm=p=>parseFloat(getComputedStyle(p).scrollMarginTop)||0;

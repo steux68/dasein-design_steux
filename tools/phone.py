@@ -280,9 +280,9 @@ def _wonder():
             f'<div class="wbars">{bars}</div>'
             f'<div class="wgrid" id="wgrid">{"".join(tiles)}</div>'
             '<p class="wend">trial – the photos are real, the dates are samples</p>'
-            f'<div class="wpop" id="wpop" hidden><div class="top"><div class="cnt"><span id="wpk"></span></div><button type="button" class="x" id="wback" aria-label="back">{XC}</button></div>'
+            f'<div class="wpop" id="wpop" hidden><div class="wcard"><div class="top"><div class="cnt"><span id="wpk"></span></div><button type="button" class="x" id="wback" aria-label="back">{XC}</button></div>'
             '<div class="wpbody" id="wpbody"></div>'
-            f'<div class="wpnav"><button type="button" id="wprev">{ARW}<span>previous</span></button><button type="button" id="wnext"><span>next</span>{ARE}</button></div></div></div>')
+            f'<div class="wpnav"><button type="button" id="wprev">{ARW}<span>previous</span></button><button type="button" id="wnext"><span>next</span>{ARE}</button></div></div></div></div>')
 
 
 WONDER = _wonder()
@@ -428,9 +428,20 @@ body{{position:relative}}
 .wonder .wg.t small{{font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--red);font-weight:700;text-align:center;line-height:1.2}}
 .wonder .wend{{margin-top:26px}}
 .wonder .wg[hidden]{{display:none!important}} .wonder .wg.t.wnews{{background:#f4f4f2}} .wonder .wg.t.wnote{{background:#fffbd6}}
-.wpbody .wpi{{display:block;width:100%;max-height:62svh;object-fit:contain;margin:6px 0 0;outline:1px dotted #b8b8b8;outline-offset:2px}}
-.wpbody .wpd{{margin:14px 0 4px;font-size:12px;letter-spacing:.06em;color:#888}}
-.wpbody .wpl{{margin:0;font-size:17px;line-height:1.45;color:#222}} .wpbody .wpl.q{{font-style:italic}}
+/* the pop-up (23 Oct, 00:45): a card almost the width of the screen, set in a little, over a see-through veil - the grid shows round it; a tap beside it goes back */
+.wonder .wpop{{position:fixed;left:0;right:0;top:var(--head);bottom:0;z-index:35;display:flex;align-items:center;justify-content:center;padding:0 12px;background:rgba(255,255,255,.62);-webkit-backdrop-filter:blur(1.5px);backdrop-filter:blur(1.5px)}}
+.wonder .wpop[hidden]{{display:none}}
+.wcard{{width:100%;max-width:560px;max-height:calc(100% - 24px);display:flex;flex-direction:column;background:#fff;box-shadow:0 2px 18px rgba(0,0,0,.18);
+  background-image:var(--dh),var(--dh),var(--dv),var(--dv);background-position:left top,left bottom,left top,right top;background-size:100% 1px,100% 1px,1px 100%,1px 100%;background-repeat:no-repeat}}
+.wcard .top{{position:static;background:none;padding:8px 10px 4px}}
+.wonder .wpbody{{flex:1 1 auto;overflow-y:auto;padding:0 12px 6px}}
+.wonder .wpop .wpnav{{border-top:1px dashed var(--line);padding:6px 10px 8px}}
+.wpbody .wpi{{display:block;width:100%;aspect-ratio:1/1;object-fit:cover;margin:0;outline:1px dotted #b8b8b8;outline-offset:-1px}}
+.wpbody .wpq{{margin-top:0}}
+.wsq{{aspect-ratio:1/1;display:flex;flex-direction:column;justify-content:center;gap:8px;padding:18px;background:#f4f4f2;box-sizing:border-box;outline:1px dotted #b8b8b8;outline-offset:-1px}}
+.wsq.n{{background:#fffbd6}} .wsq small{{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--red)}} .wsq .wpl{{font-size:20px;line-height:1.35}}
+.wpbody .wpd{{margin:10px 0 2px;font-size:12px;letter-spacing:.06em;color:#888}}
+.wpbody .wpl{{margin:0 0 4px;font-size:16px;line-height:1.45;color:#222}} .wpbody .wpl.q{{font-style:italic}}
 .wpbody .wpq{{display:block;font-style:normal;font-size:70px;line-height:.5;height:30px;margin-top:30px;color:var(--red)}}
 .wpbody a{{display:inline-block;margin-top:12px;font-size:14px;color:#1a5fd0;text-decoration:none}}
 /* the map (23 Oct): every post a rectangle, grouped by category, the newer ones bigger - like a word treemap */
@@ -955,14 +966,16 @@ dialog .top{{flex:none}}
       wd.querySelectorAll('.wbt').forEach(x=>x.classList.toggle('on',on&&x===b)); tiles.forEach(t=>{{ t.hidden=on&&t.dataset.cat!==b.dataset.c; }}); wd.scrollTo({{top:0}}); }}));
     const vis=()=>tiles.filter(t=>!t.hidden);
     function pop(t){{ const v=vis(); cur=v.indexOf(t); const d=t.dataset; let h='';
-      if(d.img) h='<img class="wpi" src="'+d.img+'" alt="">'; else if(t.classList.contains('wnote')) h='<i class="wpq">“</i>';
-      h+='<p class="wpd">'+d.when+'</p><p class="wpl'+(t.classList.contains('wnote')?' q':'')+'">'+d.line+'</p>';
-      if(d.url) h+='<a href="'+d.url+'" target="_blank" rel="noopener">'+d.src+' ↗</a>';
+      const note=t.classList.contains('wnote');
+      if(d.img) h='<img class="wpi" src="'+d.img+'" alt=""><p class="wpd">'+d.when+'</p><p class="wpl">'+d.line+'</p>';
+      else h='<div class="wsq'+(note?' n':'')+'">'+(note?'<i class="wpq">“</i>':'<small>'+d.src+'</small>')+'<p class="wpl'+(note?' q':'')+'">'+d.line+'</p>'
+        +(d.url?'<a href="'+d.url+'" target="_blank" rel="noopener">read the article ↗</a>':'')+'</div><p class="wpd">'+d.when+'</p>';
       wb.innerHTML=h; wb.scrollTop=0; document.getElementById('wpk').innerHTML='wonder <b>'+String(cur+1).padStart(2,'0')+'</b> / '+v.length; wp.hidden=false; }}
     tiles.forEach(t=>t.addEventListener('click',()=>pop(t)));
     const step=k=>{{ const v=vis(); pop(v[(cur+k+v.length)%v.length]); }};
     document.getElementById('wprev').onclick=()=>step(-1); document.getElementById('wnext').onclick=()=>step(1);
     document.getElementById('wback').onclick=()=>{{ wp.hidden=true; }};
+    wp.addEventListener('click',e=>{{ if(e.target===wp) wp.hidden=true; }});   /* a tap on the veil beside the card goes back */
     document.querySelector('header .logo').addEventListener('click',()=>set(false));
     document.querySelectorAll('.tab,.pbar').forEach(t=>t.addEventListener('click',()=>set(false)));
     addEventListener('keydown',e=>{{ if(e.key==='Escape'){{ if(!wp.hidden) wp.hidden=true; else set(false); }} }}); }})();

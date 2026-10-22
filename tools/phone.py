@@ -294,6 +294,18 @@ body{{position:relative}}
 .pbar{{display:flex;align-items:center;justify-content:center;height:30px;margin:0 10px 10px;background:#eaffae;
   font-size:12.5px;color:rgba(0,0,0,.78);white-space:nowrap}}   /* page name in yellow-lime, as thick as the side tabs; the dotted line runs flush across its top edge */
 .pbar b{{font-weight:700}} .pbar small{{font-size:8.5px;margin-left:4px}}
+/* ?stack=1 (trial, 22 Oct): logo across the top, no side strip; the five page bars are thinner and stack up at the top of the screen as you pass
+   their pages and wait at the bottom for the pages still to come - always all five on screen, a tap goes there */
+.stack header nav,.stack header .note{{display:none}}
+.stack main{{padding-left:8px}} .stack .rule.l{{left:7px}} .stack .bar{{left:8px}}
+.stack .sbar{{display:none}}
+.stack main > .pbar{{position:sticky;z-index:14;height:22px;margin:0 10px;font-size:12px;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  background:#eaffae;box-shadow:0 -1px 0 #fff;transition:background .2s}}
+.stack main > .pbar.on{{background:#cdff3e}}
+.stack main > .pbar:active{{background:var(--green)}}
+.stack .body{{padding-top:10px}}
+.stack .stage{{height:calc(100svh - var(--head) - 2 * var(--bar) - 104px);min-height:330px}}
+.stack .pg:last-child{{min-height:calc(100lvh - var(--head) - 2 * var(--bar) - 110px)}}
 .sbar{{position:relative;z-index:1;height:1px;margin:10px 10px -1px}}   /* one line between two pages, 10 px clear each side (the same as from the side lines to the content) */
 /* page boundary (21 Oct): the desktop's double edge ticks, pointing inwards from both guide lines, each running on as a dotted line right across;
    the two lines are the old title bar's height apart */
@@ -510,7 +522,8 @@ dialog .top{{flex:none}}
 <body>
 <script>/* three versions: logo and tabs all down the side (default) · logo on the side, tabs on top · logo and tabs across the top
    ?logo=rail / side / top, remembered on this phone */
-(function(){{ let m='rail'; try{{ m=new URLSearchParams(location.search).get('logo')||localStorage.getItem('ddlogo2')||'rail'; }}catch(e){{}}
+(function(){{ let m='rail'; try{{ m=new URLSearchParams(location.search).get('logo')||localStorage.getItem('ddlogo2')||'rail';
+    if(new URLSearchParams(location.search).get('stack')==='1'){{ document.body.classList.add('stack'); m='top'; }} }}catch(e){{}}
   if(m!=='top') document.body.classList.add('side'); if(m==='rail') document.body.classList.add('rail'); }})();</script>
 <a class="sidebar" href="#start" aria-label="dasein-design, start"><img src="../img/m-mark.png" alt=""><span>dasein<b>-design</b></span></a>
 <header>
@@ -573,7 +586,7 @@ dialog .top{{flex:none}}
 
   /* logo switch */
   const B=document.body;
-  const setLogo=m=>{{ B.classList.toggle('side',m!=='top'); B.classList.toggle('rail',m==='rail'); try{{ localStorage.setItem('ddlogo2',m); }}catch(e){{}}
+  const setLogo=m=>{{ B.classList.toggle('side',m!=='top'); B.classList.toggle('rail',m==='rail'); try{{ if(!B.classList.contains('stack')) localStorage.setItem('ddlogo2',m); }}catch(e){{}}
     document.querySelectorAll('[data-logo]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.logo===m))); }};
   const fitHead=()=>document.documentElement.style.setProperty('--head',(B.classList.contains('rail')?0:document.querySelector('header').offsetHeight)+'px');
   /* dotted leader lines: from the inner side of each circle across, then up or down onto the beetle, with a small arrowhead */
@@ -703,13 +716,25 @@ dialog .top{{flex:none}}
   new MutationObserver(phUpd).observe(ph,{{childList:true}});
   document.querySelectorAll('.bt').forEach(t=>t.addEventListener('click',()=>requestAnimationFrame(ivUpd)));
   /* N / S arrows in the bars: previous / next page */
+  /* ?stack=1: the page bars stack - passed pages at the top, pages still to come at the bottom; a tap on a bar goes to its page */
+  if(document.body.classList.contains('stack')){{
+    const H=22, bars=[...document.querySelectorAll('.pg .pbar')], n=bars.length;
+    bars.forEach((b,k)=>{{ const sec=b.closest('.pg'); sec.before(b);
+      b.style.top=`calc(var(--head) + var(--bar) + ${{k*H}}px)`; b.style.bottom=`calc(var(--bar) + env(safe-area-inset-bottom,0px) + ${{(n-1-k)*H}}px)`;
+      sec.style.scrollMarginTop=((k+1)*H+10)+'px'; b.setAttribute('role','link'); b.tabIndex=0;
+      b.addEventListener('click',()=>sec.scrollIntoView({{behavior:'smooth'}})); }});
+    const cur=()=>{{ let c=-1; bars.forEach((b,k)=>{{ const sec=b.nextElementSibling; if(sec.getBoundingClientRect().top<=innerHeight*.45) c=k; }});
+      bars.forEach((b,k)=>b.classList.toggle('on',k===c)); }};
+    addEventListener('scroll',cur,{{passive:true}}); cur();
+  }}
   const pages=[...document.querySelectorAll('.pg')], gN=$('goN'), gS=$('goS');
   const top0=()=>parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop)||0;
-  const curIdx=()=>{{ const y=top0()+4; let i=0; pages.forEach((p,k)=>{{ if(p.getBoundingClientRect().top<=y) i=k; }}); return i; }};
+  const sm=p=>parseFloat(getComputedStyle(p).scrollMarginTop)||0;
+  const curIdx=()=>{{ let i=0; pages.forEach((p,k)=>{{ if(p.getBoundingClientRect().top<=top0()+sm(p)+4) i=k; }}); return i; }};
   const barUpd=()=>{{ const i=curIdx(), atTop=scrollY<4, atEnd=innerHeight+scrollY>=document.documentElement.scrollHeight-4;
     gN.disabled=atTop; gS.classList.toggle('top',atEnd); gS.setAttribute('aria-label',atEnd?'back to the top':'next page'); gS.classList.toggle('go',i===0&&atTop); }};
   gS.onclick=()=>{{ if(gS.classList.contains('top')){{ scrollTo({{top:0,behavior:'smooth'}}); return; }} const i=curIdx(); if(pages[i+1]) pages[i+1].scrollIntoView({{behavior:'smooth'}}); }};
-  gN.onclick=()=>{{ const i=curIdx(), off=pages[i].getBoundingClientRect().top-top0(); (off<-8?pages[i]:pages[Math.max(0,i-1)]).scrollIntoView({{behavior:'smooth'}}); }};
+  gN.onclick=()=>{{ const i=curIdx(), off=pages[i].getBoundingClientRect().top-top0()-sm(pages[i]); (off<-8?pages[i]:pages[Math.max(0,i-1)]).scrollIntoView({{behavior:'smooth'}}); }};
   addEventListener('scroll',barUpd,{{passive:true}}); addEventListener('resize',barUpd); barUpd();
   document.querySelectorAll('.tile[data-p]').forEach(t=>t.addEventListener('click',()=>{{ show(+t.dataset.p); openDlg(lb); }}));
   $('lx').onclick=()=>lb.close();

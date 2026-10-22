@@ -183,17 +183,22 @@ def cvpanel(n, p):
             f'<button type="button" class="cvb" aria-expanded="true" aria-controls="cv{n}">{PLUS}<span class="cvt">full</span><b>CV</b></button></div></details>')
 
 
-US = ('<div class="box"><div class="lh"><p class="lab first">PARTNERSHIP</p>' + '<button type="button" class="cvb" aria-expanded="false" aria-controls="bio">' + PLUS + '<span class="cvt">full</span><b>bio</b></button>' + '</div><p class="firm"><b class="dd">dasein-design</b> [architecture+design] [Wien]<br><span>» Jan.’03 – bis dato</span></p>'
-      f'<p class="intro2">{INTRO}</p>'
-      '<details class="bio fold" id="bio"><summary></summary>' + ''.join(f'<p>{t}</p>' for t in BIO) + '</details></div>'
+def morebtn(g, word, op='full', cl='close'):
+    """the white bar with dotted lines that sits over the faded end of a folded block; opened it drops below the block"""
+    return (f'<button type="button" class="cvb more" aria-expanded="false" data-g="{g}">' + PLUS
+            + f'<span class="cvt"><span class="op">{op}</span><span class="cl">{cl}</span></span><b>{word}</b></button>')
 
+
+US = ('<div class="box"><p class="lab first">PARTNERSHIP</p><p class="firm"><b class="dd">dasein-design</b> [architecture+design] [Wien]<br><span>» Jan.’03 – bis dato</span></p>'
+      f'<div class="cut" id="g-bio" data-show="1" data-extra="30"><p class="intro2">{INTRO}</p>' + ''.join(f'<p class="bt">{t}</p>' for t in BIO) + '</div>'
+      + morebtn('g-bio', 'bio') + '</div>'
       '<div class="duo">' + ''.join(partner(n, p) for n, p in enumerate(PARTNERS)) + '</div>'
       + ''.join(cvpanel(n, p) for n, p in enumerate(PARTNERS))
-      # OUR SERVICES: its own box, the three blocks side by side in short, "full services" unfolds the whole text
-      + '<div class="box"><div class="lh"><p class="lab first">OUR SERVICES</p>' + '<button type="button" class="cvb" aria-expanded="false" aria-controls="svc">' + PLUS + '<span class="cvt">full</span><b>services</b></button>' + '</div><div class="sv3">' + ''.join(
+      # OUR SERVICES: the three blocks side by side in short; the white bar "full services" unfolds the whole text
+      + '<div class="box"><p class="lab first">OUR SERVICES</p><div class="cut" id="g-svc" data-show="1" data-extra="30"><div class="sv3">' + ''.join(
           f'<div><img src="../img/{ic}" alt=""><b>{h}</b><span>{SERVICES_SHORT[h]}</span></div>' for h, ic, xs in SERVICES) + '</div>'
-      '<details class="svc fold" id="svc"><summary></summary>' + ''.join(
-          f'<h4><img src="../img/{ic}" alt="">{h}</h4>' + ''.join(f'<p>» {x}</p>' for x in xs) for h, ic, xs in SERVICES) + '</details></div>')
+      + ''.join(f'<h4 class="sh"><img src="../img/{ic}" alt="">{h}</h4>' + ''.join(f'<p class="sp">» {x}</p>' for x in xs) for h, ic, xs in SERVICES) + '</div>'
+      + morebtn('g-svc', 'services') + '</div>')
 CONTACT = ('<div class="box"><p class="lab first">OFFICE</p><p class="addr"><b class="dd">dasein-design</b> · Neulerchenfelderstrasse 42/6<br>A-1160 Wien · Austria · EU</p>'
       + '<div class="pcs">' + ''.join(f'<p><b>{p["first"]} {p["last"]}</b><br><a href="tel:{p["tel"].replace(" ", "").replace("(0)", "")}">{p["tel"]}</a> · <a href="mailto:{p["mail"]}">{p["mail"]}</a></p>' for p in PARTNERS) + '</div>'
       '<div class="mapw"><div class="map" id="map"></div><div class="mz"><button type="button" id="zin" aria-label="zoom in">' + SEARCH.ZOOM_IN + '</button><button type="button" id="zout" aria-label="zoom out">' + SEARCH.ZOOM_OUT + '</button><button type="button" id="zhome" aria-label="back to the start view">' + SEARCH.ZOOM_HOME + '</button></div></div>'
@@ -204,7 +209,7 @@ MOREP = ('<button type="button" class="cvb more" aria-expanded="false" data-g="g
          + '<span class="cvt"><span class="op">more</span><span class="cl">fewer</span></span><b>projects</b></button>')
 
 # ---------- impressum [06] (draft by Claude, 22 Oct 2026 - to be checked by the office / the Kammer before going live) ----------
-LEGAL = ('<div class="box legal"><p class="lab first">IMPRESSUM</p>'
+LEGAL = ('<div class="box legal cut" id="g-legal" data-show="4" data-extra="30"><p class="lab first">IMPRESSUM</p>'
          '<p class="lp">Informationen gemäß § 5 E-Commerce-Gesetz und Offenlegung gemäß § 25 Mediengesetz</p>'
          '<h4>Medieninhaber, Herausgeber und Diensteanbieter</h4>'
          '<p><b>Arch. DI Cuong TRAN-VIET</b><br>Architekt (Ziviltechniker) · Inhaber von <b class="dd">dasein-design</b><br>Neulerchenfelderstrasse 42/6 · A-1160 Wien · Österreich<br>'
@@ -221,7 +226,7 @@ LEGAL = ('<div class="box legal"><p class="lab first">IMPRESSUM</p>'
          'jede Verwendung bedarf der vorherigen Zustimmung.</p>'
          '<h4>Datenschutz</h4><p>Diese Website setzt keine Cookies und erhebt keine personenbezogenen Daten. Die Karte wird von OpenStreetMap geladen. '
          '<span class="todo">[Datenschutzerklärung – bitte ergänzen]</span></p></div>'
-         '<p class="copy">© 2026 [ dasein-design &amp; steux ]</p>')
+         + morebtn('g-legal', 'impressum') + '<p class="copy">© 2026 [ dasein-design &amp; steux ]</p>')
 
 
 HTML = f'''<!doctype html>
@@ -433,6 +438,8 @@ html,body{{overflow-x:clip}}
 .who .kt a{{text-decoration:none}}
 /* short text about the practice */
 .intro2{{margin:8px 0 0;font-size:13.5px;line-height:1.4;color:#222}}
+.bt,.sp{{margin:8px 0 0;font-size:13.5px;line-height:1.4;color:#222}} .sp{{margin-top:3px;font-size:13px}}
+.sh{{display:flex;align-items:center;gap:7px;margin:12px 0 2px;font-size:14px;font-weight:700;color:var(--red);letter-spacing:.02em}} .sh img{{width:18px;height:18px}}
 .bio p{{margin:8px 0 0;font-size:13.5px;line-height:1.4;color:#222}}
 /* full bio and our services: two openers side by side, each unfolding underneath (one at a time) */
 .opn{{display:flex;gap:18px;flex-wrap:wrap}}
@@ -546,6 +553,7 @@ dialog .top{{flex:none}}
 .links{{display:grid;grid-template-columns:1fr 1fr;gap:14px 10px;margin-top:12px}}
 /* long grids (links, bits & bats) show about six at first, fading out greyed; "more …" shows the rest */
 .cut{{overflow:hidden;transition:max-height .45s ease}}
+.cut[data-extra].shut{{-webkit-mask-image:linear-gradient(#000 calc(100% - 34px),rgba(0,0,0,.15));mask-image:linear-gradient(#000 calc(100% - 34px),rgba(0,0,0,.15))}}
 .cut.shut{{-webkit-mask-image:linear-gradient(#000 55%,rgba(0,0,0,.18));mask-image:linear-gradient(#000 55%,rgba(0,0,0,.18))}}
 .more{{position:relative;z-index:2;display:flex;width:100%;height:30px;margin:-30px 0 0;padding:0 2px;background:
   repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left top/100% 1px no-repeat,repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left bottom/100% 1px no-repeat,rgba(255,255,255,.94)}}
@@ -630,7 +638,7 @@ dialog .top{{flex:none}}
     else if(b.closest('.cvp')) document.getElementById('us').scrollIntoView({{behavior:'smooth'}}); }}));
   /* long grids: cut after the first six, with "more links" / "more bits & bats" */
   const cuts=[...document.querySelectorAll('.cut')];
-  const cutH=g=>{{ const top=g.getBoundingClientRect().top; let b=0; [...g.children].slice(0,6).forEach(c=>{{ b=Math.max(b,c.getBoundingClientRect().bottom); }}); return b-top; }};
+  const cutH=g=>{{ const top=g.getBoundingClientRect().top, n=+g.dataset.show||6, ex=+g.dataset.extra||0; let b=0; [...g.children].slice(0,n).forEach(c=>{{ b=Math.max(b,c.getBoundingClientRect().bottom); }}); return b-top+ex; }};
   const setCut=(g,open)=>{{ g.classList.toggle('shut',!open); g.style.maxHeight=open?g.scrollHeight+'px':cutH(g)+'px';
     const b=document.querySelector('.more[data-g="'+g.id+'"]'); if(b) b.setAttribute('aria-expanded',String(open)); }};
   cuts.forEach(g=>setCut(g,false));

@@ -423,8 +423,9 @@ body{{position:relative}}
 .wbt:nth-child(2){{background-image:var(--dh),var(--dh);background-position:left top,left bottom;background-size:100% 1px,100% 1px}}
 .wbt b{{font-weight:700}} .wbt small{{font-size:10px;color:#444}}
 .wbt.on{{background-color:#eaffae}} .wbt:active{{background-color:#cdff3e}}
-.wonder .wbars{{display:none}}
-.wonder .wgrid{{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:calc((100vw - 36px - 12px) / 4);grid-auto-flow:dense;gap:4px;margin-top:14px}}
+.wonder .wbars{{display:grid;box-shadow:0 6px 8px -6px rgba(0,0,0,.12)}}   /* the six categories float above the grid, as the half title bars do on the main page */
+.wonder .wgrid{{display:grid;grid-template-columns:repeat(5,1fr);grid-auto-rows:calc((100vw - 36px - 12px) / 5);grid-auto-flow:dense;gap:3px;margin-top:10px}}
+.wempty{{display:block;background:#fff}}
 .wonder .wgrid > *{{position:relative;box-sizing:border-box;border:0;margin:0;width:auto;height:auto}}
 .wonder .wgrid .wg{{aspect-ratio:auto;background:#f4f4f4;padding:0;overflow:hidden}} .wonder .wgrid .wg img{{width:100%;height:100%;object-fit:cover!important}}   /* cropped to the cell, like the project tiles */
 .wcw{{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:2px;background:#f2f2f2;font:inherit;color:#000;cursor:pointer;-webkit-tap-highlight-color:transparent;overflow:hidden}}
@@ -973,7 +974,7 @@ dialog .top{{flex:none}}
     sw.addEventListener('click',()=>set(sw.getAttribute('aria-pressed')!=='true'));
     /* a bar shows only its category (lit lime); tapped again, everything */
     wd.querySelectorAll('.wbt').forEach(b=>b.addEventListener('click',()=>{{ const on=!b.classList.contains('on');
-      wd.querySelectorAll('.wbt').forEach(x=>x.classList.toggle('on',on&&x===b)); tiles.forEach(t=>{{ t.hidden=on&&t.dataset.cat!==b.dataset.c; }}); wd.scrollTo({{top:0}}); }}));
+      wd.querySelectorAll('.wbt').forEach(x=>x.classList.toggle('on',on&&x===b)); only=on?b.dataset.c:null; carpet(); wd.scrollTo({{top:0}}); }}));
     const vis=()=>[...grid.querySelectorAll('.wg:not(.again)')];
     function pop(t){{ const v=vis(); cur=v.indexOf(t); const d=t.dataset; let h='';
       const note=t.classList.contains('wnote');
@@ -1001,10 +1002,11 @@ dialog .top{{flex:none}}
        1 x 2 (portrait), 2 x 1 (landscape) or now and then 2 x 2, cropped to fit; newest first, packed densely; the six category words are cells of their own */
     function carpet(){{
       const ph=tiles.filter(t=>!t.classList.contains('t')&&(only===null||t.dataset.cat===only));
-      const items=ph.map(t=>({{t}})); [1,6,12,18,24,30].forEach((at,k)=>items.splice(Math.min(at,items.length),0,{{cat:k}}));
+      const items=ph.map(t=>({{t}})); [4,11,19,27].forEach(at=>{{ if(at<items.length) items.splice(at,0,{{empty:true}}); }});   /* a few empty squares, as on the desktop */
       grid.innerHTML=''; let n=0;
       items.forEach(u=>{{ let e, c=1, r=1;
-        if(u.cat!==undefined){{ e=document.createElement('button'); e.type='button'; e.className='wcw'+(only===String(u.cat)?' on':''); const word=CATS[u.cat];
+        if(u.empty){{ e=document.createElement('i'); e.className='wempty'; }}
+        else if(u.cat!==undefined){{ e=document.createElement('button'); e.type='button'; e.className='wcw'+(only===String(u.cat)?' on':''); const word=CATS[u.cat];
           e.innerHTML='<b>'+word+'</b><small>['+String(u.cat+1).padStart(2,'0')+']</small>';
           e.querySelector('b').style.fontSize=(word.length>8?13:word.length>5?16:19)+'px';
           e.addEventListener('click',()=>{{ only=only===String(u.cat)?null:String(u.cat); carpet(); wd.scrollTo({{top:0}}); }}); }}

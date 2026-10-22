@@ -215,12 +215,17 @@ SOCIAL = '<svg width="0" height="0" style="position:absolute" aria-hidden="true"
 # ---------- impressum [§] (draft by Claude, 22 Oct 2026 - to be checked by the office / the Kammer before going live) ----------
 LEGAL = ('<div class="box legal cut" id="g-legal" data-show="4" data-extra="30"><p class="lab first">IMPRESSUM</p>' + LEGAL_BODY + '</div>'
          + morebtn('g-legal', 'impressum')
-         # the end: one white screen for a little game - catch the red food before the beetle does; the site's mark and copyright at the foot
-         + '<div class="play" id="play"><canvas class="ptrail"></canvas>'
-           '<div class="pscore"><span>you <b id="sy">0</b></span><span>beetle <b id="sb">0</b></span></div>'
-           '<div class="phint" id="phint"><b>collect the red dots!</b><span>whoever gets to 10 first wins</span><small>touch the dot to start</small></div>'
-           '<i class="pdot"><b></b></i><img class="pbug" src="../img/m-bug-up.webp" alt="">'
-           '<div class="pend"><img src="../img/m-mark.png" alt=""><span>dasein<b>-design</b></span>' + '<p class="copy">© 2026 [ dasein-design &amp; steux ]</p></div></div>')
+         # the end (22 Oct, evening): straight under the impressum, the mark and the copyright - and the pulsing dot, "press me", which opens the game full screen
+         + '<div class="fin"><div class="finm"><img src="../img/m-mark.png" alt=""><span>dasein<b>-design</b></span><p class="copy">© 2026 [ dasein-design &amp; steux ]</p></div>'
+           '<button type="button" class="pgo" id="pgo" aria-label="play the beetle game"><span class="pme">press me</span><i class="pld"></i><i class="pdot"><b></b></i></button></div>')
+GAME = ('<dialog id="game" aria-label="beetle game"><div class="play" id="play"><canvas class="ptrail"></canvas>'
+        f'<button type="button" class="x gx" id="gx" aria-label="close the game">{XC}</button>'
+        '<div class="pscore"><span>you <b id="sy">0</b></span><span>beetle <b id="sb">0</b></span></div>'
+        '<div class="phint" id="phint"><b>collect the dots!</b><span>whoever gets to 100 first wins</span>'
+        '<span class="pkey"><i class="pf f1"></i> 1 <i class="pf f2"></i> 2 <i class="pf f5"></i> 5 <i class="pf f10"></i> 10</span>'
+        '<small>touch the yellow dot to start, then drag it</small></div>'
+        '<i class="pdot"><b></b></i><img class="pbug" src="../img/m-bug-up.webp" alt="">'
+        '<div class="pend"><img src="../img/m-mark.png" alt=""><span>dasein<b>-design</b></span></div></div></dialog>')
 
 
 HTML = f'''<!doctype html>
@@ -300,7 +305,7 @@ body{{position:relative}}
 .bar button{{align-items:center;gap:6px}} .bar .sc{{font-style:normal;font-size:11px;letter-spacing:.06em;color:#666}} #goS.top .sc{{display:none}}
 .socs{{display:none;margin-left:auto;gap:12px;align-items:center}} .soc{{display:flex}} .soc svg{{display:block}}
 body:not(.side) .socs{{display:flex}}   /* in the top layouts (and the stack trials) the three marks sit at the right of the logo */
-.pend .socs{{display:flex;margin:4px 0 0;pointer-events:auto}}
+
 #goS .up i{{font-style:normal;font-size:12px;letter-spacing:.06em;color:#3a3c37}}
 /* the round arrow itself sits exactly in the middle (where the half bars meet); its words hang off to the right */
 .bar button{{position:relative}} .bar .sc,#goS .up i{{position:absolute;left:calc(50% + 17px);top:50%;transform:translateY(-50%);white-space:nowrap}} #goS .up{{position:static}}
@@ -498,7 +503,24 @@ details ul{{margin:0;padding:0 0 0 14px;font-size:13px;line-height:1.4;color:#22
 .legal h4{{margin:12px 0 2px;font-size:12px;font-weight:700;color:#000}} .legal p{{margin:0;font-size:12.5px;line-height:1.45;color:#222}} .legal .lp{{color:#666;font-size:11.5px}}
 .legal a{{color:#1a5fd0;text-decoration:none}} .legal a[href^="tel:"]{{color:#1e8e3e}} .legal .todo{{color:#e30613}}
 .ptrail{{position:absolute;inset:0;width:100%;height:100%}}
-.play{{position:relative;height:calc(100svh - var(--head) - 2 * var(--bar) - var(--stk,0px) - 20px);min-height:360px;margin:20px -10px 0;overflow:hidden;touch-action:pan-y;-webkit-user-select:none;user-select:none}}   /* the page still scrolls; the dot itself is dragged */
+/* the end of the page: mark + copyright, and the pulsing dot that opens the game */
+.fin{{position:relative;display:flex;justify-content:center;margin:26px 0 10px;min-height:86px}}
+.finm{{display:flex;flex-direction:column;align-items:center;gap:2px}} .finm img{{width:26px;height:26px}} .finm span{{font-size:17px;color:var(--red)}} .finm b{{font-weight:700}} .finm .copy{{margin:4px 0 0}}
+.pgo{{position:absolute;right:6px;top:2px;display:flex;align-items:center;gap:0;border:0;background:none;padding:0;font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}}
+.pgo .pme{{font-size:11px;letter-spacing:.08em;color:#666;white-space:nowrap}}
+.pgo .pld{{width:22px;height:1px;margin:0 2px 0 5px;background:var(--dh)}}
+.pgo .pdot{{position:relative;margin:0;width:40px;height:40px;cursor:pointer}}
+dialog#game{{inset:0;z-index:70;padding:0;overflow:hidden}}
+.play{{position:absolute;inset:0;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;background:#fff}}
+.gx{{position:absolute;right:10px;top:calc(env(safe-area-inset-top,0px) + 10px);z-index:4}}
+.pkey{{display:flex;align-items:center;gap:5px;margin-top:10px;font-size:13px;color:#222}} 
+.pf{{position:absolute;left:0;top:0;display:block;pointer-events:none}}
+.pf.f1{{width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;background:var(--red)}}
+.pf.f2{{width:13px;height:13px;margin:-6.5px 0 0 -6.5px;border-radius:50%;border:2.5px solid var(--red);box-sizing:border-box}}
+.pf.f5{{width:13px;height:13px;margin:-6.5px 0 0 -6.5px;background:#2f8cff;transform:rotate(45deg)}}
+.pkey .pf.pf{{position:relative;left:auto;top:auto;display:inline-block;flex:none;margin:0 1px 0 12px}} .pkey .pf.pf:first-child{{margin-left:0}} .pkey .pf.f5{{transform:rotate(45deg) scale(.85)}}
+.pf.f10{{width:20px;height:20px;margin:-10px 0 0 -10px;background:#ffd400;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);filter:drop-shadow(0 0 .5px #3a3c37)}}
+.pplus{{position:absolute;left:0;top:0;font-weight:700;font-size:16px;color:var(--red);pointer-events:none;z-index:3}}
 .play .pdot{{touch-action:none;width:56px;height:56px;margin:-28px 0 0 -28px}}
 .pdot{{position:absolute;left:0;top:0;width:44px;height:44px;margin:-22px 0 0 -22px;display:flex;align-items:center;justify-content:center;cursor:grab}}
 .pdot b{{width:10px;height:10px;border-radius:50%;background:#cdff3e;box-shadow:0 0 0 1px #3a3c37;animation:pdp 1.4s ease-in-out infinite}}
@@ -507,13 +529,13 @@ details ul{{margin:0;padding:0 0 0 14px;font-size:13px;line-height:1.4;color:#22
 @keyframes pdp{{50%{{transform:scale(1.25)}}}} @keyframes pdr{{0%{{transform:scale(1);opacity:.8}}100%{{transform:scale(4.2);opacity:0}}}}
 .pbug{{position:absolute;left:0;top:0;width:38px;height:84px;margin:-42px 0 0 -19px;pointer-events:none;will-change:transform}}
 .stack{{--stk:132px}} .stack.pairs{{--stk:66px}}
-.pscore{{position:absolute;left:12px;right:12px;top:8px;display:flex;justify-content:space-between;font-size:12px;letter-spacing:.06em;color:#555;pointer-events:none;z-index:2}}
+.pscore{{position:absolute;left:12px;right:12px;top:calc(env(safe-area-inset-top,0px) + 48px);display:flex;justify-content:space-between;font-size:12px;letter-spacing:.06em;color:#555;pointer-events:none;z-index:2}}
 .pscore b{{color:var(--red);font-size:15px;margin-left:4px}}
 .phint{{position:absolute;left:0;right:0;top:30%;display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center;pointer-events:none;transition:opacity .5s;z-index:2}}
 .phint b{{font-size:21px;color:var(--red)}} .phint span{{font-size:14px;color:#222}} .phint small{{margin-top:6px;font-size:11.5px;letter-spacing:.08em;color:#888}}
 .play.go .phint{{opacity:0}}
 .pfood{{position:absolute;left:0;top:0;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:var(--red);box-shadow:0 0 0 2px #fff,0 0 0 3px rgba(227,6,19,.35);pointer-events:none}}
-.pend{{position:absolute;left:0;right:0;bottom:10px;display:flex;flex-direction:column;align-items:center;gap:2px;pointer-events:none;z-index:2}}
+.pend{{position:absolute;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);display:flex;flex-direction:column;align-items:center;gap:2px;pointer-events:none;z-index:2}}
 .pend img{{width:26px;height:26px}} .pend span{{font-size:17px;color:var(--red)}} .pend b{{font-weight:700}} .pend .copy{{margin:4px 0 0}}
 .pmsg{{position:absolute;left:0;right:0;top:44%;text-align:center;font-size:22px;font-weight:700;color:var(--red);pointer-events:none;z-index:3}}
 .pdd{{position:absolute;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;pointer-events:none}}   /* the round dd badge the beetle sends out when it catches the dot */
@@ -664,6 +686,7 @@ dialog .top{{flex:none}}
 <div class="txt"><h2 id="lt"></h2><div id="tx"></div><dl id="dl"></dl></div>
 <div class="nav2"><button type="button" id="pp2">{ARW}previous</button><div class="cnt"><span id="lk"></span></div><button type="button" id="np2">next{ARE}</button></div>
 </dialog>
+{GAME}
 <dialog id="cw" aria-label="bits &amp; bats">
 <div class="top"><div class="cnt"><span id="ck"></span></div><button type="button" class="x" id="cx" aria-label="close">{XC}</button></div>
 <div class="cwc" id="cwc"></div>
@@ -708,37 +731,39 @@ dialog .top{{flex:none}}
   document.querySelectorAll('.more').forEach(b=>b.addEventListener('click',e=>{{ if(!realTap(e)) return; const g=document.getElementById(b.dataset.g), op=g.classList.contains('shut');
     setCut(g,op); if(!op) g.scrollIntoView({{behavior:'smooth',block:'start'}}); }}));
 
-  /* the end of the site: a little game. Red food dots lie about; drag the pulsing dot to eat them before the beetle does.
-     The beetle walks in curves to the nearest food, leaving a dotted trail. First to 10 wins; a dd badge pops for every bite */
-  (function(){{ const pl=document.getElementById('play'); if(!pl) return;
+  /* the game (22 Oct, evening): opened full screen from the pulsing dot at the end of the page. Four kinds of food - red dot 1, red ring 2,
+     blue diamond 5, yellow star 10 - drag the yellow dot to eat them before the beetle does; first to 100 wins */
+  (function(){{ const gd=document.getElementById('game'), pl=document.getElementById('play'); if(!pl) return;
     const dot=pl.querySelector('.pdot'), bug=pl.querySelector('.pbug'), cv=pl.querySelector('.ptrail'), tc=cv.getContext('2d'), R2=(a,b)=>a+Math.random()*(b-a);
-    const sy=document.getElementById('sy'), sb=document.getElementById('sb'), hint=document.getElementById('phint');
+    const sy=document.getElementById('sy'), sb=document.getElementById('sb');
+    const KINDS=[[1,'f1',.5],[2,'f2',.28],[5,'f5',.15],[10,'f10',.07]], GOAL=100, N=8;
     let W=0,H=0, d={{x:0,y:0}}, g={{x:30,y:200,a:0}}, held=false, run=false, last=0, walked=0, food=[], you=0, them=0, over=false, playing=false;
-    const size=()=>{{ W=pl.clientWidth; H=pl.clientHeight; const r=devicePixelRatio||1; if(cv.width!==Math.round(W*r)){{ cv.width=Math.round(W*r); cv.height=Math.round(H*r); tc.setTransform(r,0,0,r,0,0); tc.fillStyle='rgba(58,60,55,.55)'; }} }};
+    const size=()=>{{ W=pl.clientWidth; H=pl.clientHeight; const r=devicePixelRatio||1; cv.width=Math.round(W*r); cv.height=Math.round(H*r); tc.setTransform(r,0,0,r,0,0); tc.fillStyle='rgba(58,60,55,.55)'; }};
     const DD='<svg class="pdd" viewBox="-20 -20 40 40"><circle r="19" fill="#e30613"/><circle r="15.5" fill="none" stroke="#fff" stroke-width="1" stroke-dasharray="1 2.2"/>'
       +'<text y="1" fill="#fff" font-family="Calibri,Carlito,sans-serif" font-weight="700" font-size="17" text-anchor="middle" dominant-baseline="central">dd</text></svg>';
-    function pop(x,y){{ const w=document.createElement('div'); w.innerHTML=DD; const e=w.firstChild; pl.appendChild(e);
-      e.animate([{{transform:`translate(${{x}}px,${{y}}px) scale(.2)`,opacity:1}},{{transform:`translate(${{x}}px,${{y-24}}px) scale(1.1)`,opacity:1,offset:.35}},
+    function fly(e,x,y){{ e.animate([{{transform:`translate(${{x}}px,${{y}}px) scale(.3)`,opacity:1}},{{transform:`translate(${{x}}px,${{y-24}}px) scale(1.1)`,opacity:1,offset:.35}},
         {{transform:`translate(${{x}}px,${{y-60}}px) scale(.9)`,opacity:0}}],{{duration:1100,easing:'cubic-bezier(.2,.8,.3,1)'}}).finished.then(()=>e.remove()).catch(()=>e.remove()); }}
-    function addFood(){{ const el=document.createElement('i'); el.className='pfood'; const f={{x:R2(24,W-24),y:R2(60,H-90),el}}; el.style.transform=`translate(${{f.x}}px,${{f.y}}px)`; pl.appendChild(el); food.push(f); }}
-    function eat(f,byYou){{ food=food.filter(x=>x!==f); f.el.remove(); pop(f.x,f.y);
-      if(byYou){{ you++; sy.textContent=you; }} else {{ them++; sb.textContent=them; }}
-      if(you>=10||them>=10){{ over=true; const m=document.createElement('p'); m.className='pmsg'; m.textContent=you>=10?'you win!':'the beetle wins!'; pl.appendChild(m);
-        setTimeout(()=>{{ m.remove(); playing=false; pl.classList.remove('go'); you=them=0; sy.textContent=sb.textContent='0'; tc.clearRect(0,0,W,H); food.forEach(x=>x.el.remove()); food=[]; for(let i=0;i<5;i++) addFood(); over=false; }},2600); }}
-      else setTimeout(addFood,R2(400,1400)); }}
+    function pop(x,y,v,byYou){{ let e; if(byYou){{ e=document.createElement('b'); e.className='pplus'; e.textContent='+'+v; }} else {{ const w=document.createElement('div'); w.innerHTML=DD; e=w.firstChild; }}
+      pl.appendChild(e); fly(e,x,y); }}
+    function addFood(){{ if(!W) return; let r=Math.random(), k=KINDS[0]; for(const q of KINDS){{ if(r<q[2]){{ k=q; break; }} r-=q[2]; }}
+      const el=document.createElement('i'); el.className='pf '+k[1]; const f={{x:R2(24,W-24),y:R2(110,H-110),v:k[0],el}}; el.style.left=f.x+'px'; el.style.top=f.y+'px'; pl.appendChild(el); food.push(f); }}
+    function reset(){{ you=them=0; sy.textContent=sb.textContent='0'; tc.clearRect(0,0,W,H); food.forEach(x=>x.el.remove()); food=[]; for(let i=0;i<N;i++) addFood();
+      playing=false; over=false; pl.classList.remove('go'); d={{x:W*.5,y:H*.72}}; g={{x:W*.2,y:H*.35,a:0}}; }}
+    function eat(f,byYou){{ food=food.filter(x=>x!==f); f.el.remove(); pop(f.x,f.y,f.v,byYou);
+      if(byYou){{ you+=f.v; sy.textContent=you; }} else {{ them+=f.v; sb.textContent=them; }}
+      if(you>=GOAL||them>=GOAL){{ over=true; const m=document.createElement('p'); m.className='pmsg'; m.textContent=you>=GOAL?'you win!':'the beetle wins!'; pl.appendChild(m);
+        setTimeout(()=>{{ m.remove(); reset(); }},2800); }}
+      else setTimeout(addFood,R2(250,900)); }}
     function step(t){{ if(!run) return; const dt=Math.min(.05,(t-last)/1000||0); last=t;
       if(!over){{
         let tgt=null, best=1e9;
         if(playing){{
-          /* you: the dot eats what it touches */
-          food.slice().forEach(f=>{{ if(Math.hypot(f.x-d.x,f.y-d.y)<16) eat(f,true); }});
-          /* the beetle: to the nearest food, bug-like in curves */
+          food.slice().forEach(f=>{{ if(Math.hypot(f.x-d.x,f.y-d.y)<18) eat(f,true); }});
           food.forEach(f=>{{ const q=Math.hypot(f.x-g.x,f.y-g.y); if(q<best){{ best=q; tgt=f; }} }});
-        }} else {{ /* waiting to start: the beetle strolls round in loops and leaves the food alone */
-          tgt={{x:W/2+Math.cos(t/1300)*W*.3, y:H*.62+Math.sin(t/1300)*H*.18}}; }}
+        }} else {{ tgt={{x:W/2+Math.cos(t/1300)*W*.3, y:H*.5+Math.sin(t/1300)*H*.2}}; }}
         if(tgt){{ const dx=tgt.x-g.x, dy=tgt.y-g.y;
           const want=Math.atan2(dy,dx)*180/Math.PI+90+Math.sin(t/260)*20; let da=((want-g.a+540)%360)-180;
-          g.a+=Math.max(-170*dt,Math.min(170*dt,da)); const sp=78*dt, h=(g.a-90)*Math.PI/180;
+          g.a+=Math.max(-170*dt,Math.min(170*dt,da)); const sp=82*dt, h=(g.a-90)*Math.PI/180;
           g.x=Math.max(10,Math.min(W-10,g.x+Math.cos(h)*sp)); g.y=Math.max(10,Math.min(H-10,g.y+Math.sin(h)*sp));
           walked+=sp; if(walked>3.2){{ walked=0; tc.fillRect(g.x-.6,g.y-.6,1.2,1.2); }}
           if(playing&&best<20) eat(tgt,false); }}
@@ -749,10 +774,10 @@ dialog .top{{flex:none}}
     dot.addEventListener('pointerdown',e=>{{ held=true; pl.setPointerCapture(e.pointerId); at(e); if(!playing&&!over){{ playing=true; pl.classList.add('go'); }} }});
     pl.addEventListener('pointermove',e=>{{ if(held) at(e); }});
     const up=()=>{{ held=false; }}; pl.addEventListener('pointerup',up); pl.addEventListener('pointercancel',up);
-    let started=false;
-    new IntersectionObserver(es=>es.forEach(e=>{{ if(e.isIntersecting&&!matchMedia('(prefers-reduced-motion: reduce)').matches){{
-      if(!run){{ run=true; size(); if(!started){{ started=true; d={{x:W*.7,y:H*.55}}; for(let i=0;i<5;i++) addFood(); }} last=performance.now(); requestAnimationFrame(step); }} }} else run=false; }}),{{threshold:.3}}).observe(pl);
-    addEventListener('resize',size); }})();
+    document.getElementById('pgo').addEventListener('click',()=>{{ openDlg(gd); requestAnimationFrame(()=>{{ size(); reset(); run=true; last=performance.now(); requestAnimationFrame(step); }}); }});
+    document.getElementById('gx').addEventListener('click',()=>gd.close());
+    gd.addEventListener('close',()=>{{ run=false; }});
+    addEventListener('resize',()=>{{ if(gd.open) size(); }}); }})();
   /* logo switch */
   const B=document.body;
   const setLogo=m=>{{ B.classList.toggle('side',m!=='top'); B.classList.toggle('rail',m==='rail'); try{{ if(!B.classList.contains('stack')) localStorage.setItem('ddlogo2',m); }}catch(e){{}}

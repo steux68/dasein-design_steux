@@ -356,8 +356,8 @@ body:not(.side) .socs{{display:flex}}   /* in the top layouts (and the stack tri
 .sec1 main > section.pg:not(#start):nth-of-type(even) .cvb{{background-color:#f4f4f2}}   /* the full CV / bio / services bars take the same grey */
 .sec1 main > section.pg:not(#start),.sec2 main > section.pg:not(#start),.sec3 main > section.pg:not(#start){{padding-top:12px;padding-bottom:16px}}
 .sec1 main > section.pg:not(#start){{margin-left:10px;margin-right:10px;padding-left:0;padding-right:0}}   /* the grey ends where the title bars end */
-/* the same air in every section (22 Oct): 18 px from the title bar to the first thing, 18 px from the last thing to the section's end, then 39 px to the next bar */
-.sec1 main > section.pg:not(#start){{padding-top:18px!important;padding-bottom:18px!important}}
+/* the same air in every section (22 Oct): 18 px from the title bar to the first thing; the section ends with its last thing, then 39 px to the next bar */
+.sec1 main > section.pg:not(#start){{padding-top:18px!important;padding-bottom:0!important}}   /* the grey ends on the last dotted line (the "more" bar); then 39 px of white to the next bar, the same after grey and white sections */
 .sec1 main > section.pg:not(#start) > .body{{padding-top:0;padding-bottom:0}}
 .sec1 main > section.pg:not(#start) > .body > :first-child,.sec1 main > section.pg:not(#start) > .body > :first-child > :first-child{{margin-top:0!important;padding-top:0!important}}
 .sec1 main > section.pg:not(#start) > .body > :last-child{{margin-bottom:0!important}}

@@ -226,7 +226,9 @@ LEGAL = ('<div class="box legal cut" id="g-legal" data-show="4" data-extra="30">
          'jede Verwendung bedarf der vorherigen Zustimmung.</p>'
          '<h4>Datenschutz</h4><p>Diese Website setzt keine Cookies und erhebt keine personenbezogenen Daten. Die Karte wird von OpenStreetMap geladen. '
          '<span class="todo">[Datenschutzerklärung – bitte ergänzen]</span></p></div>'
-         + morebtn('g-legal', 'impressum') + '<p class="copy">© 2026 [ dasein-design &amp; steux ]</p>')
+         + morebtn('g-legal', 'impressum') + '<p class="copy">© 2026 [ dasein-design &amp; steux ]</p>'
+         # at the very end: a small beetle chases the pulsing dot; the dot wanders, or can be held and moved with a finger
+         '<div class="play" id="play" aria-hidden="true"><i class="pdot"><b></b></i><img class="pbug" src="../img/m-bug-up.webp" alt=""></div>')
 
 
 HTML = f'''<!doctype html>
@@ -354,7 +356,8 @@ body{{position:relative}}
 .stack main > .hb.on{{background-color:#eaffae!important}} .stack main > .hb.hit{{background-color:#cdff3e!important}}
 .stack .stage{{height:calc(100svh - var(--head) - 2 * var(--bar) - 126px)}}
 .stack.pairs .stage{{height:calc(100svh - var(--head) - 2 * var(--bar) - 70px)}}
-.stack .pg:last-child{{min-height:calc(100lvh - var(--head) - 2 * var(--bar) - 110px)}}
+.stack .pg:last-child{{min-height:calc(100lvh - var(--head) - 2 * var(--bar) - 132px)}}
+.stack.pairs .pg:last-child{{min-height:calc(100lvh - var(--head) - 2 * var(--bar) - 66px)}}   /* the last page can always scroll up into place */
 .sbar{{position:relative;z-index:1;height:1px;margin:10px 10px -1px}}   /* one line between two pages, 10 px clear each side (the same as from the side lines to the content) */
 /* page boundary (21 Oct): the desktop's double edge ticks, pointing inwards from both guide lines, each running on as a dotted line right across;
    the two lines are the old title bar's height apart */
@@ -479,6 +482,13 @@ details ul{{margin:0;padding:0 0 0 14px;font-size:13px;line-height:1.4;color:#22
 /* copyright, as at the foot of the desktop side bar */
 .legal h4{{margin:12px 0 2px;font-size:12px;font-weight:700;color:#000}} .legal p{{margin:0;font-size:12.5px;line-height:1.45;color:#222}} .legal .lp{{color:#666;font-size:11.5px}}
 .legal a{{color:#1a5fd0;text-decoration:none}} .legal a[href^="tel:"]{{color:#1e8e3e}} .legal .todo{{color:#e30613}}
+.play{{position:relative;height:300px;margin:14px 0 0;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none}}
+.pdot{{position:absolute;left:0;top:0;width:44px;height:44px;margin:-22px 0 0 -22px;display:flex;align-items:center;justify-content:center;cursor:grab}}
+.pdot b{{width:10px;height:10px;border-radius:50%;background:#cdff3e;box-shadow:0 0 0 1px #3a3c37;animation:pdp 1.4s ease-in-out infinite}}
+.pdot::before,.pdot::after{{content:"";position:absolute;left:50%;top:50%;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;border:1px solid var(--red);opacity:0;animation:pdr 1.8s ease-out infinite}}
+.pdot::after{{animation-delay:.9s}}
+@keyframes pdp{{50%{{transform:scale(1.25)}}}} @keyframes pdr{{0%{{transform:scale(1);opacity:.8}}100%{{transform:scale(4.2);opacity:0}}}}
+.pbug{{position:absolute;left:0;top:0;width:19px;height:42px;margin:-21px 0 0 -9.5px;pointer-events:none;will-change:transform}}
 .copy{{margin:18px 0 0;text-align:center;font-size:10.5px;letter-spacing:.06em;color:#888}}   /* closing line, like a full stop */
 p.lab:not(.first){{margin-top:26px}}
 .box .lab.first{{margin-top:0}}
@@ -646,6 +656,27 @@ dialog .top{{flex:none}}
   document.querySelectorAll('.more').forEach(b=>b.addEventListener('click',()=>{{ const g=document.getElementById(b.dataset.g), op=g.classList.contains('shut');
     setCut(g,op); if(!op) g.scrollIntoView({{behavior:'smooth',block:'start'}}); }}));
 
+  /* the end of the site: a small beetle chases the pulsing dot. The dot wanders about; hold it and move it with a finger, the beetle follows */
+  (function(){{ const pl=document.getElementById('play'); if(!pl) return;
+    const dot=pl.querySelector('.pdot'), bug=pl.querySelector('.pbug'), R2=(a,b)=>a+Math.random()*(b-a);
+    let W=0,H=0, d={{x:60,y:60}}, goal={{x:60,y:60}}, g={{x:20,y:250,a:0}}, held=false, run=false, last=0, next=0;
+    const size=()=>{{ W=pl.clientWidth; H=pl.clientHeight; }};
+    const newGoal=()=>{{ goal={{x:R2(30,W-30),y:R2(30,H-30)}}; next=performance.now()+R2(1800,3800); }};
+    function step(t){{ if(!run) return; const dt=Math.min(.05,(t-last)/1000||0); last=t;
+      if(!held){{ if(t>next) newGoal(); d.x+=(goal.x-d.x)*Math.min(1,dt*1.6); d.y+=(goal.y-d.y)*Math.min(1,dt*1.6); }}
+      const dx=d.x-g.x, dy=d.y-g.y, dist=Math.hypot(dx,dy);
+      if(dist>16){{ const sp=Math.min(120,40+dist*.9)*dt; g.x+=dx/dist*sp; g.y+=dy/dist*sp;
+        const want=Math.atan2(dy,dx)*180/Math.PI+90; let da=((want-g.a+540)%360)-180; g.a+=da*Math.min(1,dt*8); }}
+      else if(!held) newGoal();   /* caught it: the dot hops away */
+      dot.style.transform=`translate(${{d.x}}px,${{d.y}}px)`; bug.style.transform=`translate(${{g.x}}px,${{g.y}}px) rotate(${{g.a}}deg)`;
+      requestAnimationFrame(step); }}
+    const at=e=>{{ const r=pl.getBoundingClientRect(); d.x=Math.max(8,Math.min(W-8,e.clientX-r.left)); d.y=Math.max(8,Math.min(H-8,e.clientY-r.top)); }};
+    dot.addEventListener('pointerdown',e=>{{ held=true; dot.setPointerCapture(e.pointerId); at(e); }});
+    dot.addEventListener('pointermove',e=>{{ if(held) at(e); }});
+    const up=()=>{{ held=false; next=performance.now()+1500; goal={{x:d.x,y:d.y}}; }};
+    dot.addEventListener('pointerup',up); dot.addEventListener('pointercancel',up);
+    new IntersectionObserver(es=>es.forEach(e=>{{ if(e.isIntersecting&&!matchMedia('(prefers-reduced-motion: reduce)').matches){{ if(!run){{ run=true; size(); newGoal(); last=performance.now(); requestAnimationFrame(step); }} }} else run=false; }})).observe(pl);
+    addEventListener('resize',size); }})();
   /* logo switch */
   const B=document.body;
   const setLogo=m=>{{ B.classList.toggle('side',m!=='top'); B.classList.toggle('rail',m==='rail'); try{{ if(!B.classList.contains('stack')) localStorage.setItem('ddlogo2',m); }}catch(e){{}}
@@ -790,7 +821,7 @@ dialog .top{{flex:none}}
       sec.before(b);
       b.classList.add('hb', right?'hr':'hl');
       b.style.top=`calc(var(--head) + var(--bar) + ${{r*H}}px)`; b.style.bottom=`calc(var(--bar) + env(safe-area-inset-bottom,0px) + ${{(2-r)*H}}px)`;
-      sec.style.scrollMarginTop=((r+1)*H+10)+'px';
+      sec.style.scrollMarginTop=(r*H+22)+'px';   /* lands with its own half bar exactly in its place at the top */
       b.setAttribute('role','link'); b.tabIndex=0; b.addEventListener('click',()=>tapGo(b,sec)); }});
     const up=b=>{{ const r=b.getBoundingClientRect(); return r.bottom < innerHeight-parseFloat(getComputedStyle(b).bottom)-3; }};   /* has left the bottom stack */
     const cur=()=>{{ let c=-1; bars.forEach((b,k)=>{{ if(up(b)) c=k; }});
@@ -808,7 +839,7 @@ dialog .top{{flex:none}}
     const H=22, bars=[...document.querySelectorAll('.pg .pbar')], n=bars.length;
     bars.forEach((b,k)=>{{ const sec=b.closest('.pg'); sec.before(b);
       b.style.top=`calc(var(--head) + var(--bar) + ${{k*H}}px)`; b.style.bottom=`calc(var(--bar) + env(safe-area-inset-bottom,0px) + ${{(n-1-k)*H}}px)`;
-      sec.style.scrollMarginTop=((k+1)*H+10)+'px'; b.setAttribute('role','link'); b.tabIndex=0;
+      sec.style.scrollMarginTop=(k*H+22)+'px'; b.setAttribute('role','link'); b.tabIndex=0;
       b.addEventListener('click',()=>tapGo(b,sec)); }});
     const up=b=>{{ const r=b.getBoundingClientRect(); return r.bottom < innerHeight-parseFloat(getComputedStyle(b).bottom)-3; }};   /* has left the bottom stack */
     const cur=()=>{{ let c=-1; bars.forEach((b,k)=>{{ if(up(b)) c=k; }});

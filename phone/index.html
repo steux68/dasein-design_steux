@@ -126,6 +126,10 @@ body:not(.side) .socs{display:flex}   /* in the top layouts (and the stack trial
 .sec1 main > section.pg:not(#start):nth-of-type(even) .cvb{background-color:#f4f4f2}   /* the full CV / bio / services bars take the same grey */
 .sec1 main > section.pg:not(#start),.sec2 main > section.pg:not(#start),.sec3 main > section.pg:not(#start){padding-top:12px;padding-bottom:16px}
 .sec1 main > section.pg:not(#start){margin-left:10px;margin-right:10px;padding-left:0;padding-right:0}   /* the grey ends where the title bars end */
+/* and everything with an edge - photos, boxes, dotted lines - runs out to that same edge; only the words keep 10 px in, in line with the title bar labels */
+.sec1 main > section.pg:not(#start) > .body{padding-left:0;padding-right:0}
+.sec1 main > section.pg:not(#start) > .body :is(p,h2,h3,h4,ul,ol,.lab,.firm,.lh){padding-left:10px;padding-right:10px}
+.sec1 main > section.pg:not(#start) > .body :is(.bgrid,.grid,.lks,.pdfs,.who,.cvp,article,.tile,.lk,.card,.sv3,.duo) :is(p,h2,h3,h4,ul,ol,.lab,.firm,.lh){padding-left:0;padding-right:0}
 .sec1:not(.stack) main > section.pg:not(#start){padding-top:0} .sec1:not(.stack) main > section.pg > .pbar{margin-left:0;margin-right:0}
 .sec2 main > section.pg:not(#start){margin-left:10px;margin-right:10px;padding-left:0;padding-right:0;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat}
 .sec3 main > section.pg:not(#start){transition:background-color .35s} .sec3 main > section.pg.cur{background-color:#f6ffde}

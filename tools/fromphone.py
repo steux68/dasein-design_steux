@@ -36,7 +36,8 @@ def _rep(a, b, s, n=1):
 
 
 # ---------- the beetle's leader lines: circle centre -> elbow -> end on the beetle (desktop page pixels)
-LEADS = [((335, 377), (335, 420), (580, 420)),     # 01 about us -> back leg
+LEADS = [((1215, 800), (1215, 703), (1152, 703)),   # i impressum -> tip of the lower antler
+         ((335, 377), (335, 420), (580, 420)),     # 01 about us -> back leg
          ((555, 744), (555, 652), (648, 652)),     # 02 projects -> back foot
          ((775, 328), None, (775, 432)),           # 03 downloads & links -> middle leg
          ((995, 692), (995, 671), (1086, 671)),    # 04 bits & bats -> lower jaw
@@ -73,12 +74,12 @@ a[href^="tel:"]{color:#1e8e3e;text-decoration:none} a[href^="mailto:"]{color:#1a
 .dlead.dots{mix-blend-mode:normal}
 .dlead circle{fill:#ffd400;stroke:#000;stroke-width:1.2}
 /* the circles light up yellow-lime in turn (01 ... 05), each sending out its two coloured rings, then turn grey again */
-.hot.pin{animation:pinon 7.5s ease-in-out infinite;animation-delay:calc(var(--k) * 1.5s)}
-@keyframes pinon{0%{background:#bfbfbf}3%{background:#cdff3e}17%{background:#cdff3e}20%{background:#bfbfbf}100%{background:#bfbfbf}}
+.hot.pin{animation:pinon 9s ease-in-out infinite;animation-delay:calc(var(--k) * 1.5s)}
+@keyframes pinon{0%{background:#bfbfbf}2.5%{background:#cdff3e}14%{background:#cdff3e}16.7%{background:#bfbfbf}100%{background:#bfbfbf}}
 .pin .cr{position:absolute;inset:-1px;border-radius:50%;border:1.6px solid var(--c1);opacity:0;pointer-events:none;
-  animation:pinturn 7.5s ease-out infinite;animation-delay:calc(var(--k) * 1.5s + .3s)}
+  animation:pinturn 9s ease-out infinite;animation-delay:calc(var(--k) * 1.5s + .3s)}
 .pin .cr.c2{border-color:var(--c2);animation-delay:calc(var(--k) * 1.5s + .6s)}
-@keyframes pinturn{0%{transform:scale(1);opacity:.9}15%{transform:scale(2.3);opacity:0}100%{transform:scale(2.3);opacity:0}}
+@keyframes pinturn{0%{transform:scale(1);opacity:.9}12.5%{transform:scale(2.3);opacity:0}100%{transform:scale(2.3);opacity:0}}
 .hot.pin:hover,.hot.pin:focus-visible,.hot.pin.near{animation:none}
 .hot.pin.near{animation:pinpulse 1.5s ease-in-out infinite}
 @media (prefers-reduced-motion:reduce){.hot.pin,.pin .cr{animation:none}}
@@ -141,6 +142,8 @@ a[href^="mailto:"],a[href^="mailto:"] span{text-decoration:none!important}
 .impc h4{margin:12px 0 2px;font-size:12px;font-weight:700;color:#000;break-after:avoid} .impc p{margin:0;break-inside:avoid}
 .impc a{color:#1a5fd0;text-decoration:none} .impc a[href^="tel:"]{color:#1e8e3e} .impc .todo{color:#e30613}
 .ci{display:inline-block;font-style:normal;width:.95em;height:.95em;line-height:.85em;text-align:center;border:.07em solid currentColor;border-radius:50%;font-size:.8em;vertical-align:.05em}
+.impl{pointer-events:auto;color:#000;text-decoration:none;font-weight:400;transition:color .2s}
+.impl:hover,.impl:focus-visible,.impl.cur{color:#e30613;font-weight:700;outline:none}
 /* three clicks on the beetle: the heart */
 .heartfx{position:fixed;inset:0;z-index:9999;pointer-events:none;overflow:hidden}
 .heartfx svg{position:absolute;left:0;top:0;width:60px;height:60px;margin:-30px 0 0 -30px;fill:#e30613;will-change:transform,opacity}
@@ -241,7 +244,7 @@ def _impressum_page(s):
     ch = ch.replace('bg-[rgba(205,255,62,0.86)]', 'bg-[rgba(0,0,0,0.05)]').replace('<span class="fcal-b leading-[normal] text-[18px]">contact </span>', '<span class="fcal-r leading-[normal] text-[15px]">contact </span>')
     s = s[:j] + ch + s[j:]
     # while on the impressum page its (i) link in the right-hand bar stays red
-    return s.replace('</body>', '<script>document.addEventListener("pagechange",e=>document.querySelectorAll("a.imp").forEach(a=>a.classList.toggle("cur",e.detail==="impressum")));</script></body>', 1)
+    return s.replace('</body>', '<script>document.addEventListener("pagechange",e=>document.querySelectorAll("a.impl").forEach(a=>a.classList.toggle("cur",e.detail==="impressum")));</script></body>', 1)
 
 
 def patch(s):
@@ -284,6 +287,9 @@ def patch(s):
         return out
     s = re.sub(r'<a class="hot pin" href="([^"]+)" style="([^"]+)">(\d\d)', pin, s)
     assert k[0] == 5
+    s = _sub1(r'(<a class="hot pin" href="#contact".*?</a>)', lambda m: m.group(1) +
+              '<a class="hot pin" href="#impressum" style="left:1200px;top:800px;--k:5;--c1:#3a3c37;--c2:#ffd400">i<i class="cr"></i><i class="cr c2"></i>'
+              '<svg class="pring" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="14.5"/></svg><span class="pl l">impressum</span></a>', s, re.S)
     s = _rep('<span class="pl r">us &amp; our services</span>', '<span class="pl r">about us</span>', s)
     # ---- pop-up
     s = _sub1(r'(<button type="button" class="lbx" id="lbx"[^>]*>)<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 2L14 14M14 2L2 14"/></svg>', r'\1' + XC, s)
@@ -351,10 +357,10 @@ def patch(s):
     s = _rep('<span class="leading-[normal] text-[14px]">Architekt</span>',
              '<span class="leading-[normal] text-[14px]">Architekt<i class="rs"></i>Inhaber</span>', s)
     # ---- impressum (22 Oct): no extra page or tab on the desktop - a small dot above the copyright opens it in a pop-up
-    s = _rep('<a class="hot social" href="#" data-pending="1" aria-label="Facebook"',
-             '<a class="hot imp" href="#impressum" aria-label="impressum" title="impressum" style="left:1330px;top:552px;width:26px;height:210px">'
-             '<span><b>impressum</b> · click for the full text</span></a>'
-             '<a class="hot social" href="#" data-pending="1" aria-label="Facebook"', s)
+    # the copyright line reads "© 2026 [ dasein-design & steux ] · impressum" - the last word goes to the impressum page
+    s, n = re.subn(r'(<div class="-translate-x-1/2 -translate-y-1/2 absolute flex )h-\[252px\]( items-center justify-center left-\[1343px\] )top-\[898px\]( w-\[36px\]" data-node-id="[^"]+")(><div class="-rotate-90 flex-none"><div class="[^"]*?) w-\[252px\]"><p class="whitespace-pre-wrap">(<span class="leading-\[normal\]">© 2026</span><span class="[^"]*">\s*\[ dasein-design &amp; steux \]</span>)</p>',
+                   r'\1\2\3 style="height:330px;top:859px"\4" style="width:330px"><p class="whitespace-pre-wrap">\5<span class="fcal-r"> · </span><a class="impl" href="#impressum">impressum</a></p>', s)
+    assert n >= 5, n
     s = _impressum_page(s)
     # ---- project pop-up (22 Oct): the arrows beside the photo strip step to the previous / next photo instead of scrolling the strip
     s = _rep("$('lbsl0').onclick=()=>{ st.scrollLeft-=st.clientWidth*.8; }; $('lbsr0').onclick=()=>{ st.scrollLeft+=st.clientWidth*.8; };",

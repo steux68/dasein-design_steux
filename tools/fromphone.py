@@ -142,6 +142,7 @@ a[href^="mailto:"],a[href^="mailto:"] span{text-decoration:none!important}
 .impc .lab2{margin:0 0 6px;font-weight:700;font-size:11px;letter-spacing:.14em;color:#e30613;column-span:all}
 .impc .lp{color:#666;font-size:11.5px;margin:0 0 4px;column-span:all}
 .impc h4{margin:12px 0 2px;font-size:12px;font-weight:700;color:#000;break-after:avoid} .impc p{margin:0;break-inside:avoid}
+.impc .ib{break-inside:avoid;-webkit-column-break-inside:avoid;display:block;overflow:hidden}
 .impc a{color:#1a5fd0;text-decoration:none} .impc a[href^="tel:"]{color:#1e8e3e} .impc .todo{color:#e30613}
 .ci{display:inline-block;font-style:normal;width:.95em;height:.95em;line-height:.85em;text-align:center;border:.07em solid currentColor;border-radius:50%;font-size:.8em;vertical-align:.05em}
 .impl{pointer-events:auto;color:#000;text-decoration:none;font-weight:400;transition:color .2s}
@@ -236,7 +237,9 @@ def _closing_div(s, i):
 
 def _impressum_page(s):
     """a page after contact, like it: the impressum written out, vertical title "impressum [§]"; no tab of its own (reached by the (i) above the copyright)"""
-    body = f'<div class="impc" style="left:235px;top:60px;width:860px"><p class="lab2">IMPRESSUM</p>{LEGAL_BODY}</div>'
+    # each heading travels with its text, so a column never ends on a lone heading (22 Oct)
+    legal = re.sub(r'(<h4>.*?</h4>)(<p[^>]*>.*?</p>)', r'<div class="ib">\1\2</div>', LEGAL_BODY, flags=re.S)
+    body = f'<div class="impc" style="left:235px;top:60px;width:860px"><p class="lab2">IMPRESSUM</p>{legal}</div>'
     i = s.index('<section class="pg" id="contact"'); j = s.index('</section>', i) + len('</section>')
     s = s[:j] + f'<section class="pg" id="impressum"><div class="bg-white relative frame">{body}</div></section>' + s[j:]
     i = s.index('<div class="chrome" data-pg="contact">'); j = _closing_div(s, i)

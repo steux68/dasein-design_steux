@@ -57,13 +57,13 @@ PIECES = ''.join(
 
 # ---------- five pages: about us · projects · downloads & links · bits & bats · contact (contact moved to the end, 21 Oct) ----------
 TABS = [('us', 'about us', '01'), ('projects', 'projects', '02'), ('downloads', 'downloads & links', '03'),
-        ('bits', 'bits & bats', '04'), ('contact', 'contact', '05')]
+        ('bits', 'bits & bats', '04'), ('contact', 'contact', '05'), ('legal', 'impressum', '06')]
 # about us (top) and contact (bottom) are half tabs (Steuart, 21 Oct): together they take one tab's height
-TABHTML = ''.join(f'<a class="tab{" half" if i in ("us", "contact") else ""}" href="#{i}" data-pg="{i}"><span>{n.replace("&", "&amp;")}</span> <small>[{k}]</small></a>' for i, n, k in TABS)
+TABHTML = ''.join(f'<a class="tab{" half" if i in ("us", "contact", "legal") else ""}" href="#{i}" data-pg="{i}"><span>{n.replace("&", "&amp;")}</span> <small>[{k}]</small></a>' for i, n, k in TABS)
 # circles beside the beetle: left and right, top to bottom (five, 21 Oct)
 # where each circle's dotted line ends on the upright beetle (fractions of its box): mouth, right front leg (claw), left middle leg, right back leg
-AIM = [(.51, .245), (.715, .365), (.258, .53), (.80, .605), (.31, .905)]
-PINS = ''.join(f'<a class="pin {"l" if k % 2 == 0 else "r"}" href="#{i}" data-fx="{AIM[k][0]}" data-fy="{AIM[k][1]}" style="top:{10.5 + k * 17.6}%;--k:{k}"><b>{num}</b><span>{n.replace("&", "&amp;")}</span></a>'
+AIM = [(.51, .245), (.715, .365), (.258, .53), (.80, .605), (.31, .905), (.69, .80)]   # ... 06 impressum: right back leg
+PINS = ''.join(f'<a class="pin {"l" if k % 2 == 0 else "r"}" href="#{i}" data-fx="{AIM[k][0]}" data-fy="{AIM[k][1]}" style="top:{8 + k * 15.2}%;--k:{k}"><b>{num}</b><span>{n.replace("&", "&amp;")}</span></a>'
                for k, (i, n, num) in enumerate(TABS))
 
 P = [{'t': p['t'], 'x': p['x'], 'd': p['d'], 'imgs': ['../' + s for s in p['imgs']]} for p in LB.PROJECTS]
@@ -135,7 +135,7 @@ BCAPS = [c.replace('&amp;', '&') for im, t, c in BITS]
 
 # ---------- us & contact: the partnership, the two partners (CV folds open), the office with the map ----------
 PARTNERS = [
-    dict(role='Architekt', first='Cuong', last='TRAN-VIET', q='BArch DipArch', idimg='m-id-cuong.webp', idalt='Personalausweis Cuong Tran-Viet', tel='+43 (0)676 4822 464', mail='cuong@dasein-design.net', extra='', nat='Österreich [EU]', lang='Deutsch &amp; Vietnamesisch [Muttersprache], English [verhandlungssicher]',
+    dict(role='Architekt<i class="rs"></i>Inhaber', first='Cuong', last='TRAN-VIET', q='BArch DipArch', idimg='m-id-cuong.webp', idalt='Personalausweis Cuong Tran-Viet', tel='+43 (0)676 4822 464', mail='cuong@dasein-design.net', extra='', nat='Österreich [EU]', lang='Deutsch &amp; Vietnamesisch [Muttersprache], English [verhandlungssicher]',
          cv=[('Professional', ['2010 ZT: Arch+Ing, Bundeskammer der ZiviltechnikerInnen, Österreich [EU]',
                                '2005 ARB: Architects Registration Board of the United Kingdom [UK]']),
              ('Academic', ['Sep.’00 – Jun.’02 » Bartlett School of Architecture, UCL, London – Dip. Arch',
@@ -179,7 +179,7 @@ def cvpanel(n, p):
     secs = p['cv'] + ([('Sprachen', [p['extra'].replace('Sprachen: ', '')])] if p['extra'] else [])
     cv = ''.join(f'<h4>{h}</h4><ul>' + ''.join(f'<li>{x}</li>' for x in xs) + '</ul>' for h, xs in secs)
     return (f'<details class="cvp" id="cv{n}"><summary></summary><div class="box"><p class="lab first">CV</p>'
-            f'<h3 class="cvn">{p["first"]} <b>{p["last"]}</b> <span class="q">{p["q"]}</span></h3>{cv}'
+            f'<p class="role cvr">» {p["role"]}</p><h3 class="cvn">{p["first"]} <b>{p["last"]}</b> <span class="q">{p["q"]}</span></h3>{cv}'
             f'<button type="button" class="cvb" aria-expanded="true" aria-controls="cv{n}">{PLUS}<span class="cvt">full</span><b>CV</b></button></div></details>')
 
 
@@ -198,10 +198,31 @@ CONTACT = ('<div class="box"><p class="lab first">OFFICE</p><p class="addr"><b c
       + '<div class="pcs">' + ''.join(f'<p><b>{p["first"]} {p["last"]}</b><br><a href="tel:{p["tel"].replace(" ", "").replace("(0)", "")}">{p["tel"]}</a> · <a href="mailto:{p["mail"]}">{p["mail"]}</a></p>' for p in PARTNERS) + '</div>'
       '<div class="mapw"><div class="map" id="map"></div><div class="mz"><button type="button" id="zin" aria-label="zoom in">' + SEARCH.ZOOM_IN + '</button><button type="button" id="zout" aria-label="zoom out">' + SEARCH.ZOOM_OUT + '</button><button type="button" id="zhome" aria-label="back to the start view">' + SEARCH.ZOOM_HOME + '</button></div></div>'
       '<p class="mapl"><a href="https://www.openstreetmap.org/?mlat=48.211431&amp;mlon=16.333964#map=18/48.211431/16.333964">open the map</a></p></div>'
-           '<p class="ctx">' + CONTACT_TXT + '</p><p class="copy">© 2026 [ dasein-design &amp; steux ]</p>')   # the closing line of the site, after the map
+           '<p class="ctx">' + CONTACT_TXT + '</p>')   # the closing line of the site, after the map
 
 MOREP = ('<button type="button" class="cvb more" aria-expanded="false" data-g="g-proj">' + PLUS
          + '<span class="cvt"><span class="op">more</span><span class="cl">fewer</span></span><b>projects</b></button>')
+
+# ---------- impressum [06] (draft by Claude, 22 Oct 2026 - to be checked by the office / the Kammer before going live) ----------
+LEGAL = ('<div class="box legal"><p class="lab first">IMPRESSUM</p>'
+         '<p class="lp">Informationen gemäß § 5 E-Commerce-Gesetz und Offenlegung gemäß § 25 Mediengesetz</p>'
+         '<h4>Medieninhaber, Herausgeber und Diensteanbieter</h4>'
+         '<p><b>Arch. DI Cuong TRAN-VIET</b><br>Architekt (Ziviltechniker) · Inhaber von <b class="dd">dasein-design</b><br>Neulerchenfelderstrasse 42/6 · A-1160 Wien · Österreich<br>'
+         'T <a href="tel:+436764822464">+43 (0)676 4822 464</a> · E <a href="mailto:cuong@dasein-design.net">cuong@dasein-design.net</a></p>'
+         '<h4>Unternehmensgegenstand</h4><p>Architektur, Planung und Design</p>'
+         '<h4>Berufsbezeichnung und Kammer</h4><p>Architekt (Ziviltechniker), Berufsbezeichnung verliehen in Österreich.<br>'
+         'Mitglied der Kammer der Ziviltechniker:innen für Wien, Niederösterreich und Burgenland (ZT Kammer Ost), Karlsgasse 9, 1040 Wien · <a href="https://ost.zt.at/">ost.zt.at</a></p>'
+         '<h4>Berufsrecht</h4><p>Ziviltechnikergesetz 2019 (ZTG 2019) und Standesregeln der Ziviltechniker:innen, abrufbar unter <a href="https://www.ris.bka.gv.at/">www.ris.bka.gv.at</a> und <a href="https://ost.zt.at/">ost.zt.at</a></p>'
+         '<h4>Aufsichtsbehörde</h4><p class="todo">[zuständiges Bundesministerium – bitte bestätigen]</p>'
+         '<h4>UID-Nummer</h4><p class="todo">[ATU – bitte ergänzen]</p>'
+         '<h4>Mitarbeit</h4><p>Steuart J Mackenzie HARRISON, Architect (ARB, UK) – Mitarbeit, Gestaltung dieser Website</p>'
+         '<h4>Haftung und Urheberrecht</h4><p>Die Inhalte dieser Website wurden mit Sorgfalt erstellt; für Richtigkeit, Vollständigkeit und Aktualität wird keine Gewähr übernommen. '
+         'Für die Inhalte verlinkter Websites sind ausschließlich deren Betreiber verantwortlich. Texte, Bilder und Pläne sind urheberrechtlich geschützt; '
+         'jede Verwendung bedarf der vorherigen Zustimmung.</p>'
+         '<h4>Datenschutz</h4><p>Diese Website setzt keine Cookies und erhebt keine personenbezogenen Daten. Die Karte wird von OpenStreetMap geladen. '
+         '<span class="todo">[Datenschutzerklärung – bitte ergänzen]</span></p></div>'
+         '<p class="copy">© 2026 [ dasein-design &amp; steux ]</p>')
+
 
 HTML = f'''<!doctype html>
 <html lang="de">
@@ -323,10 +344,11 @@ body{{position:relative}}
 .stack main > .hb.hr{{margin:16px 10px -1px 50%;
   background:repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left top/100% 1px no-repeat,repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left bottom/100% 1px no-repeat,
     repeating-linear-gradient(to bottom,#b8b8b8 0 1px,transparent 1px 3px) left top/1px 100% no-repeat,#fff}}
-.stack main > .hb.hs{{margin-top:-22px}}   /* start shares the line with contact */
+.sback{{position:fixed;left:18px;right:18px;z-index:13;background:#fff;pointer-events:none}}
 .stack.inpg main > .hb{{background-color:#f2f2f2}}
 .stack main > .hb.on{{background-color:#eaffae!important}} .stack main > .hb.hit{{background-color:#cdff3e!important}}
-.pairs .stage{{height:calc(100svh - var(--head) - 2 * var(--bar) - 70px)}}
+.stack .stage{{height:calc(100svh - var(--head) - 2 * var(--bar) - 126px)}}
+.stack.pairs .stage{{height:calc(100svh - var(--head) - 2 * var(--bar) - 70px)}}
 .stack .pg:last-child{{min-height:calc(100lvh - var(--head) - 2 * var(--bar) - 110px)}}
 .sbar{{position:relative;z-index:1;height:1px;margin:10px 10px -1px}}   /* one line between two pages, 10 px clear each side (the same as from the side lines to the content) */
 /* page boundary (21 Oct): the desktop's double edge ticks, pointing inwards from both guide lines, each running on as a dotted line right across;
@@ -356,14 +378,14 @@ html,body{{overflow-x:clip}}
 .pin b{{position:relative}}
 /* thin red rings ripple out of the circles one after another - 01, 02, 03, 04, then from the start - to show they can be tapped */
 .pin b::before,.pin b::after{{content:"";position:absolute;inset:-1px;border-radius:50%;border:1.6px solid var(--c1,var(--red));opacity:0;pointer-events:none;
-  animation:pinring 7.5s ease-out infinite;animation-delay:calc(var(--k) * 1.5s + .3s)}}
+  animation:pinring 9s ease-out infinite;animation-delay:calc(var(--k) * 1.5s + .3s)}}
 .pin b::after{{border-color:var(--c2,var(--red));animation-delay:calc(var(--k) * 1.5s + .6s)}}
 /* in turn each circle lights up yellow-lime (as if activated), sends out its rings, then turns grey again before the next one */
-.pin b{{animation:pinon 7.5s ease-in-out infinite;animation-delay:calc(var(--k) * 1.5s)}}
-@keyframes pinon{{0%{{background:#bfbfbf}}3%{{background:#cdff3e}}17%{{background:#cdff3e}}20%{{background:#bfbfbf}}100%{{background:#bfbfbf}}}}
+.pin b{{animation:pinon 9s ease-in-out infinite;animation-delay:calc(var(--k) * 1.5s)}}
+@keyframes pinon{{0%{{background:#bfbfbf}}2.5%{{background:#cdff3e}}14%{{background:#cdff3e}}16.7%{{background:#bfbfbf}}100%{{background:#bfbfbf}}}}
 .pin:nth-of-type(1){{--c1:#ffd400;--c2:#2f8cff}} .pin:nth-of-type(2){{--c1:#2fbf4a;--c2:#ffd400}}
-.pin:nth-of-type(3){{--c1:#2f8cff;--c2:#cdff3e}} .pin:nth-of-type(4){{--c1:#e30613;--c2:#2fbf4a}} .pin:nth-of-type(5){{--c1:#cdff3e;--c2:#e30613}}
-@keyframes pinring{{0%{{transform:scale(1);opacity:.9}}15%{{transform:scale(2.3);opacity:0}}100%{{transform:scale(2.3);opacity:0}}}}
+.pin:nth-of-type(3){{--c1:#2f8cff;--c2:#cdff3e}} .pin:nth-of-type(4){{--c1:#e30613;--c2:#2fbf4a}} .pin:nth-of-type(5){{--c1:#cdff3e;--c2:#e30613}} .pin:nth-of-type(6){{--c1:#3a3c37;--c2:#ffd400}}
+@keyframes pinring{{0%{{transform:scale(1);opacity:.9}}12.5%{{transform:scale(2.3);opacity:0}}100%{{transform:scale(2.3);opacity:0}}}}
 @media (prefers-reduced-motion:reduce){{.pin b,.pin b::before,.pin b::after{{animation:none}}}}
 .pin span{{font-size:12px;line-height:1.15;background:rgba(255,255,255,.85);padding:1px 3px}}
 /* thin dotted leader lines from the circles to the beetle, as on the desktop start page */
@@ -400,6 +422,8 @@ html,body{{overflow-x:clip}}
 /* ID card on top, filling the column (number, birth date and signature blurred) */
 .who .idw{{display:block;align-self:stretch;position:relative}}   /* the ID card fills the column, no frame of its own (Steuart, 21 Oct) */
 .who .idc{{display:block;width:100%;height:auto;border-radius:6px}}
+.cvr{{margin:0;font-size:11.5px;color:#666}}
+.who .role .rs,.cvr .rs{{display:inline-block;width:2.5px;height:.95em;margin:0 6px;vertical-align:-.1em;background:#3a3c37}}
 .who .role{{margin:8px 0 0;font-size:11.5px;color:#666}}
 .who h3,.cvn{{margin:1px 0 0;font-weight:400;font-size:15px;line-height:1.15;color:var(--red)}} .who h3 b,.cvn b{{font-weight:700}}
 .who .q,.cvn .q{{margin:2px 0 0;font-size:11.5px;font-style:italic;font-weight:400;color:#555}}
@@ -446,6 +470,8 @@ details ul{{margin:0;padding:0 0 0 14px;font-size:13px;line-height:1.4;color:#22
 /* the partners on the contact page too (as on the desktop), compact */
 .pcs{{margin:12px 0 0;font-size:min(13px,3.4vw);line-height:1.4}} .pcs p{{margin:0 0 8px}} .pcs b{{font-weight:700}} .pcs a{{text-decoration:none}}
 /* copyright, as at the foot of the desktop side bar */
+.legal h4{{margin:12px 0 2px;font-size:12px;font-weight:700;color:#000}} .legal p{{margin:0;font-size:12.5px;line-height:1.45;color:#222}} .legal .lp{{color:#666;font-size:11.5px}}
+.legal a{{color:#1a5fd0;text-decoration:none}} .legal a[href^="tel:"]{{color:#1e8e3e}} .legal .todo{{color:#e30613}}
 .copy{{margin:18px 0 0;text-align:center;font-size:10.5px;letter-spacing:.06em;color:#888}}   /* closing line, like a full stop */
 p.lab:not(.first){{margin-top:26px}}
 .box .lab.first{{margin-top:0}}
@@ -565,6 +591,7 @@ dialog .top{{flex:none}}
 {section("downloads", "downloads & links", "03", DOWNLOADS)}
 {section("bits", "bits & bats", "04", BITSHTML)}
 {section("contact", "contact", "05", CONTACT)}
+{section("legal", "impressum", "06", LEGAL)}
 </main>
 <i class="rule l" aria-hidden="true"></i><i class="rule r" aria-hidden="true"></i>
 <div class="bar btop"><button type="button" id="goN" aria-label="previous page"><span class="nn">{ARN}</span><span class="ns">{ARS}</span></button></div>
@@ -751,16 +778,23 @@ dialog .top{{flex:none}}
     /* ?stack=2: half bars in three rows (about us | projects, downloads & links | bits & bats, contact | start). Each half rises on its own
        when its page arrives and locks in beside its partner like a jigsaw piece; pages still to come wait in their places at the bottom */
     const H=22, bars=[...document.querySelectorAll('.pg .pbar')], secs=bars.map(b=>b.closest('.pg'));
-    const st=document.createElement('div'); st.className='pbar'; st.innerHTML='<b>start</b><small>[00]</small>'; bars.push(st); secs.push(document.getElementById('start'));
     bars.forEach((b,k)=>{{ const r=k>>1, right=k&1, sec=secs[k];
-      if(k===5) bars[4].after(b); else sec.before(b);
-      b.classList.add('hb', right?'hr':'hl'); if(k===5) b.classList.add('hs');
+      sec.before(b);
+      b.classList.add('hb', right?'hr':'hl');
       b.style.top=`calc(var(--head) + var(--bar) + ${{r*H}}px)`; b.style.bottom=`calc(var(--bar) + env(safe-area-inset-bottom,0px) + ${{(2-r)*H}}px)`;
-      if(k<5) sec.style.scrollMarginTop=((r+1)*H+10)+'px';
+      sec.style.scrollMarginTop=((r+1)*H+10)+'px';
       b.setAttribute('role','link'); b.tabIndex=0; b.addEventListener('click',()=>tapGo(b,sec)); }});
     const up=b=>{{ const r=b.getBoundingClientRect(); return r.bottom < innerHeight-parseFloat(getComputedStyle(b).bottom)-3; }};   /* has left the bottom stack */
-    const cur=()=>{{ let c=-1; bars.slice(0,5).forEach((b,k)=>{{ if(up(b)) c=k; }});
+    const cur=()=>{{ let c=-1; bars.forEach((b,k)=>{{ if(up(b)) c=k; }});
       bars.forEach((b,k)=>b.classList.toggle('on',k===c)); document.body.classList.toggle('inpg',c>=0); }};
+    /* white backing behind the stacks, so no page shows through the empty half of a row */
+    const bt=document.createElement('div'), bb=document.createElement('div'); bt.className='sback t'; bb.className='sback b'; document.body.append(bt,bb);
+    const back=()=>{{ const t0=document.querySelector('.bar.btop').getBoundingClientRect().bottom, b0=document.querySelector('.bar.bbot').getBoundingClientRect().top;
+      let tb=t0, bt0=b0;
+      bars.forEach(b=>{{ const r=b.getBoundingClientRect(), top=parseFloat(getComputedStyle(b).top), bot=parseFloat(getComputedStyle(b).bottom);
+        if(r.top<=top+.5) tb=Math.max(tb,r.bottom); if(r.bottom>=innerHeight-bot-.5) bt0=Math.min(bt0,r.top); }});
+      bt.style.top=t0+'px'; bt.style.height=Math.max(0,tb-t0)+'px'; bb.style.top=bt0+'px'; bb.style.height=Math.max(0,b0-bt0)+'px'; }};
+    addEventListener('scroll',back,{{passive:true}}); addEventListener('resize',back); back();
     addEventListener('scroll',cur,{{passive:true}}); cur();
   }} else if(document.body.classList.contains('stack')){{
     const H=22, bars=[...document.querySelectorAll('.pg .pbar')], n=bars.length;

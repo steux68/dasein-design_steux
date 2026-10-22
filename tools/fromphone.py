@@ -124,6 +124,7 @@ a[href^="mailto:"],a[href^="mailto:"] span{text-decoration:none!important}
 /* services: a dotted line across each partner's column at the tick y 440, in place of the red bars above the names */
 .pline{position:absolute;top:620px;width:420px;height:1px;z-index:3;background:repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px)}
 .sub2{color:#e30613;font-size:11px;letter-spacing:.12em;margin-bottom:3px!important}
+.rs{display:inline-block;width:2.5px;height:.9em;margin:0 6px;vertical-align:-.08em;background:#3a3c37}
 /* three clicks on the beetle: the heart */
 .heartfx{position:fixed;inset:0;z-index:9999;pointer-events:none;overflow:hidden}
 .heartfx svg{position:absolute;left:0;top:0;width:60px;height:60px;margin:-30px 0 0 -30px;fill:#e30613;will-change:transform,opacity}
@@ -303,6 +304,9 @@ def patch(s):
     # client subtitles in the small bold red capitals used everywhere else
     for t in ('INFORMATION FOR CLIENTS', 'LINKS FOR CLIENTS'):
         s = _rep(f'<p class="leading-[normal] mb-0">{t}</p>', f'<p class="leading-[normal] mb-0 sub2">{t}</p>', s)
+    # Cuong is the owner: "» Architekt | Inhaber" (22 Oct)
+    s = _rep('<span class="leading-[normal] text-[14px]">Architekt</span>',
+             '<span class="leading-[normal] text-[14px]">Architekt<i class="rs"></i>Inhaber</span>', s)
     # ---- styles
     s = _rep('</style>', CSS + '</style>', s)
     return s.replace('</body>', HEART_JS + MARK + '</body>', 1)

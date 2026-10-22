@@ -237,7 +237,7 @@ def _impressum_page(s):
     i = s.index('<div class="chrome" data-pg="contact">'); j = _closing_div(s, i)
     ch = s[i:j].replace('data-pg="contact"', 'data-pg="impressum"', 1)
     ch = ch.replace('<span class="fcal-b leading-[normal] text-[50px]">contact </span><span class="fcal-r leading-[normal] text-[20px]">[05]</span>',
-                    '<span class="fcal-b leading-[normal] text-[50px]">impressum </span><span class="fcal-r leading-[normal] text-[20px]">[<i class="ci">i</i>]</span>')
+                    '<span class="fcal-b leading-[normal] text-[50px]">impressum </span><span class="fcal-r leading-[normal] text-[20px]">[i]</span>')
     ch = ch.replace('bg-[rgba(205,255,62,0.86)]', 'bg-[rgba(0,0,0,0.05)]').replace('<span class="fcal-b leading-[normal] text-[18px]">contact </span>', '<span class="fcal-r leading-[normal] text-[15px]">contact </span>')
     s = s[:j] + ch + s[j:]
     # while on the impressum page its (i) link in the right-hand bar stays red
@@ -353,7 +353,7 @@ def patch(s):
     # ---- impressum (22 Oct): no extra page or tab on the desktop - a small dot above the copyright opens it in a pop-up
     s = _rep('<a class="hot social" href="#" data-pending="1" aria-label="Facebook"',
              '<a class="hot imp" href="#impressum" aria-label="impressum" title="impressum" style="left:1330px;top:552px;width:26px;height:210px">'
-             '<span><i class="ii">i</i> <b>impressum</b> · click for the full text</span></a>'
+             '<span><b>impressum</b> · click for the full text</span></a>'
              '<a class="hot social" href="#" data-pending="1" aria-label="Facebook"', s)
     s = _impressum_page(s)
     # ---- project pop-up (22 Oct): the arrows beside the photo strip step to the previous / next photo instead of scrolling the strip

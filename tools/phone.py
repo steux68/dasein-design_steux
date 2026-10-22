@@ -183,17 +183,15 @@ def cvpanel(n, p):
             f'<button type="button" class="cvb" aria-expanded="true" aria-controls="cv{n}">{PLUS}<span class="cvt">full</span><b>CV</b></button></div></details>')
 
 
-US = ('<div class="box"><p class="lab first">PARTNERSHIP</p><p class="firm"><b class="dd">dasein-design</b> [architecture+design] [Wien]<br><span>» Jan.’03 – bis dato</span></p>'
+US = ('<div class="box"><div class="lh"><p class="lab first">PARTNERSHIP</p>' + '<button type="button" class="cvb" aria-expanded="false" aria-controls="bio">' + PLUS + '<span class="cvt">full</span><b>bio</b></button>' + '</div><p class="firm"><b class="dd">dasein-design</b> [architecture+design] [Wien]<br><span>» Jan.’03 – bis dato</span></p>'
       f'<p class="intro2">{INTRO}</p>'
-      '<div class="opn"><button type="button" class="cvb" aria-expanded="false" aria-controls="bio">' + PLUS + '<span class="cvt">full</span><b>bio</b></button>'
-      '</div><details class="bio fold" id="bio"><summary></summary>' + ''.join(f'<p>{t}</p>' for t in BIO) + '</details></div>'
+      '<details class="bio fold" id="bio"><summary></summary>' + ''.join(f'<p>{t}</p>' for t in BIO) + '</details></div>'
 
       '<div class="duo">' + ''.join(partner(n, p) for n, p in enumerate(PARTNERS)) + '</div>'
       + ''.join(cvpanel(n, p) for n, p in enumerate(PARTNERS))
       # OUR SERVICES: its own box, the three blocks side by side in short, "full services" unfolds the whole text
-      + '<div class="box"><p class="lab first">OUR SERVICES</p><div class="sv3">' + ''.join(
+      + '<div class="box"><div class="lh"><p class="lab first">OUR SERVICES</p>' + '<button type="button" class="cvb" aria-expanded="false" aria-controls="svc">' + PLUS + '<span class="cvt">full</span><b>services</b></button>' + '</div><div class="sv3">' + ''.join(
           f'<div><img src="../img/{ic}" alt=""><b>{h}</b><span>{SERVICES_SHORT[h]}</span></div>' for h, ic, xs in SERVICES) + '</div>'
-      '<div class="opn"><button type="button" class="cvb" aria-expanded="false" aria-controls="svc">' + PLUS + '<span class="cvt">full</span><b>services</b></button></div>'
       '<details class="svc fold" id="svc"><summary></summary>' + ''.join(
           f'<h4><img src="../img/{ic}" alt="">{h}</h4>' + ''.join(f'<p>» {x}</p>' for x in xs) for h, ic, xs in SERVICES) + '</details></div>')
 CONTACT = ('<div class="box"><p class="lab first">OFFICE</p><p class="addr"><b class="dd">dasein-design</b> · Neulerchenfelderstrasse 42/6<br>A-1160 Wien · Austria · EU</p>'
@@ -317,13 +315,17 @@ body{{position:relative}}
 .stack .stage{{height:calc(100svh - var(--head) - 2 * var(--bar) - 104px);min-height:330px}}
 /* the start page fills the whole screen (largest viewport), so all five bars wait together at the bottom however the phone's toolbar is showing */
 .stack #start{{min-height:calc(100lvh - var(--head) - var(--bar))}}
-/* ?stack=2: the bars in three rows of two halves - more screen for the pages */
-.prow{{position:sticky;z-index:14;display:grid;grid-template-columns:1fr 1fr;height:23px;margin:16px 10px -1px;
+/* ?stack=2: half bars - each half moves on its own and locks in beside its partner */
+.stack main > .hb{{position:sticky;z-index:14;display:flex;align-items:center;height:23px;padding:0 10px;font-size:12px;color:#000;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  transition:background-color .15s;
   background:repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left top/100% 1px no-repeat,repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left bottom/100% 1px no-repeat,#fff}}
-.prow .pbar{{height:21px;margin:1px 0 0;padding:0 10px;justify-content:flex-start;font-size:12px;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background-color .15s}}
-.prow .pbar + .pbar{{background:repeating-linear-gradient(to bottom,#b8b8b8 0 1px,transparent 1px 3px) left top/1px 100% no-repeat}}
-.inpg .prow{{background-color:#f2f2f2}}
-.prow .pbar.on{{background-color:#eaffae}} .prow .pbar.hit{{background-color:#cdff3e!important}}
+.stack main > .hb.hl{{margin:16px calc(50% - 4px) -1px 10px}}
+.stack main > .hb.hr{{margin:16px 10px -1px calc(50% - 4px);
+  background:repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left top/100% 1px no-repeat,repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left bottom/100% 1px no-repeat,
+    repeating-linear-gradient(to bottom,#b8b8b8 0 1px,transparent 1px 3px) left top/1px 100% no-repeat,#fff}}
+.stack main > .hb.hs{{margin-top:-22px}}   /* start shares the line with contact */
+.stack.inpg main > .hb{{background-color:#f2f2f2}}
+.stack main > .hb.on{{background-color:#eaffae!important}} .stack main > .hb.hit{{background-color:#cdff3e!important}}
 .pairs .stage{{height:calc(100svh - var(--head) - 2 * var(--bar) - 70px)}}
 .stack .pg:last-child{{min-height:calc(100lvh - var(--head) - 2 * var(--bar) - 110px)}}
 .sbar{{position:relative;z-index:1;height:1px;margin:10px 10px -1px}}   /* one line between two pages, 10 px clear each side (the same as from the side lines to the content) */
@@ -410,6 +412,8 @@ html,body{{overflow-x:clip}}
 .bio p{{margin:8px 0 0;font-size:13.5px;line-height:1.4;color:#222}}
 /* full bio and our services: two openers side by side, each unfolding underneath (one at a time) */
 .opn{{display:flex;gap:18px;flex-wrap:wrap}}
+/* openers (full bio, full services) sit on their subtitle's line, at the right */
+.lh{{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 6px}} .lh .lab{{margin:0}} .lh .cvb{{margin:0;padding:0}}
 .fold > summary{{display:none}} .fold{{margin:0}}
 .svc h4{{display:flex;align-items:center;gap:7px;margin:12px 0 2px;font-size:14px;font-weight:700;color:var(--red);letter-spacing:.02em}}
 .svc h4 img{{width:18px;height:18px}}
@@ -517,7 +521,10 @@ dialog .top{{flex:none}}
 /* long grids (links, bits & bats) show about six at first, fading out greyed; "more …" shows the rest */
 .cut{{overflow:hidden;transition:max-height .45s ease}}
 .cut.shut{{-webkit-mask-image:linear-gradient(#000 55%,rgba(0,0,0,.18));mask-image:linear-gradient(#000 55%,rgba(0,0,0,.18))}}
-.more{{margin-top:8px}}
+.more{{position:relative;z-index:2;display:flex;width:100%;height:30px;margin:-30px 0 0;padding:0 2px;background:
+  repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left top/100% 1px no-repeat,repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left bottom/100% 1px no-repeat,rgba(255,255,255,.94)}}
+/* open: the bar drops back under the grid */
+.more[aria-expanded=true]{{margin-top:8px}}
 .more .cl{{display:none}} .more[aria-expanded=true] .cl{{display:inline}} .more[aria-expanded=true] .op{{display:none}}
 .more[aria-expanded=true] .cvt::after{{content:none}} .more[aria-expanded=true] .cvt{{font-size:13px}}
 @media (prefers-reduced-motion:reduce){{.cut{{transition:none}}}}
@@ -741,14 +748,16 @@ dialog .top{{flex:none}}
   document.querySelectorAll('.pin, .tab').forEach(a=>a.addEventListener('click',e=>{{ const t=document.querySelector(a.getAttribute('href')); if(!t) return; e.preventDefault(); tapGo(a,t); }}));
   /* ?stack=1: the page bars stack - passed pages at the top, pages still to come at the bottom; a tap on a bar goes to its page */
   if(document.body.classList.contains('pairs')){{
-    /* ?stack=2: three rows of two half bars (about us | projects, downloads & links | bits & bats, contact | start), stacking the same way */
+    /* ?stack=2: half bars in three rows (about us | projects, downloads & links | bits & bats, contact | start). Each half rises on its own
+       when its page arrives and locks in beside its partner like a jigsaw piece; pages still to come wait in their places at the bottom */
     const H=22, bars=[...document.querySelectorAll('.pg .pbar')], secs=bars.map(b=>b.closest('.pg'));
     const st=document.createElement('div'); st.className='pbar'; st.innerHTML='<b>start</b><small>[00]</small>'; bars.push(st); secs.push(document.getElementById('start'));
-    const rows=[];
-    for(let r=0;r<3;r++){{ const row=document.createElement('div'); row.className='prow'; secs[2*r].before(row);
-      row.style.top=`calc(var(--head) + var(--bar) + ${{r*H}}px)`; row.style.bottom=`calc(var(--bar) + env(safe-area-inset-bottom,0px) + ${{(2-r)*H}}px)`; rows.push(row);
-      [0,1].forEach(j=>{{ const k=2*r+j, b=bars[k], sec=secs[k]; row.appendChild(b); if(k<5) sec.style.scrollMarginTop=((r+1)*H+10)+'px';
-        b.setAttribute('role','link'); b.tabIndex=0; b.addEventListener('click',()=>tapGo(b,sec)); }}); }}
+    bars.forEach((b,k)=>{{ const r=k>>1, right=k&1, sec=secs[k];
+      if(k===5) bars[4].after(b); else sec.before(b);
+      b.classList.add('hb', right?'hr':'hl'); if(k===5) b.classList.add('hs');
+      b.style.top=`calc(var(--head) + var(--bar) + ${{r*H}}px)`; b.style.bottom=`calc(var(--bar) + env(safe-area-inset-bottom,0px) + ${{(2-r)*H}}px)`;
+      if(k<5) sec.style.scrollMarginTop=((r+1)*H+10)+'px';
+      b.setAttribute('role','link'); b.tabIndex=0; b.addEventListener('click',()=>tapGo(b,sec)); }});
     const cur=()=>{{ let c=-1; secs.slice(0,5).forEach((sec,k)=>{{ if(sec.getBoundingClientRect().top<=innerHeight*.45) c=k; }});
       bars.forEach((b,k)=>b.classList.toggle('on',k===c)); document.body.classList.toggle('inpg',c>=0); }};
     addEventListener('scroll',cur,{{passive:true}}); cur();

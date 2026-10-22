@@ -350,6 +350,8 @@ body:not(.side) .socs{{display:flex}}   /* in the top layouts (and the stack tri
 .sec1 main > section.pg:not(#start):nth-of-type(even){{background:#f4f4f2}}   /* about us, downloads, contact (start is the first section) */
 .sec1 main > section.pg:not(#start):nth-of-type(even) .cvb{{background-color:#f4f4f2}}   /* the full CV / bio / services bars take the same grey */
 .sec1 main > section.pg:not(#start),.sec2 main > section.pg:not(#start),.sec3 main > section.pg:not(#start){{padding-top:12px;padding-bottom:16px}}
+.sec1 main > section.pg:not(#start){{margin-left:10px;margin-right:10px;padding-left:0;padding-right:0}}   /* the grey ends where the title bars end */
+.sec1:not(.stack) main > section.pg:not(#start){{padding-top:0}} .sec1:not(.stack) main > section.pg > .pbar{{margin-left:0;margin-right:0}}
 .sec2 main > section.pg:not(#start){{margin-left:10px;margin-right:10px;padding-left:0;padding-right:0;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat}}
 .sec3 main > section.pg:not(#start){{transition:background-color .35s}} .sec3 main > section.pg.cur{{background-color:#f6ffde}}
 .stack main > .hb.hl{{margin:39px 50% -1px 10px}}
@@ -631,7 +633,7 @@ dialog .top{{flex:none}}
 <script>/* three versions: logo and tabs all down the side (default) · logo on the side, tabs on top · logo and tabs across the top
    ?logo=rail / side / top, remembered on this phone */
 (function(){{ let m='rail'; try{{ m=new URLSearchParams(location.search).get('logo')||localStorage.getItem('ddlogo2')||'rail';
-    const sk=new URLSearchParams(location.search).get('stack'); if(sk==='1'||sk==='2'){{ document.body.classList.add('stack'); m='top'; }} if(sk==='2') document.body.classList.add('pairs'); const sc=new URLSearchParams(location.search).get('sec'); if(['1','2','3'].includes(sc)) document.body.classList.add('sec'+sc); }}catch(e){{}}
+    const sk=new URLSearchParams(location.search).get('stack'); if(sk==='1'||sk==='2'){{ document.body.classList.add('stack'); m='top'; }} if(sk==='2') document.body.classList.add('pairs'); const sc=new URLSearchParams(location.search).get('sec'); document.body.classList.add('sec'+(['0','1','2','3'].includes(sc)?sc:'1'));   /* pale grey (sec1) is the standard since 22 Oct; ?sec=0 turns it off */ }}catch(e){{}}
   if(m!=='top') document.body.classList.add('side'); if(m==='rail') document.body.classList.add('rail'); }})();</script>
 <a class="sidebar" href="#start" aria-label="dasein-design, start"><img src="../img/m-mark.png" alt=""><span>dasein<b>-design</b></span></a>
 <header>

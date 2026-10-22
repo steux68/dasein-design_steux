@@ -38,7 +38,7 @@ LEGAL_BODY = ('<p class="lp">Informationen gemäß § 5 E-Commerce-Gesetz und Of
          '<h4>Berufsrecht</h4><p>Ziviltechnikergesetz 2019 (ZTG 2019) und Standesregeln der Ziviltechniker:innen, abrufbar unter <a href="https://www.ris.bka.gv.at/">www.ris.bka.gv.at</a> und <a href="https://ost.zt.at/">ost.zt.at</a></p>'
          '<h4>Aufsichtsbehörde</h4><p class="todo">[zuständiges Bundesministerium – bitte bestätigen]</p>'
          '<h4>UID-Nummer</h4><p class="todo">[ATU – bitte ergänzen]</p>'
-         '<h4>Mitarbeit</h4><p>Steuart J Mackenzie HARRISON, Architect (ARB, UK) – Mitarbeit, Gestaltung dieser Website</p>'
+         '<h4>Mitarbeit</h4><p><b>Steuart J Mackenzie HARRISON</b> BArch MArch ARB<br>Architect<br>Mitarbeit · Gestaltung dieser Website</p>'
          '<h4>Haftung und Urheberrecht</h4><p>Die Inhalte dieser Website wurden mit Sorgfalt erstellt; für Richtigkeit, Vollständigkeit und Aktualität wird keine Gewähr übernommen. '
          'Für die Inhalte verlinkter Websites sind ausschließlich deren Betreiber verantwortlich. Texte, Bilder und Pläne sind urheberrechtlich geschützt; '
          'jede Verwendung bedarf der vorherigen Zustimmung.</p>'

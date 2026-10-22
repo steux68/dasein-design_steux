@@ -220,10 +220,13 @@ LEGAL = ('<div class="box legal cut" id="g-legal" data-show="4" data-extra="30">
            '<button type="button" class="pgo" id="pgo" aria-label="play the beetle game"><span class="pme">press me</span><i class="pld"></i><i class="pdot"><b></b></i></button></div>')
 # ---------- "work ○ wonder" trial (?w=1, 23 Oct): the bits & bats as a notebook of everyday things, behind a switch in the header.
 # The photos and notes stand in for real posts; the dates are samples. Later the posts come by e-mail from Steuart's phone.
-WCATS = ['light', 'material', 'found type', 'the city', 'people &amp; creatures', 'things left behind', 'food &amp; table', 'drawings', 'words']
-WCAT_OF = {3: 1, 19: 0, 21: 0, 27: 0, 29: 0, 6: 1, 12: 1, 30: 1, 32: 1, 7: 2, 9: 2, 11: 2, 4: 3, 10: 3, 13: 3,
-           0: 4, 5: 4, 15: 4, 16: 4, 17: 4, 20: 4, 22: 4, 31: 4, 2: 5, 8: 5, 18: 5, 23: 5, 26: 5, 24: 6, 25: 6, 28: 6, 1: 7, 14: 7}
-WCAT_OF[3] = 0
+# six categories as title bars (23 Oct; Steuart named banality, philosophy, details - the other three are Claude's suggestions, to change)
+WCATS = ['banality', 'details', 'philosophy', 'light', 'traces', 'the city']
+WCAT_OF = {24: 0, 25: 0, 5: 0, 15: 0, 16: 0, 17: 0, 20: 0, 22: 0, 31: 0, 0: 0,
+           6: 1, 12: 1, 30: 1, 32: 1, 23: 1, 1: 1, 14: 1,
+           19: 3, 21: 3, 27: 3, 29: 3, 3: 3,
+           2: 4, 8: 4, 18: 4, 26: 4, 28: 4, 7: 4, 9: 4, 11: 4,
+           4: 5, 10: 5, 13: 5}
 
 
 WCARD_KEY = {0: 'wagner', 1: 'museum', 2: 'walk', 3: 'open house', 4: 'loos', 5: 'standard', 6: 'terra mater', 7: 'devlin', 8: 'starchitect', 9: 'fassaden'}
@@ -246,41 +249,37 @@ def _wkey(c):
 
 
 def _wonder():
-    import datetime, math
+    """wonder: six category bars like the main page, then one endless grid, newest first, four to a row; a tap opens the post: photo, date, one sentence"""
+    import datetime, html as H
     items = []
     for k, (im, t, c) in enumerate(BITS):
         if k in CARD_AT:
-            kind, src, head, txt, url = CARDS[CARD_AT[k]]
-            items.append(('card', kind, src, head, txt, url))
-        items.append(('img', im, c, WCAT_OF.get(k, 5)))
+            items.append(('card',) + tuple(CARDS[CARD_AT[k]]))
+        items.append(('img', im, c, WCAT_OF.get(k, 0)))
     items = items[::-1]          # newest first: the later photos are the newer ones
-    t0 = datetime.datetime(2026, 10, 22, 19, 40)
-    steps = [3.2, 5.1, 16.4, 4.3, 2.7, 15.9, 6.2, 18.1, 3.6, 4.8, 14.7]
-    out, t = [], t0
+    t, steps = datetime.datetime(2026, 10, 22, 19, 40), [3.2, 5.1, 16.4, 4.3, 2.7, 15.9, 6.2, 18.1, 3.6, 4.8, 14.7]
     days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    tiles = []
     for n, it in enumerate(items):
         when = f'{days[t.weekday()]} {t.day} {t.strftime("%b")} · {t.strftime("%H:%M")}'
-        wgt = round((1 + 6 * math.exp(-n / 6)) * (0.7 + ((n * 37) % 10) / 15), 2)
         if it[0] == 'img':
             _, im, c, cat = it
-            out.append(f'<article class="wp" data-cat="{cat}" data-key="{_wkey(c)}" data-w="{wgt}"><p class="wt">{when}</p><img src="../img/{im}" alt="" loading="lazy">'
-                       f'<p class="wc"><b>{c}</b><span class="wcat">{WCATS[cat]}</span></p></article>')
+            line = H.unescape(c).replace('dd - ', '').strip().capitalize().rstrip('.!?') + '.'
+            tiles.append(f'<button type="button" class="wg" data-cat="{cat}" data-when="{when}" data-line="{H.escape(line)}" data-img="../img/{im}">'
+                         f'<img src="../img/{im}" alt="" loading="lazy"></button>')
         else:
             _, kind, src, head, txt, url = it
-            body = (f'<p class="wsrc">{src}</p><h3>{head}</h3><p>{txt}</p><a class="wlink" href="{url}" target="_blank" rel="noopener">read the article on {src} ↗</a>'
-                    if kind == 'news' else f'<i class="wqm">“</i><p class="wq">{txt}</p><p class="wsrc">{src}</p>')
-            ck = next(k for k, c in enumerate(CARDS) if c[2] == head)
-            out.append(f'<article class="wp wtxt {kind}" data-cat="8" data-key="{WCARD_KEY[ck]}" data-w="{wgt}"><p class="wt">{when}</p>{body}<p class="wc"><span class="wcat">words</span></p></article>')
+            plain = re.sub(r'<[^>]+>', '', txt)
+            line = H.unescape(head)   # the quote itself, or the headline: one sentence
+            tiles.append(f'<button type="button" class="wg t w{kind}" data-cat="2" data-when="{when}" data-line="{H.escape(line)}"'
+                         + (f' data-url="{url}" data-src="{src}"' if kind == 'news' else '') + '>'
+                         + (f'<i>“</i>' if kind == 'note' else f'<small>{src}</small>') + '</button>')
         t -= datetime.timedelta(hours=steps[n % len(steps)])
-    ch = ['<button type="button" class="wch on" data-c="all">all</button>'] + [f'<button type="button" class="wch" data-c="{k}">{c}</button>' for k, c in enumerate(WCATS)]
-    chips = f'<div class="wrow">{"".join(ch[:5])}</div><div class="wrow">{"".join(ch[5:])}</div>'   # two rows, each scrolls sideways on its own
-    return ('<div class="wonder" id="wonder" hidden><div class="whd"><h2>wonder</h2><p>a notebook of everyday things · dasein-design</p>'
-            '<p class="wtrial">trial – the photos are real, the dates are samples</p></div>'
-            f'<div class="wchips">{chips}<div class="wview"><button type="button" class="on" data-v="grid">grid</button><button type="button" data-v="map">map</button></div></div>'
-            '<div class="wgrid" id="wgrid"></div>'
-            '<div class="wmap" id="wmap" aria-label="map of the notebook" hidden></div>'
-            f'<div class="wfeed" hidden>{"".join(out)}</div>'
-            '<p class="wend">– that is all for now –</p>'
+    bars = ''.join(f'<button type="button" class="wbt" data-c="{k}"><b>{c}</b><small>[{k + 1:02d}]</small></button>' for k, c in enumerate(WCATS))
+    return ('<div class="wonder" id="wonder" hidden>'
+            f'<div class="wbars">{bars}</div>'
+            f'<div class="wgrid" id="wgrid">{"".join(tiles)}</div>'
+            '<p class="wend">trial – the photos are real, the dates are samples</p>'
             f'<div class="wpop" id="wpop" hidden><div class="top"><div class="cnt"><span id="wpk"></span></div><button type="button" class="x" id="wback" aria-label="back">{XC}</button></div>'
             '<div class="wpbody" id="wpbody"></div>'
             f'<div class="wpnav"><button type="button" id="wprev">{ARW}<span>previous</span></button><button type="button" id="wnext"><span>next</span>{ARE}</button></div></div></div>')
@@ -413,6 +412,27 @@ body{{position:relative}}
 .wlink{{display:inline-block;margin-top:10px;font-size:13.5px;color:#1a5fd0;text-decoration:none}}
 .wtxt .wc{{margin-top:10px}} .wtxt .todo{{color:var(--red)}}
 .wend{{margin:34px 0 0;text-align:center;font-size:12px;letter-spacing:.06em;color:#aaa}}
+/* wonder v3 (23 Oct, 00:40): six category bars like the main page's half bars, then one endless grid, four to a row */
+.wonder{{padding:0 18px 40px}}
+.wbars{{position:sticky;top:0;z-index:3;display:grid;grid-template-columns:1fr 1fr;background:#fff;padding-top:10px}}
+.wbt{{display:flex;align-items:center;gap:5px;height:23px;padding:0 10px;border:0;font:inherit;font-size:12px;color:#000;text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  background-color:#f2f2f2;background-image:var(--dh);background-position:left bottom;background-size:100% 1px;background-repeat:no-repeat}}
+.wbt:nth-child(odd){{background-image:var(--dh),var(--dv);background-position:left bottom,right top;background-size:100% 1px,1px 100%}}
+.wbt:nth-child(1){{background-image:var(--dh),var(--dh),var(--dv);background-position:left top,left bottom,right top;background-size:100% 1px,100% 1px,1px 100%}}
+.wbt:nth-child(2){{background-image:var(--dh),var(--dh);background-position:left top,left bottom;background-size:100% 1px,100% 1px}}
+.wbt b{{font-weight:700}} .wbt small{{font-size:10px;color:#444}}
+.wbt.on{{background-color:#eaffae}} .wbt:active{{background-color:#cdff3e}}
+.wonder .wgrid{{grid-template-columns:repeat(4,1fr);gap:5px;margin-top:14px}}
+.wonder .wg{{display:block;aspect-ratio:1/1}} .wonder .wg.t{{display:flex;align-items:center;justify-content:center;padding:4px}}
+.wonder .wg.t i{{font-style:normal;font-size:34px;line-height:.6;color:var(--red);padding-top:12px}}
+.wonder .wg.t small{{font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--red);font-weight:700;text-align:center;line-height:1.2}}
+.wonder .wend{{margin-top:26px}}
+.wonder .wg[hidden]{{display:none!important}} .wonder .wg.t.wnews{{background:#f4f4f2}} .wonder .wg.t.wnote{{background:#fffbd6}}
+.wpbody .wpi{{display:block;width:100%;max-height:62svh;object-fit:contain;margin:6px 0 0;outline:1px dotted #b8b8b8;outline-offset:2px}}
+.wpbody .wpd{{margin:14px 0 4px;font-size:12px;letter-spacing:.06em;color:#888}}
+.wpbody .wpl{{margin:0;font-size:17px;line-height:1.45;color:#222}} .wpbody .wpl.q{{font-style:italic}}
+.wpbody .wpq{{display:block;font-style:normal;font-size:70px;line-height:.5;height:30px;margin-top:30px;color:var(--red)}}
+.wpbody a{{display:inline-block;margin-top:12px;font-size:14px;color:#1a5fd0;text-decoration:none}}
 /* the map (23 Oct): every post a rectangle, grouped by category, the newer ones bigger - like a word treemap */
 .whd{{padding:16px 0 8px}}
 .wmap{{position:relative;height:calc(100svh - var(--head) - 150px);min-height:380px;background:#f1f1ef;border:3px solid #111;box-sizing:border-box}}
@@ -925,52 +945,27 @@ dialog .top{{flex:none}}
     gd.addEventListener('close',()=>{{ run=false; }});
     addEventListener('resize',()=>{{ if(gd.open) size(); }}); }})();
   /* logo switch */
-  /* work ○ wonder (trial): the switch opens the notebook over the page; the category chips filter it */
+  /* work ○ wonder (trial): the switch opens the notebook over the page - six category bars, then the grid; a tap on a tile opens it */
   (function(){{ const sw=document.getElementById('wsw'), wd=document.getElementById('wonder'); if(!sw||!wd) return;
-    const set=on=>{{ sw.setAttribute('aria-pressed',String(on)); wd.hidden=!on; if(!on) document.getElementById('wpop').hidden=true; document.documentElement.classList.toggle('dlg',on); if(on) wd.scrollTop=0; }};
+    const wp=document.getElementById('wpop'), wb=document.getElementById('wpbody'), tiles=[...wd.querySelectorAll('.wg')]; let cur=0;
+    const set=on=>{{ sw.setAttribute('aria-pressed',String(on)); wd.hidden=!on; if(!on) wp.hidden=true; document.documentElement.classList.toggle('dlg',on); if(on) wd.scrollTop=0; }};
     sw.addEventListener('click',()=>set(sw.getAttribute('aria-pressed')!=='true'));
-    wd.querySelectorAll('.wch').forEach(c=>c.addEventListener('click',()=>{{ wd.querySelectorAll('.wch').forEach(x=>x.classList.toggle('on',x===c));
-      wd.querySelectorAll('.wg').forEach(p=>{{ p.hidden=!(c.dataset.c==='all'||p.dataset.cat===c.dataset.c); }}); }}));
-    /* the map: squarified treemap, categories first, then their posts */
-    const map=document.getElementById('wmap'), posts=[...wd.querySelectorAll('.wfeed .wp')], cats={WCATS!r};
-    function squarify(items,x,y,w,h,out){{ items=items.slice(); const tot=items.reduce((a,b)=>a+b.v,0); if(!items.length) return out;
-      const scale=w*h/tot; items.forEach(i=>i.a=i.v*scale);
-      const worst=(row,len)=>{{ const s=row.reduce((a,b)=>a+b.a,0), mx=Math.max(...row.map(r=>r.a)), mn=Math.min(...row.map(r=>r.a)); return Math.max(len*len*mx/(s*s), s*s/(len*len*mn)); }};
-      while(items.length){{ const len=Math.min(w,h); let row=[items.shift()];
-        while(items.length && worst(row.concat(items[0]),len) <= worst(row,len)) row.push(items.shift());
-        const s=row.reduce((a,b)=>a+b.a,0);
-        if(w>=h){{ const cw=s/h; let yy=y; row.forEach(r=>{{ const ch=r.a/cw; out.push({{...r,x,y:yy,w:cw,h:ch}}); yy+=ch; }}); x+=cw; w-=cw; }}
-        else {{ const rh=s/w; let xx=x; row.forEach(r=>{{ const rw=r.a/rh; out.push({{...r,x:xx,y,w:rw,h:rh}}); xx+=rw; }}); y+=rh; h-=rh; }} }}
-      return out; }}
-    function drawMap(){{ const W=map.clientWidth, H=map.clientHeight; if(!W) return; map.innerHTML='';
-      const groups=cats.map((c,k)=>({{k,c,items:posts.map((p,i)=>({{i,v:+p.dataset.w,key:p.dataset.key,txt:p.classList.contains('wtxt')}})).filter(o=>+posts[o.i].dataset.cat===k)}})).filter(g=>g.items.length);
-      groups.forEach(g=>{{ g.v=g.items.reduce((a,b)=>a+b.v,0); g.items.sort((a,b)=>b.v-a.v); }}); groups.sort((a,b)=>b.v-a.v);
-      squarify(groups,0,0,W,H,[]).forEach(g=>{{
-        squarify(g.items,g.x,g.y,g.w,g.h,[]).forEach(r=>{{ const d=document.createElement('button'); d.type='button'; d.className='wl'+(r.i===0?' new':'')+(r.txt?' txt':'');
-          Object.assign(d.style,{{left:r.x+'px',top:r.y+'px',width:r.w+'px',height:r.h+'px'}});
-          const fs=Math.max(5,Math.min(r.h*.62, r.w/(r.key.length*.56+.4), 58)); d.style.fontSize=fs+'px'; if(fs>=6.5) d.textContent=r.key; d.setAttribute('aria-label',r.key);
-          d.addEventListener('click',()=>pop(r.i)); map.appendChild(d); }});
-        const b=document.createElement('div'); b.className='wb'; Object.assign(b.style,{{left:g.x+'px',top:g.y+'px',width:g.w+'px',height:g.h+'px'}});
-        b.innerHTML='<i>'+g.c+'</i>'; map.appendChild(b); }}); }}
-    /* pop-up: one post, quick way back to the map */
-    const wp=document.getElementById('wpop'), wb=document.getElementById('wpbody'); let cur=0;
-    function pop(i){{ cur=(i+posts.length)%posts.length; const c=posts[cur].cloneNode(true); c.hidden=false; wb.innerHTML=''; wb.appendChild(c); wb.scrollTop=0;
-      document.getElementById('wpk').innerHTML='wonder <b>'+String(cur+1).padStart(2,'0')+'</b> / '+posts.length; wp.hidden=false; }}
+    /* a bar shows only its category (lit lime); tapped again, everything */
+    wd.querySelectorAll('.wbt').forEach(b=>b.addEventListener('click',()=>{{ const on=!b.classList.contains('on');
+      wd.querySelectorAll('.wbt').forEach(x=>x.classList.toggle('on',on&&x===b)); tiles.forEach(t=>{{ t.hidden=on&&t.dataset.cat!==b.dataset.c; }}); wd.scrollTo({{top:0}}); }}));
+    const vis=()=>tiles.filter(t=>!t.hidden);
+    function pop(t){{ const v=vis(); cur=v.indexOf(t); const d=t.dataset; let h='';
+      if(d.img) h='<img class="wpi" src="'+d.img+'" alt="">'; else if(t.classList.contains('wnote')) h='<i class="wpq">“</i>';
+      h+='<p class="wpd">'+d.when+'</p><p class="wpl'+(t.classList.contains('wnote')?' q':'')+'">'+d.line+'</p>';
+      if(d.url) h+='<a href="'+d.url+'" target="_blank" rel="noopener">'+d.src+' ↗</a>';
+      wb.innerHTML=h; wb.scrollTop=0; document.getElementById('wpk').innerHTML='wonder <b>'+String(cur+1).padStart(2,'0')+'</b> / '+v.length; wp.hidden=false; }}
+    tiles.forEach(t=>t.addEventListener('click',()=>pop(t)));
+    const step=k=>{{ const v=vis(); pop(v[(cur+k+v.length)%v.length]); }};
+    document.getElementById('wprev').onclick=()=>step(-1); document.getElementById('wnext').onclick=()=>step(1);
     document.getElementById('wback').onclick=()=>{{ wp.hidden=true; }};
-    document.getElementById('wprev').onclick=()=>pop(cur-1); document.getElementById('wnext').onclick=()=>pop(cur+1);
-    /* the grid: the posts in order, newest first, three to a row, framed like the tiles on the main page */
-    const grid=document.getElementById('wgrid');
-    posts.forEach((p,i)=>{{ const b=document.createElement('button'); b.type='button'; b.dataset.cat=p.dataset.cat; const im=p.querySelector('img'), t=p.querySelector('.wt').textContent;
-      if(im){{ b.className='wg'; b.innerHTML='<img src="'+im.getAttribute('src')+'" alt="" loading="lazy"><span class="gc">'+t+'</span>'; }}
-      else {{ const note=p.classList.contains('note'); b.className='wg t'+(note?' note':''); const h=p.querySelector('h3'), q=p.querySelector('.wq'), src=p.querySelector('.wsrc');
-        b.innerHTML='<small>'+(note?'quote':(src?src.textContent:''))+'</small><b>'+(h?h.innerHTML:(q?q.textContent:''))+'</b><span class="gc">'+t+'</span>'; }}
-      b.addEventListener('click',()=>pop(i)); grid.appendChild(b); }});
-    wd.querySelectorAll('.wview button').forEach(v=>v.addEventListener('click',()=>{{ wd.querySelectorAll('.wview button').forEach(x=>x.classList.toggle('on',x===v));
-      const m=v.dataset.v==='map'; map.hidden=!m; grid.hidden=m; if(m) drawMap(); }}));
-    addEventListener('resize',()=>{{ if(!wd.hidden&&!map.hidden) drawMap(); }});
     document.querySelector('header .logo').addEventListener('click',()=>set(false));
     document.querySelectorAll('.tab,.pbar').forEach(t=>t.addEventListener('click',()=>set(false)));
-    addEventListener('keydown',e=>{{ if(e.key==='Escape') set(false); }}); }})();
+    addEventListener('keydown',e=>{{ if(e.key==='Escape'){{ if(!wp.hidden) wp.hidden=true; else set(false); }} }}); }})();
   const B=document.body;
   const setLogo=m=>{{ B.classList.toggle('side',m!=='top'); B.classList.toggle('rail',m==='rail'); try{{ if(!B.classList.contains('stack')) localStorage.setItem('ddlogo2',m); }}catch(e){{}}
     document.querySelectorAll('[data-logo]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.logo===m))); }};

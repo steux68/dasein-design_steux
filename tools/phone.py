@@ -61,7 +61,7 @@ PIECES = ''.join(
 TABS = [('us', 'about us', '01'), ('projects', 'projects', '02'), ('downloads', 'downloads & links', '03'),
         ('contact', 'contact', '04'), ('legal', 'impressum', '§')]
 # about us (top) and contact (bottom) are half tabs (Steuart, 21 Oct): together they take one tab's height
-TABHTML = ''.join(f'<a class="tab{" half" if i in ("us", "contact", "legal") else ""}" href="#{i}" data-pg="{i}"><span>{n.replace("&", "&amp;")}</span> <small>[{k}]</small></a>' for i, n, k in TABS)
+TABHTML = ''.join(f'<a class="tab" href="#{i}" data-pg="{i}"><span>{n.replace("&", "&amp;")}</span> <small>[{k}]</small></a>' for i, n, k in TABS if i != 'legal')   # 23 Oct: four buttons; the impressum is reached from the beetle's § circle
 # circles beside the beetle: left and right, top to bottom (five, 21 Oct)
 # where each circle's dotted line ends on the upright beetle (fractions of its box): mouth, right front leg (claw), left middle leg, right back leg
 AIM = [(.51, .245), (.715, .365), (.258, .53), (.69, .80), (.31, .905)]   # five since 23 Oct (bits & bats gone)
@@ -79,9 +79,10 @@ ARW, ARE = LB.compass('W', 26), LB.compass('E', 26)
 XC = '<svg viewBox="-12 -12 24 24" aria-hidden="true"><circle class="rg" r="9.5"/><path class="xx" d="M-3.6 -3.6L3.6 3.6M3.6 -3.6L-3.6 3.6"/></svg>'
 
 
-def section(i, name, num, body):
+def section(i, name, num, body, bar=True):
     """a page; it opens with a muted yellow-lime bar across, in the tab style, naming it (scrolls away with the page)"""
-    return (f'<section class="pg" id="{i}" aria-label="{name} [{num}]"><div class="sbar" aria-hidden="true"></div><div class="pbar"><b>{name.replace("&", "&amp;")}</b><small>[{num}]</small></div>'
+    pbar = f'<div class="pbar"><b>{name.replace("&", "&amp;")}</b><small>[{num}]</small></div>' if bar else ''
+    return (f'<section class="pg" id="{i}" aria-label="{name} [{num}]"><div class="sbar" aria-hidden="true"></div>{pbar}'
             f'<div class="body">{body}</div></section>')
 
 
@@ -218,8 +219,7 @@ SOCIAL = '<svg width="0" height="0" style="position:absolute" aria-hidden="true"
 LEGAL = ('<div class="box legal cut" id="g-legal" data-show="4" data-extra="30"><p class="lab first">IMPRESSUM</p>' + LEGAL_BODY + '</div>'
          + morebtn('g-legal', 'impressum')
          # the end (22 Oct, evening): straight under the impressum, the mark and the copyright - and the pulsing dot, "press me", which opens the game full screen
-         + '<div class="fin"><div class="finm"><img src="../img/m-mark.png" alt=""><span>dasein<b>-design</b></span><p class="copy">© 2026 [ dasein-design &amp; steux ]</p></div>'
-           '<button type="button" class="pgo" id="pgo" aria-label="play the beetle game"><span class="pme">press me</span><i class="pld"></i><i class="pdot"><b></b></i></button></div>')
+         + '<div class="fin"><div class="finm"><img src="../img/m-mark.png" alt=""><span>dasein<b>-design</b></span><p class="copy">© 2026 [ dasein-design &amp; steux ]</p></div></div>')   # the game left on 23 Oct (the heart stays)
 # ---------- "work ○ wonder" trial (?w=1, 23 Oct): the bits & bats as a notebook of everyday things, behind a switch in the header.
 # The photos and notes stand in for real posts; the dates are samples. Later the posts come by e-mail from Steuart's phone.
 # six categories as title bars (23 Oct; Steuart named banality, philosophy, details - the other three are Claude's suggestions, to change)
@@ -533,7 +533,7 @@ body:not(.side) .socs{{display:flex}}   /* in the top layouts (and the stack tri
 .stack .stage{{height:calc(100svh - var(--head) - 2 * var(--bar) - 104px);min-height:330px}}
 /* the start page fills the whole screen (largest viewport), so all five bars wait together at the bottom however the phone's toolbar is showing */
 .stack #start{{min-height:calc(100lvh - var(--head) - 2 * var(--bar) - 147px)}}
-.stack.pairs #start{{min-height:calc(100lvh - var(--head) - 2 * var(--bar) - 81px)}}   /* just tall enough that all bars wait together at the bottom */
+.stack.pairs #start{{min-height:calc(100lvh - var(--head) - 2 * var(--bar) - 59px)}}   /* just tall enough that all bars wait together at the bottom */
 /* ?stack=2: half bars - each half moves on its own and locks in beside its partner */
 .stack main > .hb{{position:sticky;z-index:14;display:flex;align-items:center;height:23px;padding:0 10px;font-size:12px;color:#000;cursor:pointer;-webkit-tap-highlight-color:transparent;
   transition:background-color .15s;
@@ -565,9 +565,11 @@ body:not(.side) .socs{{display:flex}}   /* in the top layouts (and the stack tri
 .stack.inpg main > .hb{{background-color:#f2f2f2}}
 .stack main > .hb.on{{background-color:#eaffae!important}} .stack main > .hb.hit{{background-color:#cdff3e!important}}
 .stack .stage{{height:calc(100svh - var(--head) - 2 * var(--bar) - 126px)}}
-.stack.pairs .stage{{height:calc(100svh - var(--head) - 2 * var(--bar) - 70px)}}
+.stack.pairs .stage{{height:calc(100svh - var(--head) - 2 * var(--bar) - 48px)}}
+.stack.pairs #legal{{scroll-margin-top:62px}}
+.sec1 main > section#legal{{background:none!important}}   /* the impressum stays white: it is the quiet end of the page, not a section */   /* no bar of its own: lands just under the two rows of bars */
 .stack .pg:last-child{{min-height:calc(100lvh - var(--head) - 2 * var(--bar) - 132px)}}
-.stack.pairs .pg:last-child{{min-height:calc(100lvh - var(--head) - 2 * var(--bar) - 66px)}}   /* the last page can always scroll up into place */
+.stack.pairs .pg:last-child{{min-height:calc(100lvh - var(--head) - 2 * var(--bar) - 44px)}}   /* the last page can always scroll up into place */
 .sbar{{position:relative;z-index:1;height:1px;margin:10px 10px -1px}}   /* one line between two pages, 10 px clear each side (the same as from the side lines to the content) */
 /* page boundary (21 Oct): the desktop's double edge ticks, pointing inwards from both guide lines, each running on as a dotted line right across;
    the two lines are the old title bar's height apart */
@@ -721,7 +723,7 @@ dialog#game{{inset:0;z-index:70;padding:0;overflow:hidden}}
 .pdot::after{{animation-delay:.9s}}
 @keyframes pdp{{50%{{transform:scale(1.25)}}}} @keyframes pdr{{0%{{transform:scale(1);opacity:.8}}100%{{transform:scale(4.2);opacity:0}}}}
 .pbug{{position:absolute;left:0;top:0;width:38px;height:84px;margin:-42px 0 0 -19px;pointer-events:none;will-change:transform}}
-.stack{{--stk:132px}} .stack.pairs{{--stk:66px}}
+.stack{{--stk:132px}} .stack.pairs{{--stk:44px}}
 .pscore{{position:absolute;left:12px;right:12px;top:calc(env(safe-area-inset-top,0px) + 48px);display:flex;justify-content:space-between;font-size:12px;letter-spacing:.06em;color:#555;pointer-events:none;z-index:2}}
 .pscore b{{color:var(--red);font-size:15px;margin-left:4px}}
 .phint{{position:absolute;left:0;right:0;top:30%;display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center;pointer-events:none;transition:opacity .5s;z-index:2}}
@@ -866,7 +868,7 @@ dialog .top{{flex:none}}
 {section("projects", "projects", "02", '<div class="grid cut" id="g-proj" data-show="8">' + TILES + '</div>' + MOREP)}
 {section("downloads", "downloads & links", "03", DOWNLOADS)}
 {section("contact", "contact", "04", CONTACT)}
-{section("legal", "impressum", "§", LEGAL)}
+{section("legal", "impressum", "§", LEGAL, bar=False)}
 </main>
 <i class="rule l" aria-hidden="true"></i><i class="rule r" aria-hidden="true"></i>
 <div class="bar btop"><button type="button" id="goN" aria-label="previous page"><span class="nn">{ARN}</span><span class="ns">{ARS}</span><i class="sc">scroll</i></button></div>
@@ -878,7 +880,6 @@ dialog .top{{flex:none}}
 <div class="txt"><h2 id="lt"></h2><div id="tx"></div><dl id="dl"></dl></div>
 <div class="nav2"><button type="button" id="pp2">{ARW}previous</button><div class="cnt"><span id="lk"></span></div><button type="button" id="np2">next{ARE}</button></div>
 </dialog>
-{GAME}
 {WONDER}
 <dialog id="cw" aria-label="bits &amp; bats">
 <div class="top"><div class="cnt"><span id="ck"></span></div><button type="button" class="x" id="cx" aria-label="close">{XC}</button></div>
@@ -924,53 +925,6 @@ dialog .top{{flex:none}}
   document.querySelectorAll('.more').forEach(b=>b.addEventListener('click',e=>{{ if(!realTap(e)) return; const g=document.getElementById(b.dataset.g), op=g.classList.contains('shut');
     setCut(g,op); if(!op) g.scrollIntoView({{behavior:'smooth',block:'start'}}); }}));
 
-  /* the game (22 Oct, evening): opened full screen from the pulsing dot at the end of the page. Four kinds of food - red dot 1, red ring 2,
-     blue diamond 5, yellow star 10 - drag the yellow dot to eat them before the beetle does; first to 100 wins */
-  (function(){{ const gd=document.getElementById('game'), pl=document.getElementById('play'); if(!pl) return;
-    const dot=pl.querySelector('.pdot'), bug=pl.querySelector('.pbug'), cv=pl.querySelector('.ptrail'), tc=cv.getContext('2d'), R2=(a,b)=>a+Math.random()*(b-a);
-    const sy=document.getElementById('sy'), sb=document.getElementById('sb');
-    const KINDS=[[1,'f1',.5],[2,'f2',.28],[5,'f5',.15],[10,'f10',.07]], GOAL=100, N=8;
-    let W=0,H=0, d={{x:0,y:0}}, g={{x:30,y:200,a:0}}, held=false, run=false, last=0, walked=0, food=[], you=0, them=0, over=false, playing=false;
-    const size=()=>{{ W=pl.clientWidth; H=pl.clientHeight; const r=devicePixelRatio||1; cv.width=Math.round(W*r); cv.height=Math.round(H*r); tc.setTransform(r,0,0,r,0,0); tc.fillStyle='rgba(58,60,55,.55)'; }};
-    const DD='<svg class="pdd" viewBox="-20 -20 40 40"><circle r="19" fill="#e30613"/><circle r="15.5" fill="none" stroke="#fff" stroke-width="1" stroke-dasharray="1 2.2"/>'
-      +'<text y="1" fill="#fff" font-family="Calibri,Carlito,sans-serif" font-weight="700" font-size="17" text-anchor="middle" dominant-baseline="central">dd</text></svg>';
-    function fly(e,x,y){{ e.animate([{{transform:`translate(${{x}}px,${{y}}px) scale(.3)`,opacity:1}},{{transform:`translate(${{x}}px,${{y-24}}px) scale(1.1)`,opacity:1,offset:.35}},
-        {{transform:`translate(${{x}}px,${{y-60}}px) scale(.9)`,opacity:0}}],{{duration:1100,easing:'cubic-bezier(.2,.8,.3,1)'}}).finished.then(()=>e.remove()).catch(()=>e.remove()); }}
-    function pop(x,y,v,byYou){{ let e; if(byYou){{ e=document.createElement('b'); e.className='pplus'; e.textContent='+'+v; }} else {{ const w=document.createElement('div'); w.innerHTML=DD; e=w.firstChild; }}
-      pl.appendChild(e); fly(e,x,y); }}
-    function addFood(){{ if(!W) return; let r=Math.random(), k=KINDS[0]; for(const q of KINDS){{ if(r<q[2]){{ k=q; break; }} r-=q[2]; }}
-      const el=document.createElement('i'); el.className='pf '+k[1]; const f={{x:R2(24,W-24),y:R2(110,H-110),v:k[0],el}}; el.style.left=f.x+'px'; el.style.top=f.y+'px'; pl.appendChild(el); food.push(f); }}
-    function reset(){{ you=them=0; sy.textContent=sb.textContent='0'; tc.clearRect(0,0,W,H); food.forEach(x=>x.el.remove()); food=[]; for(let i=0;i<N;i++) addFood();
-      playing=false; over=false; pl.classList.remove('go'); d={{x:W*.5,y:H*.72}}; g={{x:W*.2,y:H*.35,a:0}}; }}
-    function eat(f,byYou){{ food=food.filter(x=>x!==f); f.el.remove(); pop(f.x,f.y,f.v,byYou);
-      if(byYou){{ you+=f.v; sy.textContent=you; }} else {{ them+=f.v; sb.textContent=them; }}
-      if(you>=GOAL||them>=GOAL){{ over=true; const m=document.createElement('p'); m.className='pmsg'; m.textContent=you>=GOAL?'you win!':'the beetle wins!'; pl.appendChild(m);
-        setTimeout(()=>{{ m.remove(); reset(); }},2800); }}
-      else setTimeout(addFood,R2(250,900)); }}
-    function step(t){{ if(!run) return; const dt=Math.min(.05,(t-last)/1000||0); last=t;
-      if(!over){{
-        let tgt=null, best=1e9;
-        if(playing){{
-          food.slice().forEach(f=>{{ if(Math.hypot(f.x-d.x,f.y-d.y)<18) eat(f,true); }});
-          let bs=-1; food.forEach(f=>{{ const q=Math.hypot(f.x-g.x,f.y-g.y), sc=Math.sqrt(f.v)/(q+40); if(sc>bs){{ bs=sc; best=q; tgt=f; }} }});
-        }} else {{ tgt={{x:W/2+Math.cos(t/1300)*W*.3, y:H*.5+Math.sin(t/1300)*H*.2}}; }}
-        if(tgt){{ const dx=tgt.x-g.x, dy=tgt.y-g.y;
-          const want=Math.atan2(dy,dx)*180/Math.PI+90+Math.sin(t/260)*20; let da=((want-g.a+540)%360)-180;
-          g.a+=Math.max(-280*dt,Math.min(280*dt,da)); const sp=(playing?135:82)*dt, h=(g.a-90)*Math.PI/180;
-          g.x=Math.max(10,Math.min(W-10,g.x+Math.cos(h)*sp)); g.y=Math.max(10,Math.min(H-10,g.y+Math.sin(h)*sp));
-          walked+=sp; if(walked>3.2){{ walked=0; tc.fillRect(g.x-.6,g.y-.6,1.2,1.2); }}
-          if(playing&&best<20) eat(tgt,false); }}
-      }}
-      dot.style.transform=`translate(${{d.x}}px,${{d.y}}px)`; bug.style.transform=`translate(${{g.x}}px,${{g.y}}px) rotate(${{g.a}}deg)`;
-      requestAnimationFrame(step); }}
-    const at=e=>{{ const r=pl.getBoundingClientRect(); d.x=Math.max(8,Math.min(W-8,e.clientX-r.left)); d.y=Math.max(8,Math.min(H-8,e.clientY-r.top)); }};
-    dot.addEventListener('pointerdown',e=>{{ held=true; pl.setPointerCapture(e.pointerId); at(e); if(!playing&&!over){{ playing=true; pl.classList.add('go'); }} }});
-    pl.addEventListener('pointermove',e=>{{ if(held) at(e); }});
-    const up=()=>{{ held=false; }}; pl.addEventListener('pointerup',up); pl.addEventListener('pointercancel',up);
-    document.getElementById('pgo').addEventListener('click',()=>{{ openDlg(gd); requestAnimationFrame(()=>{{ size(); reset(); run=true; last=performance.now(); requestAnimationFrame(step); }}); }});
-    document.getElementById('gx').addEventListener('click',()=>gd.close());
-    gd.addEventListener('close',()=>{{ run=false; }});
-    addEventListener('resize',()=>{{ if(gd.open) size(); }}); }})();
   /* logo switch */
   /* work ○ wonder (trial): the switch opens the notebook over the page - six category bars, then the grid; a tap on a tile opens it */
   (function(){{ const sw=document.getElementById('wsw'), wd=document.getElementById('wonder'); if(!sw||!wd) return;
@@ -1191,11 +1145,11 @@ dialog .top{{flex:none}}
   if(document.body.classList.contains('pairs')){{
     /* ?stack=2: half bars in three rows (about us | projects, downloads & links | bits & bats, contact | start). Each half rises on its own
        when its page arrives and locks in beside its partner like a jigsaw piece; pages still to come wait in their places at the bottom */
-    const H=22, bars=[...document.querySelectorAll('.pg .pbar')], secs=bars.map(b=>b.closest('.pg'));
+    const H=22, bars=[...document.querySelectorAll('.pg .pbar')], secs=bars.map(b=>b.closest('.pg')), ROWS=Math.ceil(bars.length/2);
     bars.forEach((b,k)=>{{ const r=k>>1, right=k&1, sec=secs[k];
       sec.before(b);
       b.classList.add('hb', right?'hr':'hl');
-      b.style.top=`calc(var(--head) + var(--bar) + ${{r*H}}px)`; b.style.bottom=`calc(var(--bar) + env(safe-area-inset-bottom,0px) + ${{(2-r)*H}}px)`;
+      b.style.top=`calc(var(--head) + var(--bar) + ${{r*H}}px)`; b.style.bottom=`calc(var(--bar) + env(safe-area-inset-bottom,0px) + ${{(ROWS-1-r)*H}}px)`;
       sec.style.scrollMarginTop=(r*H+22)+'px';   /* lands with its own half bar exactly in its place at the top */
       b.setAttribute('role','link'); b.tabIndex=0; b.addEventListener('click',()=>tapGo(b,sec)); }});
     const up=b=>{{ const r=b.getBoundingClientRect(); return r.bottom < innerHeight-parseFloat(getComputedStyle(b).bottom)-3; }};   /* has left the bottom stack */

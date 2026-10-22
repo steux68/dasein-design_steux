@@ -119,7 +119,10 @@ body{position:relative}
 .wbt b{font-weight:700} .wbt small{font-size:10px;color:#444}
 .wbt.on{background-color:#eaffae} .wbt:active{background-color:#cdff3e}
 .wonder .wgrid{grid-template-columns:repeat(4,1fr);gap:5px;margin-top:14px}
-.wonder .wg{display:block;aspect-ratio:1/1} .wonder .wg.t{display:flex;align-items:center;justify-content:center;padding:4px}
+.wonder .wg{display:block;aspect-ratio:1/1}
+/* photos in their own format (23 Oct, 00:50): a portrait fills the cell's height, a landscape its width; only the left-over is white, no frame, no crop */
+.wonder .wg:not(.t){background:none} .wonder .wg:not(.t)::after{content:none}
+.wonder .wg:not(.t) img{object-fit:contain} .wonder .wg.t{display:flex;align-items:center;justify-content:center;padding:4px}
 .wonder .wg.t i{font-style:normal;font-size:34px;line-height:.6;color:var(--red);padding-top:12px}
 .wonder .wg.t small{font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--red);font-weight:700;text-align:center;line-height:1.2}
 .wonder .wend{margin-top:26px}

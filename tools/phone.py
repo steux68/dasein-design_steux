@@ -265,7 +265,8 @@ def _wonder():
         if it[0] == 'img':
             _, im, c, cat = it
             line = H.unescape(c).replace('dd - ', '').strip().capitalize().rstrip('.!?') + '.'
-            tiles.append(f'<button type="button" class="wg" data-cat="{cat}" data-when="{when}" data-line="{H.escape(line)}" data-img="../img/{im}">'
+            with Image.open(os.path.join(ROOT, 'img', im)) as I: ar = round(I.width / I.height, 3)
+            tiles.append(f'<button type="button" class="wg" data-cat="{cat}" data-ar="{ar}" data-when="{when}" data-line="{H.escape(line)}" data-img="../img/{im}">'
                          f'<img src="../img/{im}" alt="" loading="lazy"></button>')
         else:
             _, kind, src, head, txt, url = it
@@ -423,11 +424,11 @@ body{{position:relative}}
 .wbt b{{font-weight:700}} .wbt small{{font-size:10px;color:#444}}
 .wbt.on{{background-color:#eaffae}} .wbt:active{{background-color:#cdff3e}}
 .wonder .wbars{{display:none}}
-.wonder .wgrid{{display:block;position:relative;margin-top:14px;outline:2px solid #111;outline-offset:0}}
-.wonder .wgrid > *{{position:absolute;box-sizing:border-box;border:.5px solid #111;margin:0}}
-.wonder .wgrid .wg{{aspect-ratio:auto;background:#fff;padding:2px}} .wonder .wgrid .wg img{{width:100%;height:100%;object-fit:contain}}
-.wcw{{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:2px;background:#f2f2f2;font:inherit;color:#000;cursor:pointer;-webkit-tap-highlight-color:transparent;overflow:hidden}}
-.wcw b{{font-weight:700;line-height:1;white-space:nowrap}} .wcw small{{font-size:9px;color:#666}} .wcw.on{{background:#eaffae}} .wcw:active{{background:#cdff3e}}   /* a tight carpet: no gaps, only the white left over round each photo */
+.wonder .wgrid{{display:block;position:relative;margin-top:14px}}
+.wonder .wgrid > *{{position:absolute;box-sizing:border-box;border:0;margin:0}}
+.wonder .wgrid .wg{{aspect-ratio:auto;background:#fff;padding:0}} .wonder .wgrid .wg img{{width:100%;height:100%;object-fit:cover}}
+.wcw{{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:2px;background:#fff;font:inherit;color:#000;cursor:pointer;-webkit-tap-highlight-color:transparent;overflow:hidden}}
+.wcw b{{font-weight:700;line-height:1;white-space:nowrap}} .wcw small{{font-size:9px;color:#666}} .wcw.on{{background:#eaffae}} .wcw.on b{{color:var(--red)}} .wcw:active{{background:#cdff3e}}   /* a tight carpet: no gaps, only the white left over round each photo */
 .wonder .wg.t{{display:none!important}}   /* no text tiles in the carpet - photos only */
 .wonder .wg{{display:block;aspect-ratio:1/1}}
 /* photos in their own format (23 Oct, 00:50): a portrait fills the cell's height, a landscape its width; only the left-over is white, no frame, no crop */
@@ -973,7 +974,7 @@ dialog .top{{flex:none}}
     /* a bar shows only its category (lit lime); tapped again, everything */
     wd.querySelectorAll('.wbt').forEach(b=>b.addEventListener('click',()=>{{ const on=!b.classList.contains('on');
       wd.querySelectorAll('.wbt').forEach(x=>x.classList.toggle('on',on&&x===b)); tiles.forEach(t=>{{ t.hidden=on&&t.dataset.cat!==b.dataset.c; }}); wd.scrollTo({{top:0}}); }}));
-    const vis=()=>[...grid.querySelectorAll('.wg')];
+    const vis=()=>[...grid.querySelectorAll('.wg:not(.again)')];
     function pop(t){{ const v=vis(); cur=v.indexOf(t); const d=t.dataset; let h='';
       const note=t.classList.contains('wnote');
       if(d.img) h='<img class="wpi" src="'+d.img+'" alt=""><p class="wpd">'+d.when+'</p><p class="wpl">'+d.line+'</p>';
@@ -996,23 +997,31 @@ dialog .top{{flex:none}}
         const s=row.reduce((a,b)=>a+b.s,0);
         if(w>=h){{ const cw=s/h; let yy=y; row.forEach(o=>{{ const ch=o.s/cw; out.push({{...o,x,y:yy,w:cw,h:ch}}); yy+=ch; }}); x+=cw; w-=cw; }}
         else {{ const rh=s/w; let xx=x; row.forEach(o=>{{ const rw=o.s/rh; out.push({{...o,x:xx,y,w:rw,h:rh}}); xx+=rw; }}); y+=rh; h-=rh; }} }} }}
-    function carpet(){{ const W=grid.clientWidth; if(!W) return; const ph=tiles.filter(t=>!t.classList.contains('t')&&(only===null||t.dataset.cat===only));
-      const items=ph.map((t,n)=>({{t,v:(1+1.4*Math.exp(-n/7))*(n<3?1.25:.55+((n*37)%10)/7)}}));
-      [0,5,11,17,23,29].forEach((at,k)=>items.splice(Math.min(at,items.length),0,{{cat:k,v:.9+((k*7)%5)/5}}));
-      const unit=(W/4)*(W/4)*.95; items.forEach(o=>o.a=o.v*unit);
-      /* nested like the Faust print: runs of 5-8 posts form blocks, the blocks are laid row by row, the posts inside each block squarified, in order */
-      const blocks=[]; let i=0, k=0; while(i<items.length){{ const n=[7,5,8,6][k++%4]; const its=items.slice(i,i+n); i+=n; blocks.push({{its,a:its.reduce((s,o)=>s+o.a,0)}}); }}
-      if(blocks.length>1&&blocks[blocks.length-1].its.length<4){{ const l=blocks.pop(), p=blocks[blocks.length-1]; p.its=p.its.concat(l.its); p.a+=l.a; }}   /* no thin strip at the end */
-      const B=lay(blocks,W), cells=[];
-      B.out.forEach(b=>sq(b.its,b.x,b.y,b.w,b.h,cells));
-      const L={{out:cells,h:B.h}}; grid.style.height=L.h+'px'; grid.innerHTML='';
-      L.out.forEach(o=>{{ let e;
-        if(o.cat!==undefined){{ e=document.createElement('button'); e.type='button'; e.className='wcw'+(only===String(o.cat)?' on':''); const word=CATS[o.cat];
-          e.innerHTML='<b>'+word+'</b><small>['+String(o.cat+1).padStart(2,'0')+']</small>';
-          e.querySelector('b').style.fontSize=Math.max(11,Math.min(o.h*.42,o.w/(word.length*.56+.6),30))+'px';
-          e.addEventListener('click',()=>{{ only=only===String(o.cat)?null:String(o.cat); carpet(); wd.scrollTo({{top:0}}); }}); }}
-        else {{ e=o.t; e.hidden=false; }}
-        Object.assign(e.style,{{left:o.x+'px',top:o.y+'px',width:o.w+'px',height:o.h+'px'}}); grid.appendChild(e); }}); }}
+    /* the carpet (23 Oct, 01:05): no lines - photos packed like sardines in their own proportions. Rows of different heights are filled and then
+       scaled to the exact width, so the photos butt up against each other; now and then two landscapes stand on top of each other as one piece.
+       The six category words sit in the carpet as pieces of their own. The last row is filled up with photos again from the start. */
+    function carpet(){{ const W=grid.clientWidth; if(!W) return;
+      const ph=tiles.filter(t=>!t.classList.contains('t')&&(only===null||t.dataset.cat===only)).map(t=>({{t,ar:+t.dataset.ar||1}}));
+      const units=[]; ph.forEach(p=>units.push(p));
+      [1,6,12,18,24,30].forEach((at,k)=>units.splice(Math.min(at,units.length),0,{{cat:k,ar:.9+CATS[k].length*.13}}));
+      /* stack two landscapes now and then */
+      for(let i=2;i<units.length-1;i+=5){{ const a=units[i], b=units[i+1]; if(a.t&&b.t&&a.ar>1.15&&b.ar>1.15){{ units.splice(i,2,{{pair:[a,b],ar:1/(1/a.ar+1/b.ar)}}); }} }}
+      const TH=[.62,.34,.46,.3,.52,.38].map(f=>f*W); const rows=[]; let row=[], sa=0, r=0, rep=0;
+      const take=u=>{{ row.push(u); sa+=u.ar; if(sa*TH[r%TH.length]>=W){{ rows.push({{row,h:W/sa}}); row=[]; sa=0; r++; }} }};
+      units.forEach(take);
+      while(row.length&&ph.length&&rep<ph.length*2){{ take({{...ph[rep%ph.length],again:true}}); rep++; }}
+      if(row.length) rows.push({{row,h:Math.min(W/sa,TH[r%TH.length])}});
+      grid.innerHTML=''; let y=0;
+      const put=(u,x,yy,w,h)=>{{ let e;
+        if(u.cat!==undefined){{ e=document.createElement('button'); e.type='button'; e.className='wcw'+(only===String(u.cat)?' on':''); const word=CATS[u.cat];
+          e.innerHTML='<b>'+word+'</b>'; e.querySelector('b').style.fontSize=Math.max(12,Math.min(h*.36,w/(word.length*.56+.5),34))+'px';
+          e.addEventListener('click',()=>{{ only=only===String(u.cat)?null:String(u.cat); carpet(); wd.scrollTo({{top:0}}); }}); }}
+        else if(u.again){{ e=u.t.cloneNode(true); e.classList.add('again'); e.addEventListener('click',()=>pop(u.t)); }}
+        else {{ e=u.t; e.hidden=false; }}
+        Object.assign(e.style,{{left:x+'px',top:yy+'px',width:w+'px',height:h+'px'}}); grid.appendChild(e); }};
+      rows.forEach(R=>{{ let x=0; R.row.forEach(u=>{{ const w=u.ar*R.h;
+        if(u.pair){{ const h1=w/u.pair[0].ar; put(u.pair[0],x,y,w,h1); put(u.pair[1],x,y+h1,w,R.h-h1); }} else put(u,x,y,w,R.h); x+=w; }}); y+=R.h; }});
+      grid.style.height=y+'px'; }}
     sw.addEventListener('click',()=>requestAnimationFrame(carpet)); addEventListener('resize',()=>{{ if(!wd.hidden) carpet(); }});
     const step=k=>{{ const v=vis(); pop(v[(cur+k+v.length)%v.length]); }};
     document.getElementById('wprev').onclick=()=>step(-1); document.getElementById('wnext').onclick=()=>step(1);

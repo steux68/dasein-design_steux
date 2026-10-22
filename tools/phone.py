@@ -218,6 +218,54 @@ LEGAL = ('<div class="box legal cut" id="g-legal" data-show="4" data-extra="30">
          # the end (22 Oct, evening): straight under the impressum, the mark and the copyright - and the pulsing dot, "press me", which opens the game full screen
          + '<div class="fin"><div class="finm"><img src="../img/m-mark.png" alt=""><span>dasein<b>-design</b></span><p class="copy">© 2026 [ dasein-design &amp; steux ]</p></div>'
            '<button type="button" class="pgo" id="pgo" aria-label="play the beetle game"><span class="pme">press me</span><i class="pld"></i><i class="pdot"><b></b></i></button></div>')
+# ---------- "work ○ wonder" trial (?w=1, 23 Oct): the bits & bats as a notebook of everyday things, behind a switch in the header.
+# The photos and notes stand in for real posts; the dates are samples. Later the posts come by e-mail from Steuart's phone.
+WCATS = ['light', 'material', 'found type', 'the city', 'people &amp; creatures', 'things left behind', 'food &amp; table', 'drawings', 'words']
+WCAT_OF = {3: 1, 19: 0, 21: 0, 27: 0, 29: 0, 6: 1, 12: 1, 30: 1, 32: 1, 7: 2, 9: 2, 11: 2, 4: 3, 10: 3, 13: 3,
+           0: 4, 5: 4, 15: 4, 16: 4, 17: 4, 20: 4, 22: 4, 31: 4, 2: 5, 8: 5, 18: 5, 23: 5, 26: 5, 24: 6, 25: 6, 28: 6, 1: 7, 14: 7}
+WCAT_OF[3] = 0
+
+
+def _wonder():
+    import datetime
+    items = []
+    for k, (im, t, c) in enumerate(BITS):
+        if k in CARD_AT:
+            kind, src, head, txt, url = CARDS[CARD_AT[k]]
+            items.append(('card', kind, src, head, txt, url))
+        items.append(('img', im, c, WCAT_OF.get(k, 5)))
+    items = items[::-1]          # newest first: the later photos are the newer ones
+    t0 = datetime.datetime(2026, 10, 22, 19, 40)
+    steps = [3.2, 5.1, 16.4, 4.3, 2.7, 15.9, 6.2, 18.1, 3.6, 4.8, 14.7]
+    out, t = [], t0
+    days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    for n, it in enumerate(items):
+        when = f'{days[t.weekday()]} {t.day} {t.strftime("%b")} · {t.strftime("%H:%M")}'
+        if it[0] == 'img':
+            _, im, c, cat = it
+            out.append(f'<article class="wp" data-cat="{cat}"><p class="wt">{when}</p><img src="../img/{im}" alt="" loading="lazy">'
+                       f'<p class="wc"><b>{c}</b><span class="wcat">{WCATS[cat]}</span></p></article>')
+        else:
+            _, kind, src, head, txt, url = it
+            body = (f'<p class="wsrc">{src}</p><h3>{head}</h3><p>{txt}</p><a class="wlink" href="{url}" target="_blank" rel="noopener">read the article on {src} ↗</a>'
+                    if kind == 'news' else f'<i class="wqm">“</i><p class="wq">{txt}</p><p class="wsrc">{src}</p>')
+            out.append(f'<article class="wp wtxt {kind}" data-cat="8"><p class="wt">{when}</p>{body}<p class="wc"><span class="wcat">words</span></p></article>')
+        t -= datetime.timedelta(hours=steps[n % len(steps)])
+    chips = '<button type="button" class="wch on" data-c="all">all</button>' + ''.join(
+        f'<button type="button" class="wch" data-c="{k}">{c}</button>' for k, c in enumerate(WCATS))
+    return ('<div class="wonder" id="wonder" hidden><div class="whd"><h2>wonder</h2><p>a notebook of everyday things · dasein-design</p>'
+            '<p class="wtrial">trial – the photos are real, the dates are samples</p></div>'
+            f'<div class="wchips">{chips}</div><div class="wfeed">{"".join(out)}</div>'
+            '<p class="wend">– that is all for now –</p></div>')
+
+
+WONDER = _wonder()
+WLATEST = '../img/' + BITS[-1][0]
+WSWITCH = (f'<button type="button" class="wsw" id="wsw" aria-pressed="false" aria-label="switch between work and wonder">'
+           f'<span class="wk">work</span><i class="tg"><b></b></i><span class="wo">wonder</span>'
+           f'<span class="wth"><img src="{WLATEST}" alt=""><i class="wdot"></i></span></button>')
+
+
 GAME = ('<dialog id="game" aria-label="beetle game"><div class="play" id="play"><canvas class="ptrail"></canvas>'
         f'<button type="button" class="x gx" id="gx" aria-label="close the game">{XC}</button>'
         '<div class="pscore"><span>you <b id="sy">0</b></span><span>beetle <b id="sb">0</b></span></div>'
@@ -304,6 +352,37 @@ body{{position:relative}}
 .stack #goS .dn,.stack #goN .nn{{display:none}} .stack #goS .su,.stack #goN .ns{{display:flex}} .stack #goS.top .su{{display:none}}
 .bar button{{align-items:center;gap:6px}} .bar .sc{{font-style:normal;font-size:11px;letter-spacing:.06em;color:#666}} #goS.top .sc{{display:none}}
 .socs{{display:none;margin-left:auto;gap:12px;align-items:center}} .soc{{display:flex}} .soc svg{{display:block}}
+/* work ○ wonder trial (?w=1) */
+.wsw{{display:none}}
+.wtr .socs{{display:none!important}}
+.wtr .wsw{{display:flex;align-items:center;gap:5px;margin-left:auto;border:0;background:none;padding:4px 0;font:inherit;font-size:12px;letter-spacing:.04em;color:#666;cursor:pointer;-webkit-tap-highlight-color:transparent}}
+.wsw .tg{{position:relative;width:28px;height:15px;border-radius:8px;border:1px solid #3a3c37;background:#fff;transition:background .25s}}
+.wsw .tg b{{position:absolute;left:2px;top:2px;width:9px;height:9px;border-radius:50%;background:#3a3c37;transition:transform .25s}}
+.wsw[aria-pressed=true] .tg{{background:#eaffae}} .wsw[aria-pressed=true] .tg b{{transform:translateX(13px);background:var(--red)}}
+.wsw .wk{{color:#000;font-weight:700}} .wsw[aria-pressed=true] .wk{{color:#666;font-weight:400}} .wsw[aria-pressed=true] .wo{{color:var(--red);font-weight:700}}
+.wsw .wth{{position:relative;width:24px;height:24px;margin-left:2px;flex:none}} .wsw .wth img{{width:100%;height:100%;object-fit:cover;border-radius:3px;outline:1px dotted #b8b8b8;outline-offset:1px}}
+.wsw .wdot{{position:absolute;right:-4px;top:-4px;width:8px;height:8px;border-radius:50%;background:#cdff3e;box-shadow:0 0 0 1px #3a3c37}}
+.wsw .wdot::after{{content:"";position:absolute;inset:-1px;border-radius:50%;border:1px solid var(--red);animation:pdr 1.8s ease-out infinite}}
+.wsw[aria-pressed=true] .wth{{display:none}}
+.wonder{{position:fixed;left:0;right:0;top:var(--head);bottom:0;z-index:30;overflow-y:auto;background:#fff;padding:0 18px 40px;-webkit-overflow-scrolling:touch}}
+.wonder[hidden]{{display:none}}
+.whd{{padding:22px 0 8px}} .whd h2{{margin:0;font-size:30px;font-weight:700;color:var(--red);letter-spacing:.01em}} .whd p{{margin:2px 0 0;font-size:13px;color:#666}}
+.whd .wtrial{{margin-top:6px;font-size:11px;letter-spacing:.06em;color:#aaa}}
+.wchips{{position:sticky;top:0;z-index:2;display:flex;gap:6px;overflow-x:auto;padding:10px 0;background:#fff;scrollbar-width:none;border-bottom:1px dashed var(--line)}} .wchips::-webkit-scrollbar{{display:none}}
+.wch{{flex:none;border:1px dotted #b8b8b8;background:#fff;border-radius:14px;padding:4px 11px;font:inherit;font-size:12.5px;color:#333;white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent}}
+.wch.on{{background:#eaffae;border-style:solid;border-color:#3a3c37;color:#000;font-weight:700}}
+.wp{{margin:26px 0 0}} .wp[hidden]{{display:none}}
+.wt{{margin:0 0 6px;font-size:11.5px;letter-spacing:.06em;color:#888}}
+.wp img{{display:block;width:100%;height:auto;max-height:78svh;object-fit:cover;outline:1px dotted #b8b8b8;outline-offset:-1px}}
+.wc{{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:7px 0 0;font-size:14px}} .wc b{{color:#222}}
+.wcat{{flex:none;font-size:11px;letter-spacing:.08em;color:var(--red)}}
+.wtxt{{padding:16px 14px 12px;background:#f4f4f2}} .wtxt.note{{background:#fffbd6}}
+.wtxt h3{{margin:2px 0 8px;font-size:18px;line-height:1.25;color:var(--red)}} .wtxt p{{margin:0;font-size:14.5px;line-height:1.5;color:#222}}
+.wtxt .wsrc{{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--red)}} .wtxt.note .wsrc{{margin-top:8px;text-transform:none;letter-spacing:.02em;font-weight:400;color:#666}}
+.wqm{{display:block;font-style:normal;font-size:48px;line-height:.5;height:22px;color:var(--red)}} .wq{{font-size:17px!important;font-style:italic}}
+.wlink{{display:inline-block;margin-top:10px;font-size:13.5px;color:#1a5fd0;text-decoration:none}}
+.wtxt .wc{{margin-top:10px}} .wtxt .todo{{color:var(--red)}}
+.wend{{margin:34px 0 0;text-align:center;font-size:12px;letter-spacing:.06em;color:#aaa}}
 body:not(.side) .socs{{display:flex}}   /* in the top layouts (and the stack trials) the three marks sit at the right of the logo */
 
 #goS .up i{{font-style:normal;font-size:12px;letter-spacing:.06em;color:#3a3c37}}
@@ -665,11 +744,11 @@ dialog .top{{flex:none}}
 <script>/* three versions: logo and tabs all down the side (default) · logo on the side, tabs on top · logo and tabs across the top
    ?logo=rail / side / top, remembered on this phone */
 (function(){{ let m='rail'; try{{ m=new URLSearchParams(location.search).get('logo')||localStorage.getItem('ddlogo2')||'rail';
-    const sk=new URLSearchParams(location.search).get('stack'); if(sk==='1'||sk==='2'){{ document.body.classList.add('stack'); m='top'; }} if(sk==='2') document.body.classList.add('pairs'); const sc=new URLSearchParams(location.search).get('sec'); document.body.classList.add('sec'+(['0','1','2','3'].includes(sc)?sc:'1'));   /* pale grey (sec1) is the standard since 22 Oct; ?sec=0 turns it off */ }}catch(e){{}}
+    const sk=new URLSearchParams(location.search).get('stack'); if(sk==='1'||sk==='2'){{ document.body.classList.add('stack'); m='top'; }} if(sk==='2') document.body.classList.add('pairs'); if(new URLSearchParams(location.search).get('w')==='1') document.body.classList.add('wtr'); const sc=new URLSearchParams(location.search).get('sec'); document.body.classList.add('sec'+(['0','1','2','3'].includes(sc)?sc:'1'));   /* pale grey (sec1) is the standard since 22 Oct; ?sec=0 turns it off */ }}catch(e){{}}
   if(m!=='top') document.body.classList.add('side'); if(m==='rail') document.body.classList.add('rail'); }})();</script>
 <a class="sidebar" href="#start" aria-label="dasein-design, start"><img src="../img/m-mark.png" alt=""><span>dasein<b>-design</b></span></a>
 <header>
-<div class="row1"><a class="logo" href="#start" aria-label="dasein-design, start"><img src="../img/m-mark.png" alt=""><span>dasein<b>-design</b></span></a>{SOCIAL}<span class="note">preview · <button type="button" data-logo="rail">all side</button>/<button type="button" data-logo="side">logo side</button>/<button type="button" data-logo="top">top</button> · <a href="../">full site</a></span></div>
+<div class="row1"><a class="logo" href="#start" aria-label="dasein-design, start"><img src="../img/m-mark.png" alt=""><span>dasein<b>-design</b></span></a>{SOCIAL}{WSWITCH}<span class="note">preview · <button type="button" data-logo="rail">all side</button>/<button type="button" data-logo="side">logo side</button>/<button type="button" data-logo="top">top</button> · <a href="../">full site</a></span></div>
 <nav>{TABHTML}</nav>
 </header>
 <main>
@@ -693,6 +772,7 @@ dialog .top{{flex:none}}
 <div class="nav2"><button type="button" id="pp2">{ARW}previous</button><div class="cnt"><span id="lk"></span></div><button type="button" id="np2">next{ARE}</button></div>
 </dialog>
 {GAME}
+{WONDER}
 <dialog id="cw" aria-label="bits &amp; bats">
 <div class="top"><div class="cnt"><span id="ck"></span></div><button type="button" class="x" id="cx" aria-label="close">{XC}</button></div>
 <div class="cwc" id="cwc"></div>
@@ -785,6 +865,15 @@ dialog .top{{flex:none}}
     gd.addEventListener('close',()=>{{ run=false; }});
     addEventListener('resize',()=>{{ if(gd.open) size(); }}); }})();
   /* logo switch */
+  /* work ○ wonder (trial): the switch opens the notebook over the page; the category chips filter it */
+  (function(){{ const sw=document.getElementById('wsw'), wd=document.getElementById('wonder'); if(!sw||!wd) return;
+    const set=on=>{{ sw.setAttribute('aria-pressed',String(on)); wd.hidden=!on; document.documentElement.classList.toggle('dlg',on); if(on) wd.scrollTop=0; }};
+    sw.addEventListener('click',()=>set(sw.getAttribute('aria-pressed')!=='true'));
+    wd.querySelectorAll('.wch').forEach(c=>c.addEventListener('click',()=>{{ wd.querySelectorAll('.wch').forEach(x=>x.classList.toggle('on',x===c));
+      wd.querySelectorAll('.wp').forEach(p=>{{ p.hidden=!(c.dataset.c==='all'||p.dataset.cat===c.dataset.c); }}); wd.scrollTo({{top:0}}); }}));
+    document.querySelector('header .logo').addEventListener('click',()=>set(false));
+    document.querySelectorAll('.tab,.pbar').forEach(t=>t.addEventListener('click',()=>set(false)));
+    addEventListener('keydown',e=>{{ if(e.key==='Escape') set(false); }}); }})();
   const B=document.body;
   const setLogo=m=>{{ B.classList.toggle('side',m!=='top'); B.classList.toggle('rail',m==='rail'); try{{ if(!B.classList.contains('stack')) localStorage.setItem('ddlogo2',m); }}catch(e){{}}
     document.querySelectorAll('[data-logo]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.logo===m))); }};

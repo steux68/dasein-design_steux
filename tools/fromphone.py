@@ -132,9 +132,15 @@ a[href^="mailto:"],a[href^="mailto:"] span{text-decoration:none!important}
 .hot.imp b{font-weight:700;font-size:12px;color:#000;transition:color .2s}
 .hot.imp .ii{display:inline-block;width:13px;height:13px;line-height:11px;text-align:center;border:1.2px solid #000;border-radius:50%;font:700 9px/11px Calibri,Carlito,sans-serif;font-style:normal;color:#000;box-sizing:border-box;animation:iiflash 3.2s ease-in-out infinite}
 @keyframes iiflash{0%,70%,100%{border-color:#000;color:#000;background:transparent}80%{border-color:#e30613;color:#e30613;background:#cdff3e}}
-.hot.imp:hover span,.hot.imp:hover b,.hot.imp:focus-visible span,.hot.imp:focus-visible b{color:#e30613}
+.hot.imp.cur span,.hot.imp.cur b,.hot.imp:hover span,.hot.imp:hover b,.hot.imp:focus-visible span,.hot.imp:focus-visible b{color:#e30613}
 .hot.imp:hover .ii{animation:none;border-color:#e30613;color:#e30613;background:#cdff3e} .hot.imp:focus-visible{outline:none}
 @media (prefers-reduced-motion:reduce){.hot.imp .ii{animation:none}}
+.impc{position:absolute;column-count:2;column-gap:20px;font:400 12px/1.5 Calibri,Carlito,sans-serif;color:#222}
+.impc .lab2{margin:0 0 6px;font-weight:700;font-size:11px;letter-spacing:.14em;color:#e30613;column-span:all}
+.impc .lp{color:#666;font-size:11.5px;margin:0 0 4px;column-span:all}
+.impc h4{margin:12px 0 2px;font-size:12px;font-weight:700;color:#000;break-after:avoid} .impc p{margin:0;break-inside:avoid}
+.impc a{color:#1a5fd0;text-decoration:none} .impc a[href^="tel:"]{color:#1e8e3e} .impc .todo{color:#e30613}
+.ci{display:inline-block;font-style:normal;width:.95em;height:.95em;line-height:.85em;text-align:center;border:.07em solid currentColor;border-radius:50%;font-size:.8em;vertical-align:.05em}
 /* three clicks on the beetle: the heart */
 .heartfx{position:fixed;inset:0;z-index:9999;pointer-events:none;overflow:hidden}
 .heartfx svg{position:absolute;left:0;top:0;width:60px;height:60px;margin:-30px 0 0 -30px;fill:#e30613;will-change:transform,opacity}
@@ -144,13 +150,7 @@ img[src^="img/m-lg-"]{box-sizing:border-box;padding:6px 12px}
 '''
 
 
-IMP_JS = r"""<script>
-(function(){ const d=document.getElementById('impd'); if(!d) return;
-  document.querySelectorAll('a.imp').forEach(a=>a.addEventListener('click',e=>{ e.preventDefault(); d.showModal(); }));
-  document.getElementById('impx').onclick=()=>d.close();
-  d.addEventListener('click',e=>{ if(e.target===d) d.close(); });
-})();
-</script>"""
+
 
 HEART_JS = r"""<script>
 /* the two CVs: "full CV" opens one, "close CV" folds it again; both fold when you leave the page */
@@ -217,6 +217,31 @@ def _tab_names(s):
     s, n = re.subn(r'(left-\[335px\][^"]*?w-\[190px\]" data-node-id="[^"]+"><p[^>]*>)(.*?)</p>', lab, s, flags=re.S)
     assert n == 6, n
     return _rep('aria-label="us &amp; our services"', 'aria-label="about us"', s)
+
+
+def _closing_div(s, i):
+    """index just after the </div> that closes the <div ...> starting at i"""
+    depth = 0
+    for m in re.finditer(r'<(/?)div\b[^>]*>', s[i:]):
+        depth += -1 if m.group(1) else 1
+        if depth == 0:
+            return i + m.end()
+    raise ValueError
+
+
+def _impressum_page(s):
+    """a page after contact, like it: the impressum written out, vertical title "impressum [i]"; no tab of its own (reached by the (i) above the copyright)"""
+    body = f'<div class="impc" style="left:235px;top:60px;width:860px"><p class="lab2">IMPRESSUM</p>{LEGAL_BODY}</div>'
+    i = s.index('<section class="pg" id="contact"'); j = s.index('</section>', i) + len('</section>')
+    s = s[:j] + f'<section class="pg" id="impressum"><div class="bg-white relative frame">{body}</div></section>' + s[j:]
+    i = s.index('<div class="chrome" data-pg="contact">'); j = _closing_div(s, i)
+    ch = s[i:j].replace('data-pg="contact"', 'data-pg="impressum"', 1)
+    ch = ch.replace('<span class="fcal-b leading-[normal] text-[50px]">contact </span><span class="fcal-r leading-[normal] text-[20px]">[05]</span>',
+                    '<span class="fcal-b leading-[normal] text-[50px]">impressum </span><span class="fcal-r leading-[normal] text-[20px]">[<i class="ci">i</i>]</span>')
+    ch = ch.replace('bg-[rgba(205,255,62,0.86)]', 'bg-[rgba(0,0,0,0.05)]').replace('<span class="fcal-b leading-[normal] text-[18px]">contact </span>', '<span class="fcal-r leading-[normal] text-[15px]">contact </span>')
+    s = s[:j] + ch + s[j:]
+    # while on the impressum page its (i) link in the right-hand bar stays red
+    return s.replace('</body>', '<script>document.addEventListener("pagechange",e=>document.querySelectorAll("a.imp").forEach(a=>a.classList.toggle("cur",e.detail==="impressum")));</script></body>', 1)
 
 
 def patch(s):
@@ -327,11 +352,10 @@ def patch(s):
              '<span class="leading-[normal] text-[14px]">Architekt<i class="rs"></i>Inhaber</span>', s)
     # ---- impressum (22 Oct): no extra page or tab on the desktop - a small dot above the copyright opens it in a pop-up
     s = _rep('<a class="hot social" href="#" data-pending="1" aria-label="Facebook"',
-             '<a class="hot imp" href="#impressum" aria-label="impressum - click to open" title="click to open the full impressum" style="left:1330px;top:552px;width:26px;height:210px">'
+             '<a class="hot imp" href="#impressum" aria-label="impressum" title="impressum" style="left:1330px;top:552px;width:26px;height:210px">'
              '<span><i class="ii">i</i> <b>impressum</b> · click for the full text</span></a>'
              '<a class="hot social" href="#" data-pending="1" aria-label="Facebook"', s)
-    s = s.replace('</body>', '<dialog class="impd" id="impd" aria-label="impressum"><button type="button" class="lbx" id="impx" aria-label="close (Esc)">' + XC + '</button>'
-                  '<div class="impc"><p class="lab2">IMPRESSUM</p>' + LEGAL_BODY + '</div></dialog>' + IMP_JS + '</body>', 1)
+    s = _impressum_page(s)
     # ---- project pop-up (22 Oct): the arrows beside the photo strip step to the previous / next photo instead of scrolling the strip
     s = _rep("$('lbsl0').onclick=()=>{ st.scrollLeft-=st.clientWidth*.8; }; $('lbsr0').onclick=()=>{ st.scrollLeft+=st.clientWidth*.8; };",
              "$('lbsl0').onclick=()=>step(-1); $('lbsr0').onclick=()=>step(1);", s)

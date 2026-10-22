@@ -126,25 +126,15 @@ a[href^="mailto:"],a[href^="mailto:"] span{text-decoration:none!important}
 .sub2{color:#e30613;font-size:11px;letter-spacing:.12em;margin-bottom:3px!important}
 .rs{display:inline-block;width:2.5px;height:.9em;margin:0 6px;vertical-align:-.08em;background:#3a3c37}
 /* impressum: a small dot above the copyright in the right-hand bar; it opens a pop-up */
-.hot.imp{display:flex;flex-direction:column;align-items:center;gap:9px;text-decoration:none}
-/* the same (+) opener as full CV, with its pulsing lime rings */
-.hot.imp .ip{width:20px;height:20px;overflow:visible;flex:none}
-.hot.imp .ip .c{fill:#fff;stroke:#e30613;stroke-width:1.5} .hot.imp .ip path{stroke:#e30613;stroke-width:1.6;stroke-linecap:round}
-.hot.imp .ip .r1,.hot.imp .ip .r2{fill:none;stroke:#cdff3e;stroke-width:2.2;transform-box:fill-box;transform-origin:center;animation:cvp 1.8s ease-out infinite} .hot.imp .ip .r2{animation-delay:.9s}
-.hot.imp span{writing-mode:vertical-rl;transform:rotate(180deg);font:400 10px Calibri,Carlito,sans-serif;letter-spacing:.06em;color:#888}
-.hot.imp:hover .ip .c{fill:#a5e35a} .hot.imp:hover span{color:#e30613} .hot.imp:focus-visible{outline:none}
-.impd{position:fixed;inset:0;margin:auto;height:fit-content;width:min(640px,90vw);max-height:84vh;overflow:auto;padding:34px 40px 30px;border:0;background:rgba(255,255,255,.97);box-shadow:0 10px 40px rgba(0,0,0,.12);font:400 13px/1.5 Calibri,Carlito,sans-serif;color:#222}
-.impd::backdrop{background:rgba(255,255,255,.55);backdrop-filter:blur(3px)}
-.impd .lbx{position:absolute;right:16px;top:16px}
-.impd .lab2{margin:0 0 6px;font-weight:700;font-size:11px;letter-spacing:.14em;color:#e30613}
-.impd .lp{color:#666;font-size:12px;margin:0 0 4px}
-.impd h4{margin:12px 0 2px;font-size:12.5px;font-weight:700;color:#000} .impd p{margin:0}
-.impd a{color:#1a5fd0;text-decoration:none} .impd a[href^="tel:"]{color:#1e8e3e} .impd .todo{color:#e30613}
-.lbst{justify-content:center;overflow:hidden!important}
-.lbst button[hidden]{display:none}
-.lbdots{position:absolute;left:60px;right:60px;top:640px;display:flex;flex-wrap:wrap;justify-content:center;gap:7px}
-.lbdots i{width:7px;height:7px;border-radius:50%;background:#d8d8d8;cursor:pointer;transition:background .2s}
-.lbdots i.vis{background:#a9a9a9} .lbdots i.on{background:#e30613} .lbdots i:hover{background:#a5e35a}
+/* impressum: written upwards above the copyright like it - a circled i (like the ©) that flashes now and then; red on hover */
+.hot.imp{display:flex;justify-content:center;text-decoration:none}
+.hot.imp span{writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;font:400 11px Calibri,Carlito,sans-serif;letter-spacing:.03em;color:#777;transition:color .2s}
+.hot.imp b{font-weight:700;font-size:12px;color:#000;transition:color .2s}
+.hot.imp .ii{display:inline-block;width:13px;height:13px;line-height:11px;text-align:center;border:1.2px solid #000;border-radius:50%;font:700 9px/11px Calibri,Carlito,sans-serif;font-style:normal;color:#000;box-sizing:border-box;animation:iiflash 3.2s ease-in-out infinite}
+@keyframes iiflash{0%,70%,100%{border-color:#000;color:#000;background:transparent}80%{border-color:#e30613;color:#e30613;background:#cdff3e}}
+.hot.imp:hover span,.hot.imp:hover b,.hot.imp:focus-visible span,.hot.imp:focus-visible b{color:#e30613}
+.hot.imp:hover .ii{animation:none;border-color:#e30613;color:#e30613;background:#cdff3e} .hot.imp:focus-visible{outline:none}
+@media (prefers-reduced-motion:reduce){.hot.imp .ii{animation:none}}
 /* three clicks on the beetle: the heart */
 .heartfx{position:fixed;inset:0;z-index:9999;pointer-events:none;overflow:hidden}
 .heartfx svg{position:absolute;left:0;top:0;width:60px;height:60px;margin:-30px 0 0 -30px;fill:#e30613;will-change:transform,opacity}
@@ -337,7 +327,8 @@ def patch(s):
              '<span class="leading-[normal] text-[14px]">Architekt<i class="rs"></i>Inhaber</span>', s)
     # ---- impressum (22 Oct): no extra page or tab on the desktop - a small dot above the copyright opens it in a pop-up
     s = _rep('<a class="hot social" href="#" data-pending="1" aria-label="Facebook"',
-             '<a class="hot imp" href="#impressum" aria-label="impressum" style="left:1330px;top:672px;width:26px;height:88px"><svg class="ip" viewBox="-12 -12 24 24" aria-hidden="true"><circle class="r1" r="8"/><circle class="r2" r="8"/><circle class="c" r="8"/><path d="M0 -4.2V4.2M-4.2 0H4.2"/></svg><span>impressum</span></a>'
+             '<a class="hot imp" href="#impressum" aria-label="impressum - click to open" title="click to open the full impressum" style="left:1330px;top:552px;width:26px;height:210px">'
+             '<span><i class="ii">i</i> <b>impressum</b> · click for the full text</span></a>'
              '<a class="hot social" href="#" data-pending="1" aria-label="Facebook"', s)
     s = s.replace('</body>', '<dialog class="impd" id="impd" aria-label="impressum"><button type="button" class="lbx" id="impx" aria-label="close (Esc)">' + XC + '</button>'
                   '<div class="impc"><p class="lab2">IMPRESSUM</p>' + LEGAL_BODY + '</div></dialog>' + IMP_JS + '</body>', 1)

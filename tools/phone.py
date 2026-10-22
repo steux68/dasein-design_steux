@@ -253,7 +253,7 @@ LEGAL = ('<div class="box legal cut" id="g-legal" data-show="4" data-extra="30">
            '<div class="pscore"><span>you <b id="sy">0</b></span><span>beetle <b id="sb">0</b></span></div>'
            '<div class="phint" id="phint"><b>collect the red dots!</b><span>whoever gets to 10 first wins</span><small>touch the dot to start</small></div>'
            '<i class="pdot"><b></b></i><img class="pbug" src="../img/m-bug-up.webp" alt="">'
-           '<div class="pend"><img src="../img/m-mark.png" alt=""><span>dasein<b>-design</b></span>' + SOCIAL.split('</svg>',1)[1] + '<p class="copy">© 2026 [ dasein-design &amp; steux ]</p></div></div>')
+           '<div class="pend"><img src="../img/m-mark.png" alt=""><span>dasein<b>-design</b></span>' + '<p class="copy">© 2026 [ dasein-design &amp; steux ]</p></div></div>')
 
 
 HTML = f'''<!doctype html>

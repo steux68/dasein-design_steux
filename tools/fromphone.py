@@ -475,6 +475,9 @@ def patch(s):
     assert n >= 5, n
     s = _impressum_page(s)
     s = _bits(s)
+    # ---- map + / - / home (22 Oct): finer lines, like the compass arrows
+    s = _rep('.mz button circle{fill:rgba(255,255,255,.9);stroke:#e30613;stroke-width:2;', '.mz button circle{fill:rgba(255,255,255,.9);stroke:#e30613;stroke-width:1;', s)
+    s = _rep('.mz button path{fill:none;stroke:#e30613;stroke-width:2;', '.mz button path{fill:none;stroke:#e30613;stroke-width:1.2;', s)
     # ---- project pop-up (22 Oct): the arrows beside the photo strip step to the previous / next photo instead of scrolling the strip
     s = _rep("$('lbsl0').onclick=()=>{ st.scrollLeft-=st.clientWidth*.8; }; $('lbsr0').onclick=()=>{ st.scrollLeft+=st.clientWidth*.8; };",
              "$('lbsl0').onclick=()=>step(-1); $('lbsr0').onclick=()=>step(1);", s)

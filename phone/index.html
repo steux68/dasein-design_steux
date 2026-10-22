@@ -94,7 +94,12 @@ body{position:relative}
 .stack .sbar{display:none}
 .stack main > .pbar{position:sticky;z-index:14;height:22px;margin:0 10px;font-size:12px;cursor:pointer;-webkit-tap-highlight-color:transparent;
   background:#eaffae;box-shadow:0 -1px 0 #fff;transition:background .2s}
-.stack main > .pbar.on{background:#cdff3e}
+.stack main > .pbar{justify-content:flex-start;padding:0 10px}
+/* each page its own colour, the same as the first ring of its circle on the beetle: a light tint, full strength while you are in that page */
+.stack main > .pbar:nth-of-type(1){--t:#fff1a3;--s:#ffd400} .stack main > .pbar:nth-of-type(2){--t:#cdeec6;--s:#7fd88e}
+.stack main > .pbar:nth-of-type(3){--t:#d3e5ff;--s:#8dbcff} .stack main > .pbar:nth-of-type(4){--t:#ffd3cf;--s:#ff8f86}
+.stack main > .pbar:nth-of-type(5){--t:#ecffb8;--s:#cdff3e}
+.stack main > .pbar{background:var(--t)} .stack main > .pbar.on{background:var(--s)}
 .stack main > .pbar:active{background:var(--green)}
 .stack .body{padding-top:10px}
 .stack .stage{height:calc(100svh - var(--head) - 2 * var(--bar) - 104px);min-height:330px}

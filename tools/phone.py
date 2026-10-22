@@ -423,8 +423,12 @@ body{{position:relative}}
 .wbt:nth-child(2){{background-image:var(--dh),var(--dh);background-position:left top,left bottom;background-size:100% 1px,100% 1px}}
 .wbt b{{font-weight:700}} .wbt small{{font-size:10px;color:#444}}
 .wbt.on{{background-color:#eaffae}} .wbt:active{{background-color:#cdff3e}}
-.wonder .wbars{{display:grid;box-shadow:0 6px 8px -6px rgba(0,0,0,.12)}}   /* the six categories float above the grid, as the half title bars do on the main page */
-.wonder .wgrid{{display:grid;grid-template-columns:repeat(5,1fr);grid-auto-rows:calc((100vw - 36px - 12px) / 5);grid-auto-flow:dense;gap:3px;margin-top:10px}}
+.wonder .wbars{{display:none}}
+.wfloat{{position:fixed;left:18px;right:18px;top:calc(var(--head) + 10px);bottom:14px;z-index:5;pointer-events:none}}
+.wfb{{position:absolute;left:0;top:0;display:flex;align-items:center;gap:5px;height:23px;padding:0 10px;border:0;font:inherit;font-size:12px;color:#000;white-space:nowrap;cursor:pointer;pointer-events:auto;
+  background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,rgba(242,242,242,.93);box-shadow:0 1px 6px rgba(0,0,0,.18);will-change:transform;-webkit-tap-highlight-color:transparent}}
+.wfb b{{font-weight:700}} .wfb small{{font-size:10px;color:#444}} .wfb.on{{background-color:#eaffae}} .wfb:active{{background-color:#cdff3e}}   /* the six categories float above the grid, as the half title bars do on the main page */
+.wonder .wgrid{{display:block;position:relative;margin-top:12px;grid-template-columns:repeat(5,1fr);grid-auto-rows:calc((100vw - 36px - 12px) / 5);grid-auto-flow:dense;gap:3px;margin-top:10px}}
 .wempty{{display:block;background:#fff}}
 .wonder .wgrid > *{{position:relative;box-sizing:border-box;border:0;margin:0;width:auto;height:auto}}
 .wonder .wgrid .wg{{aspect-ratio:auto;background:#f4f4f4;padding:0;overflow:hidden}} .wonder .wgrid .wg img{{width:100%;height:100%;object-fit:cover!important}}   /* cropped to the cell, like the project tiles */
@@ -998,24 +1002,36 @@ dialog .top{{flex:none}}
         const s=row.reduce((a,b)=>a+b.s,0);
         if(w>=h){{ const cw=s/h; let yy=y; row.forEach(o=>{{ const ch=o.s/cw; out.push({{...o,x,y:yy,w:cw,h:ch}}); yy+=ch; }}); x+=cw; w-=cw; }}
         else {{ const rh=s/w; let xx=x; row.forEach(o=>{{ const rw=o.s/rh; out.push({{...o,x:xx,y,w:rw,h:rh}}); xx+=rw; }}); y+=rh; h-=rh; }} }} }}
-    /* the carpet (23 Oct, 01:10): like the desktop's projects page - a grid of square cells, four across, the photos taking 1 x 1 (square),
-       1 x 2 (portrait), 2 x 1 (landscape) or now and then 2 x 2, cropped to fit; newest first, packed densely; the six category words are cells of their own */
-    function carpet(){{
+    /* the carpet (23 Oct, 01:25): a portrait treemap like the sketch in Steuart's book - rectangles of many sizes, upright, square and wide,
+       the photos cropped to fill them, thin white gaps, a few left empty; newest first, in runs that form blocks, the blocks stacked down the page */
+    function carpet(){{ const W=grid.clientWidth; if(!W) return;
       const ph=tiles.filter(t=>!t.classList.contains('t')&&(only===null||t.dataset.cat===only));
-      const items=ph.map(t=>({{t}})); [4,11,19,27].forEach(at=>{{ if(at<items.length) items.splice(at,0,{{empty:true}}); }});   /* a few empty squares, as on the desktop */
-      grid.innerHTML=''; let n=0;
-      items.forEach(u=>{{ let e, c=1, r=1;
-        if(u.empty){{ e=document.createElement('i'); e.className='wempty'; }}
-        else if(u.cat!==undefined){{ e=document.createElement('button'); e.type='button'; e.className='wcw'+(only===String(u.cat)?' on':''); const word=CATS[u.cat];
-          e.innerHTML='<b>'+word+'</b><small>['+String(u.cat+1).padStart(2,'0')+']</small>';
-          e.querySelector('b').style.fontSize=(word.length>8?13:word.length>5?16:19)+'px';
-          e.addEventListener('click',()=>{{ only=only===String(u.cat)?null:String(u.cat); carpet(); wd.scrollTo({{top:0}}); }}); }}
-        else {{ e=u.t; e.hidden=false; const ar=+e.dataset.ar||1;
-          if(n%7===0) {{ c=2; r=2; }}                   /* a big one now and then */
-          else if(ar>1.2) {{ c=2; }}                     /* landscape */
-          else if(ar<.8&&n%3!==1) {{ r=2; }}             /* portrait, most of the time */
-          n++; }}
-        e.style.cssText=''; e.style.gridColumn='span '+c; e.style.gridRow='span '+r; grid.appendChild(e); }}); }}
+      const items=ph.map((t,n)=>({{t,v:[2.6,1,.7,1.6,.5,1.2,.8,3.2,.6,1,1.8,.45,.9,2.2][n%14]*(n<2?1.6:1)}}));
+      [3,10,17,25].forEach(at=>{{ if(at<items.length) items.splice(at,0,{{empty:true,v:.5}}); }});
+      const unit=(W/3.2)*(W/3.2); items.forEach(o=>o.a=o.v*unit);
+      const blocks=[]; let i=0, k=0; while(i<items.length){{ const n=[6,4,7,5,8][k++%5]; const its=items.slice(i,i+n); i+=n; blocks.push({{its,a:its.reduce((s,o)=>s+o.a,0)}}); }}
+      if(blocks.length>1&&blocks[blocks.length-1].its.length<3){{ const l=blocks.pop(), p=blocks[blocks.length-1]; p.its=p.its.concat(l.its); p.a+=l.a; }}
+      /* stack the blocks down the page, each full width (portrait page), some split in two side by side */
+      const cells=[]; let y=0;
+      for(let b=0;b<blocks.length;b++){{ const B1=blocks[b], B2=(b%3===1&&blocks[b+1])?blocks[++b]:null;
+        if(B2){{ const h=(B1.a+B2.a)/W, w1=B1.a/h; sq(B1.its,0,y,w1,h,cells); sq(B2.its,w1,y,W-w1,h,cells); y+=h; }}
+        else {{ const h=B1.a/W; sq(B1.its,0,y,W,h,cells); y+=h; }} }}
+      grid.innerHTML=''; grid.style.height=y+'px'; const G=1.5;
+      cells.forEach(o=>{{ let e; if(o.empty){{ e=document.createElement('i'); e.className='wempty'; }} else {{ e=o.t; e.hidden=false; }}
+        e.style.cssText=''; Object.assign(e.style,{{position:'absolute',left:(o.x+G)+'px',top:(o.y+G)+'px',width:Math.max(0,o.w-2*G)+'px',height:Math.max(0,o.h-2*G)+'px'}}); grid.appendChild(e); }}); }}
+    /* the six categories: small title bars that drift slowly over the photos; a tap shows only that category, again = all */
+    const fl=document.createElement('div'); fl.className='wfloat'; wd.appendChild(fl);
+    const fb=CATS.map((c,k)=>{{ const b=document.createElement('button'); b.type='button'; b.className='wfb'; b.innerHTML='<b>'+c+'</b><small>['+String(k+1).padStart(2,'0')+']</small>';
+      b.addEventListener('click',()=>{{ only=only===String(k)?null:String(k); fb.forEach((x,j)=>x.el.classList.toggle('on',only===String(j))); carpet(); wd.scrollTo({{top:0}}); }});
+      fl.appendChild(b); return {{el:b,x:Math.random(),y:Math.random(),vx:(Math.random()-.5)*.02,vy:(Math.random()-.5)*.02}}; }});
+    let fla=0, flt=0;
+    function drift(t){{ if(wd.hidden){{ fla=0; return; }} const dt=Math.min(.05,(t-flt)/1000||0); flt=t; const FW=fl.clientWidth, FH=fl.clientHeight;
+      if(wp.hidden) fb.forEach(o=>{{ o.vx+=(Math.random()-.5)*.004*dt*60; o.vy+=(Math.random()-.5)*.004*dt*60; const sp=Math.hypot(o.vx,o.vy), mx=.035;
+        if(sp>mx){{ o.vx*=mx/sp; o.vy*=mx/sp; }} o.x+=o.vx*dt; o.y+=o.vy*dt;
+        if(o.x<0||o.x>1){{ o.vx*=-1; o.x=Math.max(0,Math.min(1,o.x)); }} if(o.y<0||o.y>1){{ o.vy*=-1; o.y=Math.max(0,Math.min(1,o.y)); }}
+        o.el.style.transform=`translate(${{o.x*(FW-o.el.offsetWidth)}}px,${{o.y*(FH-o.el.offsetHeight)}}px)`; }});
+      fla=requestAnimationFrame(drift); }}
+    sw.addEventListener('click',()=>{{ if(!wd.hidden&&!fla){{ flt=performance.now(); fla=requestAnimationFrame(drift); }} }});
     sw.addEventListener('click',()=>requestAnimationFrame(carpet)); 
     const step=k=>{{ const v=vis(); pop(v[(cur+k+v.length)%v.length]); }};
     document.getElementById('wprev').onclick=()=>step(-1); document.getElementById('wnext').onclick=()=>step(1);
@@ -1023,7 +1039,8 @@ dialog .top{{flex:none}}
     wp.addEventListener('click',e=>{{ if(e.target===wp) wp.hidden=true; }});   /* a tap on the veil beside the card goes back */
     document.querySelector('header .logo').addEventListener('click',()=>set(false));
     document.querySelectorAll('.tab,.pbar').forEach(t=>t.addEventListener('click',()=>set(false)));
-    addEventListener('keydown',e=>{{ if(e.key==='Escape'){{ if(!wp.hidden) wp.hidden=true; else set(false); }} }}); }})();
+    addEventListener('keydown',e=>{{ if(e.key==='Escape'){{ if(!wp.hidden) wp.hidden=true; else set(false); }} }});
+    addEventListener('resize',()=>{{ if(!wd.hidden) carpet(); }}); }})();
   const B=document.body;
   const setLogo=m=>{{ B.classList.toggle('side',m!=='top'); B.classList.toggle('rail',m==='rail'); try{{ if(!B.classList.contains('stack')) localStorage.setItem('ddlogo2',m); }}catch(e){{}}
     document.querySelectorAll('[data-logo]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.logo===m))); }};

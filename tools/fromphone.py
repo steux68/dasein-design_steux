@@ -233,14 +233,14 @@ def _closing_div(s, i):
 
 
 def _impressum_page(s):
-    """a page after contact, like it: the impressum written out, vertical title "impressum [i]"; no tab of its own (reached by the (i) above the copyright)"""
+    """a page after contact, like it: the impressum written out, vertical title "impressum [§]"; no tab of its own (reached by the (i) above the copyright)"""
     body = f'<div class="impc" style="left:235px;top:60px;width:860px"><p class="lab2">IMPRESSUM</p>{LEGAL_BODY}</div>'
     i = s.index('<section class="pg" id="contact"'); j = s.index('</section>', i) + len('</section>')
     s = s[:j] + f'<section class="pg" id="impressum"><div class="bg-white relative frame">{body}</div></section>' + s[j:]
     i = s.index('<div class="chrome" data-pg="contact">'); j = _closing_div(s, i)
     ch = s[i:j].replace('data-pg="contact"', 'data-pg="impressum"', 1)
     ch = ch.replace('<span class="fcal-b leading-[normal] text-[50px]">contact </span><span class="fcal-r leading-[normal] text-[20px]">[05]</span>',
-                    '<span class="fcal-b leading-[normal] text-[50px]">impressum </span><span class="fcal-r leading-[normal] text-[20px]">[i]</span>')
+                    '<span class="fcal-b leading-[normal] text-[50px]">impressum </span><span class="fcal-r leading-[normal] text-[20px]">[§]</span>')
     ch = ch.replace('bg-[rgba(205,255,62,0.86)]', 'bg-[rgba(0,0,0,0.05)]').replace('<span class="fcal-b leading-[normal] text-[18px]">contact </span>', '<span class="fcal-r leading-[normal] text-[15px]">contact </span>')
     s = s[:j] + ch + s[j:]
     # while on the impressum page its (i) link in the right-hand bar stays red
@@ -359,7 +359,7 @@ def patch(s):
     # ---- impressum (22 Oct): no extra page or tab on the desktop - a small dot above the copyright opens it in a pop-up
     # the copyright line reads "© 2026 [ dasein-design & steux ] · impressum" - the last word goes to the impressum page
     s, n = re.subn(r'(<div class="-translate-x-1/2 -translate-y-1/2 absolute flex )h-\[252px\]( items-center justify-center left-\[1343px\] )top-\[898px\]( w-\[36px\]" data-node-id="[^"]+")(><div class="-rotate-90 flex-none"><div class="[^"]*?) w-\[252px\]"><p class="whitespace-pre-wrap">(<span class="leading-\[normal\]">© 2026</span><span class="[^"]*">\s*\[ dasein-design &amp; steux \]</span>)</p>',
-                   r'\1\2\3 style="height:330px;top:859px"\4" style="width:330px"><p class="whitespace-pre-wrap">\5<span class="fcal-r"> · </span><a class="impl" href="#impressum">impressum</a></p>', s)
+                   r'\1\2\3 style="height:330px;top:859px"\4" style="width:330px"><p class="whitespace-pre-wrap">\5<span class="fcal-r"> · </span><a class="impl" href="#impressum">§ impressum</a></p>', s)
     assert n >= 5, n
     s = _impressum_page(s)
     # ---- project pop-up (22 Oct): the arrows beside the photo strip step to the previous / next photo instead of scrolling the strip

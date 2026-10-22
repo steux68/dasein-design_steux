@@ -125,8 +125,38 @@ BITS = [('bits-imgImage.webp', 0, 'The DILLON Shelf Plans'), ('p-drawing-grille.
         ('p-tower-drawing-blue.webp', 0, 'MUSEUMS QUARTIER'), ('bits-imgImage13.webp', 0, 'MMEEELLLAAA'),
         ('bits-imgImage14.webp', 0, 'MEESHHHA'), ('bits-imgImage15.webp', 0, 'THE “DUDE” IN VENICE'),
         ('bits-imgImage16.webp', 0, 'A. N. HARKESS'), ('p-streaks-orange.webp', 0, 'LIGHT AT THE END OF THE TUNNEL'),
-        ('p-akh-crate.webp', 1, 'WHO IS THIS GUY?')]
+        ('p-akh-crate.webp', 1, 'WHO IS THIS GUY?'),
+        # 22 Oct: more of Steuart's photos (some also appear in the project pop-ups)
+        ('p-light-hole.webp', 0, 'LIGHT HOLE'), ('p-wasp-red.webp', 0, 'WASP ON RED'), ('p-yellow-dots-box.webp', 1, 'YELLOW DOTS'),
+        ('p-carrots-plate.webp', 0, 'CARROTS, STRIPES'), ('p-milk-glass.webp', 0, 'MILK GLASS'), ('p-banana-tape.webp', 0, 'BANANA &amp; TAPE'),
+        ('p-flower-shadows.webp', 0, 'FLOWER SHADOWS'), ('p-coffee-stain.webp', 0, 'COFFEE STAIN'), ('p-light-switch.webp', 0, 'LIGHT SWITCH'),
+        ('p-paper-shreds.webp', 1, 'PAPER SHREDS'), ('p-horse-rider.webp', 0, 'HORSE &amp; RIDER'), ('p-torn-strips-photo.webp', 0, 'TORN STRIPS')]
+# notes and links between the photos - a looser, blog-like mix (drafts by Claude, 22 Oct; the articles are real, checked that day)
+CARDS = [('note', 'Otto Wagner, Moderne Architektur, 1896', '„Etwas Unpraktisches kann nicht schön sein.“',
+          '„Etwas Unpraktisches kann nicht schön sein.“<br><br>Otto Wagner wrote this in Vienna in 1896, in <i>Moderne Architektur</i> – a sentence we still pin above the drawing board.', ''),
+         ('news', 'archiweb', 'A timber museum for the MuseumsQuartier',
+          'The House of Austrian History (hdgö) moves to the MuseumsQuartier in 2028, with a new timber entrance building by O&amp;O Baukunst – construction is due to start in the second half of 2026.',
+          'https://www.archiweb.cz/en/n/foreign/ve-vidni-postavi-muzeum-dejin-rakouska-jako-moderni-drevostavbu'),
+         ('note', 'studio note', 'Every project starts with a walk.',
+          'Every project starts with a walk round the site, a sketchbook and a lot of questions – where the light comes from, what the neighbours see, what should stay. <span class="todo">[draft – Steuart to write]</span>', ''),
+         ('news', 'vienna.at', 'Open House Wien: 53 buildings open their doors',
+          'The eleventh Open House Wien opened 53 otherwise closed buildings and spaces across Vienna for free, on the theme of adapting architecture to climate and social change.',
+          'https://www.vienna.at/open-house-vienna-opens-53-otherwise-closed-buildings/10369079'),
+         ('note', 'Adolf Loos, Ornament und Verbrechen, 1908', '„Die Evolution der Kultur ist gleichbedeutend mit dem Entfernen des Ornamentes aus dem Gebrauchsgegenstande.“',
+          '„Die Evolution der Kultur ist gleichbedeutend mit dem Entfernen des Ornamentes aus dem Gebrauchsgegenstande.“<br><br>Adolf Loos, <i>Ornament und Verbrechen</i>, Vienna 1908.', ''),
+         ('news', 'Der Standard', 'Architektur &amp; Stadt',
+          'Der Standard’s pages on architecture and the city – Vienna’s buildings, housing and planning, every week.',
+          'https://www.derstandard.at/immobilien/architekturundstadt')]
+CARD_AT = {2: 0, 5: 1, 9: 2, 13: 3, 17: 4, 22: 5}   # card k goes in before photo n
+def card(k):
+    kind, src, head, txt, url = CARDS[k]
+    if kind == 'news':
+        return (f'<button type="button" class="card news" data-c="{k}"><small>{src}</small><b>{head}</b><span class="go">read ↗</span></button>')
+    return f'<button type="button" class="card note" data-c="{k}"><i class="qm">“</i><b>{head}</b><small>{src}</small></button>'
+
+
 BITSHTML = ('<div class="bgrid cut" id="g-bits">' + ''.join(
+    (card(CARD_AT[k]) if k in CARD_AT else '') +
     f'<button type="button" class="tile bt{" tall" if t else ""}" data-b="{k}"><img src="../img/{im}" alt="" loading="lazy">'
     f'<span class="cap"><b>{c}</b><small>smaller text example</small></span></button>' for k, (im, t, c) in enumerate(BITS)) + '</div>' + '<button type="button" class="cvb more" aria-expanded="false" data-g="g-bits">' + PLUS + '<span class="cvt"><span class="op">more</span><span class="cl">fewer</span></span><b>bits &amp; bats</b></button>')
 BIMGS = ['../img/' + im for im, t, c in BITS]
@@ -598,6 +628,18 @@ dialog .top{{flex:none}}
 .bgrid{{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:calc((100vw - var(--side) - 28px) / 2 * .9);grid-auto-flow:dense;gap:8px}}
 .bgrid .tile{{aspect-ratio:auto;height:100%}}
 .bgrid .tall{{grid-row:span 2}}
+/* notes and links among the photos: no frame, a pale ground, type instead of a picture */
+.card{{display:flex;flex-direction:column;justify-content:flex-start;gap:6px;height:100%;padding:12px 11px;border:0;text-align:left;font:inherit;color:#222;cursor:pointer;overflow:hidden;-webkit-tap-highlight-color:transparent}}
+.card.news{{background:#f4f4f4}} .card.note{{background:#fff8c4}}
+.card small{{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--red);font-weight:700}}
+.card b{{font-size:15px;line-height:1.25}} .card .go{{margin-top:auto;font-size:12px;color:#1a5fd0}}
+.card.note .qm{{font-style:normal;font-size:44px;line-height:.6;color:var(--red);height:20px}} .card.note b{{font-weight:400;font-style:italic;font-size:14px;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}}
+.card.note small{{margin-top:auto;color:#666;font-weight:400;text-transform:none;letter-spacing:.02em}}
+.card:active{{outline:1px solid var(--red);outline-offset:-1px}}
+.cwc{{padding:6px 14px 30px;overflow:auto}} .cwc .lab{{margin-top:10px}} .cwc h2{{margin:6px 0 10px;font-size:20px;line-height:1.2;color:var(--red)}}
+.cwc p{{margin:0;font-size:15px;line-height:1.5;color:#222}} .cwc .q{{font-size:19px;line-height:1.45}} .cwc .todo{{color:var(--red)}}
+.cwc .qm{{display:block;font-style:normal;font-size:64px;line-height:.5;height:30px;margin-top:22px;color:var(--red)}}
+.cwc .open{{display:inline-block;margin-top:16px;font-size:14px;color:#1a5fd0;text-decoration:none;padding:6px 0;background:var(--dh) left bottom/100% 1px no-repeat}}
 /* one picture full screen, swipe to the next */
 #iv .photos img{{height:70svh}}
 .ivcap{{padding:10px 10px 30px;color:var(--red);font-size:17px;font-weight:700}}
@@ -634,6 +676,10 @@ dialog .top{{flex:none}}
 <div class="phw"><div class="photos" id="ph"></div><button type="button" class="pw" id="phw" aria-label="previous photo">{ARW2}</button><button type="button" class="pe" id="phe" aria-label="next photo">{ARE2}</button></div><div class="dots" id="dots"></div>
 <div class="txt"><h2 id="lt"></h2><div id="tx"></div><dl id="dl"></dl></div>
 <div class="nav2"><button type="button" id="pp2">{ARW}previous</button><div class="cnt"><span id="lk"></span></div><button type="button" id="np2">next{ARE}</button></div>
+</dialog>
+<dialog id="cw" aria-label="bits &amp; bats">
+<div class="top"><div class="cnt"><span id="ck"></span></div><button type="button" class="x" id="cx" aria-label="close">{XC}</button></div>
+<div class="cwc" id="cwc"></div>
 </dialog>
 <dialog id="iv" aria-label="bits &amp; bats">
 <div class="top"><div class="cnt"><span id="ik"></span></div>
@@ -745,6 +791,15 @@ dialog .top{{flex:none}}
   iph.addEventListener('scroll',ishow,{{passive:true}});
   document.querySelectorAll('.bt').forEach(t=>t.addEventListener('click',()=>{{ openDlg(iv); iph.scrollLeft=+t.dataset.b*iph.clientWidth; ishow(); }}));
   document.getElementById('ix').onclick=()=>iv.close();
+  /* notes and links: their own small pop-up */
+  const CA={json.dumps([list(c) for c in CARDS])}, cw=document.getElementById('cw');
+  document.querySelectorAll('.card').forEach(b=>b.addEventListener('click',()=>{{ const [kind,src,head,txt,url]=CA[+b.dataset.c];
+    document.getElementById('ck').innerHTML='bits &amp; bats · '+(kind==='news'?'link':'note');
+    document.getElementById('cwc').innerHTML=kind==='news'
+      ? '<p class="lab first">'+src+'</p><h2>'+head+'</h2><p>'+txt+'</p><a class="open" href="'+url+'" target="_blank" rel="noopener">read the article on '+src+' ↗</a>'
+      : '<i class="qm">“</i><p class="lab first">'+src+'</p><p class="q">'+txt+'</p>';
+    openDlg(cw); }}));
+  document.getElementById('cx').onclick=()=>cw.close();
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   /* current page: tab in yellow-lime, as on the desktop */
   const tabs=[...document.querySelectorAll('.tab')];

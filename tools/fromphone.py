@@ -333,6 +333,11 @@ def patch(s):
              '<a class="hot social" href="#" data-pending="1" aria-label="Facebook"', s)
     s = s.replace('</body>', '<dialog class="impd" id="impd" aria-label="impressum"><button type="button" class="lbx" id="impx" aria-label="close (Esc)">' + XC + '</button>'
                   '<div class="impc"><p class="lab2">IMPRESSUM</p>' + LEGAL_BODY + '</div></dialog>' + IMP_JS + '</body>', 1)
+    # ---- project pop-up (22 Oct): the arrows beside the photo strip step to the previous / next photo instead of scrolling the strip
+    s = _rep("$('lbsl0').onclick=()=>{ st.scrollLeft-=st.clientWidth*.8; }; $('lbsr0').onclick=()=>{ st.scrollLeft+=st.clientWidth*.8; };",
+             "$('lbsl0').onclick=()=>step(-1); $('lbsr0').onclick=()=>step(1);", s)
+    s = _rep("function arrows(){ $('lbsl0').disabled=st.scrollLeft<=1; $('lbsr0').disabled=st.scrollLeft+st.clientWidth>=st.scrollWidth-1; }",
+             "function arrows(){}", s)
     # ---- styles
     s = _rep('</style>', CSS + '</style>', s)
     return s.replace('</body>', HEART_JS + MARK + '</body>', 1)

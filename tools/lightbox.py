@@ -229,7 +229,7 @@ JS = '''
   const lb=document.getElementById('lb'), $=id=>document.getElementById(id), st=$('lbst');
   let pi=-1, ph=0;
   const two=n=>String(n).padStart(2,'0'), esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
-  function arrows(){ $('lbsl0').disabled=st.scrollLeft<=1; $('lbsr0').disabled=st.scrollLeft+st.clientWidth>=st.scrollWidth-1; }
+  function arrows(){}   /* the strip arrows step through the photos, so they are never switched off */
   function show(p,f){
     const np=(p+P.length)%P.length, pr=P[np], newp=np!==pi; pi=np; ph=Math.max(0,Math.min(pr.imgs.length-1,f||0));
     const im=$('lbimg'); if(im.getAttribute('src')!==pr.imgs[ph]){ im.classList.add('ld'); im.onload=()=>im.classList.remove('ld'); im.src=pr.imgs[ph]; } im.alt=pr.t;
@@ -254,7 +254,8 @@ JS = '''
   $('lbpp').onclick=$('lbkp').onclick=()=>show(pi-1,0); $('lbnp').onclick=$('lbkn').onclick=()=>show(pi+1,0);
   st.addEventListener('click',e=>{ const b=e.target.closest('button'); if(b) show(pi,+b.dataset.k); });
   st.addEventListener('scroll',arrows,{passive:true});
-  $('lbsl0').onclick=()=>{ st.scrollLeft-=st.clientWidth*.8; }; $('lbsr0').onclick=()=>{ st.scrollLeft+=st.clientWidth*.8; };
+  /* the W / E arrows beside the strip step to the previous / next photo (and on into the next project), like the arrow keys */
+  $('lbsl0').onclick=()=>step(-1); $('lbsr0').onclick=()=>step(1);
   /* pulsing pointer over the project tiles */
   const pc=$('pcur');
   document.querySelectorAll('.hot.proj').forEach(b=>{

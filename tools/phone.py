@@ -251,8 +251,8 @@ def _wonder():
                     if kind == 'news' else f'<i class="wqm">“</i><p class="wq">{txt}</p><p class="wsrc">{src}</p>')
             out.append(f'<article class="wp wtxt {kind}" data-cat="8"><p class="wt">{when}</p>{body}<p class="wc"><span class="wcat">words</span></p></article>')
         t -= datetime.timedelta(hours=steps[n % len(steps)])
-    chips = '<button type="button" class="wch on" data-c="all">all</button>' + ''.join(
-        f'<button type="button" class="wch" data-c="{k}">{c}</button>' for k, c in enumerate(WCATS))
+    ch = ['<button type="button" class="wch on" data-c="all">all</button>'] + [f'<button type="button" class="wch" data-c="{k}">{c}</button>' for k, c in enumerate(WCATS)]
+    chips = f'<div class="wrow">{"".join(ch[:5])}</div><div class="wrow">{"".join(ch[5:])}</div>'   # two rows, each scrolls sideways on its own
     return ('<div class="wonder" id="wonder" hidden><div class="whd"><h2>wonder</h2><p>a notebook of everyday things · dasein-design</p>'
             '<p class="wtrial">trial – the photos are real, the dates are samples</p></div>'
             f'<div class="wchips">{chips}</div><div class="wfeed">{"".join(out)}</div>'
@@ -263,7 +263,7 @@ WONDER = _wonder()
 WLATEST = '../img/' + BITS[-1][0]
 WSWITCH = (f'<button type="button" class="wsw" id="wsw" aria-pressed="false" aria-label="switch between work and wonder">'
            f'<span class="wk">work</span><i class="tg"><b></b></i><span class="wo">wonder</span>'
-           f'<span class="wth"><img src="{WLATEST}" alt=""><i class="wdot"></i></span></button>')
+           '</button>')
 
 
 GAME = ('<dialog id="game" aria-label="beetle game"><div class="play" id="play"><canvas class="ptrail"></canvas>'
@@ -357,7 +357,9 @@ body{{position:relative}}
 .wtr .socs{{display:none!important}}
 .wtr .wsw{{display:flex;align-items:center;gap:5px;margin-left:auto;border:0;background:none;padding:4px 0;font:inherit;font-size:12px;letter-spacing:.04em;color:#666;cursor:pointer;-webkit-tap-highlight-color:transparent}}
 .wsw .tg{{position:relative;width:28px;height:15px;border-radius:8px;border:1px solid #3a3c37;background:#fff;transition:background .25s}}
-.wsw .tg b{{position:absolute;left:2px;top:2px;width:9px;height:9px;border-radius:50%;background:#3a3c37;transition:transform .25s}}
+.wsw .tg b{{position:absolute;left:2px;top:2px;width:9px;height:9px;border-radius:50%;background:#cdff3e;box-shadow:0 0 0 1px #3a3c37;transition:transform .25s}}
+.wsw .tg b::after{{content:"";position:absolute;inset:-1px;border-radius:50%;border:1px solid var(--red);opacity:0;animation:pdr 3.2s ease-out infinite}}   /* the knob itself pulses, slowly */
+.wsw[aria-pressed=true] .tg b::after{{animation:none}}
 .wsw[aria-pressed=true] .tg{{background:#eaffae}} .wsw[aria-pressed=true] .tg b{{transform:translateX(13px);background:var(--red)}}
 .wsw .wk{{color:#000;font-weight:700}} .wsw[aria-pressed=true] .wk{{color:#666;font-weight:400}} .wsw[aria-pressed=true] .wo{{color:var(--red);font-weight:700}}
 .wsw .wth{{position:relative;width:24px;height:24px;margin-left:2px;flex:none}} .wsw .wth img{{width:100%;height:100%;object-fit:cover;border-radius:3px;outline:1px dotted #b8b8b8;outline-offset:1px}}
@@ -368,7 +370,8 @@ body{{position:relative}}
 .wonder[hidden]{{display:none}}
 .whd{{padding:22px 0 8px}} .whd h2{{margin:0;font-size:30px;font-weight:700;color:var(--red);letter-spacing:.01em}} .whd p{{margin:2px 0 0;font-size:13px;color:#666}}
 .whd .wtrial{{margin-top:6px;font-size:11px;letter-spacing:.06em;color:#aaa}}
-.wchips{{position:sticky;top:0;z-index:2;display:flex;gap:6px;overflow-x:auto;padding:10px 0;background:#fff;scrollbar-width:none;border-bottom:1px dashed var(--line)}} .wchips::-webkit-scrollbar{{display:none}}
+.wchips{{position:sticky;top:0;z-index:2;display:flex;flex-direction:column;gap:6px;padding:10px 0;background:#fff;border-bottom:1px dashed var(--line)}}
+.wrow{{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}} .wrow::-webkit-scrollbar{{display:none}}
 .wch{{flex:none;border:1px dotted #b8b8b8;background:#fff;border-radius:14px;padding:4px 11px;font:inherit;font-size:12.5px;color:#333;white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent}}
 .wch.on{{background:#eaffae;border-style:solid;border-color:#3a3c37;color:#000;font-weight:700}}
 .wp{{margin:26px 0 0}} .wp[hidden]{{display:none}}

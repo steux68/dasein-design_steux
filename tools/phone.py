@@ -966,7 +966,7 @@ dialog .top{{flex:none}}
   const top0=()=>parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop)||0;
   const sm=p=>parseFloat(getComputedStyle(p).scrollMarginTop)||0;
   const curIdx=()=>{{ let i=0; pages.forEach((p,k)=>{{ if(p.getBoundingClientRect().top<=top0()+sm(p)+4) i=k; }}); return i; }};
-  const barUpd=()=>{{ const i=curIdx(), atTop=scrollY<4, atEnd=innerHeight+scrollY>=document.documentElement.scrollHeight-4;
+  const barUpd=()=>{{ const i=curIdx(), atTop=scrollY<4, atEnd=i===pages.length-1||innerHeight+scrollY>=document.documentElement.scrollHeight-4;   /* the last page counts as the end as soon as it has arrived - no extra nudge */
     gN.disabled=atTop; gS.classList.toggle('top',atEnd); gS.setAttribute('aria-label',atEnd?'back to the top':'next page'); gS.classList.toggle('go',i===0&&atTop); }};
   gS.onclick=()=>{{ if(gS.classList.contains('top')){{ scrollTo({{top:0,behavior:'smooth'}}); return; }} const i=curIdx(); if(pages[i+1]) pages[i+1].scrollIntoView({{behavior:'smooth'}}); }};
   gN.onclick=()=>{{ const i=curIdx(), off=pages[i].getBoundingClientRect().top-top0()-sm(pages[i]); (off<-8?pages[i]:pages[Math.max(0,i-1)]).scrollIntoView({{behavior:'smooth'}}); }};

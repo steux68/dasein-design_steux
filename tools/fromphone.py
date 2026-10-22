@@ -359,6 +359,105 @@ EXT_JS = r'''<script>/* every link to another site opens in a new tab / window, 
   document.addEventListener('click',e=>{ const a=e.target.closest&&e.target.closest('a[href]'); if(ext(a)) mark(a); },true); })();</script>'''
 
 
+# ---------- the beetle game (22 Oct, evening; ported from the phone): a pulsing dot with "press me" at the foot of the impressum page
+# opens it full screen. Four foods - red dot 1, red ring 2, blue diamond 5, yellow star 10 - first to 100 wins.
+# On the desktop the dot follows the mouse once the game has started (no need to hold the button down)
+GAME_CSS = """
+.pgo{position:absolute;z-index:6;display:flex;align-items:center;border:0;background:none;padding:0;font:inherit;cursor:pointer;font-family:Calibri,Carlito,sans-serif}
+.pgo .pme{font-size:14px;letter-spacing:.08em;color:#666;white-space:nowrap} .pgo:hover .pme{color:#e30613}
+.pgo .pld{width:34px;height:1px;margin:0 2px 0 7px;background:repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px)}
+.pdot{position:absolute;left:0;top:0;width:44px;height:44px;margin:-22px 0 0 -22px;display:flex;align-items:center;justify-content:center;cursor:grab}
+.pgo .pdot{position:relative;margin:0}
+.pdot b{width:12px;height:12px;border-radius:50%;background:#cdff3e;box-shadow:0 0 0 1px #3a3c37;animation:pdp 1.4s ease-in-out infinite}
+.pdot::before,.pdot::after{content:"";position:absolute;left:50%;top:50%;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;border:1px solid #e30613;opacity:0;animation:pdr 1.8s ease-out infinite}
+.pdot::after{animation-delay:.9s}
+@keyframes pdp{50%{transform:scale(1.25)}} @keyframes pdr{0%{transform:scale(1);opacity:.8}100%{transform:scale(4.2);opacity:0}}
+dialog.game{position:fixed;inset:0;width:100vw;height:100vh;max-width:none;max-height:none;margin:0;padding:0;border:0;background:#fff;overflow:hidden;font-family:Calibri,Carlito,sans-serif}
+dialog.game::backdrop{background:transparent}
+.play{position:absolute;inset:0;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;cursor:default}
+.play.go{cursor:none}
+.ptrail{position:absolute;inset:0;width:100%;height:100%}
+.gx{position:absolute;right:22px;top:20px;z-index:4;border:0;background:none;padding:4px;cursor:pointer} .gx svg{width:28px;height:28px} .gx .rg{fill:none;stroke:#3a3c37;stroke-width:.6} .gx .xx{fill:none;stroke:#1a1a1a;stroke-width:1.15;stroke-linecap:round} .gx:hover .rg{stroke:#e30613}
+.pscore{position:absolute;left:30px;right:80px;top:26px;display:flex;justify-content:space-between;font-size:15px;letter-spacing:.06em;color:#555;pointer-events:none;z-index:2}
+.pscore b{color:#e30613;font-size:20px;margin-left:5px}
+.phint{position:absolute;left:0;right:0;top:30%;display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;pointer-events:none;transition:opacity .5s;z-index:2}
+.phint b{font-size:34px;color:#e30613} .phint span{font-size:19px;color:#222} .phint small{margin-top:10px;font-size:14px;letter-spacing:.08em;color:#888}
+.play.go .phint{opacity:0}
+.pkey{display:flex;align-items:center;gap:6px;margin-top:14px;font-size:17px;color:#222}
+.pf{position:absolute;left:0;top:0;display:block;pointer-events:none}
+.pf.f1{width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:#e30613}
+.pf.f2{width:15px;height:15px;margin:-7.5px 0 0 -7.5px;border-radius:50%;border:3px solid #e30613;box-sizing:border-box}
+.pf.f5{width:15px;height:15px;margin:-7.5px 0 0 -7.5px;background:#2f8cff;transform:rotate(45deg)}
+.pf.f10{width:24px;height:24px;margin:-12px 0 0 -12px;background:#ffd400;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);filter:drop-shadow(0 0 .5px #3a3c37)}
+.pkey .pf.pf{position:relative;left:auto;top:auto;display:inline-block;flex:none;margin:0 1px 0 16px} .pkey .pf.pf:first-child{margin-left:0} .pkey .pf.f5{transform:rotate(45deg) scale(.85)}
+.pbug{position:absolute;left:0;top:0;width:46px;height:101px;margin:-50px 0 0 -23px;pointer-events:none;will-change:transform}
+.pplus{position:absolute;left:0;top:0;font-weight:700;font-size:20px;color:#e30613;pointer-events:none;z-index:3}
+.pdd{position:absolute;left:0;top:0;width:40px;height:40px;margin:-20px 0 0 -20px;pointer-events:none}
+.pmsg{position:absolute;left:0;right:0;top:44%;text-align:center;font-size:34px;font-weight:700;color:#e30613;pointer-events:none;z-index:3}
+.pend{position:absolute;left:0;right:0;bottom:22px;display:flex;flex-direction:column;align-items:center;gap:2px;pointer-events:none;z-index:2}
+.pend img{width:32px;height:32px} .pend span{font-size:21px;color:#e30613} .pend b{font-weight:700}
+"""
+
+GAME_JS = r"""<script>(function(){ const gd=document.getElementById('game'), pl=document.getElementById('play'), go=document.getElementById('pgo'); if(!gd||!pl||!go) return;
+  const dot=pl.querySelector('.pdot'), bug=pl.querySelector('.pbug'), cv=pl.querySelector('.ptrail'), tc=cv.getContext('2d'), R2=(a,b)=>a+Math.random()*(b-a);
+  const sy=document.getElementById('sy'), sb=document.getElementById('sb');
+  const KINDS=[[1,'f1',.5],[2,'f2',.28],[5,'f5',.15],[10,'f10',.07]], GOAL=100;
+  let W=0,H=0,N=10, d={x:0,y:0}, g={x:30,y:200,a:0}, run=false, last=0, walked=0, food=[], you=0, them=0, over=false, playing=false;
+  const size=()=>{ W=pl.clientWidth; H=pl.clientHeight; N=Math.max(8,Math.min(16,Math.round(W*H/90000))); const r=devicePixelRatio||1; cv.width=Math.round(W*r); cv.height=Math.round(H*r); tc.setTransform(r,0,0,r,0,0); tc.fillStyle='rgba(58,60,55,.55)'; };
+  const DD='<svg class="pdd" viewBox="-20 -20 40 40"><circle r="19" fill="#e30613"/><circle r="15.5" fill="none" stroke="#fff" stroke-width="1" stroke-dasharray="1 2.2"/>'
+    +'<text y="1" fill="#fff" font-family="Calibri,Carlito,sans-serif" font-weight="700" font-size="17" text-anchor="middle" dominant-baseline="central">dd</text></svg>';
+  function fly(e,x,y){ e.animate([{transform:`translate(${x}px,${y}px) scale(.3)`,opacity:1},{transform:`translate(${x}px,${y-28}px) scale(1.1)`,opacity:1,offset:.35},
+      {transform:`translate(${x}px,${y-70}px) scale(.9)`,opacity:0}],{duration:1100,easing:'cubic-bezier(.2,.8,.3,1)'}).finished.then(()=>e.remove()).catch(()=>e.remove()); }
+  function pop(x,y,v,byYou){ let e; if(byYou){ e=document.createElement('b'); e.className='pplus'; e.textContent='+'+v; } else { const w=document.createElement('div'); w.innerHTML=DD; e=w.firstChild; } pl.appendChild(e); fly(e,x,y); }
+  function addFood(){ if(!W||!gd.open) return; let r=Math.random(), k=KINDS[0]; for(const q of KINDS){ if(r<q[2]){ k=q; break; } r-=q[2]; }
+    const el=document.createElement('i'); el.className='pf '+k[1]; const f={x:R2(40,W-40),y:R2(110,H-120),v:k[0],el}; el.style.left=f.x+'px'; el.style.top=f.y+'px'; pl.appendChild(el); food.push(f); }
+  function reset(){ you=them=0; sy.textContent=sb.textContent='0'; tc.clearRect(0,0,W,H); food.forEach(x=>x.el.remove()); food=[]; for(let i=0;i<N;i++) addFood();
+    playing=false; over=false; pl.classList.remove('go'); d={x:W*.5,y:H*.72}; g={x:W*.2,y:H*.35,a:0}; }
+  function eat(f,byYou){ food=food.filter(x=>x!==f); f.el.remove(); pop(f.x,f.y,f.v,byYou);
+    if(byYou){ you+=f.v; sy.textContent=you; } else { them+=f.v; sb.textContent=them; }
+    if(you>=GOAL||them>=GOAL){ over=true; const m=document.createElement('p'); m.className='pmsg'; m.textContent=you>=GOAL?'you win!':'the beetle wins!'; pl.appendChild(m);
+      setTimeout(()=>{ m.remove(); reset(); },2800); }
+    else setTimeout(addFood,R2(250,900)); }
+  function step(t){ if(!run) return; const dt=Math.min(.05,(t-last)/1000||0); last=t;
+    if(!over){ let tgt=null, best=1e9;
+      if(playing){ food.slice().forEach(f=>{ if(Math.hypot(f.x-d.x,f.y-d.y)<20) eat(f,true); });
+        let bs=-1; food.forEach(f=>{ const q=Math.hypot(f.x-g.x,f.y-g.y), sc=Math.sqrt(f.v)/(q+40); if(sc>bs){ bs=sc; best=q; tgt=f; } });
+      } else { tgt={x:W/2+Math.cos(t/1300)*W*.3, y:H*.55+Math.sin(t/1300)*H*.2}; }
+      if(tgt){ const dx=tgt.x-g.x, dy=tgt.y-g.y; const want=Math.atan2(dy,dx)*180/Math.PI+90+Math.sin(t/260)*20; let da=((want-g.a+540)%360)-180;
+        g.a+=Math.max(-280*dt,Math.min(280*dt,da)); const sp=(playing?Math.max(150,W*.13):90)*dt, h=(g.a-90)*Math.PI/180;
+        g.x=Math.max(10,Math.min(W-10,g.x+Math.cos(h)*sp)); g.y=Math.max(10,Math.min(H-10,g.y+Math.sin(h)*sp));
+        walked+=sp; if(walked>3.4){ walked=0; tc.fillRect(g.x-.7,g.y-.7,1.4,1.4); }
+        if(playing&&best<24) eat(tgt,false); } }
+    dot.style.transform=`translate(${d.x}px,${d.y}px)`; bug.style.transform=`translate(${g.x}px,${g.y}px) rotate(${g.a}deg)`;
+    requestAnimationFrame(step); }
+  const at=e=>{ const r=pl.getBoundingClientRect(); d.x=Math.max(8,Math.min(W-8,e.clientX-r.left)); d.y=Math.max(8,Math.min(H-8,e.clientY-r.top)); };
+  dot.addEventListener('pointerdown',e=>{ e.preventDefault(); at(e); if(!playing&&!over){ playing=true; pl.classList.add('go'); } });
+  pl.addEventListener('pointermove',e=>{ if(playing) at(e); });
+  go.addEventListener('click',()=>{ gd.showModal(); requestAnimationFrame(()=>{ size(); reset(); run=true; last=performance.now(); requestAnimationFrame(step); }); });
+  document.getElementById('gx').addEventListener('click',()=>gd.close());
+  gd.addEventListener('close',()=>{ run=false; });
+  gd.addEventListener('wheel',e=>{ e.preventDefault(); e.stopPropagation(); },{passive:false});
+  gd.addEventListener('keydown',e=>{ if(e.key!=='Escape') e.stopPropagation(); });
+  addEventListener('resize',()=>{ if(gd.open) size(); });
+})();</script>"""
+
+
+def _game(s):
+    i = s.index('<section class="pg" id="impressum"><div class="bg-white relative frame">') + len('<section class="pg" id="impressum"><div class="bg-white relative frame">')
+    trig = ('<button type="button" class="pgo" id="pgo" style="left:1000px;top:930px" aria-label="play the beetle game">'
+            '<span class="pme">press me</span><i class="pld"></i><i class="pdot"><b></b></i></button>')
+    s = s[:i] + trig + s[i:]
+    dlg = ('<dialog class="game" id="game" aria-label="beetle game"><div class="play" id="play"><canvas class="ptrail"></canvas>'
+           f'<button type="button" class="gx" id="gx" aria-label="close the game (Esc)" title="close (Esc)">{XC}</button>'
+           '<div class="pscore"><span>you <b id="sy">0</b></span><span>beetle <b id="sb">0</b></span></div>'
+           '<div class="phint"><b>collect the dots!</b><span>whoever gets to 100 first wins</span>'
+           '<span class="pkey"><i class="pf f1"></i> 1 <i class="pf f2"></i> 2 <i class="pf f5"></i> 5 <i class="pf f10"></i> 10</span>'
+           '<small>click the yellow dot to start – then it follows your mouse</small></div>'
+           '<i class="pdot"><b></b></i><img class="pbug" src="img/m-bug-up.webp" alt="">'
+           '<div class="pend"><img src="img/m-mark.png" alt=""><span>dasein<b>-design</b></span></div></div></dialog>')
+    return s.replace('</body>', dlg + GAME_JS + '</body>', 1)
+
+
 def patch(s):
     if MARK in s:
         return s
@@ -475,6 +574,7 @@ def patch(s):
     assert n >= 5, n
     s = _impressum_page(s)
     s = _bits(s)
+    s = _game(s)
     # ---- map + / - / home (22 Oct): finer lines, like the compass arrows
     s = _rep('.mz button circle{fill:rgba(255,255,255,.9);stroke:#e30613;stroke-width:2;', '.mz button circle{fill:rgba(255,255,255,.9);stroke:#e30613;stroke-width:1;', s)
     s = _rep('.mz button path{fill:none;stroke:#e30613;stroke-width:2;', '.mz button path{fill:none;stroke:#e30613;stroke-width:1.2;', s)
@@ -492,7 +592,7 @@ def patch(s):
     s = _sub1(r'(<button type="button" class="lbsa r" id="lbsr0".*?</button></div>)', r'\1<div class="lbdots" id="lbdots"></div>', s, re.S)
     s = s.replace('</body>', '<script>document.getElementById("lbdots")&&document.getElementById("lbdots").addEventListener("click",e=>{ const i=e.target.closest("i"); if(i){ const b=document.querySelector("#lbst button[data-k=\'"+i.dataset.k+"\']"); if(b) b.click(); } });</script></body>', 1)
     # ---- styles
-    s = _rep('</style>', CSS + BITS_CSS + '</style>', s)
+    s = _rep('</style>', CSS + BITS_CSS + GAME_CSS + '</style>', s)
     return s.replace('</body>', HEART_JS + EXT_JS + MARK + '</body>', 1)
 
 

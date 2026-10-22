@@ -814,5 +814,9 @@ dialog.bv::backdrop{background:transparent}
     if(taps.length>=3){ taps=[]; heart(e.clientX,e.clientY); }
   });
 })();
-</script><!--fromphone--></body>
+</script><script>/* every link to another site opens in a new tab / window, so this site stays open behind it */
+(function(){ const ext=a=>a&&/^https?:/i.test(a.getAttribute('href')||'')&&a.host!==location.host;
+  const mark=a=>{ a.target='_blank'; a.rel='noopener'; };
+  document.querySelectorAll('a[href]').forEach(a=>{ if(ext(a)) mark(a); });
+  document.addEventListener('click',e=>{ const a=e.target.closest&&e.target.closest('a[href]'); if(ext(a)) mark(a); },true); })();</script><!--fromphone--></body>
 </html>

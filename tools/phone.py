@@ -302,6 +302,8 @@ body{{position:relative}}
 body:not(.side) .socs{{display:flex}}   /* in the top layouts (and the stack trials) the three marks sit at the right of the logo */
 .pend .socs{{display:flex;margin:4px 0 0;pointer-events:auto}}
 #goS .up i{{font-style:normal;font-size:12px;letter-spacing:.06em;color:#3a3c37}}
+/* the round arrow itself sits exactly in the middle (where the half bars meet); its words hang off to the right */
+.bar button{{position:relative}} .bar .sc,#goS .up i{{position:absolute;left:100%;top:50%;transform:translateY(-50%);margin-left:6px;white-space:nowrap}} #goS .up{{position:relative}}
 /* pulsing thin dark rings round an arrow, as on the desktop */
 .ar.pulse .tr,.bar .go .tr{{display:block;fill:none;stroke:#3a3c37;stroke-width:.7;transform-box:fill-box;transform-origin:center;animation:ring 2.2s ease-out infinite}}
 .ar.pulse .tr2,.bar .go .tr2{{animation-delay:1.1s}}
@@ -945,6 +947,11 @@ addEventListener('load',()=>{{ try{{
   L.marker(HOME,{{icon:L.divIcon({{className:'',iconSize:[34,44],iconAnchor:[17,44],html:'<div class="pinH"><svg class="pinsvg" viewBox="0 0 40 52" aria-hidden="true"><path class="pb" d="M20 51C14.5 40.5 2 31 2 19A18 18 0 0 1 38 19C38 31 25.5 40.5 20 51Z"/><circle class="pw" cx="20" cy="19" r="14.5"/><g transform="translate(20 19) scale(1.12)"><path class="pr" d="M-5.31 7.88A9.5 9.5 0 1 1 5.31 7.88"/><path class="pa" transform="rotate(90)" d="M5.4 0L-4.6 -4.9L-2.2 0L-4.6 4.9Z"/><text x="0" y="9.5">H</text></g></svg><div class="plab"><b class="dd">dasein-design</b><br>Neulerchenfelderstrasse 42/6<br>A-1160 Wien</div></div>'}})}}).addTo(map);
 }}catch(err){{ console.warn('map not available',err); }} }});
 </script>
+<script>/* every link to another site opens in a new tab / window, so this site stays open behind it */
+(function(){{ const ext=a=>a&&/^https?:/i.test(a.getAttribute('href')||'')&&a.host!==location.host;
+  const mark=a=>{{ a.target='_blank'; a.rel='noopener'; }};
+  document.querySelectorAll('a[href]').forEach(a=>{{ if(ext(a)) mark(a); }});
+  document.addEventListener('click',e=>{{ const a=e.target.closest&&e.target.closest('a[href]'); if(ext(a)) mark(a); }},true); }})();</script>
 </body>
 </html>
 '''

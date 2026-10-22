@@ -352,6 +352,13 @@ def _bits(s):
     return s.replace('</body>', dlg + js + '</body>', 1)
 
 
+EXT_JS = r'''<script>/* every link to another site opens in a new tab / window, so this site stays open behind it */
+(function(){ const ext=a=>a&&/^https?:/i.test(a.getAttribute('href')||'')&&a.host!==location.host;
+  const mark=a=>{ a.target='_blank'; a.rel='noopener'; };
+  document.querySelectorAll('a[href]').forEach(a=>{ if(ext(a)) mark(a); });
+  document.addEventListener('click',e=>{ const a=e.target.closest&&e.target.closest('a[href]'); if(ext(a)) mark(a); },true); })();</script>'''
+
+
 def patch(s):
     if MARK in s:
         return s
@@ -483,7 +490,7 @@ def patch(s):
     s = s.replace('</body>', '<script>document.getElementById("lbdots")&&document.getElementById("lbdots").addEventListener("click",e=>{ const i=e.target.closest("i"); if(i){ const b=document.querySelector("#lbst button[data-k=\'"+i.dataset.k+"\']"); if(b) b.click(); } });</script></body>', 1)
     # ---- styles
     s = _rep('</style>', CSS + BITS_CSS + '</style>', s)
-    return s.replace('</body>', HEART_JS + MARK + '</body>', 1)
+    return s.replace('</body>', HEART_JS + EXT_JS + MARK + '</body>', 1)
 
 
 if __name__ == '__main__':

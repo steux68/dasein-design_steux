@@ -226,9 +226,13 @@ LEGAL = ('<div class="box legal cut" id="g-legal" data-show="4" data-extra="30">
          'jede Verwendung bedarf der vorherigen Zustimmung.</p>'
          '<h4>Datenschutz</h4><p>Diese Website setzt keine Cookies und erhebt keine personenbezogenen Daten. Die Karte wird von OpenStreetMap geladen. '
          '<span class="todo">[Datenschutzerklärung – bitte ergänzen]</span></p></div>'
-         + morebtn('g-legal', 'impressum') + '<p class="copy">© 2026 [ dasein-design &amp; steux ]</p>'
-         # at the very end: a small beetle chases the pulsing dot; the dot wanders, or can be held and moved with a finger
-         '<div class="play" id="play" aria-hidden="true"><canvas class="ptrail"></canvas><i class="pdot"><b></b></i><img class="pbug" src="../img/m-bug-up.webp" alt=""></div>')
+         + morebtn('g-legal', 'impressum')
+         # the end: one white screen for a little game - catch the red food before the beetle does; the site's mark and copyright at the foot
+         + '<div class="play" id="play"><canvas class="ptrail"></canvas>'
+           '<div class="pscore"><span>you <b id="sy">0</b></span><span>beetle <b id="sb">0</b></span></div>'
+           '<p class="phint" id="phint">drag the dot – catch the red food before the beetle does</p>'
+           '<i class="pdot"><b></b></i><img class="pbug" src="../img/m-bug-up.webp" alt="">'
+           '<div class="pend"><img src="../img/m-mark.png" alt=""><span>dasein<b>-design</b></span><p class="copy">© 2026 [ dasein-design &amp; steux ]</p></div></div>')
 
 
 HTML = f'''<!doctype html>
@@ -488,13 +492,22 @@ details ul{{margin:0;padding:0 0 0 14px;font-size:13px;line-height:1.4;color:#22
 .legal h4{{margin:12px 0 2px;font-size:12px;font-weight:700;color:#000}} .legal p{{margin:0;font-size:12.5px;line-height:1.45;color:#222}} .legal .lp{{color:#666;font-size:11.5px}}
 .legal a{{color:#1a5fd0;text-decoration:none}} .legal a[href^="tel:"]{{color:#1e8e3e}} .legal .todo{{color:#e30613}}
 .ptrail{{position:absolute;inset:0;width:100%;height:100%}}
-.play{{position:relative;height:420px;margin:14px 0 0;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none}}
+.play{{position:relative;height:calc(100svh - var(--head) - 2 * var(--bar) - var(--stk,0px) - 20px);min-height:360px;margin:20px -10px 0;overflow:hidden;touch-action:pan-y;-webkit-user-select:none;user-select:none}}   /* the page still scrolls; the dot itself is dragged */
+.play .pdot{{touch-action:none;width:56px;height:56px;margin:-28px 0 0 -28px}}
 .pdot{{position:absolute;left:0;top:0;width:44px;height:44px;margin:-22px 0 0 -22px;display:flex;align-items:center;justify-content:center;cursor:grab}}
 .pdot b{{width:10px;height:10px;border-radius:50%;background:#cdff3e;box-shadow:0 0 0 1px #3a3c37;animation:pdp 1.4s ease-in-out infinite}}
 .pdot::before,.pdot::after{{content:"";position:absolute;left:50%;top:50%;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;border:1px solid var(--red);opacity:0;animation:pdr 1.8s ease-out infinite}}
 .pdot::after{{animation-delay:.9s}}
 @keyframes pdp{{50%{{transform:scale(1.25)}}}} @keyframes pdr{{0%{{transform:scale(1);opacity:.8}}100%{{transform:scale(4.2);opacity:0}}}}
 .pbug{{position:absolute;left:0;top:0;width:38px;height:84px;margin:-42px 0 0 -19px;pointer-events:none;will-change:transform}}
+.stack{{--stk:132px}} .stack.pairs{{--stk:66px}}
+.pscore{{position:absolute;left:12px;right:12px;top:8px;display:flex;justify-content:space-between;font-size:12px;letter-spacing:.06em;color:#555;pointer-events:none;z-index:2}}
+.pscore b{{color:var(--red);font-size:15px;margin-left:4px}}
+.phint{{position:absolute;left:0;right:0;top:32px;margin:0;text-align:center;font-size:12px;color:#888;pointer-events:none;transition:opacity .6s;z-index:2}}
+.pfood{{position:absolute;left:0;top:0;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:var(--red);box-shadow:0 0 0 2px #fff,0 0 0 3px rgba(227,6,19,.35);pointer-events:none}}
+.pend{{position:absolute;left:0;right:0;bottom:10px;display:flex;flex-direction:column;align-items:center;gap:2px;pointer-events:none;z-index:2}}
+.pend img{{width:26px;height:26px}} .pend span{{font-size:17px;color:var(--red)}} .pend b{{font-weight:700}} .pend .copy{{margin:4px 0 0}}
+.pmsg{{position:absolute;left:0;right:0;top:44%;text-align:center;font-size:22px;font-weight:700;color:var(--red);pointer-events:none;z-index:3}}
 .pdd{{position:absolute;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;pointer-events:none}}   /* the round dd badge the beetle sends out when it catches the dot */
 .copy{{margin:18px 0 0;text-align:center;font-size:10.5px;letter-spacing:.06em;color:#888}}   /* closing line, like a full stop */
 p.lab:not(.first){{margin-top:26px}}
@@ -663,37 +676,46 @@ dialog .top{{flex:none}}
   document.querySelectorAll('.more').forEach(b=>b.addEventListener('click',()=>{{ const g=document.getElementById(b.dataset.g), op=g.classList.contains('shut');
     setCut(g,op); if(!op) g.scrollIntoView({{behavior:'smooth',block:'start'}}); }}));
 
-  /* the end of the site: a small beetle chases the pulsing dot. The dot wanders about; hold it and move it with a finger, the beetle follows */
+  /* the end of the site: a little game. Red food dots lie about; drag the pulsing dot to eat them before the beetle does.
+     The beetle walks in curves to the nearest food, leaving a dotted trail. First to 10 wins; a dd badge pops for every bite */
   (function(){{ const pl=document.getElementById('play'); if(!pl) return;
-    const dot=pl.querySelector('.pdot'), bug=pl.querySelector('.pbug'), R2=(a,b)=>a+Math.random()*(b-a);
-    const cv=pl.querySelector('.ptrail'), tc=cv.getContext('2d'); let walked=0;
-    let W=0,H=0, d={{x:60,y:60}}, goal={{x:60,y:60}}, g={{x:20,y:250,a:0}}, held=false, run=false, last=0, next=0;
-    const size=()=>{{ W=pl.clientWidth; H=pl.clientHeight; const r=devicePixelRatio||1; if(cv.width!==Math.round(W*r)){{ cv.width=Math.round(W*r); cv.height=Math.round(H*r); tc.scale(r,r); tc.fillStyle='rgba(58,60,55,.55)'; }} }};
-    const newGoal=()=>{{ goal={{x:R2(30,W-30),y:R2(30,H-30)}}; next=performance.now()+R2(1800,3800); }};
-    function step(t){{ if(!run) return; const dt=Math.min(.05,(t-last)/1000||0); last=t;
-      if(!held){{ if(t>next) newGoal(); d.x+=(goal.x-d.x)*Math.min(1,dt*1.6); d.y+=(goal.y-d.y)*Math.min(1,dt*1.6); }}
-      const dx=d.x-g.x, dy=d.y-g.y, dist=Math.hypot(dx,dy);
-      if(dist>30){{ /* bug-like: it walks forward and can only turn so fast, with a little wobble, so it goes in curves */
-        const want=Math.atan2(dy,dx)*180/Math.PI+90+Math.sin(t/260)*22; let da=((want-g.a+540)%360)-180;
-        g.a+=Math.max(-150*dt,Math.min(150*dt,da)); const sp=(dist>120?95:70)*dt, h=(g.a-90)*Math.PI/180;
-        g.x=Math.max(10,Math.min(W-10,g.x+Math.cos(h)*sp)); g.y=Math.max(10,Math.min(H-10,g.y+Math.sin(h)*sp));
-        walked+=sp; if(walked>3.2){{ walked=0; tc.fillRect(g.x-.6,g.y-.6,1.2,1.2); }} }}   /* leaves a dotted line behind it */
-      else if(!held){{ newGoal(); pop(d.x,d.y); }}   /* caught it: a round dd badge pops out and the dot hops away */
-      dot.style.transform=`translate(${{d.x}}px,${{d.y}}px)`; bug.style.transform=`translate(${{g.x}}px,${{g.y}}px) rotate(${{g.a}}deg)`;
-      requestAnimationFrame(step); }}
+    const dot=pl.querySelector('.pdot'), bug=pl.querySelector('.pbug'), cv=pl.querySelector('.ptrail'), tc=cv.getContext('2d'), R2=(a,b)=>a+Math.random()*(b-a);
+    const sy=document.getElementById('sy'), sb=document.getElementById('sb'), hint=document.getElementById('phint');
+    let W=0,H=0, d={{x:0,y:0}}, g={{x:30,y:200,a:0}}, held=false, run=false, last=0, walked=0, food=[], you=0, them=0, over=false;
+    const size=()=>{{ W=pl.clientWidth; H=pl.clientHeight; const r=devicePixelRatio||1; if(cv.width!==Math.round(W*r)){{ cv.width=Math.round(W*r); cv.height=Math.round(H*r); tc.setTransform(r,0,0,r,0,0); tc.fillStyle='rgba(58,60,55,.55)'; }} }};
     const DD='<svg class="pdd" viewBox="-20 -20 40 40"><circle r="19" fill="#e30613"/><circle r="15.5" fill="none" stroke="#fff" stroke-width="1" stroke-dasharray="1 2.2"/>'
       +'<text y="1" fill="#fff" font-family="Calibri,Carlito,sans-serif" font-weight="700" font-size="17" text-anchor="middle" dominant-baseline="central">dd</text></svg>';
-    let lastPop=0;
-    function pop(x,y){{ const t=performance.now(); if(t-lastPop<900) return; lastPop=t;
-      const w=document.createElement('div'); w.innerHTML=DD; const e=w.firstChild; pl.appendChild(e);
-      e.animate([{{transform:`translate(${{x}}px,${{y}}px) scale(.2)`,opacity:1}},{{transform:`translate(${{x}}px,${{y-30}}px) scale(1.25)`,opacity:1,offset:.35}},
-        {{transform:`translate(${{x}}px,${{y-70}}px) scale(1)`,opacity:0}}],{{duration:1300,easing:'cubic-bezier(.2,.8,.3,1)'}}).finished.then(()=>e.remove()).catch(()=>e.remove()); }}
+    function pop(x,y){{ const w=document.createElement('div'); w.innerHTML=DD; const e=w.firstChild; pl.appendChild(e);
+      e.animate([{{transform:`translate(${{x}}px,${{y}}px) scale(.2)`,opacity:1}},{{transform:`translate(${{x}}px,${{y-24}}px) scale(1.1)`,opacity:1,offset:.35}},
+        {{transform:`translate(${{x}}px,${{y-60}}px) scale(.9)`,opacity:0}}],{{duration:1100,easing:'cubic-bezier(.2,.8,.3,1)'}}).finished.then(()=>e.remove()).catch(()=>e.remove()); }}
+    function addFood(){{ const el=document.createElement('i'); el.className='pfood'; const f={{x:R2(24,W-24),y:R2(60,H-90),el}}; el.style.transform=`translate(${{f.x}}px,${{f.y}}px)`; pl.appendChild(el); food.push(f); }}
+    function eat(f,byYou){{ food=food.filter(x=>x!==f); f.el.remove(); pop(f.x,f.y);
+      if(byYou){{ you++; sy.textContent=you; }} else {{ them++; sb.textContent=them; }}
+      if(you>=10||them>=10){{ over=true; const m=document.createElement('p'); m.className='pmsg'; m.textContent=you>=10?'you win!':'the beetle wins!'; pl.appendChild(m);
+        setTimeout(()=>{{ m.remove(); you=them=0; sy.textContent=sb.textContent='0'; tc.clearRect(0,0,W,H); food.forEach(x=>x.el.remove()); food=[]; for(let i=0;i<5;i++) addFood(); over=false; }},2600); }}
+      else setTimeout(addFood,R2(400,1400)); }}
+    function step(t){{ if(!run) return; const dt=Math.min(.05,(t-last)/1000||0); last=t;
+      if(!over){{
+        /* you: the dot eats what it touches */
+        food.slice().forEach(f=>{{ if(Math.hypot(f.x-d.x,f.y-d.y)<16) eat(f,true); }});
+        /* the beetle: to the nearest food, bug-like in curves */
+        let tgt=null, best=1e9; food.forEach(f=>{{ const q=Math.hypot(f.x-g.x,f.y-g.y); if(q<best){{ best=q; tgt=f; }} }});
+        if(tgt){{ const dx=tgt.x-g.x, dy=tgt.y-g.y;
+          const want=Math.atan2(dy,dx)*180/Math.PI+90+Math.sin(t/260)*20; let da=((want-g.a+540)%360)-180;
+          g.a+=Math.max(-170*dt,Math.min(170*dt,da)); const sp=78*dt, h=(g.a-90)*Math.PI/180;
+          g.x=Math.max(10,Math.min(W-10,g.x+Math.cos(h)*sp)); g.y=Math.max(10,Math.min(H-10,g.y+Math.sin(h)*sp));
+          walked+=sp; if(walked>3.2){{ walked=0; tc.fillRect(g.x-.6,g.y-.6,1.2,1.2); }}
+          if(best<20) eat(tgt,false); }}
+      }}
+      dot.style.transform=`translate(${{d.x}}px,${{d.y}}px)`; bug.style.transform=`translate(${{g.x}}px,${{g.y}}px) rotate(${{g.a}}deg)`;
+      requestAnimationFrame(step); }}
     const at=e=>{{ const r=pl.getBoundingClientRect(); d.x=Math.max(8,Math.min(W-8,e.clientX-r.left)); d.y=Math.max(8,Math.min(H-8,e.clientY-r.top)); }};
-    dot.addEventListener('pointerdown',e=>{{ held=true; dot.setPointerCapture(e.pointerId); at(e); }});
-    dot.addEventListener('pointermove',e=>{{ if(held) at(e); }});
-    const up=()=>{{ held=false; next=performance.now()+1500; goal={{x:d.x,y:d.y}}; }};
-    dot.addEventListener('pointerup',up); dot.addEventListener('pointercancel',up);
-    new IntersectionObserver(es=>es.forEach(e=>{{ if(e.isIntersecting&&!matchMedia('(prefers-reduced-motion: reduce)').matches){{ if(!run){{ run=true; size(); newGoal(); last=performance.now(); requestAnimationFrame(step); }} }} else run=false; }})).observe(pl);
+    pl.addEventListener('pointerdown',e=>{{ held=true; pl.setPointerCapture(e.pointerId); at(e); hint.style.opacity=0; }});
+    pl.addEventListener('pointermove',e=>{{ if(held) at(e); }});
+    const up=()=>{{ held=false; }}; pl.addEventListener('pointerup',up); pl.addEventListener('pointercancel',up);
+    let started=false;
+    new IntersectionObserver(es=>es.forEach(e=>{{ if(e.isIntersecting&&!matchMedia('(prefers-reduced-motion: reduce)').matches){{
+      if(!run){{ run=true; size(); if(!started){{ started=true; d={{x:W*.7,y:H*.55}}; for(let i=0;i<5;i++) addFood(); }} last=performance.now(); requestAnimationFrame(step); }} }} else run=false; }}),{{threshold:.3}}).observe(pl);
     addEventListener('resize',size); }})();
   /* logo switch */
   const B=document.body;

@@ -299,15 +299,14 @@ body{{position:relative}}
 .stack header nav,.stack header .note{{display:none}}
 .stack main{{padding-left:8px}} .stack .rule.l{{left:7px}} .stack .bar{{left:8px}}
 .stack .sbar{{display:none}}
-.stack main > .pbar{{position:sticky;z-index:14;height:22px;margin:0 10px;font-size:12px;cursor:pointer;-webkit-tap-highlight-color:transparent;
-  background:#eaffae;box-shadow:0 -1px 0 #fff;transition:background .2s}}
-.stack main > .pbar{{justify-content:flex-start;padding:0 10px}}
-/* each page its own colour, the same as the first ring of its circle on the beetle: a light tint, full strength while you are in that page */
-.stack main > .pbar:nth-of-type(1){{--t:#fff1a3;--s:#ffd400}} .stack main > .pbar:nth-of-type(2){{--t:#cdeec6;--s:#7fd88e}}
-.stack main > .pbar:nth-of-type(3){{--t:#d3e5ff;--s:#8dbcff}} .stack main > .pbar:nth-of-type(4){{--t:#ffd3cf;--s:#ff8f86}}
-.stack main > .pbar:nth-of-type(5){{--t:#ecffb8;--s:#cdff3e}}
-.stack main > .pbar{{background:var(--t)}} .stack main > .pbar.on{{background:var(--s)}}
-.stack main > .pbar:active{{background:var(--green)}}
+.stack main > .pbar{{position:sticky;z-index:14;margin:0 10px;font-size:12px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background-color .15s;
+  justify-content:flex-start;padding:0 10px;height:23px;margin-bottom:-1px;color:#000;
+  background:repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left top/100% 1px no-repeat,repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left bottom/100% 1px no-repeat,#fff}}
+/* white bars with a thin dotted line between them (each overlaps the one before by 1 px, so the lines never double); only the page you are in is yellow-lime */
+.stack main > .pbar.on{{background-color:#eaffae}}
+/* a tap shows first: the bar, tab or circle lights up, then the page moves (tapGo) */
+.stack main > .pbar.hit,.tab.hit{{background-color:#cdff3e!important}}
+.pin.hit b{{animation:none!important;background:#cdff3e!important;box-shadow:inset 0 0 0 1px var(--red)}} .pin.hit span{{color:var(--red)}}
 .stack .body{{padding-top:10px}}
 .stack .stage{{height:calc(100svh - var(--head) - 2 * var(--bar) - 104px);min-height:330px}}
 .stack .pg:last-child{{min-height:calc(100lvh - var(--head) - 2 * var(--bar) - 110px)}}
@@ -721,13 +720,16 @@ dialog .top{{flex:none}}
   new MutationObserver(phUpd).observe(ph,{{childList:true}});
   document.querySelectorAll('.bt').forEach(t=>t.addEventListener('click',()=>requestAnimationFrame(ivUpd)));
   /* N / S arrows in the bars: previous / next page */
+  /* a tap on a circle, tab or page bar shows first: it lights up for a moment (0.28 s), then the page moves there */
+  function tapGo(el,target){{ el.classList.add('hit'); setTimeout(()=>{{ target.scrollIntoView({{behavior:'smooth'}}); setTimeout(()=>el.classList.remove('hit'),500); }},reduce?60:280); }}
+  document.querySelectorAll('.pin, .tab').forEach(a=>a.addEventListener('click',e=>{{ const t=document.querySelector(a.getAttribute('href')); if(!t) return; e.preventDefault(); tapGo(a,t); }}));
   /* ?stack=1: the page bars stack - passed pages at the top, pages still to come at the bottom; a tap on a bar goes to its page */
   if(document.body.classList.contains('stack')){{
     const H=22, bars=[...document.querySelectorAll('.pg .pbar')], n=bars.length;
     bars.forEach((b,k)=>{{ const sec=b.closest('.pg'); sec.before(b);
       b.style.top=`calc(var(--head) + var(--bar) + ${{k*H}}px)`; b.style.bottom=`calc(var(--bar) + env(safe-area-inset-bottom,0px) + ${{(n-1-k)*H}}px)`;
       sec.style.scrollMarginTop=((k+1)*H+10)+'px'; b.setAttribute('role','link'); b.tabIndex=0;
-      b.addEventListener('click',()=>sec.scrollIntoView({{behavior:'smooth'}})); }});
+      b.addEventListener('click',()=>tapGo(b,sec)); }});
     const cur=()=>{{ let c=-1; bars.forEach((b,k)=>{{ const sec=b.nextElementSibling; if(sec.getBoundingClientRect().top<=innerHeight*.45) c=k; }});
       bars.forEach((b,k)=>b.classList.toggle('on',k===c)); }};
     addEventListener('scroll',cur,{{passive:true}}); cur();

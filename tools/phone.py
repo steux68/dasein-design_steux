@@ -109,7 +109,7 @@ PLUS = ('<svg class="cvx" viewBox="-12 -12 24 24" aria-hidden="true"><circle cla
         '<circle class="c" r="8"/><path class="v" d="M0 -4.2V4.2"/><path d="M-4.2 0H4.2"/></svg>')
 DOWNLOADS = ('<p class="lab first">INFORMATION FOR CLIENTS</p><p class="intro">' + INFO_TXT + '</p><ul class="pdfs">'
              + ''.join(f'<li><img src="../img/pdf.svg" alt="PDF"><span>dd – {t}<small>PDF follows</small></span></li>' for t in PDFS)
-             + '</ul><p class="lab">LINKS FOR CLIENTS</p><p class="intro">' + LINKS_TXT + '</p><div class="links cut" id="g-links">'
+             + '</ul><p class="lab">LINKS FOR CLIENTS</p><p class="intro">' + LINKS_TXT + '</p><div class="links cut" id="g-links" data-show="8">'
              + ''.join(f'<a class="lk" href="{u}" target="_blank" rel="noopener"><span class="lg"><img src="../img/m-lg-{im.replace('downloads-img', '')}" alt="" loading="lazy"></span>'
                        f'<b>{n}</b><small>{d}</small></a>' for u, im, n, d in LINKS)
              + '</div>' + '<button type="button" class="cvb more" aria-expanded="false" data-g="g-links">' + PLUS + '<span class="cvt"><span class="op">more</span><span class="cl">fewer</span></span><b>links</b></button>')
@@ -569,7 +569,8 @@ dialog .top{{flex:none}}
 /* downloads & links */
 .intro{{margin:0 0 8px;font-size:14px;line-height:1.45;color:#333}}
 .pdfs{{list-style:none;margin:10px 0 0;padding:0}}
-.pdfs li{{display:flex;align-items:center;gap:10px;padding:6px 0}}
+.pdfs{{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px}}   /* the four PDFs in two rows of two */
+.pdfs li{{display:flex;align-items:center;gap:8px;padding:4px 0}} .pdfs span{{font-size:13.5px!important;line-height:1.25}}
 .pdfs li:last-child{{background:none}}
 .pdfs img{{width:26px;height:auto}}
 .pdfs span{{font-size:15px}} .pdfs small{{display:block;font-size:11px;color:#999;letter-spacing:.04em}}
@@ -618,7 +619,7 @@ dialog .top{{flex:none}}
 <section class="pg" id="start"><div class="stage"><div class="beetle" id="beetle"><div class="whole"></div>{PIECES}</div><svg class="leads" id="leads" aria-hidden="true"></svg><svg class="leads" id="leadots" aria-hidden="true"></svg>{PINS}</div>
 </section>
 {section("us", "about us", "01", US)}
-{section("projects", "projects", "02", '<div class="grid cut" id="g-proj">' + TILES + '</div>' + MOREP)}
+{section("projects", "projects", "02", '<div class="grid cut" id="g-proj" data-show="8">' + TILES + '</div>' + MOREP)}
 {section("downloads", "downloads & links", "03", DOWNLOADS)}
 {section("bits", "bits & bats", "04", BITSHTML)}
 {section("contact", "contact", "05", CONTACT)}

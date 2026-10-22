@@ -529,11 +529,11 @@ dialog .top{flex:none}
         let tgt=null, best=1e9;
         if(playing){
           food.slice().forEach(f=>{ if(Math.hypot(f.x-d.x,f.y-d.y)<18) eat(f,true); });
-          food.forEach(f=>{ const q=Math.hypot(f.x-g.x,f.y-g.y); if(q<best){ best=q; tgt=f; } });
+          let bs=-1; food.forEach(f=>{ const q=Math.hypot(f.x-g.x,f.y-g.y), sc=Math.sqrt(f.v)/(q+40); if(sc>bs){ bs=sc; best=q; tgt=f; } });
         } else { tgt={x:W/2+Math.cos(t/1300)*W*.3, y:H*.5+Math.sin(t/1300)*H*.2}; }
         if(tgt){ const dx=tgt.x-g.x, dy=tgt.y-g.y;
           const want=Math.atan2(dy,dx)*180/Math.PI+90+Math.sin(t/260)*20; let da=((want-g.a+540)%360)-180;
-          g.a+=Math.max(-170*dt,Math.min(170*dt,da)); const sp=82*dt, h=(g.a-90)*Math.PI/180;
+          g.a+=Math.max(-280*dt,Math.min(280*dt,da)); const sp=(playing?135:82)*dt, h=(g.a-90)*Math.PI/180;
           g.x=Math.max(10,Math.min(W-10,g.x+Math.cos(h)*sp)); g.y=Math.max(10,Math.min(H-10,g.y+Math.sin(h)*sp));
           walked+=sp; if(walked>3.2){ walked=0; tc.fillRect(g.x-.6,g.y-.6,1.2,1.2); }
           if(playing&&best<20) eat(tgt,false); }

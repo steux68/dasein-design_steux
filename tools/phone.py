@@ -113,7 +113,7 @@ PLUS = ('<svg class="cvx" viewBox="-12 -12 24 24" aria-hidden="true"><circle cla
         '<circle class="c" r="8"/><path class="v" d="M0 -4.2V4.2"/><path d="M-4.2 0H4.2"/></svg>')
 DOWNLOADS = ('<p class="lab first">INFORMATION FOR CLIENTS</p><p class="intro">' + INFO_TXT + '</p><ul class="pdfs">'
              + ''.join(f'<li><img src="../img/pdf.svg" alt="PDF"><span>dd – {t}<small>PDF follows</small></span></li>' for t in PDFS)
-             + '</ul><p class="lab">LINKS FOR CLIENTS</p><p class="intro">' + LINKS_TXT + '</p><div class="links cut" id="g-links" data-show="8">'
+             + '</ul><p class="lab">LINKS FOR CLIENTS</p><p class="intro">' + LINKS_TXT + '</p><div class="links cut" id="g-links" data-show="10">'
              + ''.join(f'<a class="lk" href="{u}" target="_blank" rel="noopener"><span class="lg"><img src="../img/m-lg-{im.replace('downloads-img', '')}" alt="" loading="lazy"></span>'
                        f'<b>{n}</b><small>{d}</small></a>' for u, im, n, d in LINKS)
              + '</div>' + '<button type="button" class="cvb more" aria-expanded="false" data-g="g-links">' + PLUS + '<span class="cvt"><span class="op">more</span><span class="cl">fewer</span></span><b>links</b></button>')
@@ -566,8 +566,7 @@ body:not(.side) .socs{{display:flex}}   /* in the top layouts (and the stack tri
 .stack main > .hb.on{{background-color:#eaffae!important}} .stack main > .hb.hit{{background-color:#cdff3e!important}}
 .stack .stage{{height:calc(100svh - var(--head) - 2 * var(--bar) - 126px)}}
 .stack.pairs .stage{{height:calc(100svh - var(--head) - 2 * var(--bar) - 48px)}}
-.stack.pairs #legal{{scroll-margin-top:62px}}
-.sec1 main > section#legal{{background:none!important}}   /* the impressum stays white: it is the quiet end of the page, not a section */   /* no bar of its own: lands just under the two rows of bars */
+.stack.pairs #legal{{scroll-margin-top:62px}}   /* no bar of its own: lands just under the two rows of bars */
 .stack .pg:last-child{{min-height:calc(100lvh - var(--head) - 2 * var(--bar) - 132px)}}
 .stack.pairs .pg:last-child{{min-height:calc(100lvh - var(--head) - 2 * var(--bar) - 44px)}}   /* the last page can always scroll up into place */
 .sbar{{position:relative;z-index:1;height:1px;margin:10px 10px -1px}}   /* one line between two pages, 10 px clear each side (the same as from the side lines to the content) */
@@ -865,7 +864,7 @@ dialog .top{{flex:none}}
 <section class="pg" id="start"><div class="stage"><div class="beetle" id="beetle"><div class="whole"></div>{PIECES}</div><svg class="leads" id="leads" aria-hidden="true"></svg><svg class="leads" id="leadots" aria-hidden="true"></svg>{PINS}</div>
 </section>
 {section("us", "about us", "01", US)}
-{section("projects", "projects", "02", '<div class="grid cut" id="g-proj" data-show="8">' + TILES + '</div>' + MOREP)}
+{section("projects", "projects", "02", '<div class="grid cut" id="g-proj" data-show="10">' + TILES + '</div>' + MOREP)}
 {section("downloads", "downloads & links", "03", DOWNLOADS)}
 {section("contact", "contact", "04", CONTACT)}
 {section("legal", "impressum", "§", LEGAL, bar=False)}

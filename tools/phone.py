@@ -347,7 +347,8 @@ body:not(.side) .socs{{display:flex}}   /* in the top layouts (and the stack tri
   transition:background-color .15s;
   background:repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left top/100% 1px no-repeat,repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left bottom/100% 1px no-repeat,#fff}}
 /* trials (22 Oct): make each section read as one piece - ?sec=1 pale ground on every other section, ?sec=2 a dotted frame round each, ?sec=3 the section you are in turns pale lime */
-.sec1 main > section.pg:not(#start):nth-of-type(odd){{background:#f4f4f2}}
+.sec1 main > section.pg:not(#start):nth-of-type(even){{background:#f4f4f2}}   /* about us, downloads, contact (start is the first section) */
+.sec1 main > section.pg:not(#start):nth-of-type(even) .cvb{{background-color:#f4f4f2}}   /* the full CV / bio / services bars take the same grey */
 .sec1 main > section.pg:not(#start),.sec2 main > section.pg:not(#start),.sec3 main > section.pg:not(#start){{padding-top:12px;padding-bottom:16px}}
 .sec2 main > section.pg:not(#start){{margin-left:10px;margin-right:10px;padding-left:0;padding-right:0;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat}}
 .sec3 main > section.pg:not(#start){{transition:background-color .35s}} .sec3 main > section.pg.cur{{background-color:#f6ffde}}

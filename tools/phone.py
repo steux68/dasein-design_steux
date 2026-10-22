@@ -405,7 +405,7 @@ html,body{{overflow-x:clip}}
 .beetle{{cursor:pointer;-webkit-tap-highlight-color:transparent;position:absolute;left:50%;top:calc(10px + 5%);bottom:0;aspect-ratio:{BW}/{BH};transform:translateX(-50%);max-width:52vw}}
 .beetle .whole{{position:absolute;inset:0;background:url(../img/m-bug-up.webp) center/100% 100% no-repeat}}
 .bp{{position:absolute;display:none;background-image:url(../img/m-bug-up.webp);background-repeat:no-repeat;will-change:transform}}
-.play .bp{{display:block}} .play .whole{{visibility:hidden}}
+.beetle.fly .bp{{display:block}} .beetle.fly .whole{{visibility:hidden}}   /* not .play - that is the game's box at the end and gave the beetle a jump */
 /* three taps on the beetle: a red heart pops out, zooms up to fill the screen and bursts into little hearts */
 .heartfx{{position:fixed;inset:0;z-index:60;pointer-events:none;overflow:hidden}}
 .heartfx svg{{position:absolute;left:0;top:0;width:60px;height:60px;margin:-30px 0 0 -30px;fill:var(--red);will-change:transform,opacity}}
@@ -833,7 +833,7 @@ dialog .top{{flex:none}}
   const bug=document.getElementById('beetle'), ps=[...bug.querySelectorAll('.bp')], R=(a,b)=>a+Math.random()*(b-a);
   let anims=[], run=0, flying=false;
   function play(){{
-    if(reduce||!bug.animate) return; anims.forEach(a=>a.cancel()); const me=++run; flying=true; bug.classList.add('play');
+    if(reduce||!bug.animate) return; anims.forEach(a=>a.cancel()); const me=++run; flying=true; bug.classList.add('fly');
     const W=bug.offsetWidth, T=3600, LOCK=3150, SNAP=260;
     anims=ps.map(p=>{{
       const ang=R(0,Math.PI*2), dist=R(1.6,2.6)*W, r=R(-160,160), d=R(0,750), fly=R(1500,1850);
@@ -847,15 +847,15 @@ dialog .top{{flex:none}}
         {{offset:LOCK/T,transform:`translate(${{ax}}px,${{ay}}px)`,opacity:1,easing:'cubic-bezier(.6,0,.4,1.4)'}},
         {{offset:(LOCK+SNAP)/T,transform:'none',opacity:1}},{{offset:1,transform:'none',opacity:1}}],{{duration:T,fill:'both'}});
     }});
-    Promise.all(anims.map(a=>a.finished)).then(()=>{{ if(me===run){{ flying=false; bug.classList.remove('play'); }} }}).catch(()=>{{}});
+    Promise.all(anims.map(a=>a.finished)).then(()=>{{ if(me===run){{ flying=false; bug.classList.remove('fly'); }} }}).catch(()=>{{}});
   }}
   play();
   /* one tap: the beetle opens to the moment before the pieces lock - uneven white gaps - holds, then snaps shut */
   function openUp(){{
-    if(flying||!bug.animate) return; anims.forEach(a=>a.cancel()); const me=++run; bug.classList.add('play'); const W=bug.offsetWidth;
+    if(flying||!bug.animate) return; anims.forEach(a=>a.cancel()); const me=++run; bug.classList.add('fly'); const W=bug.offsetWidth;
     anims=ps.map(p=>{{ const dx=+p.dataset.dx, dy=+p.dataset.dy, n=Math.hypot(dx,dy)||1, g=R(.025,.075)*W, k=Math.max(.55,Math.min(1,n*1.4)), t=`translate(${{dx/n*g*k}}px,${{dy/n*g*k}}px)`;
       return p.animate([{{transform:'none',offset:0,easing:'cubic-bezier(.2,.7,.3,1)'}},{{transform:t,offset:.2}},{{transform:t,offset:.78,easing:'cubic-bezier(.6,0,.4,1.4)'}},{{transform:'none',offset:1}}],{{duration:1900,fill:'both'}}); }});
-    Promise.all(anims.map(a=>a.finished)).then(()=>{{ if(me===run) bug.classList.remove('play'); }}).catch(()=>{{}});
+    Promise.all(anims.map(a=>a.finished)).then(()=>{{ if(me===run) bug.classList.remove('fly'); }}).catch(()=>{{}});
   }}
   /* three taps: a red heart pops out of the beetle, zooms right in until it fills the screen, bursts into little hearts, and the page is back */
   const HEART='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.3s-7.6-4.7-10.1-9.4C.3 8.6 1.9 4.6 5.6 4.2c2.4-.3 4 1.1 6.4 3.5 2.4-2.4 4-3.8 6.4-3.5 3.7.4 5.3 4.4 3.7 7.7C19.6 16.6 12 21.3 12 21.3z"/></svg>';

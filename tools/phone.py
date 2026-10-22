@@ -57,14 +57,16 @@ PIECES = ''.join(
     for x, y, w, h in pieces)
 
 # ---------- five pages: about us · projects · downloads & links · bits & bats · contact (contact moved to the end, 21 Oct) ----------
+# 23 Oct: bits & bats left the page - its photos live in "wonder" behind the switch in the header; contact is now [04]
 TABS = [('us', 'about us', '01'), ('projects', 'projects', '02'), ('downloads', 'downloads & links', '03'),
-        ('bits', 'bits & bats', '04'), ('contact', 'contact', '05'), ('legal', 'impressum', '§')]
+        ('contact', 'contact', '04'), ('legal', 'impressum', '§')]
 # about us (top) and contact (bottom) are half tabs (Steuart, 21 Oct): together they take one tab's height
 TABHTML = ''.join(f'<a class="tab{" half" if i in ("us", "contact", "legal") else ""}" href="#{i}" data-pg="{i}"><span>{n.replace("&", "&amp;")}</span> <small>[{k}]</small></a>' for i, n, k in TABS)
 # circles beside the beetle: left and right, top to bottom (five, 21 Oct)
 # where each circle's dotted line ends on the upright beetle (fractions of its box): mouth, right front leg (claw), left middle leg, right back leg
-AIM = [(.51, .245), (.715, .365), (.258, .53), (.80, .605), (.31, .905), (.69, .80)]   # ... 06 impressum: right back leg
-PINS = ''.join(f'<a class="pin {"l" if k % 2 == 0 else "r"}" href="#{i}" data-fx="{AIM[k][0]}" data-fy="{AIM[k][1]}" style="top:{8 + k * 15.2}%;--k:{k}"><b>{num}</b><span>{n.replace("&", "&amp;")}</span></a>'
+AIM = [(.51, .245), (.715, .365), (.258, .53), (.69, .80), (.31, .905)]   # five since 23 Oct (bits & bats gone)
+_AIM6 = [(.51, .245), (.715, .365), (.258, .53), (.80, .605), (.31, .905), (.69, .80)]   # ... 06 impressum: right back leg
+PINS = ''.join(f'<a class="pin {"l" if k % 2 == 0 else "r"}" href="#{i}" data-fx="{AIM[k][0]}" data-fy="{AIM[k][1]}" style="top:{8 + k * 19}%;--k:{k}"><b>{num}</b><span>{n.replace("&", "&amp;")}</span></a>'
                for k, (i, n, num) in enumerate(TABS))
 
 P = [{'t': p['t'], 'x': p['x'], 'd': p['d'], 'imgs': ['../' + s for s in p['imgs']]} for p in LB.PROJECTS]
@@ -850,7 +852,7 @@ dialog .top{{flex:none}}
 <script>/* three versions: logo and tabs all down the side (default) · logo on the side, tabs on top · logo and tabs across the top
    ?logo=rail / side / top, remembered on this phone */
 (function(){{ let m='rail'; try{{ m=new URLSearchParams(location.search).get('logo')||localStorage.getItem('ddlogo2')||'rail';
-    const sk=new URLSearchParams(location.search).get('stack'); if(sk==='1'||sk==='2'){{ document.body.classList.add('stack'); m='top'; }} if(sk==='2') document.body.classList.add('pairs'); if(new URLSearchParams(location.search).get('w')==='1') document.body.classList.add('wtr'); const sc=new URLSearchParams(location.search).get('sec'); document.body.classList.add('sec'+(['0','1','2','3'].includes(sc)?sc:'1'));   /* pale grey (sec1) is the standard since 22 Oct; ?sec=0 turns it off */ }}catch(e){{}}
+    const sk=new URLSearchParams(location.search).get('stack'); if(sk==='1'||sk==='2'){{ document.body.classList.add('stack'); m='top'; }} if(sk==='2') document.body.classList.add('pairs'); if(new URLSearchParams(location.search).get('w')!=='0') document.body.classList.add('wtr');   /* work / wonder is the standard since 23 Oct; ?w=0 hides the switch */ const sc=new URLSearchParams(location.search).get('sec'); document.body.classList.add('sec'+(['0','1','2','3'].includes(sc)?sc:'1'));   /* pale grey (sec1) is the standard since 22 Oct; ?sec=0 turns it off */ }}catch(e){{}}
   if(m!=='top') document.body.classList.add('side'); if(m==='rail') document.body.classList.add('rail'); }})();</script>
 <a class="sidebar" href="#start" aria-label="dasein-design, start"><img src="../img/m-mark.png" alt=""><span>dasein<b>-design</b></span></a>
 <header>
@@ -863,8 +865,7 @@ dialog .top{{flex:none}}
 {section("us", "about us", "01", US)}
 {section("projects", "projects", "02", '<div class="grid cut" id="g-proj" data-show="8">' + TILES + '</div>' + MOREP)}
 {section("downloads", "downloads & links", "03", DOWNLOADS)}
-{section("bits", "bits & bats", "04", BITSHTML)}
-{section("contact", "contact", "05", CONTACT)}
+{section("contact", "contact", "04", CONTACT)}
 {section("legal", "impressum", "§", LEGAL)}
 </main>
 <i class="rule l" aria-hidden="true"></i><i class="rule r" aria-hidden="true"></i>
@@ -1008,12 +1009,12 @@ dialog .top{{flex:none}}
       const ph=tiles.filter(t=>!t.classList.contains('t')&&(only===null||t.dataset.cat===only));
       const items=ph.map((t,n)=>({{t,v:[2.6,1,.7,1.6,.5,1.2,.8,3.2,.6,1,1.8,.45,.9,2.2][n%14]*(n<2?1.6:1)}}));
       [3,10,17,25].forEach(at=>{{ if(at<items.length) items.splice(at,0,{{empty:true,v:.5}}); }});
-      const unit=(W/3.2)*(W/3.2); items.forEach(o=>o.a=o.v*unit);
+      const unit=(W/4.3)*(W/4.3); items.forEach(o=>o.a=o.v*unit);   /* smaller pieces, about one column more across */
       const blocks=[]; let i=0, k=0; while(i<items.length){{ const n=[6,4,7,5,8][k++%5]; const its=items.slice(i,i+n); i+=n; blocks.push({{its,a:its.reduce((s,o)=>s+o.a,0)}}); }}
       if(blocks.length>1&&blocks[blocks.length-1].its.length<3){{ const l=blocks.pop(), p=blocks[blocks.length-1]; p.its=p.its.concat(l.its); p.a+=l.a; }}
       /* stack the blocks down the page, each full width (portrait page), some split in two side by side */
       const cells=[]; let y=0;
-      for(let b=0;b<blocks.length;b++){{ const B1=blocks[b], B2=(b%3===1&&blocks[b+1])?blocks[++b]:null;
+      for(let b=0;b<blocks.length;b++){{ const B1=blocks[b], B2=(b%3!==0&&blocks[b+1])?blocks[++b]:null;   /* most blocks share their row with a neighbour */
         if(B2){{ const h=(B1.a+B2.a)/W, w1=B1.a/h; sq(B1.its,0,y,w1,h,cells); sq(B2.its,w1,y,W-w1,h,cells); y+=h; }}
         else {{ const h=B1.a/W; sq(B1.its,0,y,W,h,cells); y+=h; }} }}
       grid.innerHTML=''; grid.style.height=y+'px'; const G=1.5;

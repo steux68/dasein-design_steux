@@ -317,6 +317,14 @@ body{{position:relative}}
 .stack .stage{{height:calc(100svh - var(--head) - 2 * var(--bar) - 104px);min-height:330px}}
 /* the start page fills the whole screen (largest viewport), so all five bars wait together at the bottom however the phone's toolbar is showing */
 .stack #start{{min-height:calc(100lvh - var(--head) - var(--bar))}}
+/* ?stack=2: the bars in three rows of two halves - more screen for the pages */
+.prow{{position:sticky;z-index:14;display:grid;grid-template-columns:1fr 1fr;height:23px;margin:16px 10px -1px;
+  background:repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left top/100% 1px no-repeat,repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left bottom/100% 1px no-repeat,#fff}}
+.prow .pbar{{height:21px;margin:1px 0 0;padding:0 10px;justify-content:flex-start;font-size:12px;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background-color .15s}}
+.prow .pbar + .pbar{{background:repeating-linear-gradient(to bottom,#b8b8b8 0 1px,transparent 1px 3px) left top/1px 100% no-repeat}}
+.inpg .prow{{background-color:#f2f2f2}}
+.prow .pbar.on{{background-color:#eaffae}} .prow .pbar.hit{{background-color:#cdff3e!important}}
+.pairs .stage{{height:calc(100svh - var(--head) - 2 * var(--bar) - 70px)}}
 .stack .pg:last-child{{min-height:calc(100lvh - var(--head) - 2 * var(--bar) - 110px)}}
 .sbar{{position:relative;z-index:1;height:1px;margin:10px 10px -1px}}   /* one line between two pages, 10 px clear each side (the same as from the side lines to the content) */
 /* page boundary (21 Oct): the desktop's double edge ticks, pointing inwards from both guide lines, each running on as a dotted line right across;
@@ -535,7 +543,7 @@ dialog .top{{flex:none}}
 <script>/* three versions: logo and tabs all down the side (default) · logo on the side, tabs on top · logo and tabs across the top
    ?logo=rail / side / top, remembered on this phone */
 (function(){{ let m='rail'; try{{ m=new URLSearchParams(location.search).get('logo')||localStorage.getItem('ddlogo2')||'rail';
-    if(new URLSearchParams(location.search).get('stack')==='1'){{ document.body.classList.add('stack'); m='top'; }} }}catch(e){{}}
+    const sk=new URLSearchParams(location.search).get('stack'); if(sk==='1'||sk==='2'){{ document.body.classList.add('stack'); m='top'; }} if(sk==='2') document.body.classList.add('pairs'); }}catch(e){{}}
   if(m!=='top') document.body.classList.add('side'); if(m==='rail') document.body.classList.add('rail'); }})();</script>
 <a class="sidebar" href="#start" aria-label="dasein-design, start"><img src="../img/m-mark.png" alt=""><span>dasein<b>-design</b></span></a>
 <header>
@@ -732,7 +740,19 @@ dialog .top{{flex:none}}
   function tapGo(el,target){{ el.classList.add('hit'); setTimeout(()=>{{ target.scrollIntoView({{behavior:'smooth'}}); setTimeout(()=>el.classList.remove('hit'),500); }},reduce?60:280); }}
   document.querySelectorAll('.pin, .tab').forEach(a=>a.addEventListener('click',e=>{{ const t=document.querySelector(a.getAttribute('href')); if(!t) return; e.preventDefault(); tapGo(a,t); }}));
   /* ?stack=1: the page bars stack - passed pages at the top, pages still to come at the bottom; a tap on a bar goes to its page */
-  if(document.body.classList.contains('stack')){{
+  if(document.body.classList.contains('pairs')){{
+    /* ?stack=2: three rows of two half bars (about us | projects, downloads & links | bits & bats, contact | start), stacking the same way */
+    const H=22, bars=[...document.querySelectorAll('.pg .pbar')], secs=bars.map(b=>b.closest('.pg'));
+    const st=document.createElement('div'); st.className='pbar'; st.innerHTML='<b>start</b><small>[00]</small>'; bars.push(st); secs.push(document.getElementById('start'));
+    const rows=[];
+    for(let r=0;r<3;r++){{ const row=document.createElement('div'); row.className='prow'; secs[2*r].before(row);
+      row.style.top=`calc(var(--head) + var(--bar) + ${{r*H}}px)`; row.style.bottom=`calc(var(--bar) + env(safe-area-inset-bottom,0px) + ${{(2-r)*H}}px)`; rows.push(row);
+      [0,1].forEach(j=>{{ const k=2*r+j, b=bars[k], sec=secs[k]; row.appendChild(b); if(k<5) sec.style.scrollMarginTop=((r+1)*H+10)+'px';
+        b.setAttribute('role','link'); b.tabIndex=0; b.addEventListener('click',()=>tapGo(b,sec)); }}); }}
+    const cur=()=>{{ let c=-1; secs.slice(0,5).forEach((sec,k)=>{{ if(sec.getBoundingClientRect().top<=innerHeight*.45) c=k; }});
+      bars.forEach((b,k)=>b.classList.toggle('on',k===c)); document.body.classList.toggle('inpg',c>=0); }};
+    addEventListener('scroll',cur,{{passive:true}}); cur();
+  }} else if(document.body.classList.contains('stack')){{
     const H=22, bars=[...document.querySelectorAll('.pg .pbar')], n=bars.length;
     bars.forEach((b,k)=>{{ const sec=b.closest('.pg'); sec.before(b);
       b.style.top=`calc(var(--head) + var(--bar) + ${{k*H}}px)`; b.style.bottom=`calc(var(--bar) + env(safe-area-inset-bottom,0px) + ${{(n-1-k)*H}}px)`;

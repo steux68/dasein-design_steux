@@ -376,6 +376,11 @@ a[href^="mailto:"],a[href^="mailto:"] span{text-decoration:none!important}
 .impd .lp{color:#666;font-size:12px;margin:0 0 4px}
 .impd h4{margin:12px 0 2px;font-size:12.5px;font-weight:700;color:#000} .impd p{margin:0}
 .impd a{color:#1a5fd0;text-decoration:none} .impd a[href^="tel:"]{color:#1e8e3e} .impd .todo{color:#e30613}
+.lbst{justify-content:center;overflow:hidden!important}
+.lbst button[hidden]{display:none}
+.lbdots{position:absolute;left:60px;right:60px;top:640px;display:flex;flex-wrap:wrap;justify-content:center;gap:7px}
+.lbdots i{width:7px;height:7px;border-radius:50%;background:#d8d8d8;cursor:pointer;transition:background .2s}
+.lbdots i.vis{background:#a9a9a9} .lbdots i.on{background:#e30613} .lbdots i:hover{background:#a5e35a}
 /* three clicks on the beetle: the heart */
 .heartfx{position:fixed;inset:0;z-index:9999;pointer-events:none;overflow:hidden}
 .heartfx svg{position:absolute;left:0;top:0;width:60px;height:60px;margin:-30px 0 0 -30px;fill:#e30613;will-change:transform,opacity}
@@ -410,7 +415,7 @@ img[src^="img/m-lg-"]{box-sizing:border-box;padding:6px 12px}
 <div class="lbsl" id="lbsl"></div>
 <div class="lbsw"><button type="button" class="lbsa l" id="lbsl0" aria-label="scroll photos left"><svg class="ar " width="22" height="22" viewBox="-12 -12 24 24" aria-hidden="true"><circle class="tr" r="9.5"/><circle class="tr tr2" r="9.5"/><path class="rg" d="M-7.88 -5.31A9.5 9.5 0 1 1 -7.88 5.31"/><path class="dt" transform="rotate(180)" d="M5.4 0L-4.6 -4.9L-2.2 0L-4.6 4.9Z"/><text x="-9.50" y="0.00">W</text></svg></button>
 <div class="lbst" id="lbst"></div>
-<button type="button" class="lbsa r" id="lbsr0" aria-label="scroll photos right"><svg class="ar " width="22" height="22" viewBox="-12 -12 24 24" aria-hidden="true"><circle class="tr" r="9.5"/><circle class="tr tr2" r="9.5"/><path class="rg" d="M7.88 5.31A9.5 9.5 0 1 1 7.88 -5.31"/><path class="dt" transform="rotate(0)" d="M5.4 0L-4.6 -4.9L-2.2 0L-4.6 4.9Z"/><text x="9.50" y="0.00">E</text></svg></button></div>
+<button type="button" class="lbsa r" id="lbsr0" aria-label="scroll photos right"><svg class="ar " width="22" height="22" viewBox="-12 -12 24 24" aria-hidden="true"><circle class="tr" r="9.5"/><circle class="tr tr2" r="9.5"/><path class="rg" d="M7.88 5.31A9.5 9.5 0 1 1 7.88 -5.31"/><path class="dt" transform="rotate(0)" d="M5.4 0L-4.6 -4.9L-2.2 0L-4.6 4.9Z"/><text x="9.50" y="0.00">E</text></svg></button></div><div class="lbdots" id="lbdots"></div>
 <div class="lbm"><button type="button" class="pp" id="lbpp"><svg class="ar " width="22" height="22" viewBox="-12 -12 24 24" aria-hidden="true"><circle class="tr" r="9.5"/><circle class="tr tr2" r="9.5"/><path class="rg" d="M-7.88 -5.31A9.5 9.5 0 1 1 -7.88 5.31"/><path class="dt" transform="rotate(180)" d="M5.4 0L-4.6 -4.9L-2.2 0L-4.6 4.9Z"/><text x="-9.50" y="0.00">W</text></svg>previous project</button><span class="lbkc" id="lbk"></span><button type="button" class="np" id="lbnp">next project<svg class="ar " width="22" height="22" viewBox="-12 -12 24 24" aria-hidden="true"><circle class="tr" r="9.5"/><circle class="tr tr2" r="9.5"/><path class="rg" d="M7.88 5.31A9.5 9.5 0 1 1 7.88 -5.31"/><path class="dt" transform="rotate(0)" d="M5.4 0L-4.6 -4.9L-2.2 0L-4.6 4.9Z"/><text x="9.50" y="0.00">E</text></svg></button></div>
 </div></div></div></dialog>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" data-live-map></script>
@@ -506,7 +511,7 @@ img[src^="img/m-lg-"]{box-sizing:border-box;padding:6px 12px}
       st.scrollLeft=0;
     }
     $('lbsl').textContent='photos '+(ph+1)+' / '+pr.imgs.length;
-    st.querySelectorAll('button').forEach((b,k)=>b.classList.toggle('cur',k===ph));
+    st.querySelectorAll('button').forEach((b,k)=>b.classList.toggle('cur',k===ph)); { const n=pr.imgs.length, lo=Math.max(0,Math.min(ph-2,n-5)); st.querySelectorAll('button').forEach((b,k)=>{ b.hidden=k<lo||k>lo+4; }); const dd=$('lbdots'); if(dd.children.length!==n) dd.innerHTML=pr.imgs.map((s,k)=>'<i data-k="'+k+'"></i>').join(''); [...dd.children].forEach((x,k)=>{ x.classList.toggle('on',k===ph); x.classList.toggle('vis',k>=lo&&k<=lo+4); }); }
     const c=st.children[ph]; if(c&&lb.open){ const l=c.offsetLeft-st.offsetLeft; if(l<st.scrollLeft||l+c.offsetWidth>st.scrollLeft+st.clientWidth) st.scrollLeft=l-(st.clientWidth-c.offsetWidth)/2; }
     requestAnimationFrame(arrows);
   }
@@ -709,7 +714,7 @@ img[src^="img/m-lg-"]{box-sizing:border-box;padding:6px 12px}
   document.getElementById('impx').onclick=()=>d.close();
   d.addEventListener('click',e=>{ if(e.target===d) d.close(); });
 })();
-</script><script>
+</script><script>document.getElementById("lbdots")&&document.getElementById("lbdots").addEventListener("click",e=>{ const i=e.target.closest("i"); if(i){ const b=document.querySelector("#lbst button[data-k='"+i.dataset.k+"']"); if(b) b.click(); } });</script><script>
 /* the two CVs: "full CV" opens one, "close CV" folds it again; both fold when you leave the page */
 (function(){
   const fr=document.querySelector('#services .frame'); if(!fr) return;

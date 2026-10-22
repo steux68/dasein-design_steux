@@ -137,6 +137,11 @@ a[href^="mailto:"],a[href^="mailto:"] span{text-decoration:none!important}
 .impd .lp{color:#666;font-size:12px;margin:0 0 4px}
 .impd h4{margin:12px 0 2px;font-size:12.5px;font-weight:700;color:#000} .impd p{margin:0}
 .impd a{color:#1a5fd0;text-decoration:none} .impd a[href^="tel:"]{color:#1e8e3e} .impd .todo{color:#e30613}
+.lbst{justify-content:center;overflow:hidden!important}
+.lbst button[hidden]{display:none}
+.lbdots{position:absolute;left:60px;right:60px;top:640px;display:flex;flex-wrap:wrap;justify-content:center;gap:7px}
+.lbdots i{width:7px;height:7px;border-radius:50%;background:#d8d8d8;cursor:pointer;transition:background .2s}
+.lbdots i.vis{background:#a9a9a9} .lbdots i.on{background:#e30613} .lbdots i:hover{background:#a5e35a}
 /* three clicks on the beetle: the heart */
 .heartfx{position:fixed;inset:0;z-index:9999;pointer-events:none;overflow:hidden}
 .heartfx svg{position:absolute;left:0;top:0;width:60px;height:60px;margin:-30px 0 0 -30px;fill:#e30613;will-change:transform,opacity}
@@ -338,6 +343,14 @@ def patch(s):
              "$('lbsl0').onclick=()=>step(-1); $('lbsr0').onclick=()=>step(1);", s)
     s = _rep("function arrows(){ $('lbsl0').disabled=st.scrollLeft<=1; $('lbsr0').disabled=st.scrollLeft+st.clientWidth>=st.scrollWidth-1; }",
              "function arrows(){}", s)
+    # ---- project pop-up (22 Oct): the strip shows five thumbnails (two before and two after the current photo); a row of dots underneath shows how many there are in all
+    s = _rep("st.querySelectorAll('button').forEach((b,k)=>b.classList.toggle('cur',k===ph));",
+             "st.querySelectorAll('button').forEach((b,k)=>b.classList.toggle('cur',k===ph)); "
+             "{ const n=pr.imgs.length, lo=Math.max(0,Math.min(ph-2,n-5)); st.querySelectorAll('button').forEach((b,k)=>{ b.hidden=k<lo||k>lo+4; }); "
+             "const dd=$('lbdots'); if(dd.children.length!==n) dd.innerHTML=pr.imgs.map((s,k)=>'<i data-k=\"'+k+'\"></i>').join(''); "
+             "[...dd.children].forEach((x,k)=>{ x.classList.toggle('on',k===ph); x.classList.toggle('vis',k>=lo&&k<=lo+4); }); }", s)
+    s = _sub1(r'(<button type="button" class="lbsa r" id="lbsr0".*?</button></div>)', r'\1<div class="lbdots" id="lbdots"></div>', s, re.S)
+    s = s.replace('</body>', '<script>document.getElementById("lbdots")&&document.getElementById("lbdots").addEventListener("click",e=>{ const i=e.target.closest("i"); if(i){ const b=document.querySelector("#lbst button[data-k=\'"+i.dataset.k+"\']"); if(b) b.click(); } });</script></body>', 1)
     # ---- styles
     s = _rep('</style>', CSS + '</style>', s)
     return s.replace('</body>', HEART_JS + MARK + '</body>', 1)

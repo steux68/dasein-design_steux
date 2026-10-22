@@ -109,7 +109,8 @@ body{position:relative}
 .stack .body{padding-top:10px}
 .stack .stage{height:calc(100svh - var(--head) - 2 * var(--bar) - 104px);min-height:330px}
 /* the start page fills the whole screen (largest viewport), so all five bars wait together at the bottom however the phone's toolbar is showing */
-.stack #start{min-height:calc(100lvh - var(--head) - var(--bar))}
+.stack #start{min-height:calc(100lvh - var(--head) - 2 * var(--bar) - 147px)}
+.stack.pairs #start{min-height:calc(100lvh - var(--head) - 2 * var(--bar) - 81px)}   /* just tall enough that all bars wait together at the bottom */
 /* ?stack=2: half bars - each half moves on its own and locks in beside its partner */
 .stack main > .hb{position:sticky;z-index:14;display:flex;align-items:center;height:23px;padding:0 10px;font-size:12px;color:#000;cursor:pointer;-webkit-tap-highlight-color:transparent;
   transition:background-color .15s;
@@ -226,6 +227,9 @@ html,body{overflow-x:clip}
 .svc p{margin:3px 0 0;font-size:13px;line-height:1.4;color:#222}
 /* the CVs open under both columns */
 .cvp > summary{display:none} .cvp{margin:0} .cvp .box{margin-top:26px} .cvp .cvb{margin-top:10px}
+/* full CV: the same white bar as the other openers, one per column, the gap between the columns showing they are two */
+.who .cvb,.cvp .cvb{display:flex;align-self:stretch;width:100%;height:30px;margin-top:8px;padding:0 2px;
+  background:repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left top/100% 1px no-repeat,repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left bottom/100% 1px no-repeat,#fff}
 details,.cvb{margin:4px 0 0}
 /* "CV (+) full CV": a red cross in a circle that sends out pulsing yellow-lime rings; open, it becomes a minus and reads "close" */
 summary,.cvb{border:0;background:none;font-family:inherit;color:inherit;display:inline-flex;align-items:center;gap:7px;cursor:pointer;list-style:none;font-size:14px;letter-spacing:.04em;padding:1px 0;-webkit-tap-highlight-color:transparent}
@@ -255,7 +259,8 @@ details ul{margin:0;padding:0 0 0 14px;font-size:13px;line-height:1.4;color:#222
 .pdot::before,.pdot::after{content:"";position:absolute;left:50%;top:50%;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;border:1px solid var(--red);opacity:0;animation:pdr 1.8s ease-out infinite}
 .pdot::after{animation-delay:.9s}
 @keyframes pdp{50%{transform:scale(1.25)}} @keyframes pdr{0%{transform:scale(1);opacity:.8}100%{transform:scale(4.2);opacity:0}}
-.pbug{position:absolute;left:0;top:0;width:19px;height:42px;margin:-21px 0 0 -9.5px;pointer-events:none;will-change:transform}
+.pbug{position:absolute;left:0;top:0;width:38px;height:84px;margin:-42px 0 0 -19px;pointer-events:none;will-change:transform}
+.pdd{position:absolute;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;pointer-events:none}   /* the round dd badge the beetle sends out when it catches the dot */
 .copy{margin:18px 0 0;text-align:center;font-size:10.5px;letter-spacing:.06em;color:#888}   /* closing line, like a full stop */
 p.lab:not(.first){margin-top:26px}
 .box .lab.first{margin-top:0}
@@ -432,11 +437,18 @@ dialog .top{flex:none}
     function step(t){ if(!run) return; const dt=Math.min(.05,(t-last)/1000||0); last=t;
       if(!held){ if(t>next) newGoal(); d.x+=(goal.x-d.x)*Math.min(1,dt*1.6); d.y+=(goal.y-d.y)*Math.min(1,dt*1.6); }
       const dx=d.x-g.x, dy=d.y-g.y, dist=Math.hypot(dx,dy);
-      if(dist>16){ const sp=Math.min(120,40+dist*.9)*dt; g.x+=dx/dist*sp; g.y+=dy/dist*sp;
+      if(dist>30){ const sp=Math.min(150,50+dist*.9)*dt; g.x+=dx/dist*sp; g.y+=dy/dist*sp;
         const want=Math.atan2(dy,dx)*180/Math.PI+90; let da=((want-g.a+540)%360)-180; g.a+=da*Math.min(1,dt*8); }
-      else if(!held) newGoal();   /* caught it: the dot hops away */
+      else if(!held){ newGoal(); pop(d.x,d.y); }   /* caught it: a round dd badge pops out and the dot hops away */
       dot.style.transform=`translate(${d.x}px,${d.y}px)`; bug.style.transform=`translate(${g.x}px,${g.y}px) rotate(${g.a}deg)`;
       requestAnimationFrame(step); }
+    const DD='<svg class="pdd" viewBox="-20 -20 40 40"><circle r="19" fill="#e30613"/><circle r="15.5" fill="none" stroke="#fff" stroke-width="1" stroke-dasharray="1 2.2"/>'
+      +'<text y="1" fill="#fff" font-family="Calibri,Carlito,sans-serif" font-weight="700" font-size="17" text-anchor="middle" dominant-baseline="central">dd</text></svg>';
+    let lastPop=0;
+    function pop(x,y){ const t=performance.now(); if(t-lastPop<900) return; lastPop=t;
+      const w=document.createElement('div'); w.innerHTML=DD; const e=w.firstChild; pl.appendChild(e);
+      e.animate([{transform:`translate(${x}px,${y}px) scale(.2)`,opacity:1},{transform:`translate(${x}px,${y-30}px) scale(1.25)`,opacity:1,offset:.35},
+        {transform:`translate(${x}px,${y-70}px) scale(1)`,opacity:0}],{duration:1300,easing:'cubic-bezier(.2,.8,.3,1)'}).finished.then(()=>e.remove()).catch(()=>e.remove()); }
     const at=e=>{ const r=pl.getBoundingClientRect(); d.x=Math.max(8,Math.min(W-8,e.clientX-r.left)); d.y=Math.max(8,Math.min(H-8,e.clientY-r.top)); };
     dot.addEventListener('pointerdown',e=>{ held=true; dot.setPointerCapture(e.pointerId); at(e); });
     dot.addEventListener('pointermove',e=>{ if(held) at(e); });

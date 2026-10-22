@@ -222,8 +222,8 @@ LEGAL = ('<div class="box legal cut" id="g-legal" data-show="4" data-extra="30">
 # The photos and notes stand in for real posts; the dates are samples. Later the posts come by e-mail from Steuart's phone.
 # six categories as title bars (23 Oct; Steuart named banality, philosophy, details - the other three are Claude's suggestions, to change)
 WCATS = ['banality', 'details', 'philosophy', 'light', 'traces', 'the city']
-WCAT_OF = {24: 0, 25: 0, 5: 0, 15: 0, 16: 0, 17: 0, 20: 0, 22: 0, 31: 0, 0: 0,
-           6: 1, 12: 1, 30: 1, 32: 1, 23: 1, 1: 1, 14: 1,
+WCAT_OF = {24: 0, 25: 0, 5: 0, 15: 0, 16: 0, 17: 0, 20: 2, 22: 0, 31: 0, 0: 0,
+           6: 1, 12: 1, 30: 1, 32: 1, 23: 1, 1: 2, 14: 2,
            19: 3, 21: 3, 27: 3, 29: 3, 3: 3,
            2: 4, 8: 4, 18: 4, 26: 4, 28: 4, 7: 4, 9: 4, 11: 4,
            4: 5, 10: 5, 13: 5}
@@ -422,7 +422,8 @@ body{{position:relative}}
 .wbt:nth-child(2){{background-image:var(--dh),var(--dh);background-position:left top,left bottom;background-size:100% 1px,100% 1px}}
 .wbt b{{font-weight:700}} .wbt small{{font-size:10px;color:#444}}
 .wbt.on{{background-color:#eaffae}} .wbt:active{{background-color:#cdff3e}}
-.wonder .wgrid{{grid-template-columns:repeat(4,1fr);gap:5px;margin-top:14px}}
+.wonder .wgrid{{grid-template-columns:repeat(4,1fr);gap:0;margin-top:14px}}   /* a tight carpet: no gaps, only the white left over round each photo */
+.wonder .wg.t{{display:none!important}}   /* no text tiles in the carpet - photos only */
 .wonder .wg{{display:block;aspect-ratio:1/1}}
 /* photos in their own format (23 Oct, 00:50): a portrait fills the cell's height, a landscape its width; only the left-over is white, no frame, no crop */
 .wonder .wg:not(.t){{background:none}} .wonder .wg:not(.t)::after{{content:none}}
@@ -967,7 +968,7 @@ dialog .top{{flex:none}}
     /* a bar shows only its category (lit lime); tapped again, everything */
     wd.querySelectorAll('.wbt').forEach(b=>b.addEventListener('click',()=>{{ const on=!b.classList.contains('on');
       wd.querySelectorAll('.wbt').forEach(x=>x.classList.toggle('on',on&&x===b)); tiles.forEach(t=>{{ t.hidden=on&&t.dataset.cat!==b.dataset.c; }}); wd.scrollTo({{top:0}}); }}));
-    const vis=()=>tiles.filter(t=>!t.hidden);
+    const vis=()=>tiles.filter(t=>!t.hidden&&!t.classList.contains('t'));
     function pop(t){{ const v=vis(); cur=v.indexOf(t); const d=t.dataset; let h='';
       const note=t.classList.contains('wnote');
       if(d.img) h='<img class="wpi" src="'+d.img+'" alt=""><p class="wpd">'+d.when+'</p><p class="wpl">'+d.line+'</p>';

@@ -147,8 +147,21 @@ CARDS = [('note', 'Otto Wagner, Moderne Architektur, 1896', '„Etwas Unpraktisc
           '„Die Evolution der Kultur ist gleichbedeutend mit dem Entfernen des Ornamentes aus dem Gebrauchsgegenstande.“<br><br>Adolf Loos, <i>Ornament und Verbrechen</i>, Vienna 1908.', ''),
          ('news', 'Der Standard', 'Architektur &amp; Stadt',
           'Der Standard’s pages on architecture and the city – Vienna’s buildings, housing and planning, every week.',
-          'https://www.derstandard.at/immobilien/architekturundstadt')]
-CARD_AT = {2: 0, 5: 1, 9: 2, 13: 3, 17: 4, 22: 5}   # card k goes in before photo n
+          'https://www.derstandard.at/immobilien/architekturundstadt'),
+         # 22 Oct: Steuart's own reading list - ArchDaily, Design Museum, Architizer, DETAIL
+         ('news', 'ArchDaily', 'Terra Mater Factual Studios, Hietzing',
+          'The nature-film makers Terra Mater Factual Studios have extended and reorganised their offices in Vienna’s 13th district – a new building by the Austrian-Finnish office Berger Parkkinen + Architects.',
+          'https://www.archdaily.com/1034207/terra-mater-factual-studios-berger-parkkinen-plus-architects'),
+         ('news', 'Design Museum', 'Es Devlin: Other Worlds',
+          'At the Design Museum in London until 4 April 2027: thirty years of Es Devlin’s work across sculpture, stage design, music, language and light.',
+          'https://designmuseum.org/exhibitions/es-devlin-other-worlds'),
+         ('news', 'Architizer', 'After the Starchitect',
+          'Architizer Journal asks why 2026 feels like the end of heroic architecture – and what comes after the age of the star architect.',
+          'https://architizer.com/blog/inspiration/industry/after-the-starchitect-the-end-of-heroic-architecture/'),
+         ('news', 'DETAIL', 'Klimaadaptive Fassaden',
+          'DETAIL 5.2026, the German building journal’s issue on climate-adaptive façades – building skins for hotter summers.',
+          'https://www.detail.de/de_de/aktuelle-ausgabe-5-2026')]
+CARD_AT = {2: 0, 5: 1, 9: 2, 13: 3, 17: 4, 20: 6, 22: 5, 25: 7, 28: 8, 31: 9}   # card k goes in before photo n
 def card(k):
     kind, src, head, txt, url = CARDS[k]
     if kind == 'news':

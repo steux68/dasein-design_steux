@@ -44,3 +44,52 @@ LEGAL_BODY = ('<p class="lp">Informationen gemäß § 5 E-Commerce-Gesetz und Of
          'jede Verwendung bedarf der vorherigen Zustimmung.</p>'
          '<h4>Datenschutz</h4><p>Diese Website setzt keine Cookies und erhebt keine personenbezogenen Daten. Die Karte wird von OpenStreetMap geladen. '
          '<span class="todo">[Datenschutzerklärung – bitte ergänzen]</span></p>')
+
+
+# ---------- bits & bats (shared by phone and desktop, 22 Oct): photos (file, tall on the phone, caption), notes and links ----------
+BITS = [('bits-imgImage.webp', 0, 'The DILLON Shelf Plans'), ('p-drawing-grille.webp', 1, 'dd - NEW LOGO &amp; IDENTITY'),
+        ('p-pocket-watch.webp', 0, 'INTERIOR COURTYARDS'), ('p-barriers-night.webp', 0, 'MIRROR BALL &amp; DISCO HALLS'),
+        ('p-cages-night.webp', 0, 'SKI SLOPES IN SUMMER'), ('bits-imgImage3.webp', 0, 'PAPPI IN THE MIRROR'),
+        ('p-plastic-sheet.webp', 0, 'dd - OUR OLD LOGO'), ('p-section-grey.webp', 0, 'AIDA - THE BEST COFFEE CHAIN'),
+        ('bits-imgImage6.webp', 0, 'PAINT IT BLACK'), ('bits-imgImage7.webp', 0, 'CAFE PRÜCKEL...THE GHOSTS OF'),
+        ('p-scaffolding.webp', 1, 'Hr. KARL SCHWANZER'), ('bits-imgImage9.webp', 0, 'BOLLOCKS BOLLOCKS!...Goat*'),
+        ('p-streaks-white-blue.webp', 1, 'dd - NEW BUSINESS CARDS'), ('bits-imgImage11.webp', 0, 'VERTICAL ACCESS or STAIRS'),
+        ('p-tower-drawing-blue.webp', 0, 'MUSEUMS QUARTIER'), ('bits-imgImage13.webp', 0, 'MMEEELLLAAA'),
+        ('bits-imgImage14.webp', 0, 'MEESHHHA'), ('bits-imgImage15.webp', 0, 'THE “DUDE” IN VENICE'),
+        ('bits-imgImage16.webp', 0, 'A. N. HARKESS'), ('p-streaks-orange.webp', 0, 'LIGHT AT THE END OF THE TUNNEL'),
+        ('p-akh-crate.webp', 1, 'WHO IS THIS GUY?'),
+        # 22 Oct: more of Steuart's photos (some also appear in the project pop-ups)
+        ('p-light-hole.webp', 0, 'LIGHT HOLE'), ('p-wasp-red.webp', 0, 'WASP ON RED'), ('p-yellow-dots-box.webp', 1, 'YELLOW DOTS'),
+        ('p-carrots-plate.webp', 0, 'CARROTS, STRIPES'), ('p-milk-glass.webp', 0, 'MILK GLASS'), ('p-banana-tape.webp', 0, 'BANANA &amp; TAPE'),
+        ('p-flower-shadows.webp', 0, 'FLOWER SHADOWS'), ('p-coffee-stain.webp', 0, 'COFFEE STAIN'), ('p-light-switch.webp', 0, 'LIGHT SWITCH'),
+        ('p-paper-shreds.webp', 1, 'PAPER SHREDS'), ('p-horse-rider.webp', 0, 'HORSE &amp; RIDER'), ('p-torn-strips-photo.webp', 0, 'TORN STRIPS')]
+# notes and links between the photos - a looser, blog-like mix (drafts by Claude, 22 Oct; the articles are real, checked that day)
+CARDS = [('note', 'Otto Wagner, Moderne Architektur, 1896', '„Etwas Unpraktisches kann nicht schön sein.“',
+          '„Etwas Unpraktisches kann nicht schön sein.“<br><br>Otto Wagner wrote this in Vienna in 1896, in <i>Moderne Architektur</i> – a sentence we still pin above the drawing board.', ''),
+         ('news', 'archiweb', 'A timber museum for the MuseumsQuartier',
+          'The House of Austrian History (hdgö) moves to the MuseumsQuartier in 2028, with a new timber entrance building by O&amp;O Baukunst – construction is due to start in the second half of 2026.',
+          'https://www.archiweb.cz/en/n/foreign/ve-vidni-postavi-muzeum-dejin-rakouska-jako-moderni-drevostavbu'),
+         ('note', 'studio note', 'Start with a walk.',
+          'Every project starts with a walk round the site, a sketchbook and a lot of questions – where the light comes from, what the neighbours see, what should stay. <span class="todo">[draft – Steuart to write]</span>', ''),
+         ('news', 'vienna.at', 'Open House Wien: 53 buildings open their doors',
+          'The eleventh Open House Wien opened 53 otherwise closed buildings and spaces across Vienna for free, on the theme of adapting architecture to climate and social change.',
+          'https://www.vienna.at/open-house-vienna-opens-53-otherwise-closed-buildings/10369079'),
+         ('note', 'Adolf Loos, Ornament und Verbrechen, 1908', '„Die Evolution der Kultur ist gleichbedeutend mit dem Entfernen des Ornamentes aus dem Gebrauchsgegenstande.“',
+          '„Die Evolution der Kultur ist gleichbedeutend mit dem Entfernen des Ornamentes aus dem Gebrauchsgegenstande.“<br><br>Adolf Loos, <i>Ornament und Verbrechen</i>, Vienna 1908.', ''),
+         ('news', 'Der Standard', 'Architektur &amp; Stadt',
+          'Der Standard’s pages on architecture and the city – Vienna’s buildings, housing and planning, every week.',
+          'https://www.derstandard.at/immobilien/architekturundstadt'),
+         # 22 Oct: Steuart's own reading list - ArchDaily, Design Museum, Architizer, DETAIL
+         ('news', 'ArchDaily', 'Terra Mater Factual Studios, Hietzing',
+          'The nature-film makers Terra Mater Factual Studios have extended and reorganised their offices in Vienna’s 13th district – a new building by the Austrian-Finnish office Berger Parkkinen + Architects.',
+          'https://www.archdaily.com/1034207/terra-mater-factual-studios-berger-parkkinen-plus-architects'),
+         ('news', 'Design Museum', 'Es Devlin: Other Worlds',
+          'At the Design Museum in London until 4 April 2027: thirty years of Es Devlin’s work across sculpture, stage design, music, language and light.',
+          'https://designmuseum.org/exhibitions/es-devlin-other-worlds'),
+         ('news', 'Architizer', 'After the Starchitect',
+          'Architizer Journal asks why 2026 feels like the end of heroic architecture – and what comes after the age of the star architect.',
+          'https://architizer.com/blog/inspiration/industry/after-the-starchitect-the-end-of-heroic-architecture/'),
+         ('news', 'DETAIL', 'Klimaadaptive Fassaden',
+          'DETAIL 5.2026, the German building journal’s issue on climate-adaptive façades – building skins for hotter summers.',
+          'https://www.detail.de/de_de/aktuelle-ausgabe-5-2026')]
+CARD_AT = {2: 0, 5: 1, 9: 2, 13: 3, 17: 4, 20: 6, 22: 5, 25: 7, 28: 8, 31: 9}   # card k goes in before photo n

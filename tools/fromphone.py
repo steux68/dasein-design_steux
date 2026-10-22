@@ -18,7 +18,9 @@ build.py also calls patch() before writing, so a full rebuild keeps them.
 - menu: the first tab reads "about us [01]" (half tabs were tried and dropped)
 """
 import re
-from texts import INTRO, BIO, INFO_TXT, LINKS_TXT, CONTACT_TXT, LEGAL_BODY
+from texts import INTRO, BIO, INFO_TXT, LINKS_TXT, CONTACT_TXT, LEGAL_BODY, BITS, CARDS, CARD_AT
+import json
+from lightbox import compass
 
 MARK = '<!--fromphone-->'
 RED = '#e30613'
@@ -247,6 +249,109 @@ def _impressum_page(s):
     return s.replace('</body>', '<script>document.addEventListener("pagechange",e=>document.querySelectorAll("a.impl").forEach(a=>a.classList.toggle("cur",e.detail==="impressum")));</script></body>', 1)
 
 
+# ---------- bits & bats (22 Oct): every tile opens a pop-up; six tiles become notes / links (as on the phone);
+# the pop-up steps through all 33 photos and 10 cards in the phone's order
+BITS_CELLS = [((895, 60), 0), ((675, 440), 1), ((235, 820), 6), ((455, 630), 4), ((1115, 630), 7), ((1115, 250), 9)]
+
+
+def _bits_items():
+    items = []
+    for k, (im, t, c) in enumerate(BITS):
+        if k in CARD_AT:
+            kind, src, head, txt, url = CARDS[CARD_AT[k]]
+            items.append({'t': kind, 'c': CARD_AT[k], 'src': src, 'head': head, 'txt': txt, 'url': url})
+        items.append({'t': 'img', 'im': 'img/' + im, 'cap': c})
+    return items
+
+
+def _bits_card(x, y, k):
+    kind, src, head, txt, url = CARDS[k]
+    plain = re.sub(r'<[^>]+>', '', txt)
+    if kind == 'news':
+        body, lab, sub = f'<small>{src}</small><b>{head}</b><em>{plain}</em>', f'LINK · {src}', 'read the article ↗'
+    else:
+        body = f'<i class="qm">“</i><b>{head}</b>'
+        lab, sub = ('STUDIO NOTE', 'dasein-design') if src == 'studio note' else ('QUOTE', src)
+    return (f'<button type="button" class="bcard {kind}" data-c="{k}" style="left:{x}px;top:{y}px"><span class="bct">{body}</span>'
+            f'<span class="bcap"><b>{lab}</b><span>{sub}</span></span></button>')
+
+
+BITS_CSS = """
+/* bits & bats: cards among the photos and the pop-up */
+#bits .bhit{position:absolute;z-index:4;padding:0;border:0;background:none;cursor:pointer}
+#bits .bhit:hover{outline:1px solid #e30613;outline-offset:-1px}
+#bits .bcard{position:absolute;z-index:5;width:200px;height:180px;padding:0;border:0;text-align:left;font:inherit;color:#222;cursor:pointer;overflow:hidden;font-family:Calibri,Carlito,sans-serif}
+#bits .bcard::after{content:"";position:absolute;inset:0;pointer-events:none;border:1px dotted #b8b8b8}
+#bits .bcard.news{background:#f4f4f4} #bits .bcard.note{background:#fffbd6}
+#bits .bcard:hover{outline:1px solid #e30613;outline-offset:-1px}
+#bits .bct{position:absolute;inset:0 0 35px;display:flex;flex-direction:column;gap:4px;padding:10px 10px 6px;overflow:hidden}
+#bits .bct small{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#e30613;font-weight:700}
+#bits .bct b{font-size:14px;line-height:1.2;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;flex:none}
+#bits .bct em{font-style:normal;font-size:11px;line-height:1.35;color:#555;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+#bits .bcard.note .qm{font-style:normal;font-size:36px;line-height:.6;height:14px;color:#e30613}
+#bits .bcard.note .bct b{font-weight:400;font-style:italic;font-size:14px;line-height:1.3;-webkit-line-clamp:5}
+#bits .bcap{position:absolute;left:0;right:0;bottom:0;height:35px;padding:0 3px;display:flex;flex-direction:column;justify-content:center;background:rgba(68,68,68,.7);color:#fff;font-size:12px;line-height:normal}
+#bits .bcap b{font-weight:700} #bits .bcap span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+dialog.bv{position:fixed;inset:0;width:100vw;height:100vh;max-width:none;max-height:none;margin:0;padding:0;border:0;background:#fff;font-family:Calibri,Carlito,sans-serif;color:#000}
+dialog.bv::backdrop{background:transparent}
+.bv .bvp{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(980px,88vw);height:min(820px,90vh);display:flex;flex-direction:column}
+.bv .bvt{display:flex;justify-content:flex-end;align-items:center;height:34px;flex:none}
+.bv .bvx{border:0;background:none;padding:4px;cursor:pointer} .bv .bvx svg{width:26px;height:26px} .bv .bvx .rg{fill:none;stroke:#3a3c37;stroke-width:.6} .bv .bvx .xx{fill:none;stroke:#1a1a1a;stroke-width:1.15;stroke-linecap:round}
+.bv .bvx:hover .rg{stroke:#e30613}
+.bv button:focus:not(:focus-visible){outline:none}
+.bv .bvm{flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center}
+.bv .bvm img{max-width:100%;max-height:100%;object-fit:contain;outline:1px dotted #b8b8b8;outline-offset:3px}
+.bv .bvc{max-width:620px;padding:0 20px} .bv .bvc .lab{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:#222;margin:0 0 10px}
+.bv .bvc h2{margin:0 0 14px;font-size:30px;line-height:1.15;color:#e30613} .bv .bvc p{margin:0;font-size:18px;line-height:1.55;color:#222}
+.bv .bvc .q{font-size:26px;line-height:1.45;font-style:italic} .bv .bvc .qm{display:block;font-style:normal;font-size:80px;line-height:.5;height:36px;color:#e30613}
+.bv .bvc .todo{color:#e30613} .bv .bvc a.open{display:inline-block;margin-top:20px;font-size:17px;color:#1a5fd0;text-decoration:none;border-bottom:1px dotted #b8b8b8;padding-bottom:3px}
+.bv .bvc a.open:hover{color:#e30613}
+.bv .bvcap{flex:none;text-align:center;margin:14px 0 4px;font-size:16px;font-weight:700;color:#e30613;min-height:20px}
+.bv .bvn{flex:none;display:flex;justify-content:center;align-items:center;gap:18px;height:44px;font-size:14px;color:#666;letter-spacing:.06em}
+.bv .bvn button{display:flex;align-items:center;gap:8px;border:0;background:none;font:inherit;color:#000;cursor:pointer;padding:4px}
+.bv .bvn button:hover{color:#e30613}
+"""
+
+BITS_JS = """
+  const fr=document.querySelector('#bits .frame'), bv=document.getElementById('bv'); if(!fr||!bv) return; let cur=0;
+  const n=IT.length, $=id=>document.getElementById(id), p2=k=>String(k).padStart(2,'0');
+  function show(k){ cur=(k+n)%n; const it=IT[cur], m=$('bvm');
+    if(it.t==='img'){ m.innerHTML='<img alt="" src="'+it.im+'">'; $('bvcap').innerHTML=it.cap; }
+    else if(it.t==='news'){ m.innerHTML='<div class="bvc"><p class="lab">'+it.src+'</p><h2>'+it.head+'</h2><p>'+it.txt+'</p><a class="open" href="'+it.url+'" target="_blank" rel="noopener">read the article on '+it.src+' \\u2197</a></div>'; $('bvcap').innerHTML='link'; }
+    else { m.innerHTML='<div class="bvc"><i class="qm">\\u201c</i><p class="lab">'+it.src+'</p><p class="q">'+it.txt+'</p></div>'; $('bvcap').innerHTML=it.src==='studio note'?'studio note':'quote'; }
+    $('bvk').textContent='bits & bats '+p2(cur+1)+' / '+n; }
+  function open(k){ show(k); if(!bv.open) bv.showModal(); }
+  /* every photo on the page gets a clear button on top of it */
+  const mk=()=>{ fr.querySelectorAll('.bhit').forEach(b=>b.remove()); const f=fr.getBoundingClientRect(), sc=(f.width/fr.offsetWidth)||1;
+    fr.querySelectorAll('img').forEach(im=>{ const src=im.getAttribute('src'), k=IT.findIndex(x=>x.im===src); if(k<0) return;
+      const t=im.parentElement.closest('[data-node-id]')||im.parentElement, r=t.getBoundingClientRect();
+      const b=document.createElement('button'); b.type='button'; b.className='bhit'; b.setAttribute('aria-label','open photo');
+      Object.assign(b.style,{left:(r.left-f.left)/sc+'px',top:(r.top-f.top)/sc+'px',width:r.width/sc+'px',height:r.height/sc+'px'});
+      b.addEventListener('click',()=>open(k)); fr.appendChild(b); }); };
+  if(document.readyState==='complete') mk(); else addEventListener('load',mk);
+  fr.querySelectorAll('.bcard').forEach(c=>c.addEventListener('click',()=>open(IT.findIndex(x=>x.c===+c.dataset.c))));
+  $('bvx').onclick=()=>bv.close(); $('bvprev').onclick=()=>show(cur-1); $('bvnext').onclick=()=>show(cur+1);
+  bv.addEventListener('click',e=>{ if(e.target===bv) bv.close(); });
+  bv.addEventListener('wheel',e=>{ e.preventDefault(); e.stopPropagation(); },{passive:false});
+  bv.addEventListener('keydown',e=>{ e.stopPropagation(); if(e.key==='ArrowLeft') show(cur-1); else if(e.key==='ArrowRight') show(cur+1); });
+"""
+
+
+def _bits(s):
+    i = s.index('id="bits"'); j = s.index('<section', i + 10)
+    k = s.index('<div class="bg-white relative frame">', i) + len('<div class="bg-white relative frame">')
+    assert k < j
+    s = s[:k] + ''.join(_bits_card(x, y, c) for (x, y), c in BITS_CELLS) + s[k:]
+    W, E = compass('W', 22), compass('E', 22)
+    dlg = ('<dialog class="bv" id="bv" aria-label="bits &amp; bats"><div class="bvp">'
+           f'<div class="bvt"><button type="button" class="bvx" id="bvx" aria-label="close (Esc)" title="close (Esc)">{XC}</button></div>'
+           '<div class="bvm" id="bvm"></div><div class="bvcap" id="bvcap"></div>'
+           f'<div class="bvn"><button type="button" id="bvprev">{W}<span>previous</span></button><span id="bvk"></span>'
+           f'<button type="button" id="bvnext"><span>next</span>{E}</button></div></div></dialog>')
+    js = '<script>(function(){ const IT=' + json.dumps(_bits_items()) + ';' + BITS_JS + '})();</script>'
+    return s.replace('</body>', dlg + js + '</body>', 1)
+
+
 def patch(s):
     if MARK in s:
         return s
@@ -362,6 +467,7 @@ def patch(s):
                    r'\1\2\3 style="height:330px;top:859px"\4" style="width:330px"><p class="whitespace-pre-wrap">\5<span class="fcal-r"> · </span><a class="impl" href="#impressum">§ impressum</a></p>', s)
     assert n >= 5, n
     s = _impressum_page(s)
+    s = _bits(s)
     # ---- project pop-up (22 Oct): the arrows beside the photo strip step to the previous / next photo instead of scrolling the strip
     s = _rep("$('lbsl0').onclick=()=>{ st.scrollLeft-=st.clientWidth*.8; }; $('lbsr0').onclick=()=>{ st.scrollLeft+=st.clientWidth*.8; };",
              "$('lbsl0').onclick=()=>step(-1); $('lbsr0').onclick=()=>step(1);", s)
@@ -376,7 +482,7 @@ def patch(s):
     s = _sub1(r'(<button type="button" class="lbsa r" id="lbsr0".*?</button></div>)', r'\1<div class="lbdots" id="lbdots"></div>', s, re.S)
     s = s.replace('</body>', '<script>document.getElementById("lbdots")&&document.getElementById("lbdots").addEventListener("click",e=>{ const i=e.target.closest("i"); if(i){ const b=document.querySelector("#lbst button[data-k=\'"+i.dataset.k+"\']"); if(b) b.click(); } });</script></body>', 1)
     # ---- styles
-    s = _rep('</style>', CSS + '</style>', s)
+    s = _rep('</style>', CSS + BITS_CSS + '</style>', s)
     return s.replace('</body>', HEART_JS + MARK + '</body>', 1)
 
 

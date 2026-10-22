@@ -319,8 +319,8 @@ body{{position:relative}}
 .stack main > .hb{{position:sticky;z-index:14;display:flex;align-items:center;height:23px;padding:0 10px;font-size:12px;color:#000;cursor:pointer;-webkit-tap-highlight-color:transparent;
   transition:background-color .15s;
   background:repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left top/100% 1px no-repeat,repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left bottom/100% 1px no-repeat,#fff}}
-.stack main > .hb.hl{{margin:16px calc(50% - 4px) -1px 10px}}
-.stack main > .hb.hr{{margin:16px 10px -1px calc(50% - 4px);
+.stack main > .hb.hl{{margin:16px 50% -1px 10px}}
+.stack main > .hb.hr{{margin:16px 10px -1px 50%;
   background:repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left top/100% 1px no-repeat,repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left bottom/100% 1px no-repeat,
     repeating-linear-gradient(to bottom,#b8b8b8 0 1px,transparent 1px 3px) left top/1px 100% no-repeat,#fff}}
 .stack main > .hb.hs{{margin-top:-22px}}   /* start shares the line with contact */
@@ -758,7 +758,8 @@ dialog .top{{flex:none}}
       b.style.top=`calc(var(--head) + var(--bar) + ${{r*H}}px)`; b.style.bottom=`calc(var(--bar) + env(safe-area-inset-bottom,0px) + ${{(2-r)*H}}px)`;
       if(k<5) sec.style.scrollMarginTop=((r+1)*H+10)+'px';
       b.setAttribute('role','link'); b.tabIndex=0; b.addEventListener('click',()=>tapGo(b,sec)); }});
-    const cur=()=>{{ let c=-1; secs.slice(0,5).forEach((sec,k)=>{{ if(sec.getBoundingClientRect().top<=innerHeight*.45) c=k; }});
+    const up=b=>{{ const r=b.getBoundingClientRect(); return r.bottom < innerHeight-parseFloat(getComputedStyle(b).bottom)-3; }};   /* has left the bottom stack */
+    const cur=()=>{{ let c=-1; bars.slice(0,5).forEach((b,k)=>{{ if(up(b)) c=k; }});
       bars.forEach((b,k)=>b.classList.toggle('on',k===c)); document.body.classList.toggle('inpg',c>=0); }};
     addEventListener('scroll',cur,{{passive:true}}); cur();
   }} else if(document.body.classList.contains('stack')){{
@@ -767,7 +768,8 @@ dialog .top{{flex:none}}
       b.style.top=`calc(var(--head) + var(--bar) + ${{k*H}}px)`; b.style.bottom=`calc(var(--bar) + env(safe-area-inset-bottom,0px) + ${{(n-1-k)*H}}px)`;
       sec.style.scrollMarginTop=((k+1)*H+10)+'px'; b.setAttribute('role','link'); b.tabIndex=0;
       b.addEventListener('click',()=>tapGo(b,sec)); }});
-    const cur=()=>{{ let c=-1; bars.forEach((b,k)=>{{ const sec=b.nextElementSibling; if(sec.getBoundingClientRect().top<=innerHeight*.45) c=k; }});
+    const up=b=>{{ const r=b.getBoundingClientRect(); return r.bottom < innerHeight-parseFloat(getComputedStyle(b).bottom)-3; }};   /* has left the bottom stack */
+    const cur=()=>{{ let c=-1; bars.forEach((b,k)=>{{ if(up(b)) c=k; }});
       bars.forEach((b,k)=>b.classList.toggle('on',k===c)); document.body.classList.toggle('inpg',c>=0); }};
     addEventListener('scroll',cur,{{passive:true}}); cur();
   }}

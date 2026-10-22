@@ -126,10 +126,13 @@ a[href^="mailto:"],a[href^="mailto:"] span{text-decoration:none!important}
 .sub2{color:#e30613;font-size:11px;letter-spacing:.12em;margin-bottom:3px!important}
 .rs{display:inline-block;width:2.5px;height:.9em;margin:0 6px;vertical-align:-.08em;background:#3a3c37}
 /* impressum: a small dot above the copyright in the right-hand bar; it opens a pop-up */
-.hot.imp{display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none}
-.hot.imp i{width:9px;height:9px;border-radius:50%;background:#bfbfbf;box-shadow:0 0 0 1px #000;transition:background .15s}
+.hot.imp{display:flex;flex-direction:column;align-items:center;gap:9px;text-decoration:none}
+/* the same (+) opener as full CV, with its pulsing lime rings */
+.hot.imp .ip{width:20px;height:20px;overflow:visible;flex:none}
+.hot.imp .ip .c{fill:#fff;stroke:#e30613;stroke-width:1.5} .hot.imp .ip path{stroke:#e30613;stroke-width:1.6;stroke-linecap:round}
+.hot.imp .ip .r1,.hot.imp .ip .r2{fill:none;stroke:#cdff3e;stroke-width:2.2;transform-box:fill-box;transform-origin:center;animation:cvp 1.8s ease-out infinite} .hot.imp .ip .r2{animation-delay:.9s}
 .hot.imp span{writing-mode:vertical-rl;transform:rotate(180deg);font:400 10px Calibri,Carlito,sans-serif;letter-spacing:.06em;color:#888}
-.hot.imp:hover i,.hot.imp:focus-visible i{background:#a5e35a;box-shadow:0 0 0 1px #e30613} .hot.imp:hover span{color:#e30613} .hot.imp:focus-visible{outline:none}
+.hot.imp:hover .ip .c{fill:#a5e35a} .hot.imp:hover span{color:#e30613} .hot.imp:focus-visible{outline:none}
 .impd{position:fixed;inset:0;margin:auto;height:fit-content;width:min(640px,90vw);max-height:84vh;overflow:auto;padding:34px 40px 30px;border:0;background:rgba(255,255,255,.97);box-shadow:0 10px 40px rgba(0,0,0,.12);font:400 13px/1.5 Calibri,Carlito,sans-serif;color:#222}
 .impd::backdrop{background:rgba(255,255,255,.55);backdrop-filter:blur(3px)}
 .impd .lbx{position:absolute;right:16px;top:16px}
@@ -334,7 +337,7 @@ def patch(s):
              '<span class="leading-[normal] text-[14px]">Architekt<i class="rs"></i>Inhaber</span>', s)
     # ---- impressum (22 Oct): no extra page or tab on the desktop - a small dot above the copyright opens it in a pop-up
     s = _rep('<a class="hot social" href="#" data-pending="1" aria-label="Facebook"',
-             '<a class="hot imp" href="#impressum" aria-label="impressum" style="left:1330px;top:700px;width:26px;height:60px"><i></i><span>impressum</span></a>'
+             '<a class="hot imp" href="#impressum" aria-label="impressum" style="left:1330px;top:672px;width:26px;height:88px"><svg class="ip" viewBox="-12 -12 24 24" aria-hidden="true"><circle class="r1" r="8"/><circle class="r2" r="8"/><circle class="c" r="8"/><path d="M0 -4.2V4.2M-4.2 0H4.2"/></svg><span>impressum</span></a>'
              '<a class="hot social" href="#" data-pending="1" aria-label="Facebook"', s)
     s = s.replace('</body>', '<dialog class="impd" id="impd" aria-label="impressum"><button type="button" class="lbx" id="impx" aria-label="close (Esc)">' + XC + '</button>'
                   '<div class="impc"><p class="lab2">IMPRESSUM</p>' + LEGAL_BODY + '</div></dialog>' + IMP_JS + '</body>', 1)

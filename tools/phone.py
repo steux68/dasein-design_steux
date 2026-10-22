@@ -1,3 +1,4 @@
+import re
 """Phone preview of the dasein-design site: phone/index.html (its own address; the desktop site is untouched).
 
 Fixed header: logo mark + wordmark, then the five tabs in two rows (3 + 2), current page in yellow-lime.
@@ -137,7 +138,7 @@ CARDS = [('note', 'Otto Wagner, Moderne Architektur, 1896', '„Etwas Unpraktisc
          ('news', 'archiweb', 'A timber museum for the MuseumsQuartier',
           'The House of Austrian History (hdgö) moves to the MuseumsQuartier in 2028, with a new timber entrance building by O&amp;O Baukunst – construction is due to start in the second half of 2026.',
           'https://www.archiweb.cz/en/n/foreign/ve-vidni-postavi-muzeum-dejin-rakouska-jako-moderni-drevostavbu'),
-         ('note', 'studio note', 'Every project starts with a walk.',
+         ('note', 'studio note', 'Start with a walk.',
           'Every project starts with a walk round the site, a sketchbook and a lot of questions – where the light comes from, what the neighbours see, what should stay. <span class="todo">[draft – Steuart to write]</span>', ''),
          ('news', 'vienna.at', 'Open House Wien: 53 buildings open their doors',
           'The eleventh Open House Wien opened 53 otherwise closed buildings and spaces across Vienna for free, on the theme of adapting architecture to climate and social change.',
@@ -151,8 +152,11 @@ CARD_AT = {2: 0, 5: 1, 9: 2, 13: 3, 17: 4, 22: 5}   # card k goes in before phot
 def card(k):
     kind, src, head, txt, url = CARDS[k]
     if kind == 'news':
-        return (f'<button type="button" class="card news" data-c="{k}"><small>{src}</small><b>{head}</b><span class="go">read ↗</span></button>')
-    return f'<button type="button" class="card note" data-c="{k}"><i class="qm">“</i><b>{head}</b><small>{src}</small></button>'
+        return (f'<button type="button" class="tile card news tall" data-c="{k}"><span class="ct"><small>{src}</small><b>{head}</b><em class="ex">{re.sub(r"<[^>]+>", "", txt).replace("&amp;", "&")}</em></span>'
+                f'<span class="cap"><b>LINK · {src}</b><small>read the article ↗</small></span></button>')
+    ex = re.sub(r'<[^>]+>', '', txt.split('<br><br>')[-1] if '<br><br>' in txt else txt.replace(head, '', 1))
+    return (f'<button type="button" class="tile card note tall" data-c="{k}"><span class="ct"><i class="qm">“</i><b>{head}</b><em class="ex">{ex}</em><span class="mo">read on +</span></span>'
+            f'<span class="cap"><b>{"STUDIO NOTE" if src == "studio note" else "QUOTE"}</b><small>{"dasein-design" if src == "studio note" else src}</small></span></button>')
 
 
 BITSHTML = ('<div class="bgrid cut" id="g-bits">' + ''.join(
@@ -468,7 +472,7 @@ html,body{{overflow-x:clip}}
 .who .kt a{{text-decoration:none}}
 /* short text about the practice */
 .intro2{{margin:8px 0 0;font-size:13.5px;line-height:1.4;color:#222}}
-.bt,.sp{{margin:8px 0 0;font-size:13.5px;line-height:1.4;color:#222}} .sp{{margin-top:3px;font-size:13px}}
+p.bt,.sp{{margin:8px 0 0;font-size:13.5px;line-height:1.4;color:#222}} .sp{{margin-top:3px;font-size:13px}}
 .sh{{display:flex;align-items:center;gap:7px;margin:12px 0 2px;font-size:14px;font-weight:700;color:var(--red);letter-spacing:.02em}} .sh img{{width:18px;height:18px}}
 .bio p{{margin:8px 0 0;font-size:13.5px;line-height:1.4;color:#222}}
 /* full bio and our services: two openers side by side, each unfolding underneath (one at a time) */
@@ -628,14 +632,15 @@ dialog .top{{flex:none}}
 .bgrid{{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:calc((100vw - var(--side) - 28px) / 2 * .9);grid-auto-flow:dense;gap:8px}}
 .bgrid .tile{{aspect-ratio:auto;height:100%}}
 .bgrid .tall{{grid-row:span 2}}
-/* notes and links among the photos: no frame, a pale ground, type instead of a picture */
-.card{{display:flex;flex-direction:column;justify-content:flex-start;gap:6px;height:100%;padding:12px 11px;border:0;text-align:left;font:inherit;color:#222;cursor:pointer;overflow:hidden;-webkit-tap-highlight-color:transparent}}
-.card.news{{background:#f4f4f4}} .card.note{{background:#fff8c4}}
-.card small{{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--red);font-weight:700}}
-.card b{{font-size:15px;line-height:1.25}} .card .go{{margin-top:auto;font-size:12px;color:#1a5fd0}}
-.card.note .qm{{font-style:normal;font-size:44px;line-height:.6;color:var(--red);height:20px}} .card.note b{{font-weight:400;font-style:italic;font-size:14px;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}}
-.card.note small{{margin-top:auto;color:#666;font-weight:400;text-transform:none;letter-spacing:.02em}}
-.card:active{{outline:1px solid var(--red);outline-offset:-1px}}
+/* notes and links among the photos: a box of their own (dotted frame, grey bar underneath, like the photo tiles), type instead of a picture */
+.bgrid .card{{display:block;width:100%;text-align:left;color:#222}}
+.card.news{{background:#f4f4f4}} .card.note{{background:#fffbd6}}
+.card .ct{{position:absolute;inset:0 0 40px;display:flex;flex-direction:column;gap:7px;padding:14px 12px;overflow:hidden}}
+.card .ct small{{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--red);font-weight:700}}
+.card .ct b{{font-size:16px;line-height:1.25}}
+.card.note .qm{{font-style:normal;font-size:52px;line-height:.6;color:var(--red);height:24px;flex:none}}
+.card .ex{{font-style:normal;font-size:12.5px;line-height:1.4;color:#555;overflow:hidden;flex:1 1 auto;min-height:0}} .card .mo{{font-size:12px;color:var(--red);flex:none}}
+.card.note .ct b{{font-weight:400;font-style:italic;font-size:16px;line-height:1.4}}
 .cwc{{padding:6px 14px 30px;overflow:auto}} .cwc .lab{{margin-top:10px}} .cwc h2{{margin:6px 0 10px;font-size:20px;line-height:1.2;color:var(--red)}}
 .cwc p{{margin:0;font-size:15px;line-height:1.5;color:#222}} .cwc .q{{font-size:19px;line-height:1.45}} .cwc .todo{{color:var(--red)}}
 .cwc .qm{{display:block;font-style:normal;font-size:64px;line-height:.5;height:30px;margin-top:22px;color:var(--red)}}
@@ -702,7 +707,7 @@ dialog .top{{flex:none}}
   document.querySelectorAll('.cvp, .fold').forEach(d=>cvio.observe(d));
   document.querySelectorAll('.cvp, .fold').forEach(d=>d.addEventListener('toggle',()=>{{
     document.querySelectorAll('.cvb[aria-controls="'+d.id+'"]').forEach(b=>b.setAttribute('aria-expanded',String(d.open))); }}));
-  document.querySelectorAll('.cvb[aria-controls]').forEach(b=>b.addEventListener('click',()=>{{ const d=document.getElementById(b.getAttribute('aria-controls')), op=!d.open;
+  document.querySelectorAll('.cvb[aria-controls]').forEach(b=>b.addEventListener('click',e=>{{ if(!realTap(e)) return; const d=document.getElementById(b.getAttribute('aria-controls')), op=!d.open;
     document.querySelectorAll(d.classList.contains('fold')?'.fold[open]:not(#'+d.id+')':'.cvp[open]').forEach(x=>{{ if(x!==d) x.open=false; }});
     d.open=op; if(op&&!d.classList.contains('fold')) requestAnimationFrame(()=>d.scrollIntoView({{behavior:'smooth',block:'start'}}));
     else if(b.closest('.cvp')) document.getElementById('us').scrollIntoView({{behavior:'smooth'}}); }}));
@@ -713,7 +718,12 @@ dialog .top{{flex:none}}
     const b=document.querySelector('.more[data-g="'+g.id+'"]'); if(b) b.setAttribute('aria-expanded',String(open)); }};
   cuts.forEach(g=>setCut(g,false));
   addEventListener('resize',()=>cuts.forEach(g=>setCut(g,!g.classList.contains('shut'))));
-  document.querySelectorAll('.more').forEach(b=>b.addEventListener('click',()=>{{ const g=document.getElementById(b.dataset.g), op=g.classList.contains('shut');
+  let lastScroll=0, tap=null; addEventListener('scroll',()=>{{ lastScroll=performance.now(); }},{{passive:true}});
+  addEventListener('pointerdown',e=>{{ tap={{x:e.clientX,y:e.clientY,t:performance.now(),moving:performance.now()-lastScroll<300}}; }},{{passive:true,capture:true}});
+  const realTap=e=>{{ if(!tap) return e.detail===0; return !tap.moving && Math.hypot(e.clientX-tap.x,e.clientY-tap.y)<12 && performance.now()-tap.t<800; }};
+  const reCut=()=>cuts.forEach(g=>{{ if(g.classList.contains('shut')) setCut(g,false); }});
+  if(document.fonts) document.fonts.ready.then(reCut); addEventListener('load',reCut);
+  document.querySelectorAll('.more').forEach(b=>b.addEventListener('click',e=>{{ if(!realTap(e)) return; const g=document.getElementById(b.dataset.g), op=g.classList.contains('shut');
     setCut(g,op); if(!op) g.scrollIntoView({{behavior:'smooth',block:'start'}}); }}));
 
   /* the end of the site: a little game. Red food dots lie about; drag the pulsing dot to eat them before the beetle does.
@@ -789,7 +799,7 @@ dialog .top{{flex:none}}
   const ishow=()=>{{ const k=Math.round(iph.scrollLeft/iph.clientWidth); document.getElementById('ik').innerHTML='bits &amp; bats <b>'+tw(k+1)+'</b> / '+tw(BI.length);
     document.getElementById('icap').innerHTML=BC[k].replace(/&/g,'&amp;')+'<small>smaller text example</small>'; }};
   iph.addEventListener('scroll',ishow,{{passive:true}});
-  document.querySelectorAll('.bt').forEach(t=>t.addEventListener('click',()=>{{ openDlg(iv); iph.scrollLeft=+t.dataset.b*iph.clientWidth; ishow(); }}));
+  document.querySelectorAll('.tile.bt').forEach(t=>t.addEventListener('click',()=>{{ openDlg(iv); iph.scrollLeft=+t.dataset.b*iph.clientWidth; ishow(); }}));
   document.getElementById('ix').onclick=()=>iv.close();
   /* notes and links: their own small pop-up */
   const CA={json.dumps([list(c) for c in CARDS])}, cw=document.getElementById('cw');
@@ -900,7 +910,7 @@ dialog .top{{flex:none}}
   const phUpd=arrows(ph,$('phw'),$('phe')), ivUpd=arrows(document.getElementById('iph'),$('iw'),$('ie'));
   ph.addEventListener('scroll',()=>{{ const k=Math.round(ph.scrollLeft/ph.clientWidth); [...dots.children].forEach((d,i)=>d.classList.toggle('on',i===k)); }},{{passive:true}});
   new MutationObserver(phUpd).observe(ph,{{childList:true}});
-  document.querySelectorAll('.bt').forEach(t=>t.addEventListener('click',()=>requestAnimationFrame(ivUpd)));
+  document.querySelectorAll('.tile.bt').forEach(t=>t.addEventListener('click',()=>requestAnimationFrame(ivUpd)));
   /* N / S arrows in the bars: previous / next page */
   /* a tap on a circle, tab or page bar shows first: it lights up for a moment (0.28 s), then the page moves there */
   function tapGo(el,target){{ el.classList.add('hit'); setTimeout(()=>{{ target.scrollIntoView({{behavior:'smooth'}}); setTimeout(()=>el.classList.remove('hit'),500); }},reduce?60:280); }}

@@ -118,7 +118,12 @@ body{position:relative}
 .wbt:nth-child(2){background-image:var(--dh),var(--dh);background-position:left top,left bottom;background-size:100% 1px,100% 1px}
 .wbt b{font-weight:700} .wbt small{font-size:10px;color:#444}
 .wbt.on{background-color:#eaffae} .wbt:active{background-color:#cdff3e}
-.wonder .wgrid{grid-template-columns:repeat(4,1fr);gap:0;margin-top:14px}   /* a tight carpet: no gaps, only the white left over round each photo */
+.wonder .wbars{display:none}
+.wonder .wgrid{display:block;position:relative;margin-top:14px;outline:2px solid #111;outline-offset:0}
+.wonder .wgrid > *{position:absolute;box-sizing:border-box;border:.5px solid #111;margin:0}
+.wonder .wgrid .wg{aspect-ratio:auto;background:#fff;padding:2px} .wonder .wgrid .wg img{width:100%;height:100%;object-fit:contain}
+.wcw{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:2px;background:#f2f2f2;font:inherit;color:#000;cursor:pointer;-webkit-tap-highlight-color:transparent;overflow:hidden}
+.wcw b{font-weight:700;line-height:1;white-space:nowrap} .wcw small{font-size:9px;color:#666} .wcw.on{background:#eaffae} .wcw:active{background:#cdff3e}   /* a tight carpet: no gaps, only the white left over round each photo */
 .wonder .wg.t{display:none!important}   /* no text tiles in the carpet - photos only */
 .wonder .wg{display:block;aspect-ratio:1/1}
 /* photos in their own format (23 Oct, 00:50): a portrait fills the cell's height, a landscape its width; only the left-over is white, no frame, no crop */
@@ -664,7 +669,7 @@ dialog .top{flex:none}
     /* a bar shows only its category (lit lime); tapped again, everything */
     wd.querySelectorAll('.wbt').forEach(b=>b.addEventListener('click',()=>{ const on=!b.classList.contains('on');
       wd.querySelectorAll('.wbt').forEach(x=>x.classList.toggle('on',on&&x===b)); tiles.forEach(t=>{ t.hidden=on&&t.dataset.cat!==b.dataset.c; }); wd.scrollTo({top:0}); }));
-    const vis=()=>tiles.filter(t=>!t.hidden&&!t.classList.contains('t'));
+    const vis=()=>[...grid.querySelectorAll('.wg')];
     function pop(t){ const v=vis(); cur=v.indexOf(t); const d=t.dataset; let h='';
       const note=t.classList.contains('wnote');
       if(d.img) h='<img class="wpi" src="'+d.img+'" alt=""><p class="wpd">'+d.when+'</p><p class="wpl">'+d.line+'</p>';
@@ -672,6 +677,39 @@ dialog .top{flex:none}
         +(d.url?'<a href="'+d.url+'" target="_blank" rel="noopener">read the article ↗</a>':'')+'</div><p class="wpd">'+d.when+'</p>';
       wb.innerHTML=h; wb.scrollTop=0; document.getElementById('wpk').innerHTML='wonder <b>'+String(cur+1).padStart(2,'0')+'</b> / '+v.length; wp.hidden=false; }
     tiles.forEach(t=>t.addEventListener('click',()=>pop(t)));
+    /* the carpet (23 Oct, 01:00): an ordered strip treemap - newest first, row by row, thin black lines; each photo in its own format inside its rectangle,
+       the newer a little bigger; the six categories are rectangles of the same carpet with their word in it (sizes differ, not much). A word filters, again = all */
+    const grid=document.getElementById('wgrid'), CATS=['banality', 'details', 'philosophy', 'light', 'traces', 'the city'].map(c=>c.replace('&amp;','&')); let only=null;
+    function lay(items,W){ const out=[]; let y=0, row=[];
+      const worst=(r,h)=>Math.max(...r.map(o=>{ const w=o.a/h; return Math.max(w/h,h/w); }));
+      const flush=()=>{ const sa=row.reduce((a,o)=>a+o.a,0), h=sa/W; let x=0; row.forEach(o=>{ const w=o.a/h; out.push({...o,x,y,w,h}); x+=w; }); y+=h; row=[]; };
+      items.forEach(o=>{ if(!row.length){ row.push(o); return; } const h0=row.reduce((a,q)=>a+q.a,0)/W, r1=row.concat(o), h1=r1.reduce((a,q)=>a+q.a,0)/W;
+        if(worst(r1,h1)<=worst(row,h0)) row.push(o); else { flush(); row.push(o); } }); if(row.length) flush(); return {out,h:y}; }
+    function sq(items,x,y,w,h,out){ items=items.slice(); const tot=items.reduce((a,b)=>a+b.a,0), f=w*h/tot; items.forEach(o=>o.s=o.a*f);
+      const worst=(r,len)=>{ const s=r.reduce((a,b)=>a+b.s,0); return Math.max(...r.map(o=>Math.max(len*len*o.s/(s*s), s*s/(len*len*o.s)))); };
+      while(items.length){ const len=Math.min(w,h); let row=[items.shift()];
+        while(items.length&&worst(row.concat(items[0]),len)<=worst(row,len)) row.push(items.shift());
+        const s=row.reduce((a,b)=>a+b.s,0);
+        if(w>=h){ const cw=s/h; let yy=y; row.forEach(o=>{ const ch=o.s/cw; out.push({...o,x,y:yy,w:cw,h:ch}); yy+=ch; }); x+=cw; w-=cw; }
+        else { const rh=s/w; let xx=x; row.forEach(o=>{ const rw=o.s/rh; out.push({...o,x:xx,y,w:rw,h:rh}); xx+=rw; }); y+=rh; h-=rh; } } }
+    function carpet(){ const W=grid.clientWidth; if(!W) return; const ph=tiles.filter(t=>!t.classList.contains('t')&&(only===null||t.dataset.cat===only));
+      const items=ph.map((t,n)=>({t,v:(1+1.4*Math.exp(-n/7))*(n<3?1.25:.55+((n*37)%10)/7)}));
+      [0,5,11,17,23,29].forEach((at,k)=>items.splice(Math.min(at,items.length),0,{cat:k,v:.9+((k*7)%5)/5}));
+      const unit=(W/4)*(W/4)*.95; items.forEach(o=>o.a=o.v*unit);
+      /* nested like the Faust print: runs of 5-8 posts form blocks, the blocks are laid row by row, the posts inside each block squarified, in order */
+      const blocks=[]; let i=0, k=0; while(i<items.length){ const n=[7,5,8,6][k++%4]; const its=items.slice(i,i+n); i+=n; blocks.push({its,a:its.reduce((s,o)=>s+o.a,0)}); }
+      if(blocks.length>1&&blocks[blocks.length-1].its.length<4){ const l=blocks.pop(), p=blocks[blocks.length-1]; p.its=p.its.concat(l.its); p.a+=l.a; }   /* no thin strip at the end */
+      const B=lay(blocks,W), cells=[];
+      B.out.forEach(b=>sq(b.its,b.x,b.y,b.w,b.h,cells));
+      const L={out:cells,h:B.h}; grid.style.height=L.h+'px'; grid.innerHTML='';
+      L.out.forEach(o=>{ let e;
+        if(o.cat!==undefined){ e=document.createElement('button'); e.type='button'; e.className='wcw'+(only===String(o.cat)?' on':''); const word=CATS[o.cat];
+          e.innerHTML='<b>'+word+'</b><small>['+String(o.cat+1).padStart(2,'0')+']</small>';
+          e.querySelector('b').style.fontSize=Math.max(11,Math.min(o.h*.42,o.w/(word.length*.56+.6),30))+'px';
+          e.addEventListener('click',()=>{ only=only===String(o.cat)?null:String(o.cat); carpet(); wd.scrollTo({top:0}); }); }
+        else { e=o.t; e.hidden=false; }
+        Object.assign(e.style,{left:o.x+'px',top:o.y+'px',width:o.w+'px',height:o.h+'px'}); grid.appendChild(e); }); }
+    sw.addEventListener('click',()=>requestAnimationFrame(carpet)); addEventListener('resize',()=>{ if(!wd.hidden) carpet(); });
     const step=k=>{ const v=vis(); pop(v[(cur+k+v.length)%v.length]); };
     document.getElementById('wprev').onclick=()=>step(-1); document.getElementById('wnext').onclick=()=>step(1);
     document.getElementById('wback').onclick=()=>{ wp.hidden=true; };

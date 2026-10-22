@@ -276,12 +276,14 @@ def _wonder():
     chips = f'<div class="wrow">{"".join(ch[:5])}</div><div class="wrow">{"".join(ch[5:])}</div>'   # two rows, each scrolls sideways on its own
     return ('<div class="wonder" id="wonder" hidden><div class="whd"><h2>wonder</h2><p>a notebook of everyday things · dasein-design</p>'
             '<p class="wtrial">trial – the photos are real, the dates are samples</p></div>'
-            '<div class="wmap" id="wmap" aria-label="map of the notebook"></div><p class="wmore">tap a word – or scroll down for the notebook</p>'
-            f'<div class="wchips">{chips}</div><div class="wfeed">{"".join(out)}</div>'
+            f'<div class="wchips">{chips}<div class="wview"><button type="button" class="on" data-v="grid">grid</button><button type="button" data-v="map">map</button></div></div>'
+            '<div class="wgrid" id="wgrid"></div>'
+            '<div class="wmap" id="wmap" aria-label="map of the notebook" hidden></div>'
+            f'<div class="wfeed" hidden>{"".join(out)}</div>'
             '<p class="wend">– that is all for now –</p>'
-            '<div class="wpop" id="wpop" hidden><div class="wpbar"><button type="button" class="wback" id="wback">← map</button><span id="wpk"></span>'
-            '<span class="wpnav"><button type="button" id="wprev" aria-label="previous">‹</button><button type="button" id="wnext" aria-label="next">›</button></span></div>'
-            '<div class="wpbody" id="wpbody"></div></div></div>')
+            f'<div class="wpop" id="wpop" hidden><div class="top"><div class="cnt"><span id="wpk"></span></div><button type="button" class="x" id="wback" aria-label="back">{XC}</button></div>'
+            '<div class="wpbody" id="wpbody"></div>'
+            f'<div class="wpnav"><button type="button" id="wprev">{ARW}<span>previous</span></button><button type="button" id="wnext"><span>next</span>{ARE}</button></div></div></div>')
 
 
 WONDER = _wonder()
@@ -421,12 +423,25 @@ body{{position:relative}}
 .wmap .wl::before,.wmap .wl::after{{content:none!important}}
 .wmap .wl.new{{background:#eaffae}} .wmap .wl:active{{background:#cdff3e}} .wmap .wl.txt{{color:var(--red);font-weight:400;font-style:italic}}
 .wmore{{margin:8px 0 0;text-align:center;font-size:11.5px;letter-spacing:.06em;color:#999}}
+.wview{{display:flex;justify-content:flex-end;gap:0;margin-top:2px}} .wview button{{border:0;background:none;font:inherit;font-size:12px;letter-spacing:.06em;color:#999;padding:2px 6px;cursor:pointer}}
+.wview button.on{{color:#000;font-weight:700}} .wview button+button{{border-left:1px solid #ccc}}
+.wgrid{{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:12px}}
+.wg{{position:relative;aspect-ratio:1/1;padding:0;border:0;background:#f4f4f4;overflow:hidden;cursor:pointer;font:inherit;text-align:left;-webkit-tap-highlight-color:transparent}}
+.wg::after{{content:"";position:absolute;inset:0;pointer-events:none;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat}}
+.wg img{{width:100%;height:100%;object-fit:cover;display:block}}
+.wg .gc{{position:absolute;left:0;right:0;bottom:0;padding:2px 5px 3px;background:rgba(68,68,68,.7);color:#fff;font-size:9.5px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.wg.t{{background:#f4f4f2;padding:8px 7px 20px;display:flex;flex-direction:column;gap:3px}} .wg.t.note{{background:#fffbd6}}
+.wg.t b{{font-size:11.5px;line-height:1.2;color:var(--red);display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}} .wg.t.note b{{color:#222;font-weight:400;font-style:italic}}
+.wg.t small{{font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--red);font-weight:700}}
+.wg[hidden]{{display:none}}
 .wpop{{position:fixed;left:0;right:0;top:var(--head);bottom:0;z-index:35;background:#fff;display:flex;flex-direction:column}}
+.wpop .wpnav{{flex:none;display:flex;justify-content:space-between;align-items:center;padding:8px 14px calc(env(safe-area-inset-bottom,0px) + 10px);border-top:1px dashed var(--line)}}
+.wpop .wpnav button{{display:flex;align-items:center;gap:6px;width:auto;height:auto;border:0;border-radius:0;background:none;font:inherit;font-size:13px;color:#000;padding:4px}}
 .wpop[hidden]{{display:none}}
 .wpbar{{flex:none;display:flex;align-items:center;gap:10px;padding:10px 18px;border-bottom:1px dashed var(--line)}}
 .wback{{border:1px solid #3a3c37;border-radius:14px;background:#eaffae;padding:5px 12px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}}
 #wpk{{flex:1;font-size:12px;letter-spacing:.06em;color:#888;text-align:center}}
-.wpnav{{display:flex;gap:4px}} .wpnav button{{width:32px;height:32px;border:1px dotted #b8b8b8;border-radius:50%;background:#fff;font-size:18px;line-height:1;cursor:pointer}}
+
 .wpbody{{flex:1;overflow-y:auto;padding:4px 18px 30px}} .wpbody .wp{{margin-top:14px}} .wpbody .wp[hidden]{{display:block}}
 body:not(.side) .socs{{display:flex}}   /* in the top layouts (and the stack trials) the three marks sit at the right of the logo */
 
@@ -915,7 +930,7 @@ dialog .top{{flex:none}}
     const set=on=>{{ sw.setAttribute('aria-pressed',String(on)); wd.hidden=!on; if(!on) document.getElementById('wpop').hidden=true; document.documentElement.classList.toggle('dlg',on); if(on) wd.scrollTop=0; }};
     sw.addEventListener('click',()=>set(sw.getAttribute('aria-pressed')!=='true'));
     wd.querySelectorAll('.wch').forEach(c=>c.addEventListener('click',()=>{{ wd.querySelectorAll('.wch').forEach(x=>x.classList.toggle('on',x===c));
-      wd.querySelectorAll('.wp').forEach(p=>{{ p.hidden=!(c.dataset.c==='all'||p.dataset.cat===c.dataset.c); }}); wd.scrollTo({{top:0}}); }}));
+      wd.querySelectorAll('.wg').forEach(p=>{{ p.hidden=!(c.dataset.c==='all'||p.dataset.cat===c.dataset.c); }}); }}));
     /* the map: squarified treemap, categories first, then their posts */
     const map=document.getElementById('wmap'), posts=[...wd.querySelectorAll('.wfeed .wp')], cats={WCATS!r};
     function squarify(items,x,y,w,h,out){{ items=items.slice(); const tot=items.reduce((a,b)=>a+b.v,0); if(!items.length) return out;
@@ -940,11 +955,19 @@ dialog .top{{flex:none}}
     /* pop-up: one post, quick way back to the map */
     const wp=document.getElementById('wpop'), wb=document.getElementById('wpbody'); let cur=0;
     function pop(i){{ cur=(i+posts.length)%posts.length; const c=posts[cur].cloneNode(true); c.hidden=false; wb.innerHTML=''; wb.appendChild(c); wb.scrollTop=0;
-      document.getElementById('wpk').textContent=String(cur+1).padStart(2,'0')+' / '+posts.length; wp.hidden=false; }}
-    document.getElementById('wback').onclick=()=>{{ wp.hidden=true; wd.scrollTo({{top:0,behavior:'smooth'}}); }};
+      document.getElementById('wpk').innerHTML='wonder <b>'+String(cur+1).padStart(2,'0')+'</b> / '+posts.length; wp.hidden=false; }}
+    document.getElementById('wback').onclick=()=>{{ wp.hidden=true; }};
     document.getElementById('wprev').onclick=()=>pop(cur-1); document.getElementById('wnext').onclick=()=>pop(cur+1);
-    posts.forEach((p,i)=>p.addEventListener('click',e=>{{ if(!e.target.closest('a')) pop(i); }}));
-    sw.addEventListener('click',()=>requestAnimationFrame(drawMap)); addEventListener('resize',()=>{{ if(!wd.hidden) drawMap(); }});
+    /* the grid: the posts in order, newest first, three to a row, framed like the tiles on the main page */
+    const grid=document.getElementById('wgrid');
+    posts.forEach((p,i)=>{{ const b=document.createElement('button'); b.type='button'; b.dataset.cat=p.dataset.cat; const im=p.querySelector('img'), t=p.querySelector('.wt').textContent;
+      if(im){{ b.className='wg'; b.innerHTML='<img src="'+im.getAttribute('src')+'" alt="" loading="lazy"><span class="gc">'+t+'</span>'; }}
+      else {{ const note=p.classList.contains('note'); b.className='wg t'+(note?' note':''); const h=p.querySelector('h3'), q=p.querySelector('.wq'), src=p.querySelector('.wsrc');
+        b.innerHTML='<small>'+(note?'quote':(src?src.textContent:''))+'</small><b>'+(h?h.innerHTML:(q?q.textContent:''))+'</b><span class="gc">'+t+'</span>'; }}
+      b.addEventListener('click',()=>pop(i)); grid.appendChild(b); }});
+    wd.querySelectorAll('.wview button').forEach(v=>v.addEventListener('click',()=>{{ wd.querySelectorAll('.wview button').forEach(x=>x.classList.toggle('on',x===v));
+      const m=v.dataset.v==='map'; map.hidden=!m; grid.hidden=m; if(m) drawMap(); }}));
+    addEventListener('resize',()=>{{ if(!wd.hidden&&!map.hidden) drawMap(); }});
     document.querySelector('header .logo').addEventListener('click',()=>set(false));
     document.querySelectorAll('.tab,.pbar').forEach(t=>t.addEventListener('click',()=>set(false)));
     addEventListener('keydown',e=>{{ if(e.key==='Escape') set(false); }}); }})();

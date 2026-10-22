@@ -275,7 +275,10 @@ body{{position:relative}}
 .bar.bbot{{bottom:0;height:calc(var(--bar) + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);border-top:1px dashed var(--line)}}
 .bar button{{border:0;background:none;padding:3px 24px;display:flex;-webkit-tap-highlight-color:transparent;transition:opacity .2s}}
 .bar button:disabled{{opacity:.2}}
-#goS .up{{display:none;align-items:center;gap:6px}} #goS.top .dn{{display:none}} #goS.top .up{{display:flex}}
+#goS .up{{display:none!important;align-items:center;gap:6px}} #goS.top .dn{{display:none}} #goS.top .up{{display:flex!important}}
+.bar button span{{display:flex}} #goS .su,#goN .ns{{display:none}}
+/* stack trial: the pages rise from the bottom as you swipe up, so the bottom arrow points up (N) and the top one down (S) */
+.stack #goS .dn,.stack #goN .nn{{display:none}} .stack #goS .su,.stack #goN .ns{{display:flex}} .stack #goS.top .su{{display:none}}
 #goS .up i{{font-style:normal;font-size:12px;letter-spacing:.06em;color:#3a3c37}}
 /* pulsing thin dark rings round an arrow, as on the desktop */
 .ar.pulse .tr,.bar .go .tr{{display:block;fill:none;stroke:#3a3c37;stroke-width:.7;transform-box:fill-box;transform-origin:center;animation:ring 2.2s ease-out infinite}}
@@ -303,7 +306,10 @@ body{{position:relative}}
   justify-content:flex-start;padding:0 10px;height:23px;margin-bottom:-1px;color:#000;
   background:repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left top/100% 1px no-repeat,repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left bottom/100% 1px no-repeat,#fff}}
 /* white bars with a thin dotted line between them (each overlaps the one before by 1 px, so the lines never double); only the page you are in is yellow-lime */
-.stack main > .pbar.on{{background-color:#eaffae}}
+.stack main > .pbar{{margin-top:16px}}   /* a little air between a page and the next page's bar (only while it flows; stacked bars sit tight) */
+/* inside the pages the waiting bars are a pale grey, so they read apart from the content; on the start page all white */
+.stack.inpg main > .pbar{{background-color:#f2f2f2}}
+.stack main > .pbar.on{{background-color:#eaffae!important}}
 /* a tap shows first: the bar, tab or circle lights up, then the page moves (tapGo) */
 .stack main > .pbar.hit,.tab.hit{{background-color:#cdff3e!important}}
 .pin.hit b{{animation:none!important;background:#cdff3e!important;box-shadow:inset 0 0 0 1px var(--red)}} .pin.hit span{{color:var(--red)}}
@@ -544,8 +550,8 @@ dialog .top{{flex:none}}
 {section("contact", "contact", "05", CONTACT)}
 </main>
 <i class="rule l" aria-hidden="true"></i><i class="rule r" aria-hidden="true"></i>
-<div class="bar btop"><button type="button" id="goN" aria-label="previous page">{ARN}</button></div>
-<div class="bar bbot"><button type="button" id="goS" aria-label="next page"><span class="dn">{ARS}</span><span class="up">{ARN}<i>back to the top</i></span></button></div>
+<div class="bar btop"><button type="button" id="goN" aria-label="previous page"><span class="nn">{ARN}</span><span class="ns">{ARS}</span></button></div>
+<div class="bar bbot"><button type="button" id="goS" aria-label="next page"><span class="dn">{ARS}</span><span class="su">{ARN}</span><span class="up">{ARN}<i>back to the top</i></span></button></div>
 <dialog id="lb" aria-labelledby="lt">
 <div class="top"><span></span>
 <button type="button" class="x" id="lx" aria-label="close">{XC}</button></div>
@@ -731,7 +737,7 @@ dialog .top{{flex:none}}
       sec.style.scrollMarginTop=((k+1)*H+10)+'px'; b.setAttribute('role','link'); b.tabIndex=0;
       b.addEventListener('click',()=>tapGo(b,sec)); }});
     const cur=()=>{{ let c=-1; bars.forEach((b,k)=>{{ const sec=b.nextElementSibling; if(sec.getBoundingClientRect().top<=innerHeight*.45) c=k; }});
-      bars.forEach((b,k)=>b.classList.toggle('on',k===c)); }};
+      bars.forEach((b,k)=>b.classList.toggle('on',k===c)); document.body.classList.toggle('inpg',c>=0); }};
     addEventListener('scroll',cur,{{passive:true}}); cur();
   }}
   const pages=[...document.querySelectorAll('.pg')], gN=$('goN'), gS=$('goS');

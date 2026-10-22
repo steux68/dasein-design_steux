@@ -68,7 +68,10 @@ body{position:relative}
 .bar.bbot{bottom:0;height:calc(var(--bar) + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);border-top:1px dashed var(--line)}
 .bar button{border:0;background:none;padding:3px 24px;display:flex;-webkit-tap-highlight-color:transparent;transition:opacity .2s}
 .bar button:disabled{opacity:.2}
-#goS .up{display:none;align-items:center;gap:6px} #goS.top .dn{display:none} #goS.top .up{display:flex}
+#goS .up{display:none!important;align-items:center;gap:6px} #goS.top .dn{display:none} #goS.top .up{display:flex!important}
+.bar button span{display:flex} #goS .su,#goN .ns{display:none}
+/* stack trial: the pages rise from the bottom as you swipe up, so the bottom arrow points up (N) and the top one down (S) */
+.stack #goS .dn,.stack #goN .nn{display:none} .stack #goS .su,.stack #goN .ns{display:flex} .stack #goS.top .su{display:none}
 #goS .up i{font-style:normal;font-size:12px;letter-spacing:.06em;color:#3a3c37}
 /* pulsing thin dark rings round an arrow, as on the desktop */
 .ar.pulse .tr,.bar .go .tr{display:block;fill:none;stroke:#3a3c37;stroke-width:.7;transform-box:fill-box;transform-origin:center;animation:ring 2.2s ease-out infinite}
@@ -96,7 +99,10 @@ body{position:relative}
   justify-content:flex-start;padding:0 10px;height:23px;margin-bottom:-1px;color:#000;
   background:repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left top/100% 1px no-repeat,repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left bottom/100% 1px no-repeat,#fff}
 /* white bars with a thin dotted line between them (each overlaps the one before by 1 px, so the lines never double); only the page you are in is yellow-lime */
-.stack main > .pbar.on{background-color:#eaffae}
+.stack main > .pbar{margin-top:16px}   /* a little air between a page and the next page's bar (only while it flows; stacked bars sit tight) */
+/* inside the pages the waiting bars are a pale grey, so they read apart from the content; on the start page all white */
+.stack.inpg main > .pbar{background-color:#f2f2f2}
+.stack main > .pbar.on{background-color:#eaffae!important}
 /* a tap shows first: the bar, tab or circle lights up, then the page moves (tapGo) */
 .stack main > .pbar.hit,.tab.hit{background-color:#cdff3e!important}
 .pin.hit b{animation:none!important;background:#cdff3e!important;box-shadow:inset 0 0 0 1px var(--red)} .pin.hit span{color:var(--red)}
@@ -337,8 +343,8 @@ dialog .top{flex:none}
 <section class="pg" id="contact" aria-label="contact [05]"><div class="sbar" aria-hidden="true"></div><div class="pbar"><b>contact</b><small>[05]</small></div><div class="body"><div class="box"><p class="lab first">OFFICE</p><p class="addr"><b class="dd">dasein-design</b> · Neulerchenfelderstrasse 42/6<br>A-1160 Wien · Austria · EU</p><div class="pcs"><p><b>Cuong TRAN-VIET</b><br><a href="tel:+436764822464">+43 (0)676 4822 464</a> · <a href="mailto:cuong@dasein-design.net">cuong@dasein-design.net</a></p><p><b>Steuart J Mackenzie HARRISON</b><br><a href="tel:+4369919419240">+43 (0)699 1941 9240</a> · <a href="mailto:steuart@dasein-design.net">steuart@dasein-design.net</a></p></div><div class="mapw"><div class="map" id="map"></div><div class="mz"><button type="button" id="zin" aria-label="zoom in"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5"/><path d="M7.5 12H16.5M12 7.5V16.5"/></svg></button><button type="button" id="zout" aria-label="zoom out"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5"/><path d="M7.5 12H16.5"/></svg></button><button type="button" id="zhome" aria-label="back to the start view"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5"/><path d="M7.4 11.8L12 7.8L16.6 11.8M9 10.6V16.2H15V10.6"/></svg></button></div></div><p class="mapl"><a href="https://www.openstreetmap.org/?mlat=48.211431&amp;mlon=16.333964#map=18/48.211431/16.333964">open the map</a></p></div><p class="ctx"><i class="hd">–</i>Write, call or come visit us!<br>We’d be happy to discuss your project, large or small.<i class="hd">–</i></p><p class="copy">© 2026 [ dasein-design &amp; steux ]</p></div></section>
 </main>
 <i class="rule l" aria-hidden="true"></i><i class="rule r" aria-hidden="true"></i>
-<div class="bar btop"><button type="button" id="goN" aria-label="previous page"><svg class="ar " width="24" height="24" viewBox="-12 -12 24 24" aria-hidden="true"><circle class="tr" r="9.5"/><circle class="tr tr2" r="9.5"/><path class="rg" d="M5.31 -7.88A9.5 9.5 0 1 1 -5.31 -7.88"/><path class="dt" transform="rotate(270)" d="M5.4 0L-4.6 -4.9L-2.2 0L-4.6 4.9Z"/><text x="-0.00" y="-9.50">N</text></svg></button></div>
-<div class="bar bbot"><button type="button" id="goS" aria-label="next page"><span class="dn"><svg class="ar " width="24" height="24" viewBox="-12 -12 24 24" aria-hidden="true"><circle class="tr" r="9.5"/><circle class="tr tr2" r="9.5"/><path class="rg" d="M-5.31 7.88A9.5 9.5 0 1 1 5.31 7.88"/><path class="dt" transform="rotate(90)" d="M5.4 0L-4.6 -4.9L-2.2 0L-4.6 4.9Z"/><text x="0.00" y="9.50">S</text></svg></span><span class="up"><svg class="ar " width="24" height="24" viewBox="-12 -12 24 24" aria-hidden="true"><circle class="tr" r="9.5"/><circle class="tr tr2" r="9.5"/><path class="rg" d="M5.31 -7.88A9.5 9.5 0 1 1 -5.31 -7.88"/><path class="dt" transform="rotate(270)" d="M5.4 0L-4.6 -4.9L-2.2 0L-4.6 4.9Z"/><text x="-0.00" y="-9.50">N</text></svg><i>back to the top</i></span></button></div>
+<div class="bar btop"><button type="button" id="goN" aria-label="previous page"><span class="nn"><svg class="ar " width="24" height="24" viewBox="-12 -12 24 24" aria-hidden="true"><circle class="tr" r="9.5"/><circle class="tr tr2" r="9.5"/><path class="rg" d="M5.31 -7.88A9.5 9.5 0 1 1 -5.31 -7.88"/><path class="dt" transform="rotate(270)" d="M5.4 0L-4.6 -4.9L-2.2 0L-4.6 4.9Z"/><text x="-0.00" y="-9.50">N</text></svg></span><span class="ns"><svg class="ar " width="24" height="24" viewBox="-12 -12 24 24" aria-hidden="true"><circle class="tr" r="9.5"/><circle class="tr tr2" r="9.5"/><path class="rg" d="M-5.31 7.88A9.5 9.5 0 1 1 5.31 7.88"/><path class="dt" transform="rotate(90)" d="M5.4 0L-4.6 -4.9L-2.2 0L-4.6 4.9Z"/><text x="0.00" y="9.50">S</text></svg></span></button></div>
+<div class="bar bbot"><button type="button" id="goS" aria-label="next page"><span class="dn"><svg class="ar " width="24" height="24" viewBox="-12 -12 24 24" aria-hidden="true"><circle class="tr" r="9.5"/><circle class="tr tr2" r="9.5"/><path class="rg" d="M-5.31 7.88A9.5 9.5 0 1 1 5.31 7.88"/><path class="dt" transform="rotate(90)" d="M5.4 0L-4.6 -4.9L-2.2 0L-4.6 4.9Z"/><text x="0.00" y="9.50">S</text></svg></span><span class="su"><svg class="ar " width="24" height="24" viewBox="-12 -12 24 24" aria-hidden="true"><circle class="tr" r="9.5"/><circle class="tr tr2" r="9.5"/><path class="rg" d="M5.31 -7.88A9.5 9.5 0 1 1 -5.31 -7.88"/><path class="dt" transform="rotate(270)" d="M5.4 0L-4.6 -4.9L-2.2 0L-4.6 4.9Z"/><text x="-0.00" y="-9.50">N</text></svg></span><span class="up"><svg class="ar " width="24" height="24" viewBox="-12 -12 24 24" aria-hidden="true"><circle class="tr" r="9.5"/><circle class="tr tr2" r="9.5"/><path class="rg" d="M5.31 -7.88A9.5 9.5 0 1 1 -5.31 -7.88"/><path class="dt" transform="rotate(270)" d="M5.4 0L-4.6 -4.9L-2.2 0L-4.6 4.9Z"/><text x="-0.00" y="-9.50">N</text></svg><i>back to the top</i></span></button></div>
 <dialog id="lb" aria-labelledby="lt">
 <div class="top"><span></span>
 <button type="button" class="x" id="lx" aria-label="close"><svg viewBox="-12 -12 24 24" aria-hidden="true"><circle class="rg" r="9.5"/><path class="xx" d="M-3.6 -3.6L3.6 3.6M3.6 -3.6L-3.6 3.6"/></svg></button></div>
@@ -524,7 +530,7 @@ dialog .top{flex:none}
       sec.style.scrollMarginTop=((k+1)*H+10)+'px'; b.setAttribute('role','link'); b.tabIndex=0;
       b.addEventListener('click',()=>tapGo(b,sec)); });
     const cur=()=>{ let c=-1; bars.forEach((b,k)=>{ const sec=b.nextElementSibling; if(sec.getBoundingClientRect().top<=innerHeight*.45) c=k; });
-      bars.forEach((b,k)=>b.classList.toggle('on',k===c)); };
+      bars.forEach((b,k)=>b.classList.toggle('on',k===c)); document.body.classList.toggle('inpg',c>=0); };
     addEventListener('scroll',cur,{passive:true}); cur();
   }
   const pages=[...document.querySelectorAll('.pg')], gN=$('goN'), gS=$('goS');

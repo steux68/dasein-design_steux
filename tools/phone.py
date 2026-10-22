@@ -369,7 +369,6 @@ body:not(.side) .socs{{display:flex}}   /* in the top layouts (and the stack tri
     repeating-linear-gradient(to bottom,#b8b8b8 0 1px,transparent 1px 3px) left top/1px 100% no-repeat,#fff}}
 .stack.tstk .bar.btop{{border-bottom-color:transparent}} .stack.bstk .bar.bbot{{border-top-color:transparent}}   /* the bars' own dotted edge is enough where they meet the arrow bars */
 .sback{{position:fixed;left:18px;right:18px;z-index:13;background:#fff;pointer-events:none}}
-.sback{{display:none}}   /* 22 Oct, evening: no white band beside a lone half bar - the page shows there, so the stack steps like a staircase */
 .stack.inpg main > .hb{{background-color:#f2f2f2}}
 .stack main > .hb.on{{background-color:#eaffae!important}} .stack main > .hb.hit{{background-color:#cdff3e!important}}
 .stack .stage{{height:calc(100svh - var(--head) - 2 * var(--bar) - 126px)}}

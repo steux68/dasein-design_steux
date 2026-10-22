@@ -12,7 +12,7 @@ import os
 import random
 from PIL import Image
 import lightbox as LB
-from texts import INTRO, BIO, INFO_TXT, LINKS_TXT, CONTACT_TXT, SERVICES, SERVICES_SHORT   # shared with the desktop site
+from texts import INTRO, BIO, INFO_TXT, LINKS_TXT, CONTACT_TXT, SERVICES, SERVICES_SHORT, LEGAL_BODY   # shared with the desktop site
 import search as SEARCH
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -209,23 +209,7 @@ MOREP = ('<button type="button" class="cvb more" aria-expanded="false" data-g="g
          + '<span class="cvt"><span class="op">more</span><span class="cl">fewer</span></span><b>projects</b></button>')
 
 # ---------- impressum [06] (draft by Claude, 22 Oct 2026 - to be checked by the office / the Kammer before going live) ----------
-LEGAL = ('<div class="box legal cut" id="g-legal" data-show="4" data-extra="30"><p class="lab first">IMPRESSUM</p>'
-         '<p class="lp">Informationen gemäß § 5 E-Commerce-Gesetz und Offenlegung gemäß § 25 Mediengesetz</p>'
-         '<h4>Medieninhaber, Herausgeber und Diensteanbieter</h4>'
-         '<p><b>Arch. DI Cuong TRAN-VIET</b><br>Architekt (Ziviltechniker) · Inhaber von <b class="dd">dasein-design</b><br>Neulerchenfelderstrasse 42/6 · A-1160 Wien · Österreich<br>'
-         'T <a href="tel:+436764822464">+43 (0)676 4822 464</a> · E <a href="mailto:cuong@dasein-design.net">cuong@dasein-design.net</a></p>'
-         '<h4>Unternehmensgegenstand</h4><p>Architektur, Planung und Design</p>'
-         '<h4>Berufsbezeichnung und Kammer</h4><p>Architekt (Ziviltechniker), Berufsbezeichnung verliehen in Österreich.<br>'
-         'Mitglied der Kammer der Ziviltechniker:innen für Wien, Niederösterreich und Burgenland (ZT Kammer Ost), Karlsgasse 9, 1040 Wien · <a href="https://ost.zt.at/">ost.zt.at</a></p>'
-         '<h4>Berufsrecht</h4><p>Ziviltechnikergesetz 2019 (ZTG 2019) und Standesregeln der Ziviltechniker:innen, abrufbar unter <a href="https://www.ris.bka.gv.at/">www.ris.bka.gv.at</a> und <a href="https://ost.zt.at/">ost.zt.at</a></p>'
-         '<h4>Aufsichtsbehörde</h4><p class="todo">[zuständiges Bundesministerium – bitte bestätigen]</p>'
-         '<h4>UID-Nummer</h4><p class="todo">[ATU – bitte ergänzen]</p>'
-         '<h4>Mitarbeit</h4><p>Steuart J Mackenzie HARRISON, Architect (ARB, UK) – Mitarbeit, Gestaltung dieser Website</p>'
-         '<h4>Haftung und Urheberrecht</h4><p>Die Inhalte dieser Website wurden mit Sorgfalt erstellt; für Richtigkeit, Vollständigkeit und Aktualität wird keine Gewähr übernommen. '
-         'Für die Inhalte verlinkter Websites sind ausschließlich deren Betreiber verantwortlich. Texte, Bilder und Pläne sind urheberrechtlich geschützt; '
-         'jede Verwendung bedarf der vorherigen Zustimmung.</p>'
-         '<h4>Datenschutz</h4><p>Diese Website setzt keine Cookies und erhebt keine personenbezogenen Daten. Die Karte wird von OpenStreetMap geladen. '
-         '<span class="todo">[Datenschutzerklärung – bitte ergänzen]</span></p></div>'
+LEGAL = ('<div class="box legal cut" id="g-legal" data-show="4" data-extra="30"><p class="lab first">IMPRESSUM</p>' + LEGAL_BODY + '</div>'
          + morebtn('g-legal', 'impressum')
          # the end: one white screen for a little game - catch the red food before the beetle does; the site's mark and copyright at the foot
          + '<div class="play" id="play"><canvas class="ptrail"></canvas>'

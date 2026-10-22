@@ -18,7 +18,7 @@ build.py also calls patch() before writing, so a full rebuild keeps them.
 - menu: the first tab reads "about us [01]" (half tabs were tried and dropped)
 """
 import re
-from texts import INTRO, BIO, INFO_TXT, LINKS_TXT, CONTACT_TXT
+from texts import INTRO, BIO, INFO_TXT, LINKS_TXT, CONTACT_TXT, LEGAL_BODY
 
 MARK = '<!--fromphone-->'
 RED = '#e30613'
@@ -125,6 +125,18 @@ a[href^="mailto:"],a[href^="mailto:"] span{text-decoration:none!important}
 .pline{position:absolute;top:620px;width:420px;height:1px;z-index:3;background:repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px)}
 .sub2{color:#e30613;font-size:11px;letter-spacing:.12em;margin-bottom:3px!important}
 .rs{display:inline-block;width:2.5px;height:.9em;margin:0 6px;vertical-align:-.08em;background:#3a3c37}
+/* impressum: a small dot above the copyright in the right-hand bar; it opens a pop-up */
+.hot.imp{display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none}
+.hot.imp i{width:9px;height:9px;border-radius:50%;background:#bfbfbf;box-shadow:0 0 0 1px #000;transition:background .15s}
+.hot.imp span{writing-mode:vertical-rl;transform:rotate(180deg);font:400 10px Calibri,Carlito,sans-serif;letter-spacing:.06em;color:#888}
+.hot.imp:hover i,.hot.imp:focus-visible i{background:#a5e35a;box-shadow:0 0 0 1px #e30613} .hot.imp:hover span{color:#e30613} .hot.imp:focus-visible{outline:none}
+.impd{position:fixed;inset:0;margin:auto;height:fit-content;width:min(640px,90vw);max-height:84vh;overflow:auto;padding:34px 40px 30px;border:0;background:rgba(255,255,255,.97);box-shadow:0 10px 40px rgba(0,0,0,.12);font:400 13px/1.5 Calibri,Carlito,sans-serif;color:#222}
+.impd::backdrop{background:rgba(255,255,255,.55);backdrop-filter:blur(3px)}
+.impd .lbx{position:absolute;right:16px;top:16px}
+.impd .lab2{margin:0 0 6px;font-weight:700;font-size:11px;letter-spacing:.14em;color:#e30613}
+.impd .lp{color:#666;font-size:12px;margin:0 0 4px}
+.impd h4{margin:12px 0 2px;font-size:12.5px;font-weight:700;color:#000} .impd p{margin:0}
+.impd a{color:#1a5fd0;text-decoration:none} .impd a[href^="tel:"]{color:#1e8e3e} .impd .todo{color:#e30613}
 /* three clicks on the beetle: the heart */
 .heartfx{position:fixed;inset:0;z-index:9999;pointer-events:none;overflow:hidden}
 .heartfx svg{position:absolute;left:0;top:0;width:60px;height:60px;margin:-30px 0 0 -30px;fill:#e30613;will-change:transform,opacity}
@@ -133,6 +145,14 @@ a[href^="mailto:"],a[href^="mailto:"] span{text-decoration:none!important}
 img[src^="img/m-lg-"]{box-sizing:border-box;padding:6px 12px}
 '''
 
+
+IMP_JS = r"""<script>
+(function(){ const d=document.getElementById('impd'); if(!d) return;
+  document.querySelectorAll('a.imp').forEach(a=>a.addEventListener('click',e=>{ e.preventDefault(); d.showModal(); }));
+  document.getElementById('impx').onclick=()=>d.close();
+  d.addEventListener('click',e=>{ if(e.target===d) d.close(); });
+})();
+</script>"""
 
 HEART_JS = r"""<script>
 /* the two CVs: "full CV" opens one, "close CV" folds it again; both fold when you leave the page */
@@ -307,6 +327,12 @@ def patch(s):
     # Cuong is the owner: "» Architekt | Inhaber" (22 Oct)
     s = _rep('<span class="leading-[normal] text-[14px]">Architekt</span>',
              '<span class="leading-[normal] text-[14px]">Architekt<i class="rs"></i>Inhaber</span>', s)
+    # ---- impressum (22 Oct): no extra page or tab on the desktop - a small dot above the copyright opens it in a pop-up
+    s = _rep('<a class="hot social" href="#" data-pending="1" aria-label="Facebook"',
+             '<a class="hot imp" href="#impressum" aria-label="impressum" style="left:1330px;top:700px;width:26px;height:60px"><i></i><span>impressum</span></a>'
+             '<a class="hot social" href="#" data-pending="1" aria-label="Facebook"', s)
+    s = s.replace('</body>', '<dialog class="impd" id="impd" aria-label="impressum"><button type="button" class="lbx" id="impx" aria-label="close (Esc)">' + XC + '</button>'
+                  '<div class="impc"><p class="lab2">IMPRESSUM</p>' + LEGAL_BODY + '</div></dialog>' + IMP_JS + '</body>', 1)
     # ---- styles
     s = _rep('</style>', CSS + '</style>', s)
     return s.replace('</body>', HEART_JS + MARK + '</body>', 1)

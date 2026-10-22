@@ -26,3 +26,21 @@ SERVICES = [('IT', 'ic-it.svg', ['Experte: Archicad',
              'Grundkenntnisse: Autodesk Revit, Rhinoceros, SidounWinAVA, NBS Building.']),
             ('PROJEKTE', 'ic-projekte.svg', ['Vorentwurf bis Ausführungsplanung, Möbeldesign, örtl. Bauaufsicht für diverse Projekte, darunter eine Hotel Pension, Kleingartenhäuser, Wohnungen, Klavierübungsstudio, Büro, Ausstellungen, Ateliers / Café-Bar &amp; Einfamilienhäuser hauptsächlich in Wien.']),
             ('SKILLS', 'ic-skills.svg', ['Vorentwurf bis Ausführungsplanung, Möbeldesign, örtl. Bauaufsicht für diverse Projekte, darunter eine Hotel Pension, Kleingartenhäuser, Wohnungen, Klavierübungsstudio, Büro, Ausstellungen, Ateliers / Café-Bar &amp; Einfamilienhäuser hauptsächlich in Wien.'])]
+
+# the impressum (draft by Claude, 22 Oct 2026 - to be checked by the office / the ZT Kammer); shared by the phone page 06 and the desktop pop-up
+LEGAL_BODY = ('<p class="lp">Informationen gemäß § 5 E-Commerce-Gesetz und Offenlegung gemäß § 25 Mediengesetz</p>'
+         '<h4>Medieninhaber, Herausgeber und Diensteanbieter</h4>'
+         '<p><b>Arch. DI Cuong TRAN-VIET</b><br>Architekt (Ziviltechniker) · Inhaber von <b class="dd">dasein-design</b><br>Neulerchenfelderstrasse 42/6 · A-1160 Wien · Österreich<br>'
+         'T <a href="tel:+436764822464">+43 (0)676 4822 464</a> · E <a href="mailto:cuong@dasein-design.net">cuong@dasein-design.net</a></p>'
+         '<h4>Unternehmensgegenstand</h4><p>Architektur, Planung und Design</p>'
+         '<h4>Berufsbezeichnung und Kammer</h4><p>Architekt (Ziviltechniker), Berufsbezeichnung verliehen in Österreich.<br>'
+         'Mitglied der Kammer der Ziviltechniker:innen für Wien, Niederösterreich und Burgenland (ZT Kammer Ost), Karlsgasse 9, 1040 Wien · <a href="https://ost.zt.at/">ost.zt.at</a></p>'
+         '<h4>Berufsrecht</h4><p>Ziviltechnikergesetz 2019 (ZTG 2019) und Standesregeln der Ziviltechniker:innen, abrufbar unter <a href="https://www.ris.bka.gv.at/">www.ris.bka.gv.at</a> und <a href="https://ost.zt.at/">ost.zt.at</a></p>'
+         '<h4>Aufsichtsbehörde</h4><p class="todo">[zuständiges Bundesministerium – bitte bestätigen]</p>'
+         '<h4>UID-Nummer</h4><p class="todo">[ATU – bitte ergänzen]</p>'
+         '<h4>Mitarbeit</h4><p>Steuart J Mackenzie HARRISON, Architect (ARB, UK) – Mitarbeit, Gestaltung dieser Website</p>'
+         '<h4>Haftung und Urheberrecht</h4><p>Die Inhalte dieser Website wurden mit Sorgfalt erstellt; für Richtigkeit, Vollständigkeit und Aktualität wird keine Gewähr übernommen. '
+         'Für die Inhalte verlinkter Websites sind ausschließlich deren Betreiber verantwortlich. Texte, Bilder und Pläne sind urheberrechtlich geschützt; '
+         'jede Verwendung bedarf der vorherigen Zustimmung.</p>'
+         '<h4>Datenschutz</h4><p>Diese Website setzt keine Cookies und erhebt keine personenbezogenen Daten. Die Karte wird von OpenStreetMap geladen. '
+         '<span class="todo">[Datenschutzerklärung – bitte ergänzen]</span></p>')

@@ -139,7 +139,7 @@ BCAPS = [c.replace('&amp;', '&') for im, t, c in BITS]
 
 # ---------- us & contact: the partnership, the two partners (CV folds open), the office with the map ----------
 PARTNERS = [
-    dict(role='Architekt<i class="rs"></i>Inhaber', first='Cuong', last='TRAN-VIET', q='BArch DipArch', idimg='m-id-cuong.webp', idalt='Personalausweis Cuong Tran-Viet', tel='+43 (0)676 4822 464', mail='cuong@dasein-design.net', extra='', nat='Österreich [EU]', lang='Deutsch &amp; Vietnamesisch [Muttersprache], English [verhandlungssicher]',
+    dict(role='Architekt<i class="rs"></i>Inhaber', first='Cuong', last='TRAN-VIET', q='BArch DipArch', idimg='m-id-cuong-line.webp', idalt='Personalausweis Cuong Tran-Viet', tel='+43 (0)676 4822 464', mail='cuong@dasein-design.net', extra='', nat='Österreich [EU]', lang='Deutsch &amp; Vietnamesisch [Muttersprache], English [verhandlungssicher]',
          cv=[('Professional', ['2010 ZT: Arch+Ing, Bundeskammer der ZiviltechnikerInnen, Österreich [EU]',
                                '2005 ARB: Architects Registration Board of the United Kingdom [UK]']),
              ('Academic', ['Sep.’00 – Jun.’02 » Bartlett School of Architecture, UCL, London – Dip. Arch',
@@ -219,7 +219,7 @@ SOCIAL = '<svg width="0" height="0" style="position:absolute" aria-hidden="true"
 LEGAL = ('<div class="box legal cut" id="g-legal" data-show="4" data-extra="30"><p class="lab first">IMPRESSUM</p>' + LEGAL_BODY + '</div>'
          + morebtn('g-legal', 'impressum')
          # the end (22 Oct, evening): straight under the impressum, the mark and the copyright - and the pulsing dot, "press me", which opens the game full screen
-         + '<div class="fin"><div class="finm"><img src="../img/m-mark.png" alt=""><span>dasein<b>-design</b></span><p class="copy">© 2026 [ dasein-design &amp; steux ]</p></div></div>')   # the game left on 23 Oct (the heart stays)
+         + '<div class="fin"><div class="finm"><img src="../img/m-mark.png" alt=""><span>dasein<b>-design</b></span><p class="copy">© 2026 [ dasein-design &amp; steux ]</p><a class="todesk" href="../index.html?desktop=1">desktop version</a></div></div>')   # the game left on 23 Oct (the heart stays)
 # ---------- "work ○ wonder" trial (?w=1, 23 Oct): the bits & bats as a notebook of everyday things, behind a switch in the header.
 # The photos and notes stand in for real posts; the dates are samples. Later the posts come by e-mail from Steuart's phone.
 WCARD_KEY = {0: 'wagner', 1: 'museum', 2: 'walk', 3: 'open house', 4: 'loos', 5: 'standard', 6: 'terra mater', 7: 'devlin', 8: 'starchitect', 9: 'fassaden'}
@@ -430,8 +430,8 @@ body{{position:relative}}
 .wfb b{{font-weight:700}} .wfb small{{font-size:10px;color:inherit;opacity:.7}}
 /* eight categories, eight colours (23 Oct) - no grey; the chosen one gets a dark ring */
 .wfb{{background-image:none!important;border-radius:2px}}
-.wfb:nth-child(1){{background-color:#cdff3e}} .wfb:nth-child(2){{background-color:#ffd400}} .wfb:nth-child(3){{background-color:#2f8cff;color:#fff}} .wfb:nth-child(4){{background-color:#ffb3d1}}
-.wfb:nth-child(5){{background-color:#e30613;color:#fff}} .wfb:nth-child(6){{background-color:#2fbf4a;color:#fff}} .wfb:nth-child(7){{background-color:#ff8a00}} .wfb:nth-child(8){{background-color:#9b6bff;color:#fff}} .wfb:nth-child(9){{background-color:#00b3a6;color:#fff}} .wfb:nth-child(10){{background-color:#1f2a6b;color:#fff}}
+.wfb:nth-child(1){{background-color:#d4f06a}} .wfb:nth-child(2){{background-color:#f2cf3a}} .wfb:nth-child(3){{background-color:#4a8fe0;color:#fff}} .wfb:nth-child(4){{background-color:#f2bccf}}
+.wfb:nth-child(5){{background-color:#d03a3a;color:#fff}} .wfb:nth-child(6){{background-color:#45ad5c;color:#fff}} .wfb:nth-child(7){{background-color:#ee9233}} .wfb:nth-child(8){{background-color:#9a7ee6;color:#fff}} .wfb:nth-child(9){{background-color:#26a69c;color:#fff}} .wfb:nth-child(10){{background-color:#2e3a72;color:#fff}}
 .wfb.on{{box-shadow:0 0 0 2px #111,0 1px 6px rgba(0,0,0,.25)}} .wfb.on small{{display:none}} .wfb.on::after{{content:"× all";margin-left:4px;font-size:11px;font-weight:700;opacity:.85}} .wfb:active{{filter:brightness(1.1)}}   /* the six categories float above the grid, as the half title bars do on the main page */
 .wonder .wgrid{{display:block;position:relative;margin-top:6px;grid-template-columns:repeat(5,1fr);grid-auto-rows:calc((100vw - 36px - 12px) / 5);grid-auto-flow:dense;gap:3px;margin-top:10px}}
 .wempty{{display:block;background:#fff}}
@@ -704,6 +704,7 @@ details ul{{margin:0;padding:0 0 0 14px;font-size:13px;line-height:1.4;color:#22
 .ptrail{{position:absolute;inset:0;width:100%;height:100%}}
 /* the end of the page: mark + copyright, and the pulsing dot that opens the game */
 .fin{{position:relative;display:flex;justify-content:center;margin:26px 0 10px;min-height:86px}}
+.todesk{{display:block;margin-top:6px;font-size:11px;letter-spacing:.06em;color:#888;text-decoration:none}}
 .finm{{display:flex;flex-direction:column;align-items:center;gap:2px}} .finm img{{width:26px;height:26px}} .finm span{{font-size:17px;color:var(--red)}} .finm b{{font-weight:700}} .finm .copy{{margin:4px 0 0}}
 .pgo{{position:absolute;right:6px;top:2px;display:flex;align-items:center;gap:0;border:0;background:none;padding:0;font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}}
 .pgo .pme{{font-size:11px;letter-spacing:.08em;color:#666;white-space:nowrap}}
@@ -858,7 +859,7 @@ dialog .top{{flex:none}}
 <script>/* three versions: logo and tabs all down the side (default) · logo on the side, tabs on top · logo and tabs across the top
    ?logo=rail / side / top, remembered on this phone */
 (function(){{ let m='rail'; try{{ m=new URLSearchParams(location.search).get('logo')||localStorage.getItem('ddlogo2')||'rail';
-    const sk=new URLSearchParams(location.search).get('stack'); if(sk==='1'||sk==='2'){{ document.body.classList.add('stack'); m='top'; }} if(sk==='2') document.body.classList.add('pairs'); if(new URLSearchParams(location.search).get('w')!=='0') document.body.classList.add('wtr');   /* work / wonder is the standard since 23 Oct; ?w=0 hides the switch */ const sc=new URLSearchParams(location.search).get('sec'); document.body.classList.add('sec'+(['0','1','2','3'].includes(sc)?sc:'1'));   /* pale grey (sec1) is the standard since 22 Oct; ?sec=0 turns it off */ }}catch(e){{}}
+    const sk=new URLSearchParams(location.search).get('stack')||'2';   /* the half bars are the standard since 23 Oct; ?stack=0 gives the side strip */ if(sk==='1'||sk==='2'){{ document.body.classList.add('stack'); m='top'; }} if(sk==='2') document.body.classList.add('pairs'); if(new URLSearchParams(location.search).get('w')!=='0') document.body.classList.add('wtr');   /* work / wonder is the standard since 23 Oct; ?w=0 hides the switch */ const sc=new URLSearchParams(location.search).get('sec'); document.body.classList.add('sec'+(['0','1','2','3'].includes(sc)?sc:'1'));   /* pale grey (sec1) is the standard since 22 Oct; ?sec=0 turns it off */ }}catch(e){{}}
   if(m!=='top') document.body.classList.add('side'); if(m==='rail') document.body.classList.add('rail'); }})();</script>
 <a class="sidebar" href="#start" aria-label="dasein-design, start"><img src="../img/m-mark.png" alt=""><span>dasein<b>-design</b></span></a>
 <header>
@@ -946,6 +947,9 @@ dialog .top{{flex:none}}
         +(d.url?'<a href="'+d.url+'" target="_blank" rel="noopener">read the article ↗</a>':'')+'</div><p class="wpd">'+d.when+'</p>';
       wb.innerHTML=h; wb.scrollTop=0; document.getElementById('wpk').innerHTML='wonder <b>'+String(cur+1).padStart(2,'0')+'</b> / '+v.length; wp.hidden=false; }}
     tiles.forEach(t=>t.addEventListener('click',()=>pop(t)));
+    /* with a category chosen, a tap anywhere outside the photos and labels brings all photos back */
+    wd.addEventListener('click',e=>{{ if(only===null||!wp.hidden) return; if(e.target.closest('.wg,.wfb,.wpop,a,button')) return;
+      only=null; wd.querySelectorAll('.wfb').forEach(x=>x.classList.remove('on')); carpet(); }});
     /* the carpet (23 Oct, 01:00): an ordered strip treemap - newest first, row by row, thin black lines; each photo in its own format inside its rectangle,
        the newer a little bigger; the six categories are rectangles of the same carpet with their word in it (sizes differ, not much). A word filters, again = all */
     const grid=document.getElementById('wgrid'), CATS={WCATS!r}.map(c=>c.replace('&amp;','&')); let only=null;

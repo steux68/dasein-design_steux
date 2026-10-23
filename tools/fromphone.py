@@ -513,8 +513,8 @@ WONDER_CSS = """
 .dwsc{top:246px!important;padding-top:6px!important}   /* the category row sits on the tick at y 250 (by the i of dasein), the photos start 10 px under it */
 .dwfb{position:absolute;top:0;width:95px;height:22px;display:flex;align-items:center;justify-content:center;gap:4px;padding:0 4px;border:0;font:13px Calibri,Carlito,sans-serif;color:#000;white-space:nowrap;overflow:hidden;cursor:pointer}
 .dwfb b{font-weight:700} .dwfb small{font-size:9px;opacity:.7} .dwfb:hover{filter:brightness(1.08)}
-.dwfb:nth-child(1){background:#cdff3e} .dwfb:nth-child(2){background:#ffd400} .dwfb:nth-child(3){background:#2f8cff;color:#fff} .dwfb:nth-child(4){background:#ffb3d1}
-.dwfb:nth-child(5){background:#e30613;color:#fff} .dwfb:nth-child(6){background:#2fbf4a;color:#fff} .dwfb:nth-child(7){background:#ff8a00} .dwfb:nth-child(8){background:#9b6bff;color:#fff} .dwfb:nth-child(9){background:#00b3a6;color:#fff} .dwfb:nth-child(10){background:#1f2a6b;color:#fff}
+.dwfb:nth-child(1){background:#d4f06a} .dwfb:nth-child(2){background:#f2cf3a} .dwfb:nth-child(3){background:#4a8fe0;color:#fff} .dwfb:nth-child(4){background:#f2bccf}
+.dwfb:nth-child(5){background:#d03a3a;color:#fff} .dwfb:nth-child(6){background:#45ad5c;color:#fff} .dwfb:nth-child(7){background:#ee9233} .dwfb:nth-child(8){background:#9a7ee6;color:#fff} .dwfb:nth-child(9){background:#26a69c;color:#fff} .dwfb:nth-child(10){background:#2e3a72;color:#fff}
 .dwfb.on{box-shadow:inset 0 0 0 2px #111}
 .dwfb.on small{display:none} .dwfb.on::after{content:"× all";margin-left:4px;font-size:11px;font-weight:700;opacity:.85}   /* the chosen category offers the way back to all photos */
 .dwpop{position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.62);backdrop-filter:blur(1.5px)}
@@ -614,6 +614,9 @@ WONDER_JS = r"""<script>(function(){ const sw=document.getElementById('dwsw'), w
     document.getElementById('dwk').innerHTML='wonder <b>'+String(cur+1).padStart(2,'0')+'</b> / '+v.length; pop.hidden=false; }
   const step=k=>{ const v=vis(); show(v[(cur+k+v.length)%v.length]); };
   tiles.forEach(t=>t.addEventListener('click',()=>show(t)));
+  /* with a category chosen, a click anywhere outside the photos and labels brings all photos back */
+  wo.addEventListener('click',e=>{ if(only===null||!pop.hidden) return; if(e.target.closest('.dwg,.dwfb,.dwpop,a,button')) return;
+    only=null; wo.querySelectorAll('.dwfb').forEach(x=>x.classList.remove('on')); carpet(); });
   document.getElementById('dwprev').onclick=()=>step(-1); document.getElementById('dwnext').onclick=()=>step(1);
   document.getElementById('dwx').onclick=()=>{ pop.hidden=true; }; pop.addEventListener('click',e=>{ if(e.target===pop) pop.hidden=true; });
 })();</script>"""
@@ -800,6 +803,11 @@ def patch(s):
     assert n >= 4, n
     s = _impressum_page(s)
     s = _tint(s)
+    s = s.replace('src="img/services-imgImage.webp"', 'src="img/services-id-cuong-line.webp"')   # 23 Oct: a black-and-white line drawing of the card, no personal numbers
+    s = s.replace('<head>', '<head><script>/* phones go to the phone site (23 Oct); ?desktop=1 stays here and is remembered */ (function(){ try{ const q=new URLSearchParams(location.search);'
+                  ' if(q.get("desktop")==="1") localStorage.setItem("dd-desktop","1"); if(q.get("desktop")==="0") localStorage.removeItem("dd-desktop");'
+                  ' const narrow=Math.min(screen.width,screen.height)<=600||(innerWidth<=760&&matchMedia("(pointer:coarse)").matches);'
+                  ' if(narrow&&localStorage.getItem("dd-desktop")!=="1") location.replace("phone/index.html"+location.hash); }catch(e){} })();</script>', 1)
     s = _desk_catchup(s)   # 23 Oct: bits & bats and the game gone, wonder in the fifth slot
     # ---- map + / - / home (22 Oct): finer lines, like the compass arrows
     s = _rep('.mz button circle{fill:rgba(255,255,255,.9);stroke:#e30613;stroke-width:2;', '.mz button circle{fill:rgba(255,255,255,.9);stroke:#e30613;stroke-width:1;', s)

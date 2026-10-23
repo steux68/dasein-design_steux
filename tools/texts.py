@@ -42,7 +42,7 @@ LEGAL_BODY = ('<p class="lp">Informationen gemäß § 5 E-Commerce-Gesetz und Of
          '<h4>Haftung und Urheberrecht</h4><p>Die Inhalte dieser Website wurden mit Sorgfalt erstellt; für Richtigkeit, Vollständigkeit und Aktualität wird keine Gewähr übernommen. '
          'Für die Inhalte verlinkter Websites sind ausschließlich deren Betreiber verantwortlich. Texte, Bilder und Pläne sind urheberrechtlich geschützt; '
          'jede Verwendung bedarf der vorherigen Zustimmung.</p>'
-         '<h4>Datenschutz</h4><p>Diese Website setzt keine Cookies und erhebt keine personenbezogenen Daten. Die Karte wird von OpenStreetMap geladen. '
+         '<h4>Datenschutz</h4><p>Diese Website setzt keine Cookies und speichert selbst keine personenbezogenen Daten. Die Website liegt bei GitHub Pages (GitHub Inc.); die Karte im Kontaktbereich wird von den Servern der OpenStreetMap Foundation geladen, die Kartensoftware Leaflet von cdnjs (Cloudflare). Beim Aufruf übermittelt Ihr Browser dabei technisch notwendig Ihre IP-Adresse an diese Anbieter. '
          '<span class="todo">[Datenschutzerklärung – bitte ergänzen]</span></p>')
 
 

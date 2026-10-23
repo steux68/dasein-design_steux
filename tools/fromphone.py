@@ -20,6 +20,7 @@ build.py also calls patch() before writing, so a full rebuild keeps them.
 import re
 from texts import INTRO, BIO, INFO_TXT, LINKS_TXT, CONTACT_TXT, LEGAL_BODY, BITS, CARDS, CARD_AT
 import json
+import os
 from lightbox import compass
 
 MARK = '<!--fromphone-->'
@@ -472,7 +473,9 @@ def _wonder_tiles():
     for n, (im, c, cat) in enumerate(items):
         when = f'{days[t.weekday()]} {t.day} {t.strftime("%b")} · {t.strftime("%H:%M")}'
         line = H.unescape(c).replace('dd - ', '').strip().capitalize().rstrip('.!?') + '.'
-        out.append(f'<button type="button" class="dwg" data-cat="{cat}" data-when="{when}" data-line="{H.escape(line)}" data-img="img/{im}">'
+        from PIL import Image as _I
+        with _I.open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'img', im)) as I: ar = round(I.width / I.height, 3)
+        out.append(f'<button type="button" class="dwg" data-cat="{cat}" data-ar="{ar}" data-when="{when}" data-line="{H.escape(line)}" data-img="img/{im}">'
                    f'<img src="img/{im}" alt="" loading="lazy"></button>')
         t -= datetime.timedelta(hours=steps[n % len(steps)])
     return ''.join(out), WCATS
@@ -492,11 +495,11 @@ WONDER_CSS = """
 .dwon{position:absolute;left:225px;top:30px;width:1100px;height:994px;z-index:45;background:#fff}   /* above the map (20) and the guide lines */
 .dwon[hidden]{display:none}
 .dwopen #mapclip{visibility:hidden}   /* the live map sits above the page: hidden while wonder is open (the dashed columns stay) */
-.dwsc{position:absolute;inset:0;overflow-y:auto;scrollbar-width:none;padding:10px 10px 30px} .dwsc::-webkit-scrollbar{display:none}
-.dwgrid{position:relative}
-.dwg{position:absolute;padding:0;border:0;background:#f4f4f4;overflow:hidden;cursor:pointer}
+.dwsc{position:absolute;inset:0;overflow-y:auto;scrollbar-width:none;padding:30px 10px 30px} .dwsc::-webkit-scrollbar{display:none}
+.dwgrid{display:grid;grid-template-columns:repeat(5,200px);grid-auto-rows:180px;column-gap:20px;row-gap:10px;grid-auto-flow:dense}   /* the projects page's module: columns on the dashed lines, rows of 180 from y 60 */
+.dwg{position:relative;padding:0;border:0;background:#f4f4f4;overflow:hidden;cursor:pointer}
 .dwg img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s} .dwg:hover img{transform:scale(1.04)}
-.dwempty{position:absolute}
+.dwempty{display:block}
 .dwtitle{position:absolute;left:110px;top:380px;width:112px;height:644px;z-index:45;background:#fff;pointer-events:none}
 .dwtitle img{position:absolute;left:15px;top:50px;width:90px;height:570px;object-fit:cover}
 .dwtitle[hidden]{display:none}
@@ -542,17 +545,12 @@ WONDER_JS = r"""<script>(function(){ const sw=document.getElementById('dwsw'), w
       if(w>=h){ const cw=s/h; let yy=y; row.forEach(o=>{ const ch=o.s/cw; out.push({...o,x,y:yy,w:cw,h:ch}); yy+=ch; }); x+=cw; w-=cw; }
       else { const rh=s/w; let xx=x; row.forEach(o=>{ const rw=o.s/rh; out.push({...o,x:xx,y,w:rw,h:rh}); xx+=rw; }); y+=rh; h-=rh; } } }
   /* the carpet: a treemap of many sizes, newest first, in runs that form blocks, the blocks laid row by row; a few white rests */
-  function carpet(){ const W=grid.clientWidth; const ph=tiles.filter(t=>only===null||t.dataset.cat===only);
-    const items=ph.map((t,n)=>({t,v:[2.6,.35,1,.7,.3,1.6,.5,1.2,.32,.8,3.2,.6,.3,1,1.8,.45,.9,.35,2.2][n%19]*(n<2?1.6:1)}));
-    for(let at=1,k=0; at<items.length; at+=3+(k%2), k++) items.splice(at,0,{empty:true,v:[.6,.3,.9,.4,1.2,.35][k%6]});   /* plenty of white rests */
-    const unit=(W/8)*(W/8); items.forEach(o=>o.a=o.v*unit);
-    const blocks=[]; let i=0, k=0; while(i<items.length){ const n=[6,4,7,5,8][k++%5]; const its=items.slice(i,i+n); i+=n; blocks.push({its,a:its.reduce((s,o)=>s+o.a,0)}); }
-    if(blocks.length>1&&blocks[blocks.length-1].its.length<3){ const l=blocks.pop(), p=blocks[blocks.length-1]; p.its=p.its.concat(l.its); p.a+=l.a; }
-    const B=lay(blocks,W), cells=[]; B.out.forEach(b=>sq(b.its,b.x,b.y,b.w,b.h,cells));
-    tiles.forEach(t=>t.hidden=true); grid.querySelectorAll('.dwempty').forEach(e=>e.remove()); const G=2;
-    cells.forEach(o=>{ let e; if(o.empty){ e=document.createElement('i'); e.className='dwempty'; grid.appendChild(e); } else { e=o.t; e.hidden=false; grid.appendChild(e); }
-      Object.assign(e.style,{left:(o.x+G)+'px',top:(o.y+G)+'px',width:Math.max(0,o.w-2*G)+'px',height:Math.max(0,o.h-2*G)+'px'}); });
-    grid.style.height=B.h+'px'; }
+  function carpet(){ const ph=tiles.filter(t=>only===null||t.dataset.cat===only);
+    tiles.forEach(t=>t.hidden=true); grid.querySelectorAll('.dwempty').forEach(e=>e.remove()); let n=0;
+    ph.forEach((t,k)=>{ if(k%4===2||k%9===6){ const e=document.createElement('i'); e.className='dwempty'; grid.appendChild(e); }   /* white rests, one cell each */
+      const ar=+t.dataset.ar||1; let c=1, r=1;
+      if(n%6===0){ c=2; r=2; } else if(ar>1.25){ c=2; } else if(ar<.8&&n%3!==1){ r=2; }
+      n++; t.hidden=false; t.style.cssText='grid-column:span '+c+';grid-row:span '+r; grid.appendChild(t); }); }
   /* the eight categories drift slowly over the photos */
   const fl=wo.querySelector('.dwfloat');
   const fb=CATS.map((c,k)=>{ const b=document.createElement('button'); b.type='button'; b.className='dwfb'; b.innerHTML='<b>'+c+'</b><small>['+String(k+1).padStart(2,'0')+']</small>';

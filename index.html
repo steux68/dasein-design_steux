@@ -400,10 +400,10 @@ img[src^="img/m-lg-"]{box-sizing:border-box;padding:6px 12px}
 @keyframes dwp{0%{transform:scale(1);opacity:.8}100%{transform:scale(4);opacity:0}}
 .dwsw[aria-pressed=true] .tg{background:#eaffae} .dwsw[aria-pressed=true] .tg b{transform:translateX(15px);background:#e30613} .dwsw[aria-pressed=true] .tg b::after{animation:none}
 .dwsw:hover .wo{color:#e30613}
-.dwon{position:absolute;left:225px;top:30px;width:1100px;height:994px;z-index:45;background:#fff}   /* above the map (20) and the guide lines */
+.dwon{position:absolute;left:225px;top:30px;width:1100px;height:966px;z-index:45;background:#fff}   /* ends above the scroll arrow (y 998), which stays, as on every page */   /* above the map (20) and the guide lines */
 .dwon[hidden]{display:none}
 .dwopen #mapclip{visibility:hidden}   /* the live map sits above the page: hidden while wonder is open (the dashed columns stay) */
-.dwsc{position:absolute;inset:0;overflow-y:auto;scrollbar-width:none;padding:30px 10px 30px} .dwsc::-webkit-scrollbar{display:none}
+.dwsc{position:absolute;inset:0;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;scrollbar-width:none;padding:30px 10px 30px} .dwsc::-webkit-scrollbar{display:none}
 .dwgrid{position:relative;width:1080px}   /* each column of the projects grid split in two (95 + 10 + 95), rows of 85 + 10 */   /* the projects page's module: columns on the dashed lines, rows of 180 from y 60 */
 .dwg{position:absolute;padding:0;border:0;background:#f4f4f4;overflow:hidden;cursor:pointer}
 .dwg img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s} .dwg:hover img{transform:scale(1.04)}
@@ -753,10 +753,16 @@ img[src^="img/m-lg-"]{box-sizing:border-box;padding:6px 12px}
 <script>document.addEventListener("pagechange",e=>document.querySelectorAll("a.impl").forEach(a=>a.classList.toggle("cur",e.detail==="impressum")));</script><script>(function(){ const sw=document.getElementById('dwsw'), wo=document.getElementById('dwon'), ti=document.getElementById('dwtitle'); if(!sw||!wo) return;
   const sc=wo.querySelector('.dwsc'), grid=document.getElementById('dwgrid'), tiles=[...grid.querySelectorAll('.dwg')], pop=document.getElementById('dwpop'), body=document.getElementById('dwbody');
   const CATS=JSON.parse(wo.dataset.cats); let only=null, cur=0;
-  const set=on=>{ document.documentElement.classList.toggle('dwopen',on); sw.setAttribute('aria-pressed',String(on)); wo.hidden=!on; ti.hidden=!on; if(!on) pop.hidden=true; else { carpet(); sc.scrollTop=0;  } };
+  const set=on=>{ document.documentElement.classList.toggle('dwopen',on); sw.setAttribute('aria-pressed',String(on)); wo.hidden=!on; ti.hidden=!on; if(!on) pop.hidden=true; else { carpet(); sc.scrollTop=0; requestAnimationFrame(nxl); } };
   sw.addEventListener('click',()=>set(sw.getAttribute('aria-pressed')!=='true'));
   document.querySelectorAll('.hot.tab,.hot.pin').forEach(a=>a.addEventListener('click',()=>set(false)));
-  wo.addEventListener('wheel',e=>e.stopPropagation(),{passive:true});
+  addEventListener('wheel',e=>{ if(wo.hidden||!pop.hidden&&false) return; if(!e.target.closest||!e.target.closest('#dwon')) return; e.stopImmediatePropagation(); e.preventDefault(); sc.scrollTop+=e.deltaY; },{passive:false,capture:true});
+  /* the scroll arrow at the foot works on wonder too: a screen further down, at the end "top" */
+  const nx=document.getElementById('nextp');
+  const nxl=()=>{ if(!nx||wo.hidden) return; const end=sc.scrollTop+sc.clientHeight>=sc.scrollHeight-4; nx.classList.toggle('up',end); nx.classList.remove('hint'); nx.style.width='90px'; nx.lastChild.textContent=end?'top':'scroll'; };
+  sc.addEventListener('scroll',nxl,{passive:true});
+  if(nx) addEventListener('click',e=>{ if(wo.hidden||!e.target.closest||!e.target.closest('#nextp')) return; e.preventDefault(); e.stopImmediatePropagation();
+    const end=sc.scrollTop+sc.clientHeight>=sc.scrollHeight-4; sc.scrollTo({top:end?0:sc.scrollTop+sc.clientHeight-95,behavior:'smooth'}); },true);
   addEventListener('keydown',e=>{ if(wo.hidden) return; if(e.key==='Escape'){ if(!pop.hidden) pop.hidden=true; else set(false); e.stopImmediatePropagation(); }
     else if(!pop.hidden&&(e.key==='ArrowLeft'||e.key==='ArrowRight')){ step(e.key==='ArrowLeft'?-1:1); e.stopImmediatePropagation(); } else e.stopImmediatePropagation(); },true);
   function lay(items,W){ const out=[]; let y=0, row=[];

@@ -665,22 +665,28 @@ dialog .top{flex:none}
         else { const rh=s/w; let xx=x; row.forEach(o=>{ const rw=o.s/rh; out.push({...o,x:xx,y,w:rw,h:rh}); xx+=rw; }); y+=rh; h-=rh; } } }
     /* (23 Oct, 03:10) like the desktop: the photos on the page's own grid - its two columns (8 px apart) each split in two half-columns 5 px apart,
        rows of 0.9 x a half-column; pieces 1 x 1, a whole column (2 x 1), 1 x 2, 2 x 2 or now and then the full width (4 x 4); white rests; packed in order */
-    function carpet(){ const W=grid.clientWidth; if(!W) return; const CW=(W-8)/2, HW=(CW-5)/2, RH=Math.round(HW*.9), RG=5;
+    function carpet(){ const W=grid.clientWidth; if(!W) return;
       const ph=tiles.filter(t=>!t.classList.contains('t')&&(only===null||t.dataset.cat===only));
       tiles.forEach(t=>t.hidden=true); grid.innerHTML='';
-      const occ=[], free=(c,r,w,h)=>{ for(let y=r;y<r+h;y++) for(let x=c;x<c+w;x++){ if(x>3||(occ[y]&&occ[y][x])) return false; } return true; };
-      const take=(c,r,w,h)=>{ for(let y=r;y<r+h;y++){ occ[y]=occ[y]||[]; for(let x=c;x<c+w;x++) occ[y][x]=1; } };
-      const X=c=>Math.floor(c/2)*(CW+8)+(c%2)*(HW+5), Wd=w=>w===1?HW:w===2?CW:W;
-      let bottom=0;
-      const place=(e,w,h)=>{ for(let r=0;;r++) for(let c=0;c<4;c++){ if(w>=2&&c%2) continue; if(w===4&&c) continue; if(free(c,r,w,h)){ take(c,r,w,h);
-        e.style.cssText=''; Object.assign(e.style,{position:'absolute',left:X(c)+'px',top:(r*(RH+RG))+'px',width:Wd(w)+'px',height:(h*RH+(h-1)*RG)+'px'}); grid.appendChild(e); bottom=Math.max(bottom,r+h); return; } } };
-      let n=0;
-      ph.forEach((t,k)=>{ if(k%3===1||k%7===5){ const e=document.createElement('i'); e.className='wempty'; place(e,1,1); }
-        /* (07:30) mostly squares in many sizes, now and then a wide piece over the full width */
-        const SZ=[[2,2],[1,1],[1,1],[4,2],[1,1],[2,2],[1,1],[2,1],[1,1],[4,4],[1,1],[2,2],[1,1],[4,3],[1,1],[2,2],[1,1],[4,2]];
-        const [w,h]=SZ[n%SZ.length];
-        n++; t.hidden=false; place(t,w,h); });
-      grid.style.height=(bottom*(RH+RG))+'px'; }
+      const COLS=2, CG=8, CW=(W-CG)/2, G=4, RATIO=.95, EMPTY='wempty';
+    /* (08:10) each column of the page split in THREE, rows to match: mostly small pieces - squares, upright and wide rectangles - with the odd bigger one;
+       a piece never straddles the gap between two columns unless it fills whole columns */
+    const K=3, NC=COLS*K, SW=(CW-2*G)/K, PITCH=SW*RATIO+G;
+    const X=c=>Math.floor(c/K)*(CW+CG)+(c%K)*(SW+G), WD=(c,w)=>w%K===0?(w/K)*CW+(w/K-1)*CG:w*SW+(w-1)*G, HT=h=>h*PITCH-G;
+    const ok=(c,w)=>c+w<=NC&&(Math.floor(c/K)===Math.floor((c+w-1)/K)||(w%K===0&&c%K===0));
+    const SZ=[[1,1],[2,1],[1,1],[1,2],[1,1],[2,2],[1,1],[2,1],[1,1],[1,1],[1,2],[3,2],[1,1],[2,1],[1,1],[1,1],[2,2],[1,2],[1,1],[2,1],[1,1],[3,3],[1,1],[1,2],[2,1]];
+    const occ=[], free=(c,r,w,h)=>{ for(let y=r;y<r+h;y++) for(let x=c;x<c+w;x++){ if(occ[y]&&occ[y][x]) return false; } return true; };
+    const take=(c,r,w,h)=>{ for(let y=r;y<r+h;y++){ occ[y]=occ[y]||[]; for(let x=c;x<c+w;x++) occ[y][x]=1; } };
+    let bottom=0;
+    const place=(e,w,h)=>{ if(w>NC) w=NC; for(let r=0;;r++) for(let c=0;c<NC;c++){ if(!ok(c,w)||!free(c,r,w,h)) continue; take(c,r,w,h);
+      e.style.cssText=''; Object.assign(e.style,{position:'absolute',left:X(c)+'px',top:(r*PITCH)+'px',width:WD(c,w)+'px',height:HT(h)+'px'}); grid.appendChild(e); bottom=Math.max(bottom,r+h); return; } };
+    let n=0;
+    ph.forEach((t,k)=>{ if(k%5===3){ const e=document.createElement('i'); e.className=EMPTY; place(e,1,1); }
+      let [w,h]=SZ[n%SZ.length]; n++; t.hidden=false; place(t,w,h); });
+    /* fill the screen: with all categories on, the photos come round again (repeats open the same post) until the carpet is well over a screen deep */
+    if(only===null&&ph.length) for(let k=0; k<ph.length*3 && bottom*PITCH<innerHeight*2.2; k++){ const t=ph[(k*7+3)%ph.length], e=t.cloneNode(true); e.classList.add('again'); e.hidden=false;
+      e.addEventListener('click',()=>pop(t)); if(k%5===3){ const x=document.createElement('i'); x.className=EMPTY; place(x,1,1); } let [w,h]=SZ[n%SZ.length]; n++; place(e,w,h); }
+    grid.style.height=(bottom*PITCH)+'px'; }
     /* the ten categories: a fixed grid of five by two under the header, small coloured labels; the chosen one shows "×" (tap again = all) */
     const fl=document.createElement('div'); fl.className='wcats'; wd.insertBefore(fl,grid);
     const fb=CATS.map((c,k)=>{ const b=document.createElement('button'); b.type='button'; b.className='wfb'; b.innerHTML='<b>'+c+'</b>';

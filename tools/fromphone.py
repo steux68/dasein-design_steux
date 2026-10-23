@@ -559,19 +559,26 @@ WONDER_JS = r"""<script>(function(){ const sw=document.getElementById('dwsw'), w
   /* the carpet (02:30): ten half-columns - two in each column of the site, 10 px apart, 20 px between columns - and rows of 85 + 10, so two rows
      make one row of the projects page; photos take 1 x 1, 2 x 1 (a whole column), 1 x 2, 2 x 2 or now and then 4 x 4, packed in order */
   function carpet(){ const ph=tiles.filter(t=>only===null||t.dataset.cat===only);
-    tiles.forEach(t=>t.hidden=true); grid.querySelectorAll('.dwempty').forEach(e=>e.remove());
-    const occ=[], free=(c,r,w,h)=>{ for(let y=r;y<r+h;y++) for(let x=c;x<c+w;x++){ if(x>9||(occ[y]&&occ[y][x])) return false; } return true; };
+    tiles.forEach(t=>t.hidden=true); grid.querySelectorAll('.dwempty,.again').forEach(e=>e.remove());
+    const COLS=5, CW=200, CG=20, G=7, RATIO=.9, EMPTY='dwempty';
+    /* (08:10) each column of the page split in THREE, rows to match: mostly small pieces - squares, upright and wide rectangles - with the odd bigger one;
+       a piece never straddles the gap between two columns unless it fills whole columns */
+    const K=3, NC=COLS*K, SW=(CW-2*G)/K, PITCH=SW*RATIO+G;
+    const X=c=>Math.floor(c/K)*(CW+CG)+(c%K)*(SW+G), WD=(c,w)=>w%K===0?(w/K)*CW+(w/K-1)*CG:w*SW+(w-1)*G, HT=h=>h*PITCH-G;
+    const ok=(c,w)=>c+w<=NC&&(Math.floor(c/K)===Math.floor((c+w-1)/K)||(w%K===0&&c%K===0));
+    const SZ=[[1,1],[2,1],[1,1],[1,2],[1,1],[2,2],[1,1],[2,1],[1,1],[1,1],[1,2],[3,2],[1,1],[2,1],[1,1],[1,1],[2,2],[1,2],[1,1],[2,1],[1,1],[3,3],[1,1],[1,2],[2,1]];
+    const occ=[], free=(c,r,w,h)=>{ for(let y=r;y<r+h;y++) for(let x=c;x<c+w;x++){ if(occ[y]&&occ[y][x]) return false; } return true; };
     const take=(c,r,w,h)=>{ for(let y=r;y<r+h;y++){ occ[y]=occ[y]||[]; for(let x=c;x<c+w;x++) occ[y][x]=1; } };
-    const X=c=>Math.floor(c/2)*220+(c%2)*105, Wd=(c,w)=>w===1?95:w===2?200:w===4?420:640, Ht=h=>h*95-10;
-    const place=(e,w,h)=>{ for(let r=0;;r++) for(let c=0;c<10;c++){ if((w>=2&&c%2)||(w===4&&c%4===2&&false)) continue; if(free(c,r,w,h)){ take(c,r,w,h);
-      Object.assign(e.style,{left:X(c)+'px',top:(r*95)+'px',width:Wd(c,w)+'px',height:Ht(h)+'px'}); grid.appendChild(e); return r+h; } } };
-    let n=0, bottom=0;
-    ph.forEach((t,k)=>{ if(k%3===1||k%7===5){ const e=document.createElement('i'); e.className='dwempty'; bottom=Math.max(bottom,place(e,1,1)); }   /* white rests */
-      /* (07:30) mostly squares in many sizes - small, column, two columns - and now and then a wide piece over two or three columns */
-      const SZ=[[2,2],[1,1],[1,1],[4,2],[1,1],[2,2],[1,1],[2,1],[1,1],[4,4],[1,1],[2,2],[1,1],[6,3],[1,1],[2,2],[1,1],[4,2]];
-      const [w,h]=SZ[n%SZ.length];
-      n++; t.hidden=false; t.style.cssText=''; bottom=Math.max(bottom,place(t,w,h)); });
-    grid.style.height=(bottom*95)+'px'; }
+    let bottom=0;
+    const place=(e,w,h)=>{ if(w>NC) w=NC; for(let r=0;;r++) for(let c=0;c<NC;c++){ if(!ok(c,w)||!free(c,r,w,h)) continue; take(c,r,w,h);
+      e.style.cssText=''; Object.assign(e.style,{position:'absolute',left:X(c)+'px',top:(r*PITCH)+'px',width:WD(c,w)+'px',height:HT(h)+'px'}); grid.appendChild(e); bottom=Math.max(bottom,r+h); return; } };
+    let n=0;
+    ph.forEach((t,k)=>{ if(k%5===3){ const e=document.createElement('i'); e.className=EMPTY; place(e,1,1); }
+      let [w,h]=SZ[n%SZ.length]; n++; t.hidden=false; place(t,w,h); });
+    /* fill the screen: with all categories on, the photos come round again (repeats open the same post) until the carpet is well over a screen deep */
+    if(only===null&&ph.length) for(let k=0; k<ph.length*3 && bottom*PITCH<sc.clientHeight*1.6; k++){ const t=ph[(k*7+3)%ph.length], e=t.cloneNode(true); e.classList.add('again'); e.hidden=false;
+      e.addEventListener('click',()=>show(t)); if(k%5===3){ const x=document.createElement('i'); x.className=EMPTY; place(x,1,1); } let [w,h]=SZ[n%SZ.length]; n++; place(e,w,h); }
+    grid.style.height=(bottom*PITCH)+'px'; }
   /* the beetle wanders over wonder in curves, quick but not frantic, leaving a dotted trail that slowly fades; it stays put while the photos scroll */
   /* (02:58) only in the white band between the tabs and the category row, slowly, in spaghetti loops from left to right and back */
   (function(){ const bug=document.getElementById('dwbug'), cv=document.getElementById('dwtrail'), tc=cv.getContext('2d'); const W=1100, H=216;

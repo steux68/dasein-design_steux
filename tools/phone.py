@@ -427,7 +427,7 @@ body{{position:relative}}
 .wfb{{background-image:none!important;border-radius:2px}}
 .wfb:nth-child(1){{background-color:#cdff3e}} .wfb:nth-child(2){{background-color:#ffd400}} .wfb:nth-child(3){{background-color:#2f8cff;color:#fff}} .wfb:nth-child(4){{background-color:#ffb3d1}}
 .wfb:nth-child(5){{background-color:#e30613;color:#fff}} .wfb:nth-child(6){{background-color:#2fbf4a;color:#fff}} .wfb:nth-child(7){{background-color:#ff8a00}} .wfb:nth-child(8){{background-color:#9b6bff;color:#fff}} .wfb:nth-child(9){{background-color:#00b3a6;color:#fff}} .wfb:nth-child(10){{background-color:#1f2a6b;color:#fff}}
-.wfb.on{{box-shadow:0 0 0 2px #111,0 1px 6px rgba(0,0,0,.25)}} .wfb:active{{filter:brightness(1.1)}}   /* the six categories float above the grid, as the half title bars do on the main page */
+.wfb.on{{box-shadow:0 0 0 2px #111,0 1px 6px rgba(0,0,0,.25)}} .wfb.on small{{display:none}} .wfb.on::after{{content:"× all";margin-left:4px;font-size:11px;font-weight:700;opacity:.85}} .wfb:active{{filter:brightness(1.1)}}   /* the six categories float above the grid, as the half title bars do on the main page */
 .wonder .wgrid{{display:block;position:relative;margin-top:12px;grid-template-columns:repeat(5,1fr);grid-auto-rows:calc((100vw - 36px - 12px) / 5);grid-auto-flow:dense;gap:3px;margin-top:10px}}
 .wempty{{display:block;background:#fff}}
 .wonder .wgrid > *{{position:relative;box-sizing:border-box;border:0;margin:0;width:auto;height:auto}}

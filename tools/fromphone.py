@@ -516,6 +516,7 @@ WONDER_CSS = """
 .dwfb:nth-child(1){background:#cdff3e} .dwfb:nth-child(2){background:#ffd400} .dwfb:nth-child(3){background:#2f8cff;color:#fff} .dwfb:nth-child(4){background:#ffb3d1}
 .dwfb:nth-child(5){background:#e30613;color:#fff} .dwfb:nth-child(6){background:#2fbf4a;color:#fff} .dwfb:nth-child(7){background:#ff8a00} .dwfb:nth-child(8){background:#9b6bff;color:#fff} .dwfb:nth-child(9){background:#00b3a6;color:#fff} .dwfb:nth-child(10){background:#1f2a6b;color:#fff}
 .dwfb.on{box-shadow:inset 0 0 0 2px #111}
+.dwfb.on small{display:none} .dwfb.on::after{content:"× all";margin-left:4px;font-size:11px;font-weight:700;opacity:.85}   /* the chosen category offers the way back to all photos */
 .dwpop{position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.62);backdrop-filter:blur(1.5px)}
 .dwpop[hidden]{display:none}
 .dwcard{width:560px;background:#fff;box-shadow:0 2px 18px rgba(0,0,0,.18);border:1px dotted #b8b8b8;font-family:Calibri,Carlito,sans-serif}

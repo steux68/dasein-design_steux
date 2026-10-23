@@ -497,6 +497,7 @@ WONDER_CSS = """
 .dwtrail{position:absolute;left:0;top:0;width:1100px;height:216px;z-index:2;pointer-events:none}
 .dwbug{position:absolute;left:0;top:0;width:29px;height:65px;margin:-32px 0 0 -15px;z-index:2;pointer-events:none;will-change:transform;
 }   /* no outline: it walks on white */
+.dwopen #ihint{display:none!important}   /* no start-page hint over wonder (23 Oct) */
 .dwopen #mapclip{visibility:hidden}   /* the live map sits above the page: hidden while wonder is open (the dashed columns stay) */
 .dwsc{position:absolute;inset:0;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;scrollbar-width:none;padding:30px 10px 30px} .dwsc::-webkit-scrollbar{display:none}
 .dwgrid{position:relative;width:1080px}   /* each column of the projects grid split in two (95 + 10 + 95), rows of 85 + 10 */   /* the projects page's module: columns on the dashed lines, rows of 180 from y 60 */
@@ -524,6 +525,7 @@ WONDER_CSS = """
 .dwtop{display:flex;justify-content:space-between;align-items:center;padding:10px 14px 6px;font-size:13px;color:#666;letter-spacing:.06em} .dwtop b{color:#e30613;font-weight:400}
 .dwx{border:0;background:none;padding:2px;cursor:pointer} .dwx svg{width:24px;height:24px} .dwx .rg{fill:none;stroke:#3a3c37;stroke-width:.6} .dwx .xx{fill:none;stroke:#1a1a1a;stroke-width:1.15;stroke-linecap:round} .dwx:hover .rg{stroke:#e30613}
 .dwbody{padding:0 14px 8px} .dwbody img{display:block;width:100%;aspect-ratio:1/1;object-fit:contain;background:#f6f6f6;outline:1px dotted #b8b8b8;outline-offset:-1px}
+.dwbody img{cursor:none}   /* the floating W / E arrow takes over (23 Oct) */
 .dwbody .d{margin:10px 0 2px;font-size:13px;letter-spacing:.06em;color:#888} .dwbody .l{margin:0 0 4px;font-size:18px;color:#222}
 .dwnav{display:flex;justify-content:space-between;padding:8px 12px 10px;border-top:1px dashed #c4c4c4}
 .dwnav button{display:flex;align-items:center;gap:7px;border:0;background:none;font:14px Calibri,Carlito,sans-serif;cursor:pointer;padding:3px} .dwnav button:hover{color:#e30613}
@@ -620,6 +622,15 @@ WONDER_JS = r"""<script>(function(){ const sw=document.getElementById('dwsw'), w
     only=null; wo.querySelectorAll('.dwfb').forEach(x=>x.classList.remove('on')); carpet(); });
   document.getElementById('dwprev').onclick=()=>step(-1); document.getElementById('dwnext').onclick=()=>step(1);
   document.getElementById('dwx').onclick=()=>{ pop.hidden=true; }; pop.addEventListener('click',e=>{ if(e.target===pop) pop.hidden=true; });
+  /* over the photo: the floating W / E arrow of the project pop-up; a click on the left half goes back, on the right half on (23 Oct) */
+  const ar=document.createElement('div'); ar.className='pcar'; ar.setAttribute('aria-hidden','true'); ar.innerHTML=__DWAR__; document.body.appendChild(ar);
+  const half=(e,im)=>{ const r=im.getBoundingClientRect(); return e.clientX<r.left+r.width/2?'l':'r'; };
+  body.addEventListener('mousemove',e=>{ const im=e.target.closest('img'); if(!im){ ar.className='pcar'; return; }
+    ar.style.transform=`translate(${e.clientX}px,${e.clientY}px)`; ar.className='pcar on '+half(e,im); });
+  body.addEventListener('mouseleave',()=>ar.className='pcar');
+  body.addEventListener('click',e=>{ const im=e.target.closest('img'); if(!im) return; step(half(e,im)==='l'?-1:1);
+    requestAnimationFrame(()=>{ ar.className='pcar on '+half(e,body.querySelector('img')); }); });
+  new MutationObserver(()=>{ if(pop.hidden) ar.className='pcar'; }).observe(pop,{attributes:true,attributeFilter:['hidden']});
 })();</script>"""
 
 
@@ -675,7 +686,7 @@ def _desk_catchup(s):
           f'<div class="dwbody" id="dwbody"></div><div class="dwnav"><button type="button" id="dwprev">{W}<span>previous</span></button><button type="button" id="dwnext"><span>next</span>{E}</button></div></div></div></div>')
     i = s.index('<a class="hot tab" href="#contact"')
     s = s[:i] + sw + wo + s[i:]
-    return s.replace('</body>', WONDER_JS + '</body>', 1)
+    return s.replace('</body>', WONDER_JS.replace('__DWAR__', json.dumps(compass('W', 28, 'cw') + compass('E', 28, 'ce'))) + '</body>', 1)
 
 
 def _tint(s):

@@ -108,6 +108,7 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
 @keyframes lbin{from{opacity:0;transform:translateY(14px)}}
 @media (prefers-reduced-motion:reduce){dialog.lb[open] .lbv,dialog.lb[open] .lbp{animation:none}}
 /* the site's dashed column lines, kept sharp over the veil */
+.lbg{position:absolute;inset:0;z-index:6;pointer-events:none}   /* the column lines above the pop-up too (23 Oct) */
 .lbg i{position:absolute;top:32px;height:992px;width:var(--w);pointer-events:none;
   --w:calc(1px / (var(--s,1) * var(--dpr,1)));background:repeating-linear-gradient(to bottom,#b4b4b4 0 5px,transparent 5px 7.5px)}
 /* the pop-up itself, centred in the main area */

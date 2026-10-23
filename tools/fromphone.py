@@ -517,6 +517,7 @@ WONDER_CSS = """
 .dwfb:nth-child(5){background:#d03a3a;color:#fff} .dwfb:nth-child(6){background:#45ad5c;color:#fff} .dwfb:nth-child(7){background:#ee9233} .dwfb:nth-child(8){background:#9a7ee6;color:#fff} .dwfb:nth-child(9){background:#26a69c;color:#fff} .dwfb:nth-child(10){background:#2e3a72;color:#fff}
 .dwfb.on{box-shadow:inset 0 0 0 2px #111}
 .dwfb.on small{display:none} .dwfb.on::after{content:"× all";margin-left:4px;font-size:11px;font-weight:700;opacity:.85}   /* the chosen category offers the way back to all photos */
+.dwlines{z-index:5} .dwlines i{top:0;height:966px}   /* the column lines above the wonder photos and card (23 Oct) */
 .dwpop{position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.62);backdrop-filter:blur(1.5px)}
 .dwpop[hidden]{display:none}
 .dwcard{width:560px;background:#fff;box-shadow:0 2px 18px rgba(0,0,0,.18);border:1px dotted #b8b8b8;font-family:Calibri,Carlito,sans-serif}
@@ -669,7 +670,7 @@ def _desk_catchup(s):
              '<div class="[word-break:break-word] flex flex-col finter font-semibold h-[84px] justify-end leading-[0] not-italic relative text-[0px] text-[rgba(0,0,0,0.8)] w-[560px]">'
              '<p><span class="fcal-b leading-[normal] text-[50px]">wonder </span><span class="fcal-r leading-[normal] text-[20px]">[w]</span></p></div></div></div>')
     wo = (f'<div class="dwtitle" id="dwtitle" hidden>{title}</div>'
-          f'<div class="dwon" id="dwon" hidden data-cats=\'{json.dumps(cats)}\'><div class="dwsc"><div class="dwgrid" id="dwgrid">{tiles}</div></div><div class="dwfloat"></div><canvas class="dwtrail" id="dwtrail"></canvas><img class="dwbug" id="dwbug" src="img/m-bug-up.webp" alt="">'
+          f'<div class="dwon" id="dwon" hidden data-cats=\'{json.dumps(cats)}\'><div class="dwsc"><div class="dwgrid" id="dwgrid">{tiles}</div></div><div class="dwfloat"></div><canvas class="dwtrail" id="dwtrail"></canvas><img class="dwbug" id="dwbug" src="img/m-bug-up.webp" alt=""><div class="lbg dwlines" aria-hidden="true"><i style="left:0px"></i><i style="left:220px"></i><i style="left:440px"></i><i style="left:660px"></i><i style="left:880px"></i><i style="left:1100px"></i></div>'
           f'<div class="dwpop" id="dwpop" hidden><div class="dwcard"><div class="dwtop"><span id="dwk"></span><button type="button" class="dwx" id="dwx" aria-label="close">{XC}</button></div>'
           f'<div class="dwbody" id="dwbody"></div><div class="dwnav"><button type="button" id="dwprev">{W}<span>previous</span></button><button type="button" id="dwnext"><span>next</span>{E}</button></div></div></div></div>')
     i = s.index('<a class="hot tab" href="#contact"')

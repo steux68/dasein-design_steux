@@ -150,7 +150,7 @@ PARTNERS = [
                                          'Sep.’19 – Mai.’20 » BWM Architekten, Wien',
                                          'Mar.’10 – Aug.’19 » BEHF Architects, Wien',
                                          'Jun.’99 – Feb.’10 » Aedas, Ian Simpson, David Morley, Arthur Collin &amp; Gregory Phillips, London'])]),
-    dict(role='Architect', first='Steuart', last='J Mackenzie HARRISON', q='BArch MArch ARB', idimg='m-id-steuart-line.webp', idalt='Führerschein Steuart J Mackenzie Harrison', tel='+43 (0)699 1941 9240', mail='steuart@dasein-design.net', nat='Schottland [Europäisch!]', lang='Englisch [Muttersprache], Deutsch [B2]',
+    dict(role='Architect', first='Steuart', last='J Mackenzie HARRISON', q='BArch MArch ARB', idimg='m-portrait-steuart.webp', idalt='Steuart J Mackenzie Harrison', tel='+43 (0)699 1941 9240', mail='steuart@dasein-design.net', nat='Schottland [Europäisch!]', lang='Englisch [Muttersprache], Deutsch [B2]',
          extra='Sprachen: Englisch [Muttersprache] &amp; Deutsch [B2]',
          cv=[('Professional', ['2019 ZT: Arch+Ing, Bundeskammer der ZiviltechnikerInnen, Österreich [EU]',
                                '2004 ARB: Architects Registration Board of the United Kingdom [UK]',
@@ -171,7 +171,7 @@ PARTNERS = [
 def partner(n, p):
     """one architect: a column of the two-column block (ID card on its grey tile, name, letters, phone, e-mail, CV button)"""
     tel = p['tel'].replace(' ', '').replace('(0)', '')
-    return (f'<article class="who"><span class="idw"><img class="idc" src="../img/{p["idimg"]}" alt="{p["idalt"]} (Nummer, Geburtsdatum und Unterschrift unkenntlich)" loading="lazy"></span>'
+    return (f'<article class="who"><span class="idw"><img class="idc{" sq" if "portrait" in p["idimg"] else ""}" src="../img/{p["idimg"]}" alt="{p["idalt"]}{"" if "portrait" in p["idimg"] else " (Nummer, Geburtsdatum und Unterschrift unkenntlich)"}" loading="lazy"></span>'
             f'<p class="role">» {p["role"]}</p><h3>{p["first"]}<br><b>{p["last"]}</b></h3><p class="q">{p["q"]}</p>'
             f'<p class="fx"><b>Staatsbürgerschaft:</b> {p["nat"]}<br><b>Sprachen:</b> {p["lang"]}</p>'
             f'<p class="kt"><a href="tel:{tel}">{p["tel"]}</a><a href="mailto:{p["mail"]}">{p["mail"]}</a></p>'
@@ -646,6 +646,7 @@ html,body{{overflow-x:clip}}
 /* ID card on top, filling the column (number, birth date and signature blurred) */
 .who .idw{{display:block;align-self:stretch;position:relative}}   /* the ID card fills the column, no frame of its own (Steuart, 21 Oct) */
 .who .idc{{display:block;width:100%;height:auto;border-radius:6px}}
+.who .idc.sq{{width:63.4%;border-radius:0}}   /* Steuart's portrait square, as tall as Cuong's card (23 Oct) */
 .cvr{{margin:0;font-size:11.5px;color:#666}}
 .who .role .rs,.cvr .rs{{display:inline-block;width:2.5px;height:.95em;margin:0 6px;vertical-align:-.1em;background:#3a3c37}}
 .who .role{{margin:8px 0 0;font-size:11.5px;color:#666}}

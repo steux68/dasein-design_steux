@@ -497,6 +497,7 @@ WONDER_CSS = """
 .dwtrail{position:absolute;left:0;top:0;width:1100px;height:216px;z-index:2;pointer-events:none}
 .dwbug{position:absolute;left:0;top:0;width:29px;height:65px;margin:-32px 0 0 -15px;z-index:2;pointer-events:none;will-change:transform;
 }   /* no outline: it walks on white */
+[data-node-id="1:600"]{width:150px!important}   /* Steuart's portrait square (three photos and one empty) in place of his card, as tall as Cuong's card (23 Oct) */
 .dwopen #ihint{display:none!important}   /* no start-page hint over wonder (23 Oct) */
 .dwopen #mapclip{visibility:hidden}   /* the live map sits above the page: hidden while wonder is open (the dashed columns stay) */
 .dwsc{position:absolute;inset:0;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;scrollbar-width:none;padding:30px 10px 30px} .dwsc::-webkit-scrollbar{display:none}
@@ -518,7 +519,6 @@ WONDER_CSS = """
 .dwfb:nth-child(5){background:#d03a3a;color:#fff} .dwfb:nth-child(6){background:#45ad5c;color:#fff} .dwfb:nth-child(7){background:#ee9233} .dwfb:nth-child(8){background:#9a7ee6;color:#fff} .dwfb:nth-child(9){background:#26a69c;color:#fff} .dwfb:nth-child(10){background:#2e3a72;color:#fff}
 .dwfb.on{box-shadow:inset 0 0 0 2px #111}
 .dwfb.on small{display:none} .dwfb.on::after{content:"× all";margin-left:4px;font-size:11px;font-weight:700;opacity:.85}   /* the chosen category offers the way back to all photos */
-.dwlines{z-index:5} .dwlines i{top:0;height:966px}   /* the column lines above the wonder photos and card (23 Oct) */
 .dwpop{position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.62);backdrop-filter:blur(1.5px)}
 .dwpop[hidden]{display:none}
 .dwcard{width:560px;background:#fff;box-shadow:0 2px 18px rgba(0,0,0,.18);border:1px dotted #b8b8b8;font-family:Calibri,Carlito,sans-serif}
@@ -681,7 +681,7 @@ def _desk_catchup(s):
              '<div class="[word-break:break-word] flex flex-col finter font-semibold h-[84px] justify-end leading-[0] not-italic relative text-[0px] text-[rgba(0,0,0,0.8)] w-[560px]">'
              '<p><span class="fcal-b leading-[normal] text-[50px]">wonder </span><span class="fcal-r leading-[normal] text-[20px]">[w]</span></p></div></div></div>')
     wo = (f'<div class="dwtitle" id="dwtitle" hidden>{title}</div>'
-          f'<div class="dwon" id="dwon" hidden data-cats=\'{json.dumps(cats)}\'><div class="dwsc"><div class="dwgrid" id="dwgrid">{tiles}</div></div><div class="dwfloat"></div><canvas class="dwtrail" id="dwtrail"></canvas><img class="dwbug" id="dwbug" src="img/m-bug-up.webp" alt=""><div class="lbg dwlines" aria-hidden="true"><i style="left:0px"></i><i style="left:220px"></i><i style="left:440px"></i><i style="left:660px"></i><i style="left:880px"></i><i style="left:1100px"></i></div>'
+          f'<div class="dwon" id="dwon" hidden data-cats=\'{json.dumps(cats)}\'><div class="dwsc"><div class="dwgrid" id="dwgrid">{tiles}</div></div><div class="dwfloat"></div><canvas class="dwtrail" id="dwtrail"></canvas><img class="dwbug" id="dwbug" src="img/m-bug-up.webp" alt="">'
           f'<div class="dwpop" id="dwpop" hidden><div class="dwcard"><div class="dwtop"><span id="dwk"></span><button type="button" class="dwx" id="dwx" aria-label="close">{XC}</button></div>'
           f'<div class="dwbody" id="dwbody"></div><div class="dwnav"><button type="button" id="dwprev">{W}<span>previous</span></button><button type="button" id="dwnext"><span>next</span>{E}</button></div></div></div></div>')
     i = s.index('<a class="hot tab" href="#contact"')
@@ -816,7 +816,7 @@ def patch(s):
     s = _impressum_page(s)
     s = _tint(s)
     s = s.replace('src="img/services-imgImage.webp"', 'src="img/services-id-cuong-line.webp"')
-    s = s.replace('src="img/services-imgImage1.webp"', 'src="img/services-id-steuart-line.webp"')   # 23 Oct: a black-and-white line drawing of the card, no personal numbers
+    s = s.replace('src="img/services-imgImage1.webp"', 'src="img/services-portrait-steuart.webp"')   # 23 Oct: a black-and-white line drawing of the card, no personal numbers
     s = s.replace('<head>', '<head><script>/* phones go to the phone site (23 Oct); ?desktop=1 stays here and is remembered */ (function(){ try{ const q=new URLSearchParams(location.search);'
                   ' if(q.get("desktop")==="1") localStorage.setItem("dd-desktop","1"); if(q.get("desktop")==="0") localStorage.removeItem("dd-desktop");'
                   ' const narrow=Math.min(screen.width,screen.height)<=600||(innerWidth<=760&&matchMedia("(pointer:coarse)").matches);'

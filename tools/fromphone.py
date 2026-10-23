@@ -716,8 +716,8 @@ IMP_CSS = """
 .impb .lp{color:#666;font-size:11px;margin:0}
 .impb h4{margin:0 0 2px;font-size:11.5px;font-weight:700;color:#000} .impb p{margin:0} .impb .lp+h4{margin-top:8px}
 .impb a,.impfull a{color:#1a5fd0;text-decoration:none} .impb a[href^="tel:"],.impfull a[href^="tel:"]{color:#1e8e3e}
-.impfull{background:#fff;z-index:7;display:none} .impo .impfull{display:block} .impo .impb{visibility:hidden}
-.impopen #mapclip{visibility:hidden}   /* the live map sits above the page: hidden while the full impressum is open */
+.impfull{z-index:7;display:none;column-count:5;column-gap:20px;font-size:11px;line-height:1.42} .impfull h4{font-size:11px;margin-top:8px} .impfull .lp{font-size:10.5px} .impo .impfull{display:block} .impo .impb{visibility:hidden}
+.imptint{position:absolute;left:235px;top:630px;width:1080px;height:363px;background:#f4f4f2}   /* the impressum on a pale grey band under the map (23 Oct, 13:20) */
 .dimp{left:235px;top:960px;width:1080px;height:28px;padding:0 0 0 2px;
   background:repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left top/100% 1px no-repeat,
              repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left bottom/100% 1px no-repeat}
@@ -748,10 +748,10 @@ def _contact_imp(s):
     s = s.replace('<head>', '<head><script>if(location.hash==="#impressum"){ history.replaceState(null,"",location.pathname+location.search+"#contact"); window.ddImp=1; }</script>', 1)
     # contact details to the top of the first column, a touch smaller; the map from y 60 to 800
     s = _rep('top-[445px] w-[200px] whitespace-pre-wrap" style="top:440px" data-node-id="1:474"', 'top-[445px] w-[200px] whitespace-pre-wrap" style="top:60px;font-size:11px" data-node-id="1:474"', s)
-    s = _rep('<div class="absolute h-[560px] left-[455px] top-[440px] w-[860px]" data-node-id="4:2"', '<div class="absolute h-[560px] left-[455px] top-[440px] w-[860px]" style="top:60px;height:740px" data-node-id="4:2"', s)
+    s = _rep('<div class="absolute h-[560px] left-[455px] top-[440px] w-[860px]" data-node-id="4:2"', '<div class="absolute h-[560px] left-[455px] top-[440px] w-[860px]" style="top:60px;height:560px" data-node-id="4:2"', s)
     s = _rep('contact.offsetTop-sc.scrollTop+440-32', 'contact.offsetTop-sc.scrollTop+60-32', s)
-    s = _rep('height:${560*s}px`;', 'height:${740*s}px`;', s)
-    s = _rep('top:${240*s}px`;', 'top:${620*s}px`;', s)
+    s = _rep('height:${560*s}px`;', 'height:${560*s}px`;', s)
+    s = _rep('top:${240*s}px`;', 'top:${240*s}px`;', s)
     # under the map: the basics; at the bottom the bar; the full text over the map when open
     PLUS = ('<svg viewBox="-12 -12 24 24" aria-hidden="true"><circle class="r1" r="8"/><circle class="r2" r="8"/><circle class="c" r="8"/>'
             '<path class="v" d="M0 -4.2V4.2"/><path d="M-4.2 0H4.2"/></svg>')
@@ -759,9 +759,9 @@ def _contact_imp(s):
     get = {re.sub('<.*?>', '', h): h + t for h, t in parts}
     lp = re.search(r'<p class="lp">.*?</p>', LEGAL_BODY).group(0)
     legal = re.sub(r'(<h4>.*?</h4>)(<p[^>]*>.*?</p>)', r'<div class="ib">\1\2</div>', LEGAL_BODY, flags=re.S)
-    add = (f'<div class="impb" style="left:235px;top:820px;width:420px"><p class="lab2">IMPRESSUM</p>{lp}{get["Unternehmensgegenstand"]}</div>'
-           f'<div class="impb" style="left:675px;top:820px;width:420px">{get["Medieninhaber, Herausgeber und Diensteanbieter"]}</div>'
-           f'<div class="impc impfull" style="left:455px;top:60px;width:860px;height:740px"><p class="lab2">IMPRESSUM</p>{legal}</div>'
+    add = (f'<div class="imptint" aria-hidden="true"></div><div class="impb" style="left:235px;top:640px;width:420px"><p class="lab2">IMPRESSUM</p>{lp}{get["Unternehmensgegenstand"]}</div>'
+           f'<div class="impb" style="left:675px;top:640px;width:420px">{get["Medieninhaber, Herausgeber und Diensteanbieter"]}</div>'
+           f'<div class="impc impfull" style="left:235px;top:640px;width:1080px;height:312px"><p class="lab2">IMPRESSUM</p>{legal}</div>'
            f'<button type="button" class="dcv dimp" id="dimp" aria-expanded="false">{PLUS}<span class="cvt"><span class="op">full</span><span class="cl">close</span></span><b>impressum</b></button>')
     a = '<section class="pg" id="contact"><div class="bg-white relative frame">'
     s = _rep(a, a + add, s)

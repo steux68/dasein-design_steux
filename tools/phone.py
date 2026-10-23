@@ -456,7 +456,7 @@ body{{position:relative}}
   background-image:var(--dh),var(--dh),var(--dv),var(--dv);background-position:left top,left bottom,left top,right top;background-size:100% 1px,100% 1px,1px 100%,1px 100%;background-repeat:no-repeat}}
 .wcard .top{{position:static;background:none;padding:8px 10px 4px}}
 .wonder .wpbody{{flex:1 1 auto;overflow-y:auto;padding:0 12px 6px}}
-.wonder .wpop .wpnav{{border-top:1px dashed var(--line);padding:6px 10px 8px}}
+.wonder .wpop .wpnav{{display:none}}   /* 23 Oct: the arrows on the photo and the swipe are enough - no previous / next row */
 .wpbody .wpi{{display:block;width:100%;aspect-ratio:1/1;object-fit:contain;background:#f6f6f6;margin:0;outline:1px dotted #b8b8b8;outline-offset:-1px}}   /* the whole photo, whatever its format; grey fills the rest of the square, as in the project pop-up */
 .wpbody .wpq{{margin-top:0}}
 .wph{{position:relative;touch-action:pan-y}}   /* W / E arrows on the photo, as in the project pop-up (23 Oct) */
@@ -778,6 +778,8 @@ html.dlg{{overflow:hidden}}
 .cnt{{display:flex;align-items:center;gap:6px;font-size:13px;color:#666;letter-spacing:.06em}}
 .cnt b{{color:var(--red);font-weight:400}}
 .cnt button,.x{{border:0;background:none;padding:6px;margin:-6px;display:flex}}
+.top.tc{{display:grid;grid-template-columns:1fr auto 1fr;align-items:center}} .top.tc .x{{justify-self:end}}   /* project pop-up (23 Oct): "projects 06 / 11" in the middle at the top, the small W / E project arrows right beside it */
+.cnt.pk{{gap:10px;font-size:13.5px}} .cnt.pk button{{margin:-6px 0;outline:none;-webkit-tap-highlight-color:transparent}}
 .x{{outline:none;-webkit-tap-highlight-color:transparent}} .x svg{{width:22px;height:22px}} .x .rg{{fill:none;stroke:#3a3c37;stroke-width:var(--hp)}} .x .xx{{fill:none;stroke:#1a1a1a;stroke-width:1.15;stroke-linecap:round}}
 .ar{{overflow:visible}} .ar .rg{{fill:none;stroke:#3a3c37;stroke-width:var(--hp)}} .ar .dt{{fill:#4d4f4a;stroke:#1a1a1a;stroke-width:var(--hp);stroke-linejoin:round}}
 .ar text{{fill:#3a3c37;font:700 6.4px Calibri,Carlito,sans-serif;text-anchor:middle;dominant-baseline:central}} .ar .tr{{display:none}}
@@ -884,11 +886,10 @@ dialog .top{{flex:none}}
 <div class="bar btop"><button type="button" id="goN" aria-label="previous page"><span class="nn">{ARN}</span><span class="ns">{ARS}</span><i class="sc">scroll</i></button></div>
 <div class="bar bbot"><button type="button" id="goS" aria-label="next page"><span class="dn">{ARS}</span><span class="su">{ARN}</span><i class="sc">scroll</i><span class="up">{ARN}<i>back to the top</i></span></button></div>
 <dialog id="lb" aria-labelledby="lt">
-<div class="top"><span></span>
+<div class="top tc"><span></span><div class="cnt pk"><button type="button" id="pp2" aria-label="previous project">{ARW}</button><span id="lk"></span><button type="button" id="np2" aria-label="next project">{ARE}</button></div>
 <button type="button" class="x" id="lx" aria-label="close">{XC}</button></div>
 <div class="phw"><div class="photos" id="ph"></div><button type="button" class="pw" id="phw" aria-label="previous photo">{ARW2}</button><button type="button" class="pe" id="phe" aria-label="next photo">{ARE2}</button></div><div class="dots" id="dots"></div>
 <div class="txt"><h2 id="lt"></h2><div id="tx"></div><dl id="dl"></dl></div>
-<div class="nav2"><button type="button" id="pp2">{ARW}previous</button><div class="cnt"><span id="lk"></span></div><button type="button" id="np2">next{ARE}</button></div>
 </dialog>
 {WONDER}
 <dialog id="cw" aria-label="bits &amp; bats">

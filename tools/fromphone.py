@@ -494,9 +494,9 @@ WONDER_CSS = """
 .dwsw:hover .wo{color:#e30613}
 .dwon{position:absolute;left:225px;top:30px;width:1100px;height:966px;z-index:45;background:#fff}   /* ends above the scroll arrow (y 998), which stays, as on every page */   /* above the map (20) and the guide lines */
 .dwon[hidden]{display:none}
-.dwtrail{position:absolute;inset:0;width:1100px;height:966px;z-index:2;pointer-events:none}
+.dwtrail{position:absolute;left:0;top:0;width:1100px;height:216px;z-index:2;pointer-events:none}
 .dwbug{position:absolute;left:0;top:0;width:44px;height:97px;margin:-48px 0 0 -22px;z-index:2;pointer-events:none;will-change:transform;
-  filter:drop-shadow(1.5px 0 0 #fff) drop-shadow(-1.5px 0 0 #fff) drop-shadow(0 1.5px 0 #fff) drop-shadow(0 -1.5px 0 #fff) drop-shadow(0 1px 3px rgba(0,0,0,.35))}   /* a thin white outline so it stands out on the photos */
+}   /* no outline: it walks on white */
 .dwopen #mapclip{visibility:hidden}   /* the live map sits above the page: hidden while wonder is open (the dashed columns stay) */
 .dwsc{position:absolute;inset:0;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;scrollbar-width:none;padding:30px 10px 30px} .dwsc::-webkit-scrollbar{display:none}
 .dwgrid{position:relative;width:1080px}   /* each column of the projects grid split in two (95 + 10 + 95), rows of 85 + 10 */   /* the projects page's module: columns on the dashed lines, rows of 180 from y 60 */
@@ -571,15 +571,16 @@ WONDER_JS = r"""<script>(function(){ const sw=document.getElementById('dwsw'), w
       n++; t.hidden=false; t.style.cssText=''; bottom=Math.max(bottom,place(t,w,h)); });
     grid.style.height=(bottom*95)+'px'; }
   /* the beetle wanders over wonder in curves, quick but not frantic, leaving a dotted trail that slowly fades; it stays put while the photos scroll */
-  (function(){ const bug=document.getElementById('dwbug'), cv=document.getElementById('dwtrail'), tc=cv.getContext('2d'); const W=1100, H=966;
+  /* (02:58) only in the white band between the tabs and the category row, slowly, in spaghetti loops from left to right and back */
+  (function(){ const bug=document.getElementById('dwbug'), cv=document.getElementById('dwtrail'), tc=cv.getContext('2d'); const W=1100, H=216;
     cv.width=W*2; cv.height=H*2; tc.setTransform(2,0,0,2,0,0);
-    let g={x:200,y:400,a:0}, tgt={x:600,y:500}, last=0, walked=0, fade=0, run=0;
-    const R=(a,b)=>a+Math.random()*(b-a), pick=()=>{ tgt={x:R(60,W-60),y:R(60,H-60)}; };
+    let g={x:60,y:108,a:90}, tgt={x:600,y:500}, last=0, walked=0, fade=0, run=0;
+    let dir=1; const R=(a,b)=>a+Math.random()*(b-a), pick=()=>{ let x=g.x+dir*R(70,160); if(x>W-50){ x=W-50; dir=-1; } if(x<50){ x=50; dir=1; } tgt={x,y:R(55,H-55)}; };
     function step(t){ if(wo.hidden){ run=0; return; } const dt=Math.min(.05,(t-last)/1000||0); last=t;
       const dx=tgt.x-g.x, dy=tgt.y-g.y; if(Math.hypot(dx,dy)<40) pick();
-      const want=Math.atan2(dy,dx)*180/Math.PI+90+Math.sin(t/300)*24; let da=((want-g.a+540)%360)-180;
-      g.a+=Math.max(-200*dt,Math.min(200*dt,da)); const sp=150*dt, h=(g.a-90)*Math.PI/180;
-      g.x=Math.max(20,Math.min(W-20,g.x+Math.cos(h)*sp)); g.y=Math.max(20,Math.min(H-20,g.y+Math.sin(h)*sp));
+      const want=Math.atan2(dy,dx)*180/Math.PI+90+Math.sin(t/420)*55; let da=((want-g.a+540)%360)-180;
+      g.a+=Math.max(-140*dt,Math.min(140*dt,da)); const sp=70*dt, h=(g.a-90)*Math.PI/180;
+      g.x=Math.max(30,Math.min(W-30,g.x+Math.cos(h)*sp)); g.y=Math.max(40,Math.min(H-40,g.y+Math.sin(h)*sp));
       walked+=sp; if(walked>4){ walked=0; tc.fillStyle='rgba(58,60,55,.6)'; tc.beginPath(); tc.arc(g.x,g.y,1,0,7); tc.fill(); }
       fade+=dt; if(fade>.12){ fade=0; tc.globalCompositeOperation='destination-out'; tc.fillStyle='rgba(0,0,0,.025)'; tc.fillRect(0,0,W,H); tc.globalCompositeOperation='source-over'; }
       bug.style.transform=`translate(${g.x}px,${g.y}px) rotate(${g.a}deg)`; run=requestAnimationFrame(step); }

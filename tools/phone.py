@@ -420,7 +420,7 @@ body{{position:relative}}
 .wbt.on{{background-color:#eaffae}} .wbt:active{{background-color:#cdff3e}}
 .wonder .wbars{{display:none}}
 .wband{{position:relative;height:78px;margin:6px 0 0;overflow:hidden}} .wband canvas{{position:absolute;inset:0;width:100%;height:100%}}
-.wband img{{position:absolute;left:0;top:0;width:22px;height:48px;margin:-24px 0 0 -11px;will-change:transform;pointer-events:none}}
+.wband img{{position:absolute;left:0;top:0;width:15px;height:32px;margin:-16px 0 0 -7px;will-change:transform;pointer-events:none}}
 .wcats{{position:sticky;top:0;z-index:3;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:6px 0;background:#fff}}
 .wonder .wcats .wfb{{position:static;transform:none!important;box-shadow:none;height:22px;padding:0 2px;justify-content:center;font-size:10.5px;overflow:hidden}}
 .wonder .wcats .wfb b{{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}

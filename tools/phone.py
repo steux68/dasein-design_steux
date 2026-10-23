@@ -974,8 +974,9 @@ dialog .top{{flex:none}}
         e.style.cssText=''; Object.assign(e.style,{{position:'absolute',left:X(c)+'px',top:(r*(RH+RG))+'px',width:Wd(w)+'px',height:(h*RH+(h-1)*RG)+'px'}}); grid.appendChild(e); bottom=Math.max(bottom,r+h); return; }} }} }};
       let n=0;
       ph.forEach((t,k)=>{{ if(k%3===1||k%7===5){{ const e=document.createElement('i'); e.className='wempty'; place(e,1,1); }}
-        const ar=+t.dataset.ar||1; let w=1, h=1;
-        if(n%15===8){{ w=4; h=4; }} else if(n%5===0){{ w=2; h=2; }} else if(ar>1.25){{ w=2; }} else if(ar<.8){{ h=2; }}
+        /* (07:30) mostly squares in many sizes, now and then a wide piece over the full width */
+        const SZ=[[2,2],[1,1],[1,1],[4,2],[1,1],[2,2],[1,1],[2,1],[1,1],[4,4],[1,1],[2,2],[1,1],[4,3],[1,1],[2,2],[1,1],[4,2]];
+        const [w,h]=SZ[n%SZ.length];
         n++; t.hidden=false; place(t,w,h); }});
       grid.style.height=(bottom*(RH+RG))+'px'; }}
     /* the ten categories: a fixed grid of five by two under the header, small coloured labels; the chosen one shows "×" (tap again = all) */

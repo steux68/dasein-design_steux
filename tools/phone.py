@@ -13,7 +13,7 @@ import os
 import random
 from PIL import Image
 import lightbox as LB
-from texts import INTRO, BIO, INFO_TXT, LINKS_TXT, CONTACT_TXT, SERVICES, SERVICES_SHORT, LEGAL_BODY, BITS, CARDS, CARD_AT   # shared with the desktop site
+from texts import INTRO, BIO, INFO_TXT, LINKS_TXT, CONTACT_TXT, SERVICES, SERVICES_SHORT, LEGAL_BODY, BITS, CARDS, CARD_AT, WCATS, WCAT_OF   # shared with the desktop site
 import search as SEARCH
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -222,16 +222,6 @@ LEGAL = ('<div class="box legal cut" id="g-legal" data-show="4" data-extra="30">
          + '<div class="fin"><div class="finm"><img src="../img/m-mark.png" alt=""><span>dasein<b>-design</b></span><p class="copy">© 2026 [ dasein-design &amp; steux ]</p></div></div>')   # the game left on 23 Oct (the heart stays)
 # ---------- "work ○ wonder" trial (?w=1, 23 Oct): the bits & bats as a notebook of everyday things, behind a switch in the header.
 # The photos and notes stand in for real posts; the dates are samples. Later the posts come by e-mail from Steuart's phone.
-# six categories as title bars (23 Oct; Steuart named banality, philosophy, details - the other three are Claude's suggestions, to change)
-WCATS = ['banality', 'details', 'philosophy', 'light', 'traces', 'the city', 'material', 'creatures']   # eight since 23 Oct, 02:00; material and creatures added by Claude
-WCAT_OF = {24: 0, 25: 0, 5: 0, 15: 0, 16: 0, 17: 0, 20: 2, 22: 0, 31: 0, 0: 0,
-           6: 1, 12: 1, 30: 1, 32: 1, 23: 1, 1: 2, 14: 2,
-           19: 3, 21: 3, 27: 3, 29: 3, 3: 3,
-           2: 4, 8: 4, 18: 4, 26: 4, 28: 4, 7: 4, 9: 4, 11: 4,
-           4: 5, 10: 5, 13: 5}
-WCAT_OF.update({30: 6, 32: 6, 6: 6, 26: 6, 22: 7, 31: 7})   # material: shreds, torn strips, plastic, tape; creatures: the wasp, the horse
-
-
 WCARD_KEY = {0: 'wagner', 1: 'museum', 2: 'walk', 3: 'open house', 4: 'loos', 5: 'standard', 6: 'terra mater', 7: 'devlin', 8: 'starchitect', 9: 'fassaden'}
 
 

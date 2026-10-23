@@ -42,7 +42,6 @@ LEADS = [((1215, 800), (1215, 703), (1152, 703)),   # i impressum -> tip of the 
          ((335, 377), (335, 420), (580, 420)),     # 01 about us -> back leg
          ((555, 744), (555, 652), (648, 652)),     # 02 projects -> back foot
          ((775, 328), None, (775, 432)),           # 03 downloads & links -> middle leg
-         ((995, 692), (995, 671), (1086, 671)),    # 04 bits & bats -> lower jaw
          ((1215, 287), (1215, 524), (1005, 524))]  # 05 contact -> mouth
 R = 4.5
 FIGMA_LINES = ['1:225', '1:228', '26:180', '30:639', '26:181', '30:640', '26:186', '26:187']
@@ -461,6 +460,168 @@ def _game(s):
     return s.replace('</body>', dlg + GAME_JS + '</body>', 1)
 
 
+# ---------- 23 Oct, 02:10 - the desktop catches up with the phone: bits & bats leaves (its photos live in "wonder"), contact becomes [04],
+# the fifth tab slot holds the "work ○ wonder" switch, no game, no social marks, no closing contact line
+def _wonder_tiles():
+    import datetime, html as H
+    from texts import WCATS, WCAT_OF
+    items = [(im, c, WCAT_OF.get(k, 0)) for k, (im, t, c) in enumerate(BITS)][::-1]   # newest first
+    t, steps = datetime.datetime(2026, 10, 22, 19, 40), [3.2, 5.1, 16.4, 4.3, 2.7, 15.9, 6.2, 18.1, 3.6, 4.8, 14.7]
+    days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    out = []
+    for n, (im, c, cat) in enumerate(items):
+        when = f'{days[t.weekday()]} {t.day} {t.strftime("%b")} · {t.strftime("%H:%M")}'
+        line = H.unescape(c).replace('dd - ', '').strip().capitalize().rstrip('.!?') + '.'
+        out.append(f'<button type="button" class="dwg" data-cat="{cat}" data-when="{when}" data-line="{H.escape(line)}" data-img="img/{im}">'
+                   f'<img src="img/{im}" alt="" loading="lazy"></button>')
+        t -= datetime.timedelta(hours=steps[n % len(steps)])
+    return ''.join(out), WCATS
+
+
+WONDER_CSS = """
+/* work ○ wonder on the desktop (23 Oct) */
+.dwsw{position:absolute;left:1115px;top:0;width:200px;height:25px;z-index:46;display:flex;align-items:center;justify-content:center;gap:7px;border:.5px dashed #fff;background:rgba(0,0,0,.05);
+  font-family:Calibri,Carlito,sans-serif;font-size:15px;color:#666;cursor:pointer;padding:0}
+.dwsw .wk{color:#000;font-weight:700} .dwsw[aria-pressed=true] .wk{color:#666;font-weight:400} .dwsw[aria-pressed=true] .wo{color:#e30613;font-weight:700}
+.dwsw .tg{position:relative;width:30px;height:15px;border-radius:8px;border:1px solid #3a3c37;background:#fff;transition:background .25s}
+.dwsw .tg b{position:absolute;left:2px;top:2px;width:9px;height:9px;border-radius:50%;background:#cdff3e;box-shadow:0 0 0 1px #3a3c37;transition:transform .25s}
+.dwsw .tg b::after{content:"";position:absolute;inset:-1px;border-radius:50%;border:1px solid #e30613;opacity:0;animation:dwp 3.2s ease-out infinite}
+@keyframes dwp{0%{transform:scale(1);opacity:.8}100%{transform:scale(4);opacity:0}}
+.dwsw[aria-pressed=true] .tg{background:#eaffae} .dwsw[aria-pressed=true] .tg b{transform:translateX(15px);background:#e30613} .dwsw[aria-pressed=true] .tg b::after{animation:none}
+.dwsw:hover .wo{color:#e30613}
+.dwon{position:absolute;left:225px;top:30px;width:1100px;height:994px;z-index:45;background:#fff}   /* above the map (20) and the guide lines */
+.dwon[hidden]{display:none}
+.dwopen #mapclip{visibility:hidden} .dwopen #gl{opacity:0}   /* the live map and the drawn guide lines sit above the page: hidden while wonder is open */
+.dwsc{position:absolute;inset:0;overflow-y:auto;scrollbar-width:none;padding:10px 10px 30px} .dwsc::-webkit-scrollbar{display:none}
+.dwgrid{position:relative}
+.dwg{position:absolute;padding:0;border:0;background:#f4f4f4;overflow:hidden;cursor:pointer}
+.dwg img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s} .dwg:hover img{transform:scale(1.04)}
+.dwempty{position:absolute}
+.dwtitle{position:absolute;left:110px;top:380px;width:112px;height:644px;z-index:45;background:#fff;display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
+.dwtitle[hidden]{display:none}
+.dwtitle span{display:block;transform:rotate(-90deg) translateX(50%);transform-origin:center;white-space:nowrap;font:700 50px Calibri,Carlito,sans-serif;color:rgba(0,0,0,.8);margin-bottom:300px}
+.dwfloat{position:absolute;inset:14px;pointer-events:none;z-index:2}
+.dwfb{position:absolute;left:0;top:0;display:flex;align-items:center;gap:6px;height:25px;padding:0 12px;border:0;font:15px Calibri,Carlito,sans-serif;color:#000;white-space:nowrap;cursor:pointer;
+  pointer-events:auto;box-shadow:0 1px 6px rgba(0,0,0,.18);border-radius:2px;will-change:transform}
+.dwfb b{font-weight:700} .dwfb small{font-size:10px;opacity:.7}
+.dwfb:nth-child(1){background:#cdff3e} .dwfb:nth-child(2){background:#ffd400} .dwfb:nth-child(3){background:#2f8cff;color:#fff} .dwfb:nth-child(4){background:#ffb3d1}
+.dwfb:nth-child(5){background:#e30613;color:#fff} .dwfb:nth-child(6){background:#2fbf4a;color:#fff} .dwfb:nth-child(7){background:#ff8a00} .dwfb:nth-child(8){background:#9b6bff;color:#fff}
+.dwfb.on{box-shadow:0 0 0 2px #111,0 1px 6px rgba(0,0,0,.25)}
+.dwpop{position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.62);backdrop-filter:blur(1.5px)}
+.dwpop[hidden]{display:none}
+.dwcard{width:560px;background:#fff;box-shadow:0 2px 18px rgba(0,0,0,.18);border:1px dotted #b8b8b8;font-family:Calibri,Carlito,sans-serif}
+.dwtop{display:flex;justify-content:space-between;align-items:center;padding:10px 14px 6px;font-size:13px;color:#666;letter-spacing:.06em} .dwtop b{color:#e30613;font-weight:400}
+.dwx{border:0;background:none;padding:2px;cursor:pointer} .dwx svg{width:24px;height:24px} .dwx .rg{fill:none;stroke:#3a3c37;stroke-width:.6} .dwx .xx{fill:none;stroke:#1a1a1a;stroke-width:1.15;stroke-linecap:round} .dwx:hover .rg{stroke:#e30613}
+.dwbody{padding:0 14px 8px} .dwbody img{display:block;width:100%;aspect-ratio:1/1;object-fit:contain;background:#f6f6f6;outline:1px dotted #b8b8b8;outline-offset:-1px}
+.dwbody .d{margin:10px 0 2px;font-size:13px;letter-spacing:.06em;color:#888} .dwbody .l{margin:0 0 4px;font-size:18px;color:#222}
+.dwnav{display:flex;justify-content:space-between;padding:8px 12px 10px;border-top:1px dashed #c4c4c4}
+.dwnav button{display:flex;align-items:center;gap:7px;border:0;background:none;font:14px Calibri,Carlito,sans-serif;cursor:pointer;padding:3px} .dwnav button:hover{color:#e30613}
+"""
+
+WONDER_JS = r"""<script>(function(){ const sw=document.getElementById('dwsw'), wo=document.getElementById('dwon'), ti=document.getElementById('dwtitle'); if(!sw||!wo) return;
+  const sc=wo.querySelector('.dwsc'), grid=document.getElementById('dwgrid'), tiles=[...grid.querySelectorAll('.dwg')], pop=document.getElementById('dwpop'), body=document.getElementById('dwbody');
+  const CATS=JSON.parse(wo.dataset.cats); let only=null, cur=0;
+  const set=on=>{ document.documentElement.classList.toggle('dwopen',on); sw.setAttribute('aria-pressed',String(on)); wo.hidden=!on; ti.hidden=!on; if(!on) pop.hidden=true; else { carpet(); sc.scrollTop=0; if(!fla){ flt=performance.now(); fla=requestAnimationFrame(drift); } } };
+  sw.addEventListener('click',()=>set(sw.getAttribute('aria-pressed')!=='true'));
+  document.querySelectorAll('.hot.tab,.hot.pin').forEach(a=>a.addEventListener('click',()=>set(false)));
+  wo.addEventListener('wheel',e=>e.stopPropagation(),{passive:true});
+  addEventListener('keydown',e=>{ if(wo.hidden) return; if(e.key==='Escape'){ if(!pop.hidden) pop.hidden=true; else set(false); e.stopImmediatePropagation(); }
+    else if(!pop.hidden&&(e.key==='ArrowLeft'||e.key==='ArrowRight')){ step(e.key==='ArrowLeft'?-1:1); e.stopImmediatePropagation(); } else e.stopImmediatePropagation(); },true);
+  function lay(items,W){ const out=[]; let y=0, row=[];
+    const worst=(r,h)=>Math.max(...r.map(o=>{ const w=o.a/h; return Math.max(w/h,h/w); }));
+    const flush=()=>{ const sa=row.reduce((a,o)=>a+o.a,0), h=sa/W; let x=0; row.forEach(o=>{ const w=o.a/h; out.push({...o,x,y,w,h}); x+=w; }); y+=h; row=[]; };
+    items.forEach(o=>{ if(!row.length){ row.push(o); return; } const h0=row.reduce((a,q)=>a+q.a,0)/W, r1=row.concat(o), h1=r1.reduce((a,q)=>a+q.a,0)/W;
+      if(worst(r1,h1)<=worst(row,h0)) row.push(o); else { flush(); row.push(o); } }); if(row.length) flush(); return {out,h:y}; }
+  function sq(items,x,y,w,h,out){ items=items.slice(); const tot=items.reduce((a,b)=>a+b.a,0), f=w*h/tot; items.forEach(o=>o.s=o.a*f);
+    const worst=(r,len)=>{ const s=r.reduce((a,b)=>a+b.s,0); return Math.max(...r.map(o=>Math.max(len*len*o.s/(s*s), s*s/(len*len*o.s)))); };
+    while(items.length){ const len=Math.min(w,h); let row=[items.shift()];
+      while(items.length&&worst(row.concat(items[0]),len)<=worst(row,len)) row.push(items.shift());
+      const s=row.reduce((a,b)=>a+b.s,0);
+      if(w>=h){ const cw=s/h; let yy=y; row.forEach(o=>{ const ch=o.s/cw; out.push({...o,x,y:yy,w:cw,h:ch}); yy+=ch; }); x+=cw; w-=cw; }
+      else { const rh=s/w; let xx=x; row.forEach(o=>{ const rw=o.s/rh; out.push({...o,x:xx,y,w:rw,h:rh}); xx+=rw; }); y+=rh; h-=rh; } } }
+  /* the carpet: a treemap of many sizes, newest first, in runs that form blocks, the blocks laid row by row; a few white rests */
+  function carpet(){ const W=grid.clientWidth; const ph=tiles.filter(t=>only===null||t.dataset.cat===only);
+    const items=ph.map((t,n)=>({t,v:[2.6,.35,1,.7,.3,1.6,.5,1.2,.32,.8,3.2,.6,.3,1,1.8,.45,.9,.35,2.2][n%19]*(n<2?1.6:1)}));
+    [2,6,10,13,17,21,25,29,33,37].forEach((at,k)=>{ if(at<items.length) items.splice(at,0,{empty:true,v:[.5,.3,.8,.35][k%4]}); });
+    const unit=(W/8)*(W/8); items.forEach(o=>o.a=o.v*unit);
+    const blocks=[]; let i=0, k=0; while(i<items.length){ const n=[6,4,7,5,8][k++%5]; const its=items.slice(i,i+n); i+=n; blocks.push({its,a:its.reduce((s,o)=>s+o.a,0)}); }
+    if(blocks.length>1&&blocks[blocks.length-1].its.length<3){ const l=blocks.pop(), p=blocks[blocks.length-1]; p.its=p.its.concat(l.its); p.a+=l.a; }
+    const B=lay(blocks,W), cells=[]; B.out.forEach(b=>sq(b.its,b.x,b.y,b.w,b.h,cells));
+    tiles.forEach(t=>t.hidden=true); grid.querySelectorAll('.dwempty').forEach(e=>e.remove()); const G=2;
+    cells.forEach(o=>{ let e; if(o.empty){ e=document.createElement('i'); e.className='dwempty'; grid.appendChild(e); } else { e=o.t; e.hidden=false; grid.appendChild(e); }
+      Object.assign(e.style,{left:(o.x+G)+'px',top:(o.y+G)+'px',width:Math.max(0,o.w-2*G)+'px',height:Math.max(0,o.h-2*G)+'px'}); });
+    grid.style.height=B.h+'px'; }
+  /* the eight categories drift slowly over the photos */
+  const fl=wo.querySelector('.dwfloat');
+  const fb=CATS.map((c,k)=>{ const b=document.createElement('button'); b.type='button'; b.className='dwfb'; b.innerHTML='<b>'+c+'</b><small>['+String(k+1).padStart(2,'0')+']</small>';
+    b.addEventListener('click',()=>{ only=only===String(k)?null:String(k); fb.forEach((x,j)=>x.el.classList.toggle('on',only===String(j))); carpet(); sc.scrollTop=0; });
+    fl.appendChild(b); return {el:b,x:Math.random(),y:Math.random(),vx:(Math.random()-.5)*.02,vy:(Math.random()-.5)*.02}; });
+  let fla=0, flt=0;
+  function drift(t){ if(wo.hidden){ fla=0; return; } const dt=Math.min(.05,(t-flt)/1000||0); flt=t; const FW=fl.clientWidth, FH=fl.clientHeight;
+    if(pop.hidden) fb.forEach(o=>{ o.vx+=(Math.random()-.5)*.004*dt*60; o.vy+=(Math.random()-.5)*.004*dt*60; const sp=Math.hypot(o.vx,o.vy), mx=.03;
+      if(sp>mx){ o.vx*=mx/sp; o.vy*=mx/sp; } o.x+=o.vx*dt; o.y+=o.vy*dt;
+      if(o.x<0||o.x>1){ o.vx*=-1; o.x=Math.max(0,Math.min(1,o.x)); } if(o.y<0||o.y>1){ o.vy*=-1; o.y=Math.max(0,Math.min(1,o.y)); }
+      o.el.style.transform=`translate(${o.x*(FW-o.el.offsetWidth)}px,${o.y*(FH-o.el.offsetHeight)}px)`; });
+    fla=requestAnimationFrame(drift); }
+  /* the pop-up: a square card, the photo whole, date and one sentence; previous / next; a click beside it goes back */
+  const vis=()=>tiles.filter(t=>!t.hidden);
+  function show(t){ const v=vis(); cur=v.indexOf(t); const d=t.dataset;
+    body.innerHTML='<img src="'+d.img+'" alt=""><p class="d">'+d.when+'</p><p class="l">'+d.line+'</p>';
+    document.getElementById('dwk').innerHTML='wonder <b>'+String(cur+1).padStart(2,'0')+'</b> / '+v.length; pop.hidden=false; }
+  const step=k=>{ const v=vis(); show(v[(cur+k+v.length)%v.length]); };
+  tiles.forEach(t=>t.addEventListener('click',()=>show(t)));
+  document.getElementById('dwprev').onclick=()=>step(-1); document.getElementById('dwnext').onclick=()=>step(1);
+  document.getElementById('dwx').onclick=()=>{ pop.hidden=true; }; pop.addEventListener('click',e=>{ if(e.target===pop) pop.hidden=true; });
+})();</script>"""
+
+
+def _tab_pat(label):
+    """a top tab: its dashed box and its words (with or without a wrapper), found by its label"""
+    return (r'<div class="absolute bg-[^"]*h-\[25px\] left-\[\d+px\] top-0 w-\[200px\]"[^>]*></div>'
+            r'<div class="[^"]*"[^>]*><p[^>]*>(?:(?!</p>).)*?' + re.escape(label) + r'(?:(?!</p>).)*</p></div>')
+
+
+def _drop_group(s, label):
+    return re.subn(_tab_pat(label), '', s, flags=re.S)
+
+
+def _desk_catchup(s):
+    # bits & bats: page, its chrome, its tab (in every chrome), its hot tab, its beetle circle
+    i = s.index('<section class="pg" id="bits">'); j = s.index('<section', i + 10)
+    s = s[:i] + s[j:]
+    i = s.index('<div class="chrome" data-pg="bits">'); s = s[:i] + s[_closing_div(s, i):]
+    s, n = _drop_group(s, 'bits &amp; bats </span>'); assert n >= 4, n
+    s = re.sub(r'<a class="hot tab" href="#bits"[^>]*></a>', '', s)
+    s = re.sub(r'<a class="hot pin" href="#bits".*?</a>', '', s, count=1, flags=re.S)
+    # contact moves into the fourth slot and becomes [04]
+    def mv(m):
+        g = m.group(0)
+        return g.replace('left-[1115px]', 'left-[895px]').replace('left-[1215px]', 'left-[995px]').replace('[05]', '[04]')
+    s, n = re.subn(_tab_pat('contact </span>'), mv, s, flags=re.S)
+    s = s.replace('<div class="absolute contents left-[1115px] top-0"', '<div class="absolute contents left-[895px] top-0"')
+    assert n >= 4, n
+    s = s.replace('<a class="hot tab" href="#contact" style="left:1115px;', '<a class="hot tab" href="#contact" style="left:895px;')
+    s = s.replace('contact </span><span class="fcal-r leading-[normal] text-[20px]">[05]</span>', 'contact </span><span class="fcal-r leading-[normal] text-[20px]">[04]</span>')
+    s = re.sub(r'(<a class="hot pin" href="#contact" style="[^"]*?)--k:4;([^"]*">)05', r'\1--k:3;\g<2>04', s)
+    s = re.sub(r'(<a class="hot pin" href="#impressum" style="[^"]*?)--k:5;([^"]*">)i<', r'\1--k:4;\2§<', s)
+    # no social marks, no closing contact line
+    s = re.sub(r'<div class="absolute left-\[1335px\] size-\[25px\] top-\[\d+px\]" data-node-id="[^"]+" data-name="(?:Twitter Squared|Facebook|Instagram)"><img[^>]*></div>', '', s)
+    s = re.sub(r'<a class="hot social"[^>]*>(?:</a>)?', '', s)
+    s = re.sub(r'<div class="ptx end"[^>]*>(?:(?!</div>).)*Write, call(?:(?!</div>).)*</div>', '', s, flags=re.S)
+    # the switch in the fifth slot, and wonder itself over the five columns
+    tiles, cats = _wonder_tiles()
+    W, E = compass('W', 22), compass('E', 22)
+    sw = ('<button type="button" class="dwsw" id="dwsw" aria-pressed="false" aria-label="switch between work and wonder">'
+          '<span class="wk">work</span><i class="tg"><b></b></i><span class="wo">wonder</span></button>')
+    wo = (f'<div class="dwtitle" id="dwtitle" hidden><span>wonder</span></div>'
+          f'<div class="dwon" id="dwon" hidden data-cats=\'{json.dumps(cats)}\'><div class="dwsc"><div class="dwgrid" id="dwgrid">{tiles}</div></div><div class="dwfloat"></div>'
+          f'<div class="dwpop" id="dwpop" hidden><div class="dwcard"><div class="dwtop"><span id="dwk"></span><button type="button" class="dwx" id="dwx" aria-label="close">{XC}</button></div>'
+          f'<div class="dwbody" id="dwbody"></div><div class="dwnav"><button type="button" id="dwprev">{W}<span>previous</span></button><button type="button" id="dwnext"><span>next</span>{E}</button></div></div></div></div>')
+    i = s.index('<a class="hot tab" href="#contact"')
+    s = s[:i] + sw + wo + s[i:]
+    return s.replace('</body>', WONDER_JS + '</body>', 1)
+
+
 def patch(s):
     if MARK in s:
         return s
@@ -574,10 +735,9 @@ def patch(s):
     # the copyright line reads "© 2026 [ dasein-design & steux ] · impressum" - the last word goes to the impressum page
     s, n = re.subn(r'(<div class="-translate-x-1/2 -translate-y-1/2 absolute flex )h-\[252px\]( items-center justify-center left-\[1343px\] )top-\[898px\]( w-\[36px\]" data-node-id="[^"]+")(><div class="-rotate-90 flex-none"><div class="[^"]*?) w-\[252px\]"><p class="whitespace-pre-wrap">(<span class="leading-\[normal\]">© 2026</span><span class="[^"]*">\s*\[ dasein-design &amp; steux \]</span>)</p>',
                    r'\1\2\3 style="height:330px;top:859px"\4" style="width:330px"><p class="whitespace-pre-wrap">\5<span class="fcal-r"> · </span><a class="impl" href="#impressum">§ impressum</a></p>', s)
-    assert n >= 5, n
+    assert n >= 4, n
     s = _impressum_page(s)
-    s = _bits(s)
-    s = _game(s)
+    s = _desk_catchup(s)   # 23 Oct: bits & bats and the game gone, wonder in the fifth slot
     # ---- map + / - / home (22 Oct): finer lines, like the compass arrows
     s = _rep('.mz button circle{fill:rgba(255,255,255,.9);stroke:#e30613;stroke-width:2;', '.mz button circle{fill:rgba(255,255,255,.9);stroke:#e30613;stroke-width:1;', s)
     s = _rep('.mz button path{fill:none;stroke:#e30613;stroke-width:2;', '.mz button path{fill:none;stroke:#e30613;stroke-width:1.2;', s)
@@ -595,7 +755,7 @@ def patch(s):
     s = _sub1(r'(<button type="button" class="lbsa r" id="lbsr0".*?</button></div>)', r'\1<div class="lbdots" id="lbdots"></div>', s, re.S)
     s = s.replace('</body>', '<script>document.getElementById("lbdots")&&document.getElementById("lbdots").addEventListener("click",e=>{ const i=e.target.closest("i"); if(i){ const b=document.querySelector("#lbst button[data-k=\'"+i.dataset.k+"\']"); if(b) b.click(); } });</script></body>', 1)
     # ---- styles
-    s = _rep('</style>', CSS + BITS_CSS + GAME_CSS + '</style>', s)
+    s = _rep('</style>', CSS + WONDER_CSS + '</style>', s)
     return s.replace('</body>', HEART_JS + EXT_JS + MARK + '</body>', 1)
 
 

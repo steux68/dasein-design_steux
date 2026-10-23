@@ -93,3 +93,14 @@ CARDS = [('note', 'Otto Wagner, Moderne Architektur, 1896', '„Etwas Unpraktisc
           'DETAIL 5.2026, the German building journal’s issue on climate-adaptive façades – building skins for hotter summers.',
           'https://www.detail.de/de_de/aktuelle-ausgabe-5-2026')]
 CARD_AT = {2: 0, 5: 1, 9: 2, 13: 3, 17: 4, 20: 6, 22: 5, 25: 7, 28: 8, 31: 9}   # card k goes in before photo n
+
+
+# ---------- wonder (23 Oct): the notebook's categories and which photo (index in BITS) sits in which - shared by phone and desktop
+# six categories as title bars (23 Oct; Steuart named banality, philosophy, details - the other three are Claude's suggestions, to change)
+WCATS = ['banality', 'details', 'philosophy', 'light', 'traces', 'the city', 'material', 'creatures']   # eight since 23 Oct, 02:00; material and creatures added by Claude
+WCAT_OF = {24: 0, 25: 0, 5: 0, 15: 0, 16: 0, 17: 0, 20: 2, 22: 0, 31: 0, 0: 0,
+           6: 1, 12: 1, 30: 1, 32: 1, 23: 1, 1: 2, 14: 2,
+           19: 3, 21: 3, 27: 3, 29: 3, 3: 3,
+           2: 4, 8: 4, 18: 4, 26: 4, 28: 4, 7: 4, 9: 4, 11: 4,
+           4: 5, 10: 5, 13: 5}
+WCAT_OF.update({30: 6, 32: 6, 6: 6, 26: 6, 22: 7, 31: 7})   # material: shreds, torn strips, plastic, tape; creatures: the wasp, the horse

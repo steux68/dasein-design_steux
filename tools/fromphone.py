@@ -505,13 +505,13 @@ WONDER_CSS = """
 .dwtitle[hidden]{display:none}
 .dwtitle span{position:absolute;left:15px;bottom:24px;width:84px;height:560px;display:flex;align-items:flex-end;justify-content:flex-start}
 .dwtitle span b{display:block;transform:rotate(-90deg);transform-origin:left bottom;position:absolute;left:84px;bottom:0;white-space:nowrap;font:700 50px/84px Calibri,Carlito,sans-serif;color:rgba(0,0,0,.8)}
-.dwfloat{position:absolute;inset:14px;pointer-events:none;z-index:2}
-.dwfb{position:absolute;left:0;top:0;display:flex;align-items:center;gap:6px;height:25px;padding:0 12px;border:0;font:15px Calibri,Carlito,sans-serif;color:#000;white-space:nowrap;cursor:pointer;
-  pointer-events:auto;box-shadow:0 1px 6px rgba(0,0,0,.18);border-radius:2px;will-change:transform}
-.dwfb b{font-weight:700} .dwfb small{font-size:10px;opacity:.7}
+.dwfloat{position:absolute;left:10px;top:0;width:1080px;height:22px;z-index:2}   /* ten categories, two to each column, in a row under the tabs, level with the dd mark */
+.dwsc{top:26px!important;padding-top:4px!important}
+.dwfb{position:absolute;top:0;width:95px;height:22px;display:flex;align-items:center;justify-content:center;gap:4px;padding:0 4px;border:0;font:13px Calibri,Carlito,sans-serif;color:#000;white-space:nowrap;overflow:hidden;cursor:pointer}
+.dwfb b{font-weight:700} .dwfb small{font-size:9px;opacity:.7} .dwfb:hover{filter:brightness(1.08)}
 .dwfb:nth-child(1){background:#cdff3e} .dwfb:nth-child(2){background:#ffd400} .dwfb:nth-child(3){background:#2f8cff;color:#fff} .dwfb:nth-child(4){background:#ffb3d1}
-.dwfb:nth-child(5){background:#e30613;color:#fff} .dwfb:nth-child(6){background:#2fbf4a;color:#fff} .dwfb:nth-child(7){background:#ff8a00} .dwfb:nth-child(8){background:#9b6bff;color:#fff}
-.dwfb.on{box-shadow:0 0 0 2px #111,0 1px 6px rgba(0,0,0,.25)}
+.dwfb:nth-child(5){background:#e30613;color:#fff} .dwfb:nth-child(6){background:#2fbf4a;color:#fff} .dwfb:nth-child(7){background:#ff8a00} .dwfb:nth-child(8){background:#9b6bff;color:#fff} .dwfb:nth-child(9){background:#00b3a6;color:#fff} .dwfb:nth-child(10){background:#1f2a6b;color:#fff}
+.dwfb.on{box-shadow:inset 0 0 0 2px #111}
 .dwpop{position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.62);backdrop-filter:blur(1.5px)}
 .dwpop[hidden]{display:none}
 .dwcard{width:560px;background:#fff;box-shadow:0 2px 18px rgba(0,0,0,.18);border:1px dotted #b8b8b8;font-family:Calibri,Carlito,sans-serif}
@@ -526,7 +526,7 @@ WONDER_CSS = """
 WONDER_JS = r"""<script>(function(){ const sw=document.getElementById('dwsw'), wo=document.getElementById('dwon'), ti=document.getElementById('dwtitle'); if(!sw||!wo) return;
   const sc=wo.querySelector('.dwsc'), grid=document.getElementById('dwgrid'), tiles=[...grid.querySelectorAll('.dwg')], pop=document.getElementById('dwpop'), body=document.getElementById('dwbody');
   const CATS=JSON.parse(wo.dataset.cats); let only=null, cur=0;
-  const set=on=>{ document.documentElement.classList.toggle('dwopen',on); sw.setAttribute('aria-pressed',String(on)); wo.hidden=!on; ti.hidden=!on; if(!on) pop.hidden=true; else { carpet(); sc.scrollTop=0; if(!fla){ flt=performance.now(); fla=requestAnimationFrame(drift); } } };
+  const set=on=>{ document.documentElement.classList.toggle('dwopen',on); sw.setAttribute('aria-pressed',String(on)); wo.hidden=!on; ti.hidden=!on; if(!on) pop.hidden=true; else { carpet(); sc.scrollTop=0;  } };
   sw.addEventListener('click',()=>set(sw.getAttribute('aria-pressed')!=='true'));
   document.querySelectorAll('.hot.tab,.hot.pin').forEach(a=>a.addEventListener('click',()=>set(false)));
   wo.addEventListener('wheel',e=>e.stopPropagation(),{passive:true});
@@ -564,7 +564,7 @@ WONDER_JS = r"""<script>(function(){ const sw=document.getElementById('dwsw'), w
   const fl=wo.querySelector('.dwfloat');
   const fb=CATS.map((c,k)=>{ const b=document.createElement('button'); b.type='button'; b.className='dwfb'; b.innerHTML='<b>'+c+'</b><small>['+String(k+1).padStart(2,'0')+']</small>';
     b.addEventListener('click',()=>{ only=only===String(k)?null:String(k); fb.forEach((x,j)=>x.el.classList.toggle('on',only===String(j))); carpet(); sc.scrollTop=0; });
-    fl.appendChild(b); return {el:b,x:Math.random(),y:Math.random(),vx:(Math.random()-.5)*.02,vy:(Math.random()-.5)*.02}; });
+    b.style.left=(Math.floor(k/2)*220+(k%2)*105)+'px'; fl.appendChild(b); return {el:b,x:Math.random(),y:Math.random(),vx:(Math.random()-.5)*.02,vy:(Math.random()-.5)*.02}; });
   let fla=0, flt=0;
   function drift(t){ if(wo.hidden){ fla=0; return; } const dt=Math.min(.05,(t-flt)/1000||0); flt=t; const FW=fl.clientWidth, FH=fl.clientHeight;
     if(pop.hidden) fb.forEach(o=>{ o.vx+=(Math.random()-.5)*.004*dt*60; o.vy+=(Math.random()-.5)*.004*dt*60; const sp=Math.hypot(o.vx,o.vy), mx=.03;

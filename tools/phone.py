@@ -150,7 +150,7 @@ PARTNERS = [
                                          'Sep.’19 – Mai.’20 » BWM Architekten, Wien',
                                          'Mar.’10 – Aug.’19 » BEHF Architects, Wien',
                                          'Jun.’99 – Feb.’10 » Aedas, Ian Simpson, David Morley, Arthur Collin &amp; Gregory Phillips, London'])]),
-    dict(role='Architect', first='Steuart', last='J Mackenzie HARRISON', q='BArch MArch ARB', idimg='m-id-steuart.webp', idalt='Führerschein Steuart J Mackenzie Harrison', tel='+43 (0)699 1941 9240', mail='steuart@dasein-design.net', nat='Schottland [Europäisch!]', lang='Englisch [Muttersprache], Deutsch [B2]',
+    dict(role='Architect', first='Steuart', last='J Mackenzie HARRISON', q='BArch MArch ARB', idimg='m-id-steuart-line.webp', idalt='Führerschein Steuart J Mackenzie Harrison', tel='+43 (0)699 1941 9240', mail='steuart@dasein-design.net', nat='Schottland [Europäisch!]', lang='Englisch [Muttersprache], Deutsch [B2]',
          extra='Sprachen: Englisch [Muttersprache] &amp; Deutsch [B2]',
          cv=[('Professional', ['2019 ZT: Arch+Ing, Bundeskammer der ZiviltechnikerInnen, Österreich [EU]',
                                '2004 ARB: Architects Registration Board of the United Kingdom [UK]',

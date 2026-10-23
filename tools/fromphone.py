@@ -803,7 +803,8 @@ def patch(s):
     assert n >= 4, n
     s = _impressum_page(s)
     s = _tint(s)
-    s = s.replace('src="img/services-imgImage.webp"', 'src="img/services-id-cuong-line.webp"')   # 23 Oct: a black-and-white line drawing of the card, no personal numbers
+    s = s.replace('src="img/services-imgImage.webp"', 'src="img/services-id-cuong-line.webp"')
+    s = s.replace('src="img/services-imgImage1.webp"', 'src="img/services-id-steuart-line.webp"')   # 23 Oct: a black-and-white line drawing of the card, no personal numbers
     s = s.replace('<head>', '<head><script>/* phones go to the phone site (23 Oct); ?desktop=1 stays here and is remembered */ (function(){ try{ const q=new URLSearchParams(location.search);'
                   ' if(q.get("desktop")==="1") localStorage.setItem("dd-desktop","1"); if(q.get("desktop")==="0") localStorage.removeItem("dd-desktop");'
                   ' const narrow=Math.min(screen.width,screen.height)<=600||(innerWidth<=760&&matchMedia("(pointer:coarse)").matches);'

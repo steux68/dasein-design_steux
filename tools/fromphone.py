@@ -494,17 +494,21 @@ WONDER_CSS = """
 .dwsw:hover .wo{color:#e30613}
 .dwon{position:absolute;left:225px;top:30px;width:1100px;height:966px;z-index:45;background:#fff}   /* ends above the scroll arrow (y 998), which stays, as on every page */   /* above the map (20) and the guide lines */
 .dwon[hidden]{display:none}
+.dwtrail{position:absolute;inset:0;width:1100px;height:966px;z-index:2;pointer-events:none}
+.dwbug{position:absolute;left:0;top:0;width:44px;height:97px;margin:-48px 0 0 -22px;z-index:2;pointer-events:none;will-change:transform;
+  filter:drop-shadow(1.5px 0 0 #fff) drop-shadow(-1.5px 0 0 #fff) drop-shadow(0 1.5px 0 #fff) drop-shadow(0 -1.5px 0 #fff) drop-shadow(0 1px 3px rgba(0,0,0,.35))}   /* a thin white outline so it stands out on the photos */
 .dwopen #mapclip{visibility:hidden}   /* the live map sits above the page: hidden while wonder is open (the dashed columns stay) */
 .dwsc{position:absolute;inset:0;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;scrollbar-width:none;padding:30px 10px 30px} .dwsc::-webkit-scrollbar{display:none}
 .dwgrid{position:relative;width:1080px}   /* each column of the projects grid split in two (95 + 10 + 95), rows of 85 + 10 */   /* the projects page's module: columns on the dashed lines, rows of 180 from y 60 */
 .dwg{position:absolute;padding:0;border:0;background:#f4f4f4;overflow:hidden;cursor:pointer}
 .dwg img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s} .dwg:hover img{transform:scale(1.04)}
 .dwempty{position:absolute}
-.dwtitle{position:absolute;left:110px;top:380px;width:112px;height:644px;z-index:45;background:#fff;pointer-events:none}
-.dwtitle img{position:absolute;left:15px;top:50px;width:90px;height:570px;object-fit:cover}
+.dwtitle{position:absolute;left:0;top:0;width:1440px;height:1024px;z-index:45;pointer-events:none}
+.dwtitle .dwtw{position:absolute;left:110px;top:380px;width:112px;height:644px;background:#fff}
+.dwtitle [class*="h-[560px]"][class*="w-[84px]"]{height:570px!important} .dwtitle [class*="w-[560px]"]{width:570px!important}
+.dwtitle [class*="w-[560px]"] > p{display:flex;align-items:baseline;white-space:pre;margin:0}
+.dwtitle [class*="w-[560px]"] > p > span[class*="text-[20px]"]{font-size:40px!important;margin-left:auto;color:#e30613}   /* [w] like the pages' [01]-[04] */
 .dwtitle[hidden]{display:none}
-.dwtitle span{position:absolute;left:15px;bottom:24px;width:84px;height:560px;display:flex;align-items:flex-end;justify-content:flex-start}
-.dwtitle span b{display:block;transform:rotate(-90deg);transform-origin:left bottom;position:absolute;left:84px;bottom:0;white-space:nowrap;font:700 50px/84px Calibri,Carlito,sans-serif;color:rgba(0,0,0,.8)}
 .dwfloat{position:absolute;left:10px;top:220px;width:1080px;height:22px;z-index:2}   /* ten categories, two to each column, in a row under the tabs, level with the dd mark */
 .dwsc{top:246px!important;padding-top:6px!important}   /* the category row sits on the tick at y 250 (by the i of dasein), the photos start 10 px under it */
 .dwfb{position:absolute;top:0;width:95px;height:22px;display:flex;align-items:center;justify-content:center;gap:4px;padding:0 4px;border:0;font:13px Calibri,Carlito,sans-serif;color:#000;white-space:nowrap;overflow:hidden;cursor:pointer}
@@ -566,7 +570,22 @@ WONDER_JS = r"""<script>(function(){ const sw=document.getElementById('dwsw'), w
       if(n%15===8){ w=4; h=4; } else if(n%5===0){ w=2; h=2; } else if(ar>1.25){ w=2; } else if(ar<.8){ h=2; }
       n++; t.hidden=false; t.style.cssText=''; bottom=Math.max(bottom,place(t,w,h)); });
     grid.style.height=(bottom*95)+'px'; }
-  /* the eight categories drift slowly over the photos */
+  /* the beetle wanders over wonder in curves, quick but not frantic, leaving a dotted trail that slowly fades; it stays put while the photos scroll */
+  (function(){ const bug=document.getElementById('dwbug'), cv=document.getElementById('dwtrail'), tc=cv.getContext('2d'); const W=1100, H=966;
+    cv.width=W*2; cv.height=H*2; tc.setTransform(2,0,0,2,0,0);
+    let g={x:200,y:400,a:0}, tgt={x:600,y:500}, last=0, walked=0, fade=0, run=0;
+    const R=(a,b)=>a+Math.random()*(b-a), pick=()=>{ tgt={x:R(60,W-60),y:R(60,H-60)}; };
+    function step(t){ if(wo.hidden){ run=0; return; } const dt=Math.min(.05,(t-last)/1000||0); last=t;
+      const dx=tgt.x-g.x, dy=tgt.y-g.y; if(Math.hypot(dx,dy)<40) pick();
+      const want=Math.atan2(dy,dx)*180/Math.PI+90+Math.sin(t/300)*24; let da=((want-g.a+540)%360)-180;
+      g.a+=Math.max(-200*dt,Math.min(200*dt,da)); const sp=150*dt, h=(g.a-90)*Math.PI/180;
+      g.x=Math.max(20,Math.min(W-20,g.x+Math.cos(h)*sp)); g.y=Math.max(20,Math.min(H-20,g.y+Math.sin(h)*sp));
+      walked+=sp; if(walked>4){ walked=0; tc.fillStyle='rgba(58,60,55,.6)'; tc.beginPath(); tc.arc(g.x,g.y,1,0,7); tc.fill(); }
+      fade+=dt; if(fade>.12){ fade=0; tc.globalCompositeOperation='destination-out'; tc.fillStyle='rgba(0,0,0,.025)'; tc.fillRect(0,0,W,H); tc.globalCompositeOperation='source-over'; }
+      bug.style.transform=`translate(${g.x}px,${g.y}px) rotate(${g.a}deg)`; run=requestAnimationFrame(step); }
+    sw.addEventListener('click',()=>{ if(!wo.hidden&&!run){ tc.clearRect(0,0,W,H); pick(); last=performance.now(); run=requestAnimationFrame(step); } });
+  })();
+  /* the categories: a row of half-column labels */
   const fl=wo.querySelector('.dwfloat');
   const fb=CATS.map((c,k)=>{ const b=document.createElement('button'); b.type='button'; b.className='dwfb'; b.innerHTML='<b>'+c+'</b><small>['+String(k+1).padStart(2,'0')+']</small>';
     b.addEventListener('click',()=>{ only=only===String(k)?null:String(k); fb.forEach((x,j)=>x.el.classList.toggle('on',only===String(j))); carpet(); sc.scrollTop=0; });
@@ -628,8 +647,15 @@ def _desk_catchup(s):
     W, E = compass('W', 22), compass('E', 22)
     sw = ('<button type="button" class="dwsw" id="dwsw" aria-pressed="false" aria-label="switch between work and wonder">'
           '<span class="wk">work</span><i class="tg"><b></b></i><span class="wo">wonder</span></button>')
-    wo = (f'<div class="dwtitle" id="dwtitle" hidden><img src="img/intro-imgImage.webp" alt=""><span><b>wonder</b></span></div>'
-          f'<div class="dwon" id="dwon" hidden data-cats=\'{json.dumps(cats)}\'><div class="dwsc"><div class="dwgrid" id="dwgrid">{tiles}</div></div><div class="dwfloat"></div>'
+    # the vertical title in exactly the markup and position of the other pages' titles, over the same grey text strip (23 Oct, 02:50)
+    title = ('<i class="dwtw"></i>'
+             '<div class="absolute flex h-[570px] items-center justify-center left-[125px] top-[430px] w-[90px]"><div class="flex-none"><div class="border-[0.5px] border-solid border-white h-[570px] relative w-[90px]">'
+             '<img alt="" class="absolute inset-0 max-w-none object-contain pointer-events-none size-full" src="img/intro-imgImage.webp"></div></div></div>'
+             '<div class="-translate-y-full absolute flex h-[560px] items-center justify-center left-[125px] top-[1000px] w-[84px]"><div class="-rotate-90 flex-none">'
+             '<div class="[word-break:break-word] flex flex-col finter font-semibold h-[84px] justify-end leading-[0] not-italic relative text-[0px] text-[rgba(0,0,0,0.8)] w-[560px]">'
+             '<p><span class="fcal-b leading-[normal] text-[50px]">wonder </span><span class="fcal-r leading-[normal] text-[20px]">[w]</span></p></div></div></div>')
+    wo = (f'<div class="dwtitle" id="dwtitle" hidden>{title}</div>'
+          f'<div class="dwon" id="dwon" hidden data-cats=\'{json.dumps(cats)}\'><div class="dwsc"><div class="dwgrid" id="dwgrid">{tiles}</div></div><div class="dwfloat"></div><canvas class="dwtrail" id="dwtrail"></canvas><img class="dwbug" id="dwbug" src="img/m-bug-up.webp" alt="">'
           f'<div class="dwpop" id="dwpop" hidden><div class="dwcard"><div class="dwtop"><span id="dwk"></span><button type="button" class="dwx" id="dwx" aria-label="close">{XC}</button></div>'
           f'<div class="dwbody" id="dwbody"></div><div class="dwnav"><button type="button" id="dwprev">{W}<span>previous</span></button><button type="button" id="dwnext"><span>next</span>{E}</button></div></div></div></div>')
     i = s.index('<a class="hot tab" href="#contact"')

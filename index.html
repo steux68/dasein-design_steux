@@ -404,10 +404,10 @@ img[src^="img/m-lg-"]{box-sizing:border-box;padding:6px 12px}
 .dwon[hidden]{display:none}
 .dwopen #mapclip{visibility:hidden}   /* the live map sits above the page: hidden while wonder is open (the dashed columns stay) */
 .dwsc{position:absolute;inset:0;overflow-y:auto;scrollbar-width:none;padding:30px 10px 30px} .dwsc::-webkit-scrollbar{display:none}
-.dwgrid{display:grid;grid-template-columns:repeat(5,200px);grid-auto-rows:180px;column-gap:20px;row-gap:10px;grid-auto-flow:dense}   /* the projects page's module: columns on the dashed lines, rows of 180 from y 60 */
-.dwg{position:relative;padding:0;border:0;background:#f4f4f4;overflow:hidden;cursor:pointer}
+.dwgrid{position:relative;width:1080px}   /* each column of the projects grid split in two (95 + 10 + 95), rows of 85 + 10 */   /* the projects page's module: columns on the dashed lines, rows of 180 from y 60 */
+.dwg{position:absolute;padding:0;border:0;background:#f4f4f4;overflow:hidden;cursor:pointer}
 .dwg img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s} .dwg:hover img{transform:scale(1.04)}
-.dwempty{display:block}
+.dwempty{position:absolute}
 .dwtitle{position:absolute;left:110px;top:380px;width:112px;height:644px;z-index:45;background:#fff;pointer-events:none}
 .dwtitle img{position:absolute;left:15px;top:50px;width:90px;height:570px;object-fit:cover}
 .dwtitle[hidden]{display:none}
@@ -772,12 +772,21 @@ img[src^="img/m-lg-"]{box-sizing:border-box;padding:6px 12px}
       if(w>=h){ const cw=s/h; let yy=y; row.forEach(o=>{ const ch=o.s/cw; out.push({...o,x,y:yy,w:cw,h:ch}); yy+=ch; }); x+=cw; w-=cw; }
       else { const rh=s/w; let xx=x; row.forEach(o=>{ const rw=o.s/rh; out.push({...o,x:xx,y,w:rw,h:rh}); xx+=rw; }); y+=rh; h-=rh; } } }
   /* the carpet: a treemap of many sizes, newest first, in runs that form blocks, the blocks laid row by row; a few white rests */
+  /* the carpet (02:30): ten half-columns - two in each column of the site, 10 px apart, 20 px between columns - and rows of 85 + 10, so two rows
+     make one row of the projects page; photos take 1 x 1, 2 x 1 (a whole column), 1 x 2, 2 x 2 or now and then 4 x 4, packed in order */
   function carpet(){ const ph=tiles.filter(t=>only===null||t.dataset.cat===only);
-    tiles.forEach(t=>t.hidden=true); grid.querySelectorAll('.dwempty').forEach(e=>e.remove()); let n=0;
-    ph.forEach((t,k)=>{ if(k%4===2||k%9===6){ const e=document.createElement('i'); e.className='dwempty'; grid.appendChild(e); }   /* white rests, one cell each */
-      const ar=+t.dataset.ar||1; let c=1, r=1;
-      if(n%6===0){ c=2; r=2; } else if(ar>1.25){ c=2; } else if(ar<.8&&n%3!==1){ r=2; }
-      n++; t.hidden=false; t.style.cssText='grid-column:span '+c+';grid-row:span '+r; grid.appendChild(t); }); }
+    tiles.forEach(t=>t.hidden=true); grid.querySelectorAll('.dwempty').forEach(e=>e.remove());
+    const occ=[], free=(c,r,w,h)=>{ for(let y=r;y<r+h;y++) for(let x=c;x<c+w;x++){ if(x>9||(occ[y]&&occ[y][x])) return false; } return true; };
+    const take=(c,r,w,h)=>{ for(let y=r;y<r+h;y++){ occ[y]=occ[y]||[]; for(let x=c;x<c+w;x++) occ[y][x]=1; } };
+    const X=c=>Math.floor(c/2)*220+(c%2)*105, Wd=(c,w)=>w===1?95:w===2?200:420, Ht=h=>h*95-10;
+    const place=(e,w,h)=>{ for(let r=0;;r++) for(let c=0;c<10;c++){ if((w>=2&&c%2)||(w===4&&c%4===2&&false)) continue; if(free(c,r,w,h)){ take(c,r,w,h);
+      Object.assign(e.style,{left:X(c)+'px',top:(r*95)+'px',width:Wd(c,w)+'px',height:Ht(h)+'px'}); grid.appendChild(e); return r+h; } } };
+    let n=0, bottom=0;
+    ph.forEach((t,k)=>{ if(k%3===1||k%7===5){ const e=document.createElement('i'); e.className='dwempty'; bottom=Math.max(bottom,place(e,1,1)); }   /* white rests */
+      const ar=+t.dataset.ar||1; let w=1, h=1;
+      if(n%15===8){ w=4; h=4; } else if(n%5===0){ w=2; h=2; } else if(ar>1.25){ w=2; } else if(ar<.8){ h=2; }
+      n++; t.hidden=false; t.style.cssText=''; bottom=Math.max(bottom,place(t,w,h)); });
+    grid.style.height=(bottom*95)+'px'; }
   /* the eight categories drift slowly over the photos */
   const fl=wo.querySelector('.dwfloat');
   const fb=CATS.map((c,k)=>{ const b=document.createElement('button'); b.type='button'; b.className='dwfb'; b.innerHTML='<b>'+c+'</b><small>['+String(k+1).padStart(2,'0')+']</small>';

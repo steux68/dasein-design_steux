@@ -635,6 +635,7 @@ def _desk_catchup(s):
     s = s[:i] + s[j:]
     i = s.index('<div class="chrome" data-pg="bits">'); s = s[:i] + s[_closing_div(s, i):]
     s, n = _drop_group(s, 'bits &amp; bats </span>'); assert n >= 4, n
+    s, n2 = _drop_group(s, '>bits</span>')   # the contact page's tab spells it in three spans
     s = re.sub(r'<a class="hot tab" href="#bits"[^>]*></a>', '', s)
     s = re.sub(r'<a class="hot pin" href="#bits".*?</a>', '', s, count=1, flags=re.S)
     # contact moves into the fourth slot and becomes [04]
@@ -671,6 +672,16 @@ def _desk_catchup(s):
     i = s.index('<a class="hot tab" href="#contact"')
     s = s[:i] + sw + wo + s[i:]
     return s.replace('</body>', WONDER_JS + '</body>', 1)
+
+
+def _tint(s):
+    """23 Oct, 08:15 - like the phone: a pale grey ground on every other page, starting with about us (about us, downloads & links, impressum),
+    inside the five columns (x 235-1315), from under the tabs to above the scroll arrow"""
+    for pid in ('services', 'downloads', 'impressum'):
+        a = f'<section class="pg" id="{pid}"><div class="bg-white relative frame">'
+        assert a in s, pid
+        s = s.replace(a, a + '<div class="pgtint" aria-hidden="true"></div>', 1)
+    return s
 
 
 def patch(s):
@@ -788,6 +799,7 @@ def patch(s):
                    r'\1\2\3 style="height:330px;top:884px"\4" style="width:330px"><p class="whitespace-pre-wrap">\5<span class="fcal-r"> · </span><a class="impl" href="#impressum">§ impressum</a></p>', s)
     assert n >= 4, n
     s = _impressum_page(s)
+    s = _tint(s)
     s = _desk_catchup(s)   # 23 Oct: bits & bats and the game gone, wonder in the fifth slot
     # ---- map + / - / home (22 Oct): finer lines, like the compass arrows
     s = _rep('.mz button circle{fill:rgba(255,255,255,.9);stroke:#e30613;stroke-width:2;', '.mz button circle{fill:rgba(255,255,255,.9);stroke:#e30613;stroke-width:1;', s)
@@ -806,7 +818,7 @@ def patch(s):
     s = _sub1(r'(<button type="button" class="lbsa r" id="lbsr0".*?</button></div>)', r'\1<div class="lbdots" id="lbdots"></div>', s, re.S)
     s = s.replace('</body>', '<script>document.getElementById("lbdots")&&document.getElementById("lbdots").addEventListener("click",e=>{ const i=e.target.closest("i"); if(i){ const b=document.querySelector("#lbst button[data-k=\'"+i.dataset.k+"\']"); if(b) b.click(); } });</script></body>', 1)
     # ---- styles
-    s = _rep('</style>', CSS + WONDER_CSS + '</style>', s)
+    s = _rep('</style>', CSS + WONDER_CSS + '.pgtint{position:absolute;left:235px;top:35px;width:1080px;height:958px;background:#f4f4f2;pointer-events:none}\n</style>', s)
     return s.replace('</body>', HEART_JS + EXT_JS + MARK + '</body>', 1)
 
 

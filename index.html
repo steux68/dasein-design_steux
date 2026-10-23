@@ -943,5 +943,9 @@ img[src^="img/m-lg-"]{box-sizing:border-box;padding:6px 12px}
   document.addEventListener('pagechange',e=>{ here=e.detail; if(here==='contact'){ if(want){ want=false; set(true); } } else set(false); });
   document.addEventListener('click',e=>{ if(e.target.closest('[data-imp]')){ if(here==='contact') set(true); else want=true; } },true);
   if(window.ddImp) set(true);
+})();</script><script>/* 23 Oct: with the project pop-up open, a click on the work / wonder switch or a tab closes it and does that too */
+(function(){ const lb=document.getElementById('lb'); if(!lb) return;
+  lb.addEventListener('click',e=>{ if(e.target.closest('#lbp')) return; const x=e.clientX, y=e.clientY;
+    requestAnimationFrame(()=>{ if(lb.open) return; const el=document.elementFromPoint(x,y), t=el&&el.closest('#dwsw,.hot.tab'); if(t) t.click(); }); });
 })();</script></body>
 </html>

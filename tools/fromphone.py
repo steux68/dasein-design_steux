@@ -734,6 +734,12 @@ IMP_JS = """<script>/* contact + impressum (23 Oct): "full impressum" opens the 
   if(window.ddImp) set(true);
 })();</script>"""
 
+LBSW_JS = """<script>/* 23 Oct: with the project pop-up open, a click on the work / wonder switch or a tab closes it and does that too */
+(function(){ const lb=document.getElementById('lb'); if(!lb) return;
+  lb.addEventListener('click',e=>{ if(e.target.closest('#lbp')) return; const x=e.clientX, y=e.clientY;
+    requestAnimationFrame(()=>{ if(lb.open) return; const el=document.elementFromPoint(x,y), t=el&&el.closest('#dwsw,.hot.tab'); if(t) t.click(); }); });
+})();</script>"""
+
 
 def _contact_imp(s):
     # the impressum page and its chrome go
@@ -766,6 +772,7 @@ def _contact_imp(s):
     a = '<section class="pg" id="contact"><div class="bg-white relative frame">'
     s = _rep(a, a + add, s)
     s = s.replace('</style>', IMP_CSS + '</style>', 1)
+    s = s.replace('</body>', LBSW_JS + '</body>', 1)
     return s.replace('</body>', IMP_JS + '</body>', 1)
 
 

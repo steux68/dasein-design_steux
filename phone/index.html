@@ -641,7 +641,8 @@ dialog .top{flex:none}
   /* work ○ wonder (trial): the switch opens the notebook over the page - six category bars, then the grid; a tap on a tile opens it */
   (function(){ const sw=document.getElementById('wsw'), wd=document.getElementById('wonder'); if(!sw||!wd) return;
     const wp=document.getElementById('wpop'), wb=document.getElementById('wpbody'), tiles=[...wd.querySelectorAll('.wg')]; let cur=0;
-    const set=on=>{ sw.setAttribute('aria-pressed',String(on)); wd.hidden=!on; if(!on) wp.hidden=true; document.documentElement.classList.toggle('dlg',on); if(on) wd.scrollTop=0; };
+    const set=on=>{ document.querySelectorAll('dialog[open]').forEach(d=>d.close());   /* 23 Oct: the switch closes any open pop-up and goes straight to work or wonder */
+      sw.setAttribute('aria-pressed',String(on)); wd.hidden=!on; if(!on) wp.hidden=true; document.documentElement.classList.toggle('dlg',on); if(on) wd.scrollTop=0; };
     sw.addEventListener('click',()=>set(sw.getAttribute('aria-pressed')!=='true'));
     /* a bar shows only its category (lit lime); tapped again, everything */
     wd.querySelectorAll('.wbt').forEach(b=>b.addEventListener('click',()=>{ const on=!b.classList.contains('on');

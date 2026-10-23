@@ -207,7 +207,7 @@ CONTACT = ('<div class="box"><p class="lab first">OFFICE</p><p class="addr"><b c
       + '<div class="pcs">' + ''.join(f'<p><b>{p["first"]} {p["last"]}</b><br><a href="tel:{p["tel"].replace(" ", "").replace("(0)", "")}">{p["tel"]}</a> · <a href="mailto:{p["mail"]}">{p["mail"]}</a></p>' for p in PARTNERS) + '</div>'
       '<div class="mapw"><div class="map" id="map"></div><div class="mz"><button type="button" id="zin" aria-label="zoom in">' + SEARCH.ZOOM_IN + '</button><button type="button" id="zout" aria-label="zoom out">' + SEARCH.ZOOM_OUT + '</button><button type="button" id="zhome" aria-label="back to the start view">' + SEARCH.ZOOM_HOME + '</button></div></div>'
       '<p class="mapl"><a href="https://www.openstreetmap.org/?mlat=48.211431&amp;mlon=16.333964#map=18/48.211431/16.333964">open the map</a></p></div>'
-           '<p class="ctx">' + CONTACT_TXT + '</p>')   # the closing line of the site, after the map
+           '')   # 23 Oct: the closing "Write, call or come visit us!" line is gone (Steuart)
 
 MOREP = ('<button type="button" class="cvb more" aria-expanded="false" data-g="g-proj">' + PLUS
          + '<span class="cvt"><span class="op">more</span><span class="cl">fewer</span></span><b>projects</b></button>')
@@ -223,12 +223,13 @@ LEGAL = ('<div class="box legal cut" id="g-legal" data-show="4" data-extra="30">
 # ---------- "work ○ wonder" trial (?w=1, 23 Oct): the bits & bats as a notebook of everyday things, behind a switch in the header.
 # The photos and notes stand in for real posts; the dates are samples. Later the posts come by e-mail from Steuart's phone.
 # six categories as title bars (23 Oct; Steuart named banality, philosophy, details - the other three are Claude's suggestions, to change)
-WCATS = ['banality', 'details', 'philosophy', 'light', 'traces', 'the city']
+WCATS = ['banality', 'details', 'philosophy', 'light', 'traces', 'the city', 'material', 'creatures']   # eight since 23 Oct, 02:00; material and creatures added by Claude
 WCAT_OF = {24: 0, 25: 0, 5: 0, 15: 0, 16: 0, 17: 0, 20: 2, 22: 0, 31: 0, 0: 0,
            6: 1, 12: 1, 30: 1, 32: 1, 23: 1, 1: 2, 14: 2,
            19: 3, 21: 3, 27: 3, 29: 3, 3: 3,
            2: 4, 8: 4, 18: 4, 26: 4, 28: 4, 7: 4, 9: 4, 11: 4,
            4: 5, 10: 5, 13: 5}
+WCAT_OF.update({30: 6, 32: 6, 6: 6, 26: 6, 22: 7, 31: 7})   # material: shreds, torn strips, plastic, tape; creatures: the wasp, the horse
 
 
 WCARD_KEY = {0: 'wagner', 1: 'museum', 2: 'walk', 3: 'open house', 4: 'loos', 5: 'standard', 6: 'terra mater', 7: 'devlin', 8: 'starchitect', 9: 'fassaden'}
@@ -372,7 +373,9 @@ body{{position:relative}}
 /* thin white bars at the top and bottom of the screen with the N and S arrows: previous / next page */
 .bar{{position:fixed;left:var(--side);right:8px;z-index:15;height:var(--bar);display:flex;align-items:center;justify-content:center;background:#fff}}
 .bar.btop{{top:var(--head);border-bottom:1px dashed var(--line)}}
-.bar.bbot{{bottom:0;height:calc(var(--bar) + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);border-top:1px dashed var(--line)}}
+.bar.bbot{{bottom:0;height:calc(var(--bar) + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);border-top:1px dashed var(--line);align-items:flex-start}}
+.bar.bbot > button{{height:var(--bar)}}
+.bar.bbot::after{{content:"";position:absolute;left:0;right:0;top:calc(var(--bar) - 1px);border-top:1px dashed var(--line);pointer-events:none}}   /* a second line under the arrow, as at the top (23 Oct) */
 .bar button{{border:0;background:none;padding:3px 24px;display:flex;-webkit-tap-highlight-color:transparent;transition:opacity .2s}}
 .bar button:disabled{{opacity:.2}}
 #goS .up{{display:none!important;align-items:center;gap:6px}} #goS.top .dn{{display:none}} #goS.top .up{{display:flex!important}}
@@ -429,7 +432,12 @@ body{{position:relative}}
 .wfloat{{position:fixed;left:18px;right:18px;top:calc(var(--head) + 10px);bottom:14px;z-index:5;pointer-events:none}}
 .wfb{{position:absolute;left:0;top:0;display:flex;align-items:center;gap:5px;height:23px;padding:0 10px;border:0;font:inherit;font-size:12px;color:#000;white-space:nowrap;cursor:pointer;pointer-events:auto;
   background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,rgba(242,242,242,.93);box-shadow:0 1px 6px rgba(0,0,0,.18);will-change:transform;-webkit-tap-highlight-color:transparent}}
-.wfb b{{font-weight:700}} .wfb small{{font-size:10px;color:#444}} .wfb.on{{background-color:#eaffae}} .wfb:active{{background-color:#cdff3e}}   /* the six categories float above the grid, as the half title bars do on the main page */
+.wfb b{{font-weight:700}} .wfb small{{font-size:10px;color:inherit;opacity:.7}}
+/* eight categories, eight colours (23 Oct) - no grey; the chosen one gets a dark ring */
+.wfb{{background-image:none!important;border-radius:2px}}
+.wfb:nth-child(1){{background-color:#cdff3e}} .wfb:nth-child(2){{background-color:#ffd400}} .wfb:nth-child(3){{background-color:#2f8cff;color:#fff}} .wfb:nth-child(4){{background-color:#ffb3d1}}
+.wfb:nth-child(5){{background-color:#e30613;color:#fff}} .wfb:nth-child(6){{background-color:#2fbf4a;color:#fff}} .wfb:nth-child(7){{background-color:#ff8a00}} .wfb:nth-child(8){{background-color:#9b6bff;color:#fff}}
+.wfb.on{{box-shadow:0 0 0 2px #111,0 1px 6px rgba(0,0,0,.25)}} .wfb:active{{filter:brightness(1.1)}}   /* the six categories float above the grid, as the half title bars do on the main page */
 .wonder .wgrid{{display:block;position:relative;margin-top:12px;grid-template-columns:repeat(5,1fr);grid-auto-rows:calc((100vw - 36px - 12px) / 5);grid-auto-flow:dense;gap:3px;margin-top:10px}}
 .wempty{{display:block;background:#fff}}
 .wonder .wgrid > *{{position:relative;box-sizing:border-box;border:0;margin:0;width:auto;height:auto}}
@@ -567,6 +575,7 @@ body:not(.side) .socs{{display:flex}}   /* in the top layouts (and the stack tri
 .stack .stage{{height:calc(100svh - var(--head) - 2 * var(--bar) - 126px)}}
 .stack.pairs .stage{{height:calc(100svh - var(--head) - 2 * var(--bar) - 48px)}}
 .stack.pairs #legal{{scroll-margin-top:62px}}
+.stack main > #legal{{margin-top:39px}}   /* the same white before the impressum as before a section bar */
 .stack main > #start + .hb{{margin-top:14px}}   /* about us sits closer under the beetle (23 Oct) */   /* no bar of its own: lands just under the two rows of bars */
 .stack .pg:last-child{{min-height:calc(100lvh - var(--head) - 2 * var(--bar) - 132px)}}
 .stack.pairs .pg:last-child{{min-height:calc(100lvh - var(--head) - 2 * var(--bar) - 44px)}}   /* the last page can always scroll up into place */

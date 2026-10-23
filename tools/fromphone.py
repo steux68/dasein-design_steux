@@ -699,6 +699,69 @@ def _tint(s):
     return s
 
 
+# ---------- contact + impressum on one page (23 Oct, 13:04, Steuart): contact details at the top, the map in the middle,
+# the impressum basics under the map and "(+) full impressum" right at the bottom; the impressum page goes
+IMP_CSS = """
+/* contact + impressum (23 Oct) */
+#contact [data-node-id="1:539"],#contact [data-node-id="8:3"],#contact [data-node-id="104:17"],#contact [data-node-id="104:18"]{display:none}
+.impb{position:absolute;font:400 11.5px/1.5 Calibri,Carlito,sans-serif;color:#222}
+.impb .lab2{margin:0 0 4px;font-weight:700;font-size:11px;letter-spacing:.14em;color:#e30613}
+.impb .lp{color:#666;font-size:11px;margin:0}
+.impb h4{margin:0 0 2px;font-size:11.5px;font-weight:700;color:#000} .impb p{margin:0} .impb .lp+h4{margin-top:8px}
+.impb a,.impfull a{color:#1a5fd0;text-decoration:none} .impb a[href^="tel:"],.impfull a[href^="tel:"]{color:#1e8e3e}
+.impfull{background:#fff;z-index:7;display:none} .impo .impfull{display:block} .impo .impb{visibility:hidden}
+.impopen #mapclip{visibility:hidden}   /* the live map sits above the page: hidden while the full impressum is open */
+.dimp{left:235px;top:960px;width:1080px;height:28px;padding:0 0 0 2px;
+  background:repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left top/100% 1px no-repeat,
+             repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left bottom/100% 1px no-repeat}
+"""
+IMP_JS = """<script>/* contact + impressum (23 Oct): "full impressum" opens the whole text over the map; the § links open it from anywhere */
+(function(){
+  const fr=document.querySelector('#contact .frame'), b=document.getElementById('dimp'); if(!fr||!b) return;
+  let here='', want=false;
+  const set=on=>{ fr.classList.toggle('impo',on); document.documentElement.classList.toggle('impopen',on); b.setAttribute('aria-expanded',String(on));
+    document.querySelectorAll('a.impl').forEach(a=>a.classList.toggle('cur',on)); };
+  b.addEventListener('click',()=>set(!fr.classList.contains('impo')));
+  document.addEventListener('pagechange',e=>{ here=e.detail; if(here==='contact'){ if(want){ want=false; set(true); } } else set(false); });
+  document.addEventListener('click',e=>{ if(e.target.closest('[data-imp]')){ if(here==='contact') set(true); else want=true; } },true);
+  if(window.ddImp) set(true);
+})();</script>"""
+
+
+def _contact_imp(s):
+    # the impressum page and its chrome go
+    i = s.index('<section class="pg" id="impressum"'); j = s.index('</section>', i) + len('</section>')
+    s = s[:i] + s[j:]
+    i = s.index('<div class="chrome" data-pg="impressum">'); s = s[:i] + s[_closing_div(s, i):]
+    s = _rep('<script>document.addEventListener("pagechange",e=>document.querySelectorAll("a.impl").forEach(a=>a.classList.toggle("cur",e.detail==="impressum")));</script>', '', s)
+    # every § link now opens contact with the impressum unfolded; an old #impressum address too
+    s = s.replace('<a class="impl" href="#impressum">', '<a class="impl" href="#contact" data-imp="1">')
+    s = s.replace('<a class="hot pin" href="#impressum"', '<a class="hot pin" href="#contact" data-imp="1"')
+    assert '#impressum"' not in s
+    s = s.replace('<head>', '<head><script>if(location.hash==="#impressum"){ history.replaceState(null,"",location.pathname+location.search+"#contact"); window.ddImp=1; }</script>', 1)
+    # contact details to the top of the first column, a touch smaller; the map from y 60 to 800
+    s = _rep('top-[445px] w-[200px] whitespace-pre-wrap" style="top:440px" data-node-id="1:474"', 'top-[445px] w-[200px] whitespace-pre-wrap" style="top:60px;font-size:11px" data-node-id="1:474"', s)
+    s = _rep('<div class="absolute h-[560px] left-[455px] top-[440px] w-[860px]" data-node-id="4:2"', '<div class="absolute h-[560px] left-[455px] top-[440px] w-[860px]" style="top:60px;height:740px" data-node-id="4:2"', s)
+    s = _rep('contact.offsetTop-sc.scrollTop+440-32', 'contact.offsetTop-sc.scrollTop+60-32', s)
+    s = _rep('height:${560*s}px`;', 'height:${740*s}px`;', s)
+    s = _rep('top:${240*s}px`;', 'top:${620*s}px`;', s)
+    # under the map: the basics; at the bottom the bar; the full text over the map when open
+    PLUS = ('<svg viewBox="-12 -12 24 24" aria-hidden="true"><circle class="r1" r="8"/><circle class="r2" r="8"/><circle class="c" r="8"/>'
+            '<path class="v" d="M0 -4.2V4.2"/><path d="M-4.2 0H4.2"/></svg>')
+    parts = re.findall(r'(<h4>.*?</h4>)(<p[^>]*>.*?</p>)', LEGAL_BODY, re.S)
+    get = {re.sub('<.*?>', '', h): h + t for h, t in parts}
+    lp = re.search(r'<p class="lp">.*?</p>', LEGAL_BODY).group(0)
+    legal = re.sub(r'(<h4>.*?</h4>)(<p[^>]*>.*?</p>)', r'<div class="ib">\1\2</div>', LEGAL_BODY, flags=re.S)
+    add = (f'<div class="impb" style="left:235px;top:820px;width:420px"><p class="lab2">IMPRESSUM</p>{lp}{get["Unternehmensgegenstand"]}</div>'
+           f'<div class="impb" style="left:675px;top:820px;width:420px">{get["Medieninhaber, Herausgeber und Diensteanbieter"]}</div>'
+           f'<div class="impc impfull" style="left:455px;top:60px;width:860px;height:740px"><p class="lab2">IMPRESSUM</p>{legal}</div>'
+           f'<button type="button" class="dcv dimp" id="dimp" aria-expanded="false">{PLUS}<span class="cvt"><span class="op">full</span><span class="cl">close</span></span><b>impressum</b></button>')
+    a = '<section class="pg" id="contact"><div class="bg-white relative frame">'
+    s = _rep(a, a + add, s)
+    s = s.replace('</style>', IMP_CSS + '</style>', 1)
+    return s.replace('</body>', IMP_JS + '</body>', 1)
+
+
 def patch(s):
     if MARK in s:
         return s
@@ -840,6 +903,7 @@ def patch(s):
     s = s.replace('</body>', '<script>document.getElementById("lbdots")&&document.getElementById("lbdots").addEventListener("click",e=>{ const i=e.target.closest("i"); if(i){ const b=document.querySelector("#lbst button[data-k=\'"+i.dataset.k+"\']"); if(b) b.click(); } });</script></body>', 1)
     # ---- styles
     s = _rep('</style>', CSS + WONDER_CSS + '.pgtint{position:absolute;left:235px;top:35px;width:1080px;height:958px;background:#f4f4f2;pointer-events:none}\n</style>', s)
+    s = _contact_imp(s)   # 23 Oct, 13:04: contact + impressum on one page
     return s.replace('</body>', HEART_JS + EXT_JS + MARK + '</body>', 1)
 
 

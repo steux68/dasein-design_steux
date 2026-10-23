@@ -276,6 +276,7 @@ def _wonder():
 
             f'<div class="wpop" id="wpop" hidden><div class="wcard"><div class="top"><div class="cnt"><span id="wpk"></span></div><button type="button" class="x" id="wback" aria-label="back">{XC}</button></div>'
             '<div class="wpbody" id="wpbody"></div>'
+            f'<template id="wparr"><button type="button" class="pw" data-k="-1" aria-label="previous">{ARW2}</button><button type="button" class="pe" data-k="1" aria-label="next">{ARE2}</button></template>'
             f'<div class="wpnav"><button type="button" id="wprev">{ARW}<span>previous</span></button><button type="button" id="wnext"><span>next</span>{ARE}</button></div></div></div></div>')
 
 
@@ -458,6 +459,9 @@ body{{position:relative}}
 .wonder .wpop .wpnav{{border-top:1px dashed var(--line);padding:6px 10px 8px}}
 .wpbody .wpi{{display:block;width:100%;aspect-ratio:1/1;object-fit:contain;background:#f6f6f6;margin:0;outline:1px dotted #b8b8b8;outline-offset:-1px}}   /* the whole photo, whatever its format; grey fills the rest of the square, as in the project pop-up */
 .wpbody .wpq{{margin-top:0}}
+.wph{{position:relative;touch-action:pan-y}}   /* W / E arrows on the photo, as in the project pop-up (23 Oct) */
+.wph button{{position:absolute;top:50%;margin-top:-21px;width:42px;height:42px;border:0;padding:0;border-radius:50%;background:rgba(255,255,255,.82);display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent}}
+.wph .pw{{left:6px}} .wph .pe{{right:6px}}
 .wsq{{aspect-ratio:1/1;display:flex;flex-direction:column;justify-content:center;gap:8px;padding:18px;background:#f4f4f2;box-sizing:border-box;outline:1px dotted #b8b8b8;outline-offset:-1px}}
 .wsq.n{{background:#fffbd6}} .wsq small{{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--red)}} .wsq .wpl{{font-size:20px;line-height:1.35}}
 .wpbody .wpd{{margin:10px 0 2px;font-size:12px;letter-spacing:.06em;color:#888}}
@@ -943,7 +947,7 @@ dialog .top{{flex:none}}
     const vis=()=>[...grid.querySelectorAll('.wg:not(.again)')];
     function pop(t){{ const v=vis(); cur=v.indexOf(t); const d=t.dataset; let h='';
       const note=t.classList.contains('wnote');
-      if(d.img) h='<img class="wpi" src="'+d.img+'" alt=""><p class="wpd">'+d.when+'</p><p class="wpl">'+d.line+'</p>';
+      if(d.img) h='<div class="wph"><img class="wpi" src="'+d.img+'" alt="">'+document.getElementById('wparr').innerHTML+'</div><p class="wpd">'+d.when+'</p><p class="wpl">'+d.line+'</p>';
       else h='<div class="wsq'+(note?' n':'')+'">'+(note?'<i class="wpq">“</i>':'<small>'+d.src+'</small>')+'<p class="wpl'+(note?' q':'')+'">'+d.line+'</p>'
         +(d.url?'<a href="'+d.url+'" target="_blank" rel="noopener">read the article ↗</a>':'')+'</div><p class="wpd">'+d.when+'</p>';
       wb.innerHTML=h; wb.scrollTop=0; document.getElementById('wpk').innerHTML='wonder <b>'+String(cur+1).padStart(2,'0')+'</b> / '+v.length; wp.hidden=false; }}
@@ -1011,6 +1015,12 @@ dialog .top{{flex:none}}
     const step=k=>{{ const v=vis(); pop(v[(cur+k+v.length)%v.length]); }};
     document.getElementById('wprev').onclick=()=>step(-1); document.getElementById('wnext').onclick=()=>step(1);
     document.getElementById('wback').onclick=()=>{{ wp.hidden=true; }};
+    /* arrows on the photo and a swipe, as in the project pop-up (23 Oct) */
+    wb.addEventListener('click',e=>{{ const a=e.target.closest('.wph button'); if(a) step(+a.dataset.k); }});
+    let sx=null, sy=0;
+    wb.addEventListener('touchstart',e=>{{ const t=e.touches[0]; sx=t.clientX; sy=t.clientY; }},{{passive:true}});
+    wb.addEventListener('touchend',e=>{{ if(sx===null) return; const t=e.changedTouches[0], dx=t.clientX-sx, dy=t.clientY-sy; sx=null;
+      if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)*1.3) step(dx<0?1:-1); }},{{passive:true}});
     wp.addEventListener('click',e=>{{ if(e.target===wp) wp.hidden=true; }});   /* a tap on the veil beside the card goes back */
     document.querySelector('header .logo').addEventListener('click',()=>set(false));
     document.querySelectorAll('.tab,.pbar').forEach(t=>t.addEventListener('click',()=>set(false)));

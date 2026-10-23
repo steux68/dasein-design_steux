@@ -523,7 +523,9 @@ WONDER_CSS = """
 .dwpop[hidden]{display:none}
 .dwcard{width:560px;background:#fff;box-shadow:0 2px 18px rgba(0,0,0,.18);border:1px dotted #b8b8b8;font-family:Calibri,Carlito,sans-serif}
 .dwtop{display:flex;justify-content:space-between;align-items:center;padding:10px 14px 6px;font-size:13px;color:#666;letter-spacing:.06em} .dwtop b{color:#e30613;font-weight:400}
-.dwx{border:0;background:none;padding:2px;cursor:pointer} .dwx svg{width:24px;height:24px} .dwx .rg{fill:none;stroke:#3a3c37;stroke-width:.6} .dwx .xx{fill:none;stroke:#1a1a1a;stroke-width:1.15;stroke-linecap:round} .dwx:hover .rg{stroke:#e30613}
+.dwx{border:0;background:none;padding:2px;cursor:pointer} .dwx svg{width:24px;height:24px} .dwx .rg{fill:none;stroke:#3a3c37;stroke-width:.6} .dwx .xx{fill:none;stroke:#1a1a1a;stroke-width:1.15;stroke-linecap:round} .dwx:hover .rg,.dwx:focus-visible .rg{stroke:#e30613} .dwx .xx{transition:stroke .2s} .dwx:hover .xx,.dwx:focus-visible .xx{stroke:#e30613}
+.dwx:hover svg,.dwx:focus-visible svg{animation:lbxp 1.4s ease-in-out infinite} .dwx:focus-visible{outline:none}   /* the close pulses on hover, like the project pop-up's (23 Oct) */
+@media (prefers-reduced-motion:reduce){.dwx:hover svg,.dwx:focus-visible svg{animation:none}}
 .dwbody{padding:0 14px 8px} .dwbody img{display:block;width:100%;aspect-ratio:1/1;object-fit:contain;background:#f6f6f6;outline:1px dotted #b8b8b8;outline-offset:-1px}
 .dwbody img{cursor:none}   /* the floating W / E arrow takes over (23 Oct) */
 .dwbody .d{margin:10px 0 2px;font-size:13px;letter-spacing:.06em;color:#888} .dwbody .l{margin:0 0 4px;font-size:18px;color:#222}
@@ -631,6 +633,11 @@ WONDER_JS = r"""<script>(function(){ const sw=document.getElementById('dwsw'), w
   body.addEventListener('click',e=>{ const im=e.target.closest('img'); if(!im) return; step(half(e,im)==='l'?-1:1);
     requestAnimationFrame(()=>{ ar.className='pcar on '+half(e,body.querySelector('img')); }); });
   new MutationObserver(()=>{ if(pop.hidden) ar.className='pcar'; }).observe(pop,{attributes:true,attributeFilter:['hidden']});
+  /* a swipe on a touch screen steps too (23 Oct) */
+  let sx=null, sy=0;
+  body.addEventListener('touchstart',e=>{ const t=e.touches[0]; sx=t.clientX; sy=t.clientY; },{passive:true});
+  body.addEventListener('touchend',e=>{ if(sx===null) return; const t=e.changedTouches[0], dx=t.clientX-sx, dy=t.clientY-sy; sx=null;
+    if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)*1.3){ e.preventDefault(); step(dx<0?1:-1); } });
 })();</script>"""
 
 

@@ -283,7 +283,7 @@ def _wonder():
     return ('<div class="wonder" id="wonder" hidden>'
             f'<div class="wbars">{bars}</div>'
             f'<div class="wgrid" id="wgrid">{"".join(tiles)}</div>'
-            '<p class="wend">trial – the photos are real, the dates are samples</p>'
+
             f'<div class="wpop" id="wpop" hidden><div class="wcard"><div class="top"><div class="cnt"><span id="wpk"></span></div><button type="button" class="x" id="wback" aria-label="back">{XC}</button></div>'
             '<div class="wpbody" id="wpbody"></div>'
             f'<div class="wpnav"><button type="button" id="wprev">{ARW}<span>previous</span></button><button type="button" id="wnext"><span>next</span>{ARE}</button></div></div></div></div>')

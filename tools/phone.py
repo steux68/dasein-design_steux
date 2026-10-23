@@ -419,7 +419,12 @@ body{{position:relative}}
 .wbt b{{font-weight:700}} .wbt small{{font-size:10px;color:#444}}
 .wbt.on{{background-color:#eaffae}} .wbt:active{{background-color:#cdff3e}}
 .wonder .wbars{{display:none}}
-.wfloat{{position:fixed;left:18px;right:18px;top:calc(var(--head) + 10px);bottom:14px;z-index:5;pointer-events:none}}
+.wband{{position:relative;height:78px;margin:6px 0 0;overflow:hidden}} .wband canvas{{position:absolute;inset:0;width:100%;height:100%}}
+.wband img{{position:absolute;left:0;top:0;width:22px;height:48px;margin:-24px 0 0 -11px;will-change:transform;pointer-events:none}}
+.wcats{{position:sticky;top:0;z-index:3;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:6px 0;background:#fff}}
+.wonder .wcats .wfb{{position:static;transform:none!important;box-shadow:none;height:22px;padding:0 2px;justify-content:center;font-size:10.5px;overflow:hidden}}
+.wonder .wcats .wfb b{{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.wonder .wcats .wfb.on{{box-shadow:inset 0 0 0 2px #111}} .wonder .wcats .wfb.on::after{{content:"×";margin-left:3px;font-size:12px;font-weight:700}}
 .wfb{{position:absolute;left:0;top:0;display:flex;align-items:center;gap:5px;height:23px;padding:0 10px;border:0;font:inherit;font-size:12px;color:#000;white-space:nowrap;cursor:pointer;pointer-events:auto;
   background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,rgba(242,242,242,.93);box-shadow:0 1px 6px rgba(0,0,0,.18);will-change:transform;-webkit-tap-highlight-color:transparent}}
 .wfb b{{font-weight:700}} .wfb small{{font-size:10px;color:inherit;opacity:.7}}
@@ -428,7 +433,7 @@ body{{position:relative}}
 .wfb:nth-child(1){{background-color:#cdff3e}} .wfb:nth-child(2){{background-color:#ffd400}} .wfb:nth-child(3){{background-color:#2f8cff;color:#fff}} .wfb:nth-child(4){{background-color:#ffb3d1}}
 .wfb:nth-child(5){{background-color:#e30613;color:#fff}} .wfb:nth-child(6){{background-color:#2fbf4a;color:#fff}} .wfb:nth-child(7){{background-color:#ff8a00}} .wfb:nth-child(8){{background-color:#9b6bff;color:#fff}} .wfb:nth-child(9){{background-color:#00b3a6;color:#fff}} .wfb:nth-child(10){{background-color:#1f2a6b;color:#fff}}
 .wfb.on{{box-shadow:0 0 0 2px #111,0 1px 6px rgba(0,0,0,.25)}} .wfb.on small{{display:none}} .wfb.on::after{{content:"× all";margin-left:4px;font-size:11px;font-weight:700;opacity:.85}} .wfb:active{{filter:brightness(1.1)}}   /* the six categories float above the grid, as the half title bars do on the main page */
-.wonder .wgrid{{display:block;position:relative;margin-top:12px;grid-template-columns:repeat(5,1fr);grid-auto-rows:calc((100vw - 36px - 12px) / 5);grid-auto-flow:dense;gap:3px;margin-top:10px}}
+.wonder .wgrid{{display:block;position:relative;margin-top:6px;grid-template-columns:repeat(5,1fr);grid-auto-rows:calc((100vw - 36px - 12px) / 5);grid-auto-flow:dense;gap:3px;margin-top:10px}}
 .wempty{{display:block;background:#fff}}
 .wonder .wgrid > *{{position:relative;box-sizing:border-box;border:0;margin:0;width:auto;height:auto}}
 .wonder .wgrid .wg{{aspect-ratio:auto;background:#f4f4f4;padding:0;overflow:hidden}} .wonder .wgrid .wg img{{width:100%;height:100%;object-fit:cover!important}}   /* cropped to the cell, like the project tiles */
@@ -956,36 +961,40 @@ dialog .top{{flex:none}}
         const s=row.reduce((a,b)=>a+b.s,0);
         if(w>=h){{ const cw=s/h; let yy=y; row.forEach(o=>{{ const ch=o.s/cw; out.push({{...o,x,y:yy,w:cw,h:ch}}); yy+=ch; }}); x+=cw; w-=cw; }}
         else {{ const rh=s/w; let xx=x; row.forEach(o=>{{ const rw=o.s/rh; out.push({{...o,x:xx,y,w:rw,h:rh}}); xx+=rw; }}); y+=rh; h-=rh; }} }} }}
-    /* the carpet (23 Oct, 01:25): a portrait treemap like the sketch in Steuart's book - rectangles of many sizes, upright, square and wide,
-       the photos cropped to fill them, thin white gaps, a few left empty; newest first, in runs that form blocks, the blocks stacked down the page */
-    function carpet(){{ const W=grid.clientWidth; if(!W) return;
+    /* (23 Oct, 03:10) like the desktop: the photos on the page's own grid - its two columns (8 px apart) each split in two half-columns 5 px apart,
+       rows of 0.9 x a half-column; pieces 1 x 1, a whole column (2 x 1), 1 x 2, 2 x 2 or now and then the full width (4 x 4); white rests; packed in order */
+    function carpet(){{ const W=grid.clientWidth; if(!W) return; const CW=(W-8)/2, HW=(CW-5)/2, RH=Math.round(HW*.9), RG=5;
       const ph=tiles.filter(t=>!t.classList.contains('t')&&(only===null||t.dataset.cat===only));
-      const items=ph.map((t,n)=>({{t,v:[2.6,.35,1,.7,.3,1.6,.5,1.2,.32,.8,3.2,.6,.3,1,1.8,.45,.9,.35,2.2][n%19]*(n<2?1.6:1)}}));   /* more small squares among the big ones */
-      [2,6,10,13,17,21,25,29,33,37].forEach((at,k)=>{{ if(at<items.length) items.splice(at,0,{{empty:true,v:[.5,.3,.8,.35][k%4]}}); }});   /* more white rests */
-      const unit=(W/4.3)*(W/4.3); items.forEach(o=>o.a=o.v*unit);   /* smaller pieces, about one column more across */
-      const blocks=[]; let i=0, k=0; while(i<items.length){{ const n=[6,4,7,5,8][k++%5]; const its=items.slice(i,i+n); i+=n; blocks.push({{its,a:its.reduce((s,o)=>s+o.a,0)}}); }}
-      if(blocks.length>1&&blocks[blocks.length-1].its.length<3){{ const l=blocks.pop(), p=blocks[blocks.length-1]; p.its=p.its.concat(l.its); p.a+=l.a; }}
-      /* stack the blocks down the page, each full width (portrait page), some split in two side by side */
-      const cells=[]; let y=0;
-      for(let b=0;b<blocks.length;b++){{ const B1=blocks[b], B2=(b%3!==0&&blocks[b+1])?blocks[++b]:null;   /* most blocks share their row with a neighbour */
-        if(B2){{ const h=(B1.a+B2.a)/W, w1=B1.a/h; sq(B1.its,0,y,w1,h,cells); sq(B2.its,w1,y,W-w1,h,cells); y+=h; }}
-        else {{ const h=B1.a/W; sq(B1.its,0,y,W,h,cells); y+=h; }} }}
-      grid.innerHTML=''; grid.style.height=y+'px'; const G=1.5;
-      cells.forEach(o=>{{ let e; if(o.empty){{ e=document.createElement('i'); e.className='wempty'; }} else {{ e=o.t; e.hidden=false; }}
-        e.style.cssText=''; Object.assign(e.style,{{position:'absolute',left:(o.x+G)+'px',top:(o.y+G)+'px',width:Math.max(0,o.w-2*G)+'px',height:Math.max(0,o.h-2*G)+'px'}}); grid.appendChild(e); }}); }}
-    /* the six categories: small title bars that drift slowly over the photos; a tap shows only that category, again = all */
-    const fl=document.createElement('div'); fl.className='wfloat'; wd.appendChild(fl);
-    const fb=CATS.map((c,k)=>{{ const b=document.createElement('button'); b.type='button'; b.className='wfb'; b.innerHTML='<b>'+c+'</b><small>['+String(k+1).padStart(2,'0')+']</small>';
+      tiles.forEach(t=>t.hidden=true); grid.innerHTML='';
+      const occ=[], free=(c,r,w,h)=>{{ for(let y=r;y<r+h;y++) for(let x=c;x<c+w;x++){{ if(x>3||(occ[y]&&occ[y][x])) return false; }} return true; }};
+      const take=(c,r,w,h)=>{{ for(let y=r;y<r+h;y++){{ occ[y]=occ[y]||[]; for(let x=c;x<c+w;x++) occ[y][x]=1; }} }};
+      const X=c=>Math.floor(c/2)*(CW+8)+(c%2)*(HW+5), Wd=w=>w===1?HW:w===2?CW:W;
+      let bottom=0;
+      const place=(e,w,h)=>{{ for(let r=0;;r++) for(let c=0;c<4;c++){{ if(w>=2&&c%2) continue; if(w===4&&c) continue; if(free(c,r,w,h)){{ take(c,r,w,h);
+        e.style.cssText=''; Object.assign(e.style,{{position:'absolute',left:X(c)+'px',top:(r*(RH+RG))+'px',width:Wd(w)+'px',height:(h*RH+(h-1)*RG)+'px'}}); grid.appendChild(e); bottom=Math.max(bottom,r+h); return; }} }} }};
+      let n=0;
+      ph.forEach((t,k)=>{{ if(k%3===1||k%7===5){{ const e=document.createElement('i'); e.className='wempty'; place(e,1,1); }}
+        const ar=+t.dataset.ar||1; let w=1, h=1;
+        if(n%15===8){{ w=4; h=4; }} else if(n%5===0){{ w=2; h=2; }} else if(ar>1.25){{ w=2; }} else if(ar<.8){{ h=2; }}
+        n++; t.hidden=false; place(t,w,h); }});
+      grid.style.height=(bottom*(RH+RG))+'px'; }}
+    /* the ten categories: a fixed grid of five by two under the header, small coloured labels; the chosen one shows "×" (tap again = all) */
+    const fl=document.createElement('div'); fl.className='wcats'; wd.insertBefore(fl,grid);
+    const fb=CATS.map((c,k)=>{{ const b=document.createElement('button'); b.type='button'; b.className='wfb'; b.innerHTML='<b>'+c+'</b>';
       b.addEventListener('click',()=>{{ only=only===String(k)?null:String(k); fb.forEach((x,j)=>x.el.classList.toggle('on',only===String(j))); carpet(); wd.scrollTo({{top:0}}); }});
-      fl.appendChild(b); return {{el:b,x:Math.random(),y:Math.random(),vx:(Math.random()-.5)*.02,vy:(Math.random()-.5)*.02}}; }});
-    let fla=0, flt=0;
-    function drift(t){{ if(wd.hidden){{ fla=0; return; }} const dt=Math.min(.05,(t-flt)/1000||0); flt=t; const FW=fl.clientWidth, FH=fl.clientHeight;
-      if(wp.hidden) fb.forEach(o=>{{ o.vx+=(Math.random()-.5)*.004*dt*60; o.vy+=(Math.random()-.5)*.004*dt*60; const sp=Math.hypot(o.vx,o.vy), mx=.035;
-        if(sp>mx){{ o.vx*=mx/sp; o.vy*=mx/sp; }} o.x+=o.vx*dt; o.y+=o.vy*dt;
-        if(o.x<0||o.x>1){{ o.vx*=-1; o.x=Math.max(0,Math.min(1,o.x)); }} if(o.y<0||o.y>1){{ o.vy*=-1; o.y=Math.max(0,Math.min(1,o.y)); }}
-        o.el.style.transform=`translate(${{o.x*(FW-o.el.offsetWidth)}}px,${{o.y*(FH-o.el.offsetHeight)}}px)`; }});
-      fla=requestAnimationFrame(drift); }}
-    sw.addEventListener('click',()=>{{ if(!wd.hidden&&!fla){{ flt=performance.now(); fla=requestAnimationFrame(drift); }} }});
+      fl.appendChild(b); return {{el:b}}; }});
+    /* the beetle walks slowly in spaghetti loops across a white band above the categories, leaving a fading dotted trail */
+    const band=document.createElement('div'); band.className='wband'; band.innerHTML='<canvas></canvas><img src="../img/m-bug-up.webp" alt="">'; wd.insertBefore(band,fl);
+    (function(){{ const cv=band.querySelector('canvas'), tc=cv.getContext('2d'), bug=band.querySelector('img'); let W=0, H=0, g={{x:30,y:40,a:90}}, tgt={{x:100,y:40}}, dir=1, last=0, walked=0, fade=0, run=0;
+      const R=(a,b)=>a+Math.random()*(b-a), pick=()=>{{ let x=g.x+dir*R(40,90); if(x>W-25){{ x=W-25; dir=-1; }} if(x<25){{ x=25; dir=1; }} tgt={{x,y:R(22,H-22)}}; }};
+      const size=()=>{{ W=band.clientWidth; H=band.clientHeight; cv.width=W*2; cv.height=H*2; tc.setTransform(2,0,0,2,0,0); }};
+      function step(t){{ if(wd.hidden){{ run=0; return; }} const dt=Math.min(.05,(t-last)/1000||0); last=t; const dx=tgt.x-g.x, dy=tgt.y-g.y; if(Math.hypot(dx,dy)<20) pick();
+        const want=Math.atan2(dy,dx)*180/Math.PI+90+Math.sin(t/420)*55; let da=((want-g.a+540)%360)-180; g.a+=Math.max(-140*dt,Math.min(140*dt,da));
+        const sp=34*dt, h=(g.a-90)*Math.PI/180; g.x=Math.max(14,Math.min(W-14,g.x+Math.cos(h)*sp)); g.y=Math.max(14,Math.min(H-14,g.y+Math.sin(h)*sp));
+        walked+=sp; if(walked>3){{ walked=0; tc.fillStyle='rgba(58,60,55,.6)'; tc.beginPath(); tc.arc(g.x,g.y,.8,0,7); tc.fill(); }}
+        fade+=dt; if(fade>.12){{ fade=0; tc.globalCompositeOperation='destination-out'; tc.fillStyle='rgba(0,0,0,.025)'; tc.fillRect(0,0,W,H); tc.globalCompositeOperation='source-over'; }}
+        bug.style.transform=`translate(${{g.x}}px,${{g.y}}px) rotate(${{g.a}}deg)`; run=requestAnimationFrame(step); }}
+      sw.addEventListener('click',()=>{{ if(!wd.hidden&&!run){{ size(); tc.clearRect(0,0,W,H); pick(); last=performance.now(); run=requestAnimationFrame(step); }} }}); }})();
     sw.addEventListener('click',()=>requestAnimationFrame(carpet)); 
     const step=k=>{{ const v=vis(); pop(v[(cur+k+v.length)%v.length]); }};
     document.getElementById('wprev').onclick=()=>step(-1); document.getElementById('wnext').onclick=()=>step(1);

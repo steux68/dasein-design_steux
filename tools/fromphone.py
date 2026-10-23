@@ -491,15 +491,17 @@ WONDER_CSS = """
 .dwsw:hover .wo{color:#e30613}
 .dwon{position:absolute;left:225px;top:30px;width:1100px;height:994px;z-index:45;background:#fff}   /* above the map (20) and the guide lines */
 .dwon[hidden]{display:none}
-.dwopen #mapclip{visibility:hidden} .dwopen #gl{opacity:0}   /* the live map and the drawn guide lines sit above the page: hidden while wonder is open */
+.dwopen #mapclip{visibility:hidden}   /* the live map sits above the page: hidden while wonder is open (the dashed columns stay) */
 .dwsc{position:absolute;inset:0;overflow-y:auto;scrollbar-width:none;padding:10px 10px 30px} .dwsc::-webkit-scrollbar{display:none}
 .dwgrid{position:relative}
 .dwg{position:absolute;padding:0;border:0;background:#f4f4f4;overflow:hidden;cursor:pointer}
 .dwg img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s} .dwg:hover img{transform:scale(1.04)}
 .dwempty{position:absolute}
-.dwtitle{position:absolute;left:110px;top:380px;width:112px;height:644px;z-index:45;background:#fff;display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
+.dwtitle{position:absolute;left:110px;top:380px;width:112px;height:644px;z-index:45;background:#fff;pointer-events:none}
+.dwtitle img{position:absolute;left:15px;top:50px;width:90px;height:570px;object-fit:cover}
 .dwtitle[hidden]{display:none}
-.dwtitle span{display:block;transform:rotate(-90deg) translateX(50%);transform-origin:center;white-space:nowrap;font:700 50px Calibri,Carlito,sans-serif;color:rgba(0,0,0,.8);margin-bottom:300px}
+.dwtitle span{position:absolute;left:15px;bottom:24px;width:84px;height:560px;display:flex;align-items:flex-end;justify-content:flex-start}
+.dwtitle span b{display:block;transform:rotate(-90deg);transform-origin:left bottom;position:absolute;left:84px;bottom:0;white-space:nowrap;font:700 50px/84px Calibri,Carlito,sans-serif;color:rgba(0,0,0,.8)}
 .dwfloat{position:absolute;inset:14px;pointer-events:none;z-index:2}
 .dwfb{position:absolute;left:0;top:0;display:flex;align-items:center;gap:6px;height:25px;padding:0 12px;border:0;font:15px Calibri,Carlito,sans-serif;color:#000;white-space:nowrap;cursor:pointer;
   pointer-events:auto;box-shadow:0 1px 6px rgba(0,0,0,.18);border-radius:2px;will-change:transform}
@@ -542,7 +544,7 @@ WONDER_JS = r"""<script>(function(){ const sw=document.getElementById('dwsw'), w
   /* the carpet: a treemap of many sizes, newest first, in runs that form blocks, the blocks laid row by row; a few white rests */
   function carpet(){ const W=grid.clientWidth; const ph=tiles.filter(t=>only===null||t.dataset.cat===only);
     const items=ph.map((t,n)=>({t,v:[2.6,.35,1,.7,.3,1.6,.5,1.2,.32,.8,3.2,.6,.3,1,1.8,.45,.9,.35,2.2][n%19]*(n<2?1.6:1)}));
-    [2,6,10,13,17,21,25,29,33,37].forEach((at,k)=>{ if(at<items.length) items.splice(at,0,{empty:true,v:[.5,.3,.8,.35][k%4]}); });
+    for(let at=1,k=0; at<items.length; at+=3+(k%2), k++) items.splice(at,0,{empty:true,v:[.6,.3,.9,.4,1.2,.35][k%6]});   /* plenty of white rests */
     const unit=(W/8)*(W/8); items.forEach(o=>o.a=o.v*unit);
     const blocks=[]; let i=0, k=0; while(i<items.length){ const n=[6,4,7,5,8][k++%5]; const its=items.slice(i,i+n); i+=n; blocks.push({its,a:its.reduce((s,o)=>s+o.a,0)}); }
     if(blocks.length>1&&blocks[blocks.length-1].its.length<3){ const l=blocks.pop(), p=blocks[blocks.length-1]; p.its=p.its.concat(l.its); p.a+=l.a; }
@@ -613,7 +615,7 @@ def _desk_catchup(s):
     W, E = compass('W', 22), compass('E', 22)
     sw = ('<button type="button" class="dwsw" id="dwsw" aria-pressed="false" aria-label="switch between work and wonder">'
           '<span class="wk">work</span><i class="tg"><b></b></i><span class="wo">wonder</span></button>')
-    wo = (f'<div class="dwtitle" id="dwtitle" hidden><span>wonder</span></div>'
+    wo = (f'<div class="dwtitle" id="dwtitle" hidden><img src="img/intro-imgImage.webp" alt=""><span><b>wonder</b></span></div>'
           f'<div class="dwon" id="dwon" hidden data-cats=\'{json.dumps(cats)}\'><div class="dwsc"><div class="dwgrid" id="dwgrid">{tiles}</div></div><div class="dwfloat"></div>'
           f'<div class="dwpop" id="dwpop" hidden><div class="dwcard"><div class="dwtop"><span id="dwk"></span><button type="button" class="dwx" id="dwx" aria-label="close">{XC}</button></div>'
           f'<div class="dwbody" id="dwbody"></div><div class="dwnav"><button type="button" id="dwprev">{W}<span>previous</span></button><button type="button" id="dwnext"><span>next</span>{E}</button></div></div></div></div>')
@@ -734,7 +736,7 @@ def patch(s):
     # ---- impressum (22 Oct): no extra page or tab on the desktop - a small dot above the copyright opens it in a pop-up
     # the copyright line reads "© 2026 [ dasein-design & steux ] · impressum" - the last word goes to the impressum page
     s, n = re.subn(r'(<div class="-translate-x-1/2 -translate-y-1/2 absolute flex )h-\[252px\]( items-center justify-center left-\[1343px\] )top-\[898px\]( w-\[36px\]" data-node-id="[^"]+")(><div class="-rotate-90 flex-none"><div class="[^"]*?) w-\[252px\]"><p class="whitespace-pre-wrap">(<span class="leading-\[normal\]">© 2026</span><span class="[^"]*">\s*\[ dasein-design &amp; steux \]</span>)</p>',
-                   r'\1\2\3 style="height:330px;top:859px"\4" style="width:330px"><p class="whitespace-pre-wrap">\5<span class="fcal-r"> · </span><a class="impl" href="#impressum">§ impressum</a></p>', s)
+                   r'\1\2\3 style="height:330px;top:884px"\4" style="width:330px"><p class="whitespace-pre-wrap">\5<span class="fcal-r"> · </span><a class="impl" href="#impressum">§ impressum</a></p>', s)
     assert n >= 4, n
     s = _impressum_page(s)
     s = _desk_catchup(s)   # 23 Oct: bits & bats and the game gone, wonder in the fifth slot

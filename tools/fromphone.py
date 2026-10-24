@@ -780,6 +780,9 @@ def _contact_imp(s):
     return s.replace('</body>', IMP_JS + '</body>', 1)
 
 
+NOCOPY = '<style>/* photos are harder to copy (24 Oct): no dragging, no selecting, no long-press "save image" on phones */\nimg{-webkit-user-drag:none;user-drag:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}</style>\n<script>/* no right-click / long-press menu and no dragging on pictures (24 Oct) - the link logos keep their menu */\n(function(){ const ph=e=>{ const im=e.target.closest&&e.target.closest(\'img\'); return im&&!im.closest(\'a[href^="http"]\'); };\n  document.addEventListener(\'contextmenu\',e=>{ if(ph(e)) e.preventDefault(); },true);\n  document.addEventListener(\'dragstart\',e=>{ if(e.target.closest&&e.target.closest(\'img\')) e.preventDefault(); },true); })();</script>\n'
+
+
 def _links_board(s):
     """24 Oct (Steuart, after the phone): the 15 links for clients on a draughts board - each link (logo, red name, grey line) on its own square,
     white and grey taking turns, so it is clear which text belongs to which logo. Squares 220 x 110 on the three right-hand columns
@@ -932,6 +935,7 @@ def patch(s):
     s = _rep('</style>', CSS + WONDER_CSS + '.pgtint{position:absolute;left:235px;top:35px;width:1080px;height:958px;background:#f4f4f2;pointer-events:none}\n</style>', s)
     s = _contact_imp(s)   # 23 Oct, 13:04: contact + impressum on one page
     s = _links_board(s)   # 24 Oct: links for clients on a draughts board
+    s = s.replace('</body>', NOCOPY + '</body>', 1)   # 24 Oct: photos harder to copy
     return s.replace('</body>', HEART_JS + EXT_JS + MARK + '</body>', 1)
 
 

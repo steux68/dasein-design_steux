@@ -948,5 +948,11 @@ addEventListener('load',()=>{ try{
   const mark=a=>{ a.target='_blank'; a.rel='noopener'; };
   document.querySelectorAll('a[href]').forEach(a=>{ if(ext(a)) mark(a); });
   document.addEventListener('click',e=>{ const a=e.target.closest&&e.target.closest('a[href]'); if(ext(a)) mark(a); },true); })();</script>
+<style>/* photos are harder to copy (24 Oct): no dragging, no selecting, no long-press "save image" on phones */
+img{-webkit-user-drag:none;user-drag:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}</style>
+<script>/* no right-click / long-press menu and no dragging on pictures (24 Oct) - the link logos keep their menu */
+(function(){ const ph=e=>{ const im=e.target.closest&&e.target.closest('img'); return im&&!im.closest('a[href^="http"]'); };
+  document.addEventListener('contextmenu',e=>{ if(ph(e)) e.preventDefault(); },true);
+  document.addEventListener('dragstart',e=>{ if(e.target.closest&&e.target.closest('img')) e.preventDefault(); },true); })();</script>
 </body>
 </html>

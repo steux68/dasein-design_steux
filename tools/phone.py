@@ -1252,6 +1252,7 @@ addEventListener('load',()=>{{ try{{
 '''
 
 os.makedirs(os.path.dirname(OUT), exist_ok=True)
-open(OUT, 'w').write(HTML)
+NOCOPY = '<style>/* photos are harder to copy (24 Oct): no dragging, no selecting, no long-press "save image" on phones */\nimg{-webkit-user-drag:none;user-drag:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}</style>\n<script>/* no right-click / long-press menu and no dragging on pictures (24 Oct) - the link logos keep their menu */\n(function(){ const ph=e=>{ const im=e.target.closest&&e.target.closest(\'img\'); return im&&!im.closest(\'a[href^="http"]\'); };\n  document.addEventListener(\'contextmenu\',e=>{ if(ph(e)) e.preventDefault(); },true);\n  document.addEventListener(\'dragstart\',e=>{ if(e.target.closest&&e.target.closest(\'img\')) e.preventDefault(); },true); })();</script>\n'
+open(OUT, 'w').write(HTML.replace('</body>', NOCOPY + '</body>', 1))
 if __name__ == '__main__':
     print(len(pieces), 'pieces,', len(HTML) // 1024, 'KB ->', OUT)

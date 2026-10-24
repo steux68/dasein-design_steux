@@ -951,5 +951,11 @@ img[src^="img/m-lg-"]{box-sizing:border-box;padding:6px 12px;background:#fff}   
 (function(){ const lb=document.getElementById('lb'); if(!lb) return;
   lb.addEventListener('click',e=>{ if(e.target.closest('#lbp')) return; const x=e.clientX, y=e.clientY;
     requestAnimationFrame(()=>{ if(lb.open) return; const el=document.elementFromPoint(x,y), t=el&&el.closest('#dwsw,.hot.tab'); if(t) t.click(); }); });
-})();</script></body>
+})();</script><style>/* photos are harder to copy (24 Oct): no dragging, no selecting, no long-press "save image" on phones */
+img{-webkit-user-drag:none;user-drag:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}</style>
+<script>/* no right-click / long-press menu and no dragging on pictures (24 Oct) - the link logos keep their menu */
+(function(){ const ph=e=>{ const im=e.target.closest&&e.target.closest('img'); return im&&!im.closest('a[href^="http"]'); };
+  document.addEventListener('contextmenu',e=>{ if(ph(e)) e.preventDefault(); },true);
+  document.addEventListener('dragstart',e=>{ if(e.target.closest&&e.target.closest('img')) e.preventDefault(); },true); })();</script>
+</body>
 </html>

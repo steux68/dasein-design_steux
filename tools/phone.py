@@ -350,6 +350,10 @@ header{{position:fixed;left:0;right:0;top:0;z-index:20;background:#fff;padding:c
 .logo img{{width:30px;height:30px}}
 .logo span{{font-size:27px;line-height:1;letter-spacing:-.01em}}
 .logo b{{font-weight:700}}
+/* 24 Oct (Steuart): with the middle guide line the logo shrinks so its right end stops 4 px short of that line, on every phone width
+   (whole logo scaled as one: at scale 1 it is 187 px wide from x 10; target width = half the screen - 14.5 px) */
+.stack .logo{{gap:calc(2.139vw - .62px)}} .stack .logo img{{width:calc(8.02vw - 2.33px);height:calc(8.02vw - 2.33px)}}
+.stack .logo span{{font-size:calc(7.219vw - 2.09px)}}
 nav{{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px}}
 .tab{{display:flex;align-items:center;justify-content:center;gap:3px;height:28px;padding:0 4px;background:var(--grey);text-decoration:none;
   font-size:13.5px;white-space:nowrap;-webkit-tap-highlight-color:transparent;transition:background .15s}}

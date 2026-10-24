@@ -97,10 +97,11 @@ a[href^="tel:"]{color:#1e8e3e;text-decoration:none} a[href^="mailto:"]{color:#1a
 .lbx svg{width:22px;height:22px;stroke:none}
 .lbx .rg{fill:none;stroke:#3a3c37;stroke-width:var(--hp)} .lbx .xx{fill:none;stroke:#1a1a1a;stroke-width:1.15;stroke-linecap:round;transition:stroke .2s}
 .lbx:hover .rg,.lbx:focus-visible .rg{stroke:#e30613} .lbx:hover .xx,.lbx:focus-visible .xx{stroke:#e30613}
-.lbk{display:none}
-.lbm{align-items:center}
-.lbm .lbkc{font:400 13px/25px Calibri,Carlito,sans-serif;color:#666;letter-spacing:.06em}
-.lbm .lbkc b{color:#e30613;font-weight:400}
+/* project counter at the top, centred on the pop-up and level with the close cross, the previous / next project arrows either side (23 Oct) */
+.lbk{left:50%;right:auto;top:30px;transform:translateX(-50%);gap:10px;z-index:4}
+.lbk .ar{width:22px;height:22px}
+.lbk .lbkc{display:inline-block;min-width:13.5em;text-align:center;white-space:nowrap;font:400 13px/25px Calibri,Carlito,sans-serif;color:#666;letter-spacing:.06em;font-variant-numeric:tabular-nums}   /* room for three-figure numbers (100+) so the arrows never shift */
+.lbk .lbkc b{color:#e30613;font-weight:400}
 /* the two long CVs on the us & our services page end just over half way down, faded, with a "full CV" opener; open, they run to the foot as designed */
 [data-node-id="1:622"],[data-node-id="1:623"]{max-height:165px;overflow:hidden;overscroll-behavior:contain;transition:max-height .45s ease;
   -webkit-mask-image:linear-gradient(#000 62%,transparent);mask-image:linear-gradient(#000 62%,transparent)}
@@ -717,7 +718,10 @@ IMP_CSS = """
 .impb h4{margin:0 0 2px;font-size:11.5px;font-weight:700;color:#000} .impb p{margin:0} .impb .lp+h4{margin-top:8px}
 .impb a,.impfull a{color:#1a5fd0;text-decoration:none} .impb a[href^="tel:"],.impfull a[href^="tel:"]{color:#1e8e3e}
 .impfull{z-index:7;display:none;column-count:5;column-gap:20px;font-size:11px;line-height:1.42} .impfull h4{font-size:11px;margin-top:8px} .impfull .lp{font-size:10.5px} .impo .impfull{display:block} .impo .impb{visibility:hidden}
-.imptint{position:absolute;left:235px;top:630px;width:1080px;height:363px;background:#f4f4f2}   /* the impressum on a pale grey band under the map (23 Oct, 13:20) */
+.imptint{position:absolute;left:235px;top:815px;width:1080px;height:178px;background:#f4f4f2;transition:top .45s ease,height .45s ease}   /* the short impressum on a pale grey band from the tick mark above "contact" to the foot, a whole tick clear of the map (23 Oct, 13:31) */
+.impo .imptint{top:630px;height:363px}   /* "full impressum" grows the band up to just under the map, with the whole text */
+.impo .impfull{animation:impin .35s .15s ease-out both} @keyframes impin{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.imptint{transition:none}.impo .impfull{animation:none}}
 .dimp{left:235px;top:960px;width:1080px;height:28px;padding:0 0 0 2px;
   background:repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left top/100% 1px no-repeat,
              repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left bottom/100% 1px no-repeat}
@@ -765,8 +769,8 @@ def _contact_imp(s):
     get = {re.sub('<.*?>', '', h): h + t for h, t in parts}
     lp = re.search(r'<p class="lp">.*?</p>', LEGAL_BODY).group(0)
     legal = re.sub(r'(<h4>.*?</h4>)(<p[^>]*>.*?</p>)', r'<div class="ib">\1\2</div>', LEGAL_BODY, flags=re.S)
-    add = (f'<div class="imptint" aria-hidden="true"></div><div class="impb" style="left:235px;top:640px;width:420px"><p class="lab2">IMPRESSUM</p>{lp}{get["Unternehmensgegenstand"]}</div>'
-           f'<div class="impb" style="left:675px;top:640px;width:420px">{get["Medieninhaber, Herausgeber und Diensteanbieter"]}</div>'
+    add = (f'<div class="imptint" aria-hidden="true"></div><div class="impb" style="left:235px;top:825px;width:420px"><p class="lab2">IMPRESSUM</p>{lp}{get["Unternehmensgegenstand"]}</div>'
+           f'<div class="impb" style="left:675px;top:825px;width:420px">{get["Medieninhaber, Herausgeber und Diensteanbieter"]}</div>'
            f'<div class="impc impfull" style="left:235px;top:640px;width:1080px;height:312px"><p class="lab2">IMPRESSUM</p>{legal}</div>'
            f'<button type="button" class="dcv dimp" id="dimp" aria-expanded="false">{PLUS}<span class="cvt"><span class="op">full</span><span class="cl">close</span></span><b>impressum</b></button>')
     a = '<section class="pg" id="contact"><div class="bg-white relative frame">'
@@ -774,6 +778,17 @@ def _contact_imp(s):
     s = s.replace('</style>', IMP_CSS + '</style>', 1)
     s = s.replace('</body>', LBSW_JS + '</body>', 1)
     return s.replace('</body>', IMP_JS + '</body>', 1)
+
+
+def _links_board(s):
+    """24 Oct (Steuart, after the phone): the 15 links for clients on a draughts board - each link (logo, red name, grey line) on its own square,
+    white and grey taking turns, so it is clear which text belongs to which logo. Squares 220 x 110 on the three right-hand columns
+    (x 665 / 885 / 1105, from one dashed column line to the next), rows from y 428; the grey squares are the page's own grey"""
+    sq = ''.join(f'<i style="left:{665 + c * 220}px;top:{428 + r * 110}px;width:220px"></i>'
+                 for r in range(5) for c in range(3) if (r + c) % 2)
+    a = '<section class="pg" id="downloads"><div class="bg-white relative frame"><div class="pgtint" aria-hidden="true"></div>'
+    s = _rep(a, a + f'<div class="lboard" aria-hidden="true">{sq}</div>', s)
+    return s.replace('</style>', '.lboard i{position:absolute;height:110px;background:#fff;pointer-events:none}   /* links on a draughts board (24 Oct) */\n</style>', 1)
 
 
 def patch(s):
@@ -822,8 +837,6 @@ def patch(s):
     s = _rep('<span class="pl r">us &amp; our services</span>', '<span class="pl r">about us</span>', s)
     # ---- pop-up
     s = _sub1(r'(<button type="button" class="lbx" id="lbx"[^>]*>)<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 2L14 14M14 2L2 14"/></svg>', r'\1' + XC, s)
-    s = _rep('<span id="lbk"></span>', '', s)
-    s = _sub1(r'(<div class="lbm"><button type="button" class="pp" id="lbpp">.*?</button>)', r'\1<span class="lbkc" id="lbk"></span>', s, re.S)
     # ---- logos
     import os
     for n in sorted(os.listdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'img'))):
@@ -918,6 +931,7 @@ def patch(s):
     # ---- styles
     s = _rep('</style>', CSS + WONDER_CSS + '.pgtint{position:absolute;left:235px;top:35px;width:1080px;height:958px;background:#f4f4f2;pointer-events:none}\n</style>', s)
     s = _contact_imp(s)   # 23 Oct, 13:04: contact + impressum on one page
+    s = _links_board(s)   # 24 Oct: links for clients on a draughts board
     return s.replace('</body>', HEART_JS + EXT_JS + MARK + '</body>', 1)
 
 

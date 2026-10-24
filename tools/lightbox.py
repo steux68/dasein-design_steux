@@ -210,7 +210,7 @@ LINES = ''.join(f'<i style="left:{x}px"></i>' for x in (225, 445, 665, 885, 1105
 HTML = '<div class="pcur" id="pcur" aria-hidden="true"><b></b></div>' + f'''<dialog class="lb" id="lb" aria-labelledby="lbt"><div class="pcar" id="pcar" aria-hidden="true">{compass("W", 28, "cw")}{compass("E", 28, "ce")}</div><div class="lbh"><div class="lbs" id="lbs">
 <div class="lbv"></div><div class="lbg">{LINES}</div>
 <div class="lbp" id="lbp" tabindex="-1" style="left:{BX}px;top:{BY}px;width:{BW}px;height:{BH}px">
-<div class="lbk"><button type="button" class="lbkb" id="lbkp" aria-label="previous project">{compass("W", 18)}</button><span id="lbk"></span><button type="button" class="lbkb" id="lbkn" aria-label="next project">{compass("E", 18)}</button></div>
+<div class="lbk"><button type="button" class="lbkb" id="lbkp" aria-label="previous project">{compass("W", 18)}</button><span class="lbkc" id="lbk" aria-live="polite"></span><button type="button" class="lbkb" id="lbkn" aria-label="next project">{compass("E", 18)}</button></div>
 <button type="button" class="lbx" id="lbx" aria-label="close (Esc)" title="close (Esc)"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 2L14 14M14 2L2 14"/></svg></button>
 <div class="lbi lbd"><img id="lbimg" alt="">
 <button type="button" class="lbn prev" id="lbprev" aria-label="previous photo"><span>{ARROW_W}</span></button>
@@ -220,7 +220,6 @@ HTML = '<div class="pcur" id="pcur" aria-hidden="true"><b></b></div>' + f'''<dia
 <div class="lbsw"><button type="button" class="lbsa l" id="lbsl0" aria-label="scroll photos left">{ARROW_W}</button>
 <div class="lbst" id="lbst"></div>
 <button type="button" class="lbsa r" id="lbsr0" aria-label="scroll photos right">{ARROW_E}</button></div>
-<div class="lbm"><button type="button" class="pp" id="lbpp">{ARROW_W}previous project</button><button type="button" class="np" id="lbnp">next project{ARROW_E}</button></div>
 </div></div></div></dialog>'''
 
 JS = '''
@@ -252,7 +251,7 @@ JS = '''
   document.querySelectorAll('.hot.proj').forEach(b=>b.addEventListener('click',()=>{ pi=-1; lb.showModal(); show(+b.dataset.p,0); $('lbp').focus({preventScroll:true}); }));
   $('lbx').onclick=()=>lb.close();
   $('lbprev').onclick=()=>step(-1); $('lbnext').onclick=()=>step(1);
-  $('lbpp').onclick=$('lbkp').onclick=()=>show(pi-1,0); $('lbnp').onclick=$('lbkn').onclick=()=>show(pi+1,0);
+  $('lbkp').onclick=()=>show(pi-1,0); $('lbkn').onclick=()=>show(pi+1,0);
   st.addEventListener('click',e=>{ const b=e.target.closest('button'); if(b) show(pi,+b.dataset.k); });
   st.addEventListener('scroll',arrows,{passive:true});
   /* the W / E arrows beside the strip step to the previous / next photo (and on into the next project), like the arrow keys */

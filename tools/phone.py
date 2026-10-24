@@ -519,6 +519,14 @@ body:not(.side) .socs{{display:flex}}   /* in the top layouts (and the stack tri
 .rule{{position:fixed;top:0;bottom:0;width:1px;z-index:45;pointer-events:none;
   background:repeating-linear-gradient(to bottom,var(--line) 0 4px,transparent 4px 7px)}}
 .rule.l{{left:calc(var(--side) - 1px)}} .rule.r{{right:7px}}
+/* 25 Oct (Steuart): pairs of the desktop's dashed edge ticks (18 px, 10 px apart), pointing inwards from both outer guide lines, fixed on screen:
+   top pair inside the top arrow bar, bottom pair inside the bottom arrow bar (both level with the scroll arrows), middle pair halfway between the two bars */
+.tk{{position:fixed;left:var(--side);right:8px;height:11px;z-index:45;pointer-events:none;
+  --t:repeating-linear-gradient(to right,#b8b8b8 0 4px,transparent 4px 6px);
+  background:var(--t) left top/18px 1px no-repeat,var(--t) left bottom/18px 1px no-repeat,var(--t) right top/18px 1px no-repeat,var(--t) right bottom/18px 1px no-repeat}}
+.stack .tk{{left:8px}}
+.tk.t{{top:calc(var(--head) + 10px)}} .tk.b{{bottom:calc(env(safe-area-inset-bottom,0px) + 9px)}}
+.tk.m{{top:calc(50% + var(--head) / 2 - env(safe-area-inset-bottom,0px) / 2 - 5px)}}
 /* trial (24 Oct, Steuart): a third dashed line down the middle, exactly halfway between the two side lines; ?mid=0 hides it */
 .rule.m{{left:calc((var(--side) + 100% - 9px) / 2)}} .stack .rule.m{{left:calc(50% - .5px)}} html.nomid .rule.m{{display:none}}
 .side.rail .sidebar,.side.rail header{{border-right:0!important}}
@@ -892,7 +900,7 @@ html.nochk .links.chk{{gap:14px 10px}} html.nochk .links.chk .lk{{padding:0;back
 {section("contact", "contact", "04", CONTACT)}
 {section("legal", "impressum", "§", LEGAL, bar=False)}
 </main>
-<i class="rule l" aria-hidden="true"></i><i class="rule m" aria-hidden="true"></i><i class="rule r" aria-hidden="true"></i>
+<i class="rule l" aria-hidden="true"></i><i class="rule m" aria-hidden="true"></i><i class="rule r" aria-hidden="true"></i><i class="tk t" aria-hidden="true"></i><i class="tk m" aria-hidden="true"></i><i class="tk b" aria-hidden="true"></i>
 <div class="bar btop"><button type="button" id="goN" aria-label="previous page"><span class="nn">{ARN}</span><span class="ns">{ARS}</span><i class="sc">scroll</i></button></div>
 <div class="bar bbot"><button type="button" id="goS" aria-label="next page"><span class="dn">{ARS}</span><span class="su">{ARN}</span><i class="sc">scroll</i><span class="up">{ARN}<i>back to the top</i></span></button></div>
 <dialog id="lb" aria-labelledby="lt">

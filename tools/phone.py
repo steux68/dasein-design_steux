@@ -113,7 +113,7 @@ PLUS = ('<svg class="cvx" viewBox="-12 -12 24 24" aria-hidden="true"><circle cla
         '<circle class="c" r="8"/><path class="v" d="M0 -4.2V4.2"/><path d="M-4.2 0H4.2"/></svg>')
 DOWNLOADS = ('<p class="lab first">INFORMATION FOR CLIENTS</p><p class="intro">' + INFO_TXT + '</p><ul class="pdfs">'
              + ''.join(f'<li><img src="../img/pdf.svg" alt="PDF"><span>dd – {t}<small>PDF follows</small></span></li>' for t in PDFS)
-             + '</ul><p class="lab">LINKS FOR CLIENTS</p><p class="intro">' + LINKS_TXT + '</p><div class="links cut" id="g-links" data-show="10">'
+             + '</ul><p class="lab">LINKS FOR CLIENTS</p><p class="intro">' + LINKS_TXT + '</p><div class="links chk cut" id="g-links" data-show="10">'
              + ''.join(f'<a class="lk" href="{u}" target="_blank" rel="noopener"><span class="lg"><img src="../img/m-lg-{im.replace('downloads-img', '')}" alt="" loading="lazy"></span>'
                        f'<b>{n}</b><small>{d}</small></a>' for u, im, n, d in LINKS)
              + '</div>' + '<button type="button" class="cvb more" aria-expanded="false" data-g="g-links">' + PLUS + '<span class="cvt"><span class="op">more</span><span class="cl">fewer</span></span><b>links</b></button>')
@@ -299,7 +299,7 @@ GAME = ('<dialog id="game" aria-label="beetle game"><div class="play" id="play">
 
 HTML = f'''<!doctype html>
 <html lang="de">
-<head>
+<head><script>if(/[?&]chk=0/.test(location.search)) document.documentElement.classList.add("nochk");</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>dasein-design · phone preview</title>
@@ -819,6 +819,10 @@ dialog .top{{flex:none}}
 .pdfs img{{width:26px;height:auto}}
 .pdfs span{{font-size:15px}} .pdfs small{{display:block;font-size:11px;color:#999;letter-spacing:.04em}}
 .links{{display:grid;grid-template-columns:1fr 1fr;gap:14px 10px;margin-top:12px}}
+/* checkerboard (24 Oct, Steuart): each link - logo, name and line - sits on its own square, grey and white taking turns like a draughts board, so it is clear which text belongs to which logo; ?chk=0 shows the old look */
+.links.chk{{gap:0}} .links.chk .lk{{padding:10px 10px 12px;background:#f4f4f2}}
+.links.chk .lk:nth-child(4n+2),.links.chk .lk:nth-child(4n+3){{background:#fff}}
+html.nochk .links.chk{{gap:14px 10px}} html.nochk .links.chk .lk{{padding:0;background:none!important}}
 /* long grids (links, bits & bats) show about six at first, fading out greyed; "more …" shows the rest */
 .cut{{overflow:hidden;transition:max-height .45s ease}}
 .cut[data-extra].shut{{-webkit-mask-image:linear-gradient(#000 calc(100% - 34px),rgba(0,0,0,.15));mask-image:linear-gradient(#000 calc(100% - 34px),rgba(0,0,0,.15))}}

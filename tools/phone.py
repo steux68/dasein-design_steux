@@ -299,7 +299,7 @@ GAME = ('<dialog id="game" aria-label="beetle game"><div class="play" id="play">
 
 HTML = f'''<!doctype html>
 <html lang="de">
-<head><script>/* 24 Oct (Steuart): the phone site always opens on the start page - no remembered scroll position, no #page in the address; coming back from the browser's page cache starts fresh too */ (function(){{ try{{ if("scrollRestoration" in history) history.scrollRestoration="manual"; if(location.hash) history.replaceState(null,"",location.pathname+location.search); }}catch(e){{}} addEventListener("load",()=>scrollTo(0,0)); addEventListener("pageshow",e=>{{ if(e.persisted) location.reload(); }}); }})();</script><script>if(/[?&]chk=0/.test(location.search)) document.documentElement.classList.add("nochk");</script>
+<head><script>/* 24 Oct (Steuart): the phone site always opens on the start page - no remembered scroll position, no #page in the address; coming back from the browser's page cache starts fresh too */ (function(){{ try{{ if("scrollRestoration" in history) history.scrollRestoration="manual"; if(location.hash) history.replaceState(null,"",location.pathname+location.search); }}catch(e){{}} addEventListener("load",()=>scrollTo(0,0)); addEventListener("pageshow",e=>{{ if(e.persisted) location.reload(); }}); }})();</script><script>if(/[?&]chk=0/.test(location.search)) document.documentElement.classList.add("nochk"); if(/[?&]mid=0/.test(location.search)) document.documentElement.classList.add("nomid");</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>dasein-design · phone preview</title>
@@ -515,6 +515,8 @@ body:not(.side) .socs{{display:flex}}   /* in the top layouts (and the stack tri
 .rule{{position:fixed;top:0;bottom:0;width:1px;z-index:45;pointer-events:none;
   background:repeating-linear-gradient(to bottom,var(--line) 0 4px,transparent 4px 7px)}}
 .rule.l{{left:calc(var(--side) - 1px)}} .rule.r{{right:7px}}
+/* trial (24 Oct, Steuart): a third dashed line down the middle, exactly halfway between the two side lines; ?mid=0 hides it */
+.rule.m{{left:calc((var(--side) + 100% - 9px) / 2)}} .stack .rule.m{{left:calc(50% - .5px)}} html.nomid .rule.m{{display:none}}
 .side.rail .sidebar,.side.rail header{{border-right:0!important}}
 /* section bar: same size, type and thickness as a tab in the side strip, a muted version of the lit tab's yellow-lime */
 .pbar{{display:flex;align-items:center;justify-content:center;height:30px;margin:0 10px 10px;background:#eaffae;
@@ -886,7 +888,7 @@ html.nochk .links.chk{{gap:14px 10px}} html.nochk .links.chk .lk{{padding:0;back
 {section("contact", "contact", "04", CONTACT)}
 {section("legal", "impressum", "§", LEGAL, bar=False)}
 </main>
-<i class="rule l" aria-hidden="true"></i><i class="rule r" aria-hidden="true"></i>
+<i class="rule l" aria-hidden="true"></i><i class="rule m" aria-hidden="true"></i><i class="rule r" aria-hidden="true"></i>
 <div class="bar btop"><button type="button" id="goN" aria-label="previous page"><span class="nn">{ARN}</span><span class="ns">{ARS}</span><i class="sc">scroll</i></button></div>
 <div class="bar bbot"><button type="button" id="goS" aria-label="next page"><span class="dn">{ARS}</span><span class="su">{ARN}</span><i class="sc">scroll</i><span class="up">{ARN}<i>back to the top</i></span></button></div>
 <dialog id="lb" aria-labelledby="lt">

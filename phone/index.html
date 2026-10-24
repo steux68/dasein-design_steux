@@ -220,11 +220,11 @@ body:not(.side) .socs{display:flex}   /* in the top layouts (and the stack trial
 .rule{position:fixed;top:0;bottom:0;width:1px;z-index:45;pointer-events:none;
   background:repeating-linear-gradient(to bottom,var(--line) 0 4px,transparent 4px 7px)}
 .rule.l{left:calc(var(--side) - 1px)} .rule.r{right:7px}
-/* 25 Oct (Steuart): pairs of the desktop's dashed edge ticks (18 px, 10 px apart), pointing inwards from both outer guide lines, fixed on screen:
+/* 25 Oct (Steuart): pairs of short dashed edge ticks (10 px: from the guide line exactly to the edge of the content / grey / pictures; 10 px apart), pointing inwards from both outer guide lines, fixed on screen:
    top pair inside the top arrow bar, bottom pair inside the bottom arrow bar (both level with the scroll arrows), middle pair halfway between the two bars */
 .tk{position:fixed;left:var(--side);right:8px;height:11px;z-index:45;pointer-events:none;
   --t:repeating-linear-gradient(to right,#b8b8b8 0 4px,transparent 4px 6px);
-  background:var(--t) left top/18px 1px no-repeat,var(--t) left bottom/18px 1px no-repeat,var(--t) right top/18px 1px no-repeat,var(--t) right bottom/18px 1px no-repeat}
+  background:var(--t) left top/10px 1px no-repeat,var(--t) left bottom/10px 1px no-repeat,var(--t) right top/10px 1px no-repeat,var(--t) right bottom/10px 1px no-repeat}
 .stack .tk{left:8px}
 .tk.t{top:calc(var(--head) + 10px)} .tk.b{bottom:calc(env(safe-area-inset-bottom,0px) + 9px)}
 .tk.m{top:calc(50% + var(--head) / 2 - env(safe-area-inset-bottom,0px) / 2 - 5px)}

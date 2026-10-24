@@ -299,7 +299,7 @@ GAME = ('<dialog id="game" aria-label="beetle game"><div class="play" id="play">
 
 HTML = f'''<!doctype html>
 <html lang="de">
-<head><script>if(/[?&]chk=0/.test(location.search)) document.documentElement.classList.add("nochk");</script>
+<head><script>/* 24 Oct (Steuart): the phone site always opens on the start page - no remembered scroll position, no #page in the address; coming back from the browser's page cache starts fresh too */ (function(){{ try{{ if("scrollRestoration" in history) history.scrollRestoration="manual"; if(location.hash) history.replaceState(null,"",location.pathname+location.search); }}catch(e){{}} addEventListener("load",()=>scrollTo(0,0)); addEventListener("pageshow",e=>{{ if(e.persisted) location.reload(); }}); }})();</script><script>if(/[?&]chk=0/.test(location.search)) document.documentElement.classList.add("nochk");</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>dasein-design · phone preview</title>

@@ -64,7 +64,7 @@ TABS = [('us', 'about us', '01'), ('projects', 'projects', '02'), ('downloads', 
 TABHTML = ''.join(f'<a class="tab" href="#{i}" data-pg="{i}"><span>{n.replace("&", "&amp;")}</span> <small>[{k}]</small></a>' for i, n, k in TABS if i != 'legal')   # 23 Oct: four buttons; the impressum is reached from the beetle's § circle
 # circles beside the beetle: left and right, top to bottom (five, 21 Oct)
 # where each circle's dotted line ends on the upright beetle (fractions of its box): mouth, right front leg (claw), left middle leg, right back leg
-AIM = [(.51, .245), (.715, .365), (.258, .53), (.69, .80), (.31, .905)]   # five since 23 Oct (bits & bats gone)
+AIM = [(.425, .205), (.715, .365), (.258, .53), (.69, .80), (.31, .905)]   # five since 23 Oct (bits & bats gone); 25 Oct: 01 moved from the mouth (.51, .245) onto the small left feeler, clear of the middle guide line
 _AIM6 = [(.51, .245), (.715, .365), (.258, .53), (.80, .605), (.31, .905), (.69, .80)]   # ... 06 impressum: right back leg
 PINS = ''.join(f'<a class="pin {"l" if k % 2 == 0 else "r"}" href="#{i}" data-fx="{AIM[k][0]}" data-fy="{AIM[k][1]}" style="top:{8 + k * 19}%;--k:{k}"><b>{num}</b><span>{n.replace("&", "&amp;")}</span></a>'
                for k, (i, n, num) in enumerate(TABS))

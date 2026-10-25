@@ -967,5 +967,5 @@ img{-webkit-user-drag:none;user-drag:none;-webkit-user-select:none;user-select:n
 (function(){ const ph=e=>{ const im=e.target.closest&&e.target.closest('img'); return im&&!im.closest('a[href^="http"]'); };
   document.addEventListener('contextmenu',e=>{ if(ph(e)) e.preventDefault(); },true);
   document.addEventListener('dragstart',e=>{ if(e.target.closest&&e.target.closest('img')) e.preventDefault(); },true); })();</script>
-</body>
+<script>/* automatic update check (25 Oct): reload once when a newer build is on the server */ (function(){ const V="20261025104652"; function check(){ fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{ if(!j||!j.v||j.v===V) return; try{ if(sessionStorage.getItem("dd-upd")===j.v) return; sessionStorage.setItem("dd-upd",j.v); }catch(e){} const q=new URLSearchParams(location.search); q.set("v",j.v); location.replace(location.pathname+"?"+q.toString()); }).catch(()=>{}); } addEventListener("load",check); document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible") check(); }); })();</script></body>
 </html>

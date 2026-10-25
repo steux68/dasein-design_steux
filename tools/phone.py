@@ -1266,6 +1266,17 @@ addEventListener('load',()=>{{ try{{
 
 os.makedirs(os.path.dirname(OUT), exist_ok=True)
 NOCOPY = '<style>/* photos are harder to copy (24 Oct): no dragging, no selecting, no long-press "save image" on phones */\nimg{-webkit-user-drag:none;user-drag:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}</style>\n<script>/* no right-click / long-press menu and no dragging on pictures (24 Oct) - the link logos keep their menu */\n(function(){ const ph=e=>{ const im=e.target.closest&&e.target.closest(\'img\'); return im&&!im.closest(\'a[href^="http"]\'); };\n  document.addEventListener(\'contextmenu\',e=>{ if(ph(e)) e.preventDefault(); },true);\n  document.addEventListener(\'dragstart\',e=>{ if(e.target.closest&&e.target.closest(\'img\')) e.preventDefault(); },true); })();</script>\n'
-open(OUT, 'w').write(HTML.replace('</body>', NOCOPY + '</body>', 1))
+# 25 Oct (Steuart): automatic update check, as in the riding-school app - each build gets a version stamp, written into the page and into
+# phone/version.json; on start (and whenever the page comes back to the screen) the page fetches version.json past every cache and,
+# if it is newer, reloads itself once with ?v=<new version> so phones never need a manual refresh
+import time as _t
+VERSION = _t.strftime('%Y%m%d%H%M%S')
+UPDATE = ('<script>/* automatic update check (25 Oct): reload once when a newer build is on the server */ (function(){ const V="' + VERSION + '";'
+          ' function check(){ fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{ if(!j||!j.v||j.v===V) return;'
+          ' try{ if(sessionStorage.getItem("dd-upd")===j.v) return; sessionStorage.setItem("dd-upd",j.v); }catch(e){}'
+          ' const q=new URLSearchParams(location.search); q.set("v",j.v); location.replace(location.pathname+"?"+q.toString()); }).catch(()=>{}); }'
+          ' addEventListener("load",check); document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible") check(); }); })();</script>')
+open(OUT, 'w').write(HTML.replace('</body>', NOCOPY + UPDATE + '</body>', 1))
+open(os.path.join(ROOT, 'phone', 'version.json'), 'w').write('{"v":"' + VERSION + '"}\n')
 if __name__ == '__main__':
     print(len(pieces), 'pieces,', len(HTML) // 1024, 'KB ->', OUT)

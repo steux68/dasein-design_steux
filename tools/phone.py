@@ -139,7 +139,7 @@ BCAPS = [c.replace('&amp;', '&') for im, t, c in BITS]
 
 # ---------- us & contact: the partnership, the two partners (CV folds open), the office with the map ----------
 PARTNERS = [
-    dict(role='Architekt<i class="rs"></i>Inhaber', first='Cuong', last='TRAN-VIET', q='BArch DipArch', idimg='m-id-cuong-line.webp', idalt='Personalausweis Cuong Tran-Viet', tel='+43 (0)676 4822 464', mail='cuong@dasein-design.net', extra='', nat='Österreich [EU]', lang='Deutsch &amp; Vietnamesisch [Muttersprache], English [verhandlungssicher]',
+    dict(role='Architekt<i class="rs"></i>Inhaber', first='Cuong', last='TRAN-VIET', q='BArch DipArch', idimg='m-portrait-cuong.webp', idalt='Cuong Tran-Viet', tel='+43 (0)676 4822 464', mail='cuong@dasein-design.net', extra='', nat='Österreich [EU]', lang='Deutsch &amp; Vietnamesisch [Muttersprache], English [verhandlungssicher]',
          cv=[('Professional', ['2010 ZT: Arch+Ing, Bundeskammer der ZiviltechnikerInnen, Österreich [EU]',
                                '2005 ARB: Architects Registration Board of the United Kingdom [UK]']),
              ('Academic', ['Sep.’00 – Jun.’02 » Bartlett School of Architecture, UCL, London – Dip. Arch',

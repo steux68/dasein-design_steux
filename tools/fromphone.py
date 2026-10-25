@@ -498,7 +498,7 @@ WONDER_CSS = """
 .dwtrail{position:absolute;left:0;top:0;width:1100px;height:216px;z-index:2;pointer-events:none}
 .dwbug{position:absolute;left:0;top:0;width:29px;height:65px;margin:-32px 0 0 -15px;z-index:2;pointer-events:none;will-change:transform;
 }   /* no outline: it walks on white */
-[data-node-id="1:600"]{width:150px!important}   /* Steuart's portrait square (three photos and one empty) in place of his card, as tall as Cuong's card (23 Oct) */
+[data-node-id="1:600"],[data-node-id="1:555"]{width:150px!important}   /* Steuart's portrait square (three photos and one empty) in place of his card, as tall as Cuong's card (23 Oct) */
 .dwopen #ihint{display:none!important}   /* no start-page hint over wonder (23 Oct) */
 .dwopen #mapclip{visibility:hidden}   /* the live map sits above the page: hidden while wonder is open (the dashed columns stay) */
 .dwsc{position:absolute;inset:0;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;scrollbar-width:none;padding:30px 10px 30px} .dwsc::-webkit-scrollbar{display:none}
@@ -908,7 +908,7 @@ def patch(s):
     assert n >= 4, n
     s = _impressum_page(s)
     s = _tint(s)
-    s = s.replace('src="img/services-imgImage.webp"', 'src="img/services-id-cuong-line.webp"')
+    s = s.replace('src="img/services-imgImage.webp"', 'src="img/services-portrait-cuong.webp"')   # 25 Oct: Cuong's booth-style portrait square, like Steuart's
     s = s.replace('src="img/services-imgImage1.webp"', 'src="img/services-portrait-steuart.webp"')   # 23 Oct: a black-and-white line drawing of the card, no personal numbers
     s = s.replace('<head>', '<head><script>/* phones go to the phone site (23 Oct); ?desktop=1 stays here and is remembered */ (function(){ try{ const q=new URLSearchParams(location.search);'
                   ' if(q.get("desktop")==="1") localStorage.setItem("dd-desktop","1"); if(q.get("desktop")==="0") localStorage.removeItem("dd-desktop");'

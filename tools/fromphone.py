@@ -539,7 +539,7 @@ WONDER_JS = r"""<script>(function(){ const sw=document.getElementById('dwsw'), w
   const CATS=JSON.parse(wo.dataset.cats); let only=null, cur=0;
   const set=on=>{ document.documentElement.classList.toggle('dwopen',on); sw.setAttribute('aria-pressed',String(on)); wo.hidden=!on; ti.hidden=!on; if(!on) pop.hidden=true; else { carpet(); sc.scrollTop=0; requestAnimationFrame(nxl); } };
   sw.addEventListener('click',()=>set(sw.getAttribute('aria-pressed')!=='true'));
-  document.querySelectorAll('.hot.tab,.hot.pin').forEach(a=>a.addEventListener('click',()=>set(false)));
+  document.querySelectorAll('.hot.tab,.hot.pin,.hot[href="#intro"],a.impl').forEach(a=>a.addEventListener('click',()=>set(false)));   /* 30 Oct: the dasein-design logo and the § impressum link close wonder too */
   addEventListener('wheel',e=>{ if(wo.hidden||!pop.hidden&&false) return; if(!e.target.closest||!e.target.closest('#dwon')) return; e.stopImmediatePropagation(); e.preventDefault(); sc.scrollTop+=e.deltaY; },{passive:false,capture:true});
   /* the scroll arrow at the foot works on wonder too: a screen further down, at the end "top" */
   const nx=document.getElementById('nextp');

@@ -578,8 +578,8 @@ body:not(.side) .socs{{display:flex}}   /* in the top layouts (and the stack tri
 .sec1:not(.stack) main > section.pg:not(#start){{padding-top:0}} .sec1:not(.stack) main > section.pg > .pbar{{margin-left:0;margin-right:0}}
 .sec2 main > section.pg:not(#start){{margin-left:10px;margin-right:10px;padding-left:0;padding-right:0;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat}}
 .sec3 main > section.pg:not(#start){{transition:background-color .35s}} .sec3 main > section.pg.cur{{background-color:#f6ffde}}
-.stack main > .hb.hl{{margin:39px 50% -1px 10px}}
-.stack main > .hb.hr{{margin:39px 10px -1px 50%;
+.stack main > .hb.hl{{margin:22px 50% -1px 10px}}
+.stack main > .hb.hr{{margin:22px 10px -1px 50%;
   background:repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left top/100% 1px no-repeat,repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left bottom/100% 1px no-repeat,#fff}}   /* 25 Oct: no dotted line down the left edge any more (it ran beside the middle guide line) - only above and below, like the left halves */
 .stack.tstk .bar.btop{{border-bottom-color:transparent}} .stack.bstk .bar.bbot{{border-top-color:transparent}}   /* the bars' own dotted edge is enough where they meet the arrow bars */
 .sback{{position:fixed;left:18px;right:18px;z-index:13;background:#fff;pointer-events:none}}
@@ -588,7 +588,7 @@ body:not(.side) .socs{{display:flex}}   /* in the top layouts (and the stack tri
 .stack .stage{{height:calc(100svh - var(--head) - 2 * var(--bar) - 126px)}}
 .stack.pairs .stage{{height:calc(100svh - var(--head) - 2 * var(--bar) - 48px)}}
 .stack.pairs #legal{{scroll-margin-top:62px}}
-.stack main > #legal{{margin-top:39px}}   /* the same white before the impressum as before a section bar */
+.stack main > #legal{{margin-top:22px}}   /* the same white before the impressum as before a section bar */
 .stack main > #start + .hb{{margin-top:14px}}   /* about us sits closer under the beetle (23 Oct) */   /* no bar of its own: lands just under the two rows of bars */
 .stack .pg:last-child{{min-height:calc(100lvh - var(--head) - 2 * var(--bar) - 132px)}}
 .stack.pairs .pg:last-child{{min-height:calc(100lvh - var(--head) - 2 * var(--bar) - 44px)}}   /* the last page can always scroll up into place */

@@ -302,6 +302,7 @@ HTML = f'''<!doctype html>
 <head><script>/* 24 Oct (Steuart): the phone site always opens on the start page - no remembered scroll position, no #page in the address; coming back from the browser's page cache starts fresh too */ (function(){{ try{{ if("scrollRestoration" in history) history.scrollRestoration="manual"; if(location.hash) history.replaceState(null,"",location.pathname+location.search); }}catch(e){{}} addEventListener("load",()=>scrollTo(0,0)); addEventListener("pageshow",e=>{{ if(e.persisted) location.reload(); }}); }})();</script><script>if(/[?&]chk=0/.test(location.search)) document.documentElement.classList.add("nochk"); if(/[?&]mid=0/.test(location.search)) document.documentElement.classList.add("nomid");</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="icon" type="image/png" href="../icon-192.png"><meta name="theme-color" content="#ffffff"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="dasein-design">
 <title>dasein-design · phone preview</title>
 <link rel="stylesheet" href="../fonts.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">

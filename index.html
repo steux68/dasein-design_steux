@@ -3,6 +3,8 @@
 <head><script>if(location.hash==="#impressum"){ history.replaceState(null,"",location.pathname+location.search+"#contact"); window.ddImp=1; }</script><script>/* phones go to the phone site (23 Oct); ?desktop=1 stays here and is remembered */ (function(){ try{ const q=new URLSearchParams(location.search); if(q.get("desktop")==="1") localStorage.setItem("dd-desktop","1"); if(q.get("desktop")==="0") localStorage.removeItem("dd-desktop"); const narrow=Math.min(screen.width,screen.height)<=600||(innerWidth<=760&&matchMedia("(pointer:coarse)").matches); if(narrow&&localStorage.getItem("dd-desktop")!=="1") location.replace("phone/index.html"+location.hash); }catch(e){} })();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" type="image/png" href="icon-192.png"><meta name="theme-color" content="#ffffff"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="dasein-design">
+
 <title>dasein-design Big Stripes</title>
 <link rel="stylesheet" href="fonts.css">
 <link rel="stylesheet" href="figma.css">

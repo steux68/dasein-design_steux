@@ -1,9 +1,9 @@
 # Startseite erzwingen (robuster als start_patch.py): Herzschlag in sessionStorage, Prüfung bei jedem Zurückkehren
-# (visibilitychange, pageshow, focus, resume); Neustart ohne #-Anhang, wenn die letzte Aktivität > 30 s her ist.
+# (visibilitychange, pageshow, focus, resume); Neustart ohne #-Anhang, wenn die letzte Aktivität > 5 s her ist.
 # Aufruf im Repo-Hauptordner: python3 -I src/start2_patch.py <datei> [<datei> ...]
 import re,sys
 JS=('<script id="start-top">(function(){try{if("scrollRestoration" in history)history.scrollRestoration="manual";'
-'var K="start-seen",LIM=30000,base=location.pathname+location.search;'
+'var K="start-seen",LIM=5000,base=location.pathname+location.search;'
 'function get(){try{return +sessionStorage.getItem(K)||0}catch(e){return 0}}'
 'function put(){try{sessionStorage.setItem(K,String(Date.now()))}catch(e){}}'
 'function stale(){var p=get();return p&&Date.now()-p>LIM}'

@@ -4,7 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="icon" type="image/png" href="../icon-192.png"><meta name="theme-color" content="#ffffff"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="dasein-design"><script id="start-top">(function(){try{if("scrollRestoration" in history)history.scrollRestoration="manual";var K="start-seen",LIM=5000,base=location.pathname+location.search;function get(){try{return +sessionStorage.getItem(K)||0}catch(e){return 0}}function put(){try{sessionStorage.setItem(K,String(Date.now()))}catch(e){}}function stale(){var p=get();return p&&Date.now()-p>LIM}function reset(){try{sessionStorage.removeItem(K)}catch(e){}location.replace(base)}if(stale()&&location.hash){reset();return}put();function back(){if(stale())reset();else put()}setInterval(function(){if(document.visibilityState==="visible")put()},3000);document.addEventListener("visibilitychange",function(){if(document.visibilityState==="hidden")put();else back()});addEventListener("pageshow",function(e){if(e.persisted)location.reload();else back()});addEventListener("focus",back);document.addEventListener("resume",back);addEventListener("pagehide",put);}catch(e){}})();</script><script id="sw-reg">if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("load",function(){navigator.serviceWorker.register("../sw.js").catch(function(){});});</script>
-
 <title>dasein-design · phone preview</title>
 <link rel="stylesheet" href="../fonts.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
@@ -286,6 +285,13 @@ body:not(.side) .socs{display:flex}   /* in the top layouts (and the stack trial
 .stack.tstk .bar.btop{border-bottom-color:transparent} .stack.bstk .bar.bbot{border-top-color:transparent}   /* the bars' own dotted edge is enough where they meet the arrow bars */
 .sback{position:fixed;left:18px;right:18px;z-index:13;background:#fff;pointer-events:none}
 .stack.inpg main > .hb{background-color:#f2f2f2}
+/* 1 Nov (Steuart, as in the PASSAGE app): on the start page the half bars pulse as whole bars, white to an extremely pale colour, each its own, one after another */
+@keyframes hbp{0%,100%{background-color:#fff}50%{background-color:var(--pc)}}
+.stack:not(.inpg) main > .hb{animation:hbp 3.4s ease-in-out infinite}
+.stack:not(.inpg) main > .hb[data-pc="0"]{--pc:#fbe0e3} .stack:not(.inpg) main > .hb[data-pc="1"]{--pc:#e6f4c8;animation-delay:-.7s}
+.stack:not(.inpg) main > .hb[data-pc="2"]{--pc:#dfe9fb;animation-delay:-1.4s} .stack:not(.inpg) main > .hb[data-pc="3"]{--pc:#fdf0c2;animation-delay:-2.1s}
+.stack:not(.inpg) main > .hb[data-pc="4"]{--pc:#ece2f8;animation-delay:-2.8s}
+@media (prefers-reduced-motion:reduce){.stack main > .hb{animation:none}}
 .stack main > .hb.on{background-color:#eaffae!important} .stack main > .hb.hit{background-color:#cdff3e!important}
 .stack .stage{height:calc(100svh - var(--head) - 2 * var(--bar) - 126px)}
 .stack.pairs .stage{height:calc(100svh - var(--head) - 2 * var(--bar) - 48px)}
@@ -901,6 +907,7 @@ html.nochk .links.chk{gap:14px 10px} html.nochk .links.chk .lk{padding:0;backgro
     bars.forEach((b,k)=>{ const r=k>>1, right=k&1, sec=secs[k];
       sec.before(b);
       b.classList.add('hb', right?'hr':'hl');
+      b.dataset.pc=k%5;   /* 1 Nov: each half bar its own pale colour for the start-page pulse, as in PASSAGE */
       b.style.top=`calc(var(--head) + var(--bar) + ${r*H}px)`; b.style.bottom=`calc(var(--bar) + env(safe-area-inset-bottom,0px) + ${(ROWS-1-r)*H}px)`;
       sec.style.scrollMarginTop=(r*H+22)+'px';   /* lands with its own half bar exactly in its place at the top */
       b.setAttribute('role','link'); b.tabIndex=0; b.addEventListener('click',()=>tapGo(b,sec)); });
@@ -969,5 +976,5 @@ img{-webkit-user-drag:none;user-drag:none;-webkit-user-select:none;user-select:n
 (function(){ const ph=e=>{ const im=e.target.closest&&e.target.closest('img'); return im&&!im.closest('a[href^="http"]'); };
   document.addEventListener('contextmenu',e=>{ if(ph(e)) e.preventDefault(); },true);
   document.addEventListener('dragstart',e=>{ if(e.target.closest&&e.target.closest('img')) e.preventDefault(); },true); })();</script>
-<script>/* automatic update check (25 Oct): reload once when a newer build is on the server */ (function(){ const V="20261025113537"; function check(){ fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{ if(!j||!j.v||j.v===V) return; try{ if(sessionStorage.getItem("dd-upd")===j.v) return; sessionStorage.setItem("dd-upd",j.v); }catch(e){} const q=new URLSearchParams(location.search); q.set("v",j.v); location.replace(location.pathname+"?"+q.toString()); }).catch(()=>{}); } addEventListener("load",check); document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible") check(); }); })();</script></body>
+<script>/* automatic update check (25 Oct): reload once when a newer build is on the server */ (function(){ const V="20261101015559"; function check(){ fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{ if(!j||!j.v||j.v===V) return; try{ if(sessionStorage.getItem("dd-upd")===j.v) return; sessionStorage.setItem("dd-upd",j.v); }catch(e){} const q=new URLSearchParams(location.search); q.set("v",j.v); location.replace(location.pathname+"?"+q.toString()); }).catch(()=>{}); } addEventListener("load",check); document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible") check(); }); })();</script></body>
 </html>

@@ -334,7 +334,7 @@ html,body,button,input,select,textarea,dialog{{font-family:Calibri,Carlito,sans-
     if(window.L){{
       clip.hidden=false; placeMap();
       map=L.map('livemap',{{zoomControl:false,scrollWheelZoom:false,attributionControl:true}});
-      L.tileLayer('https://tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png',{{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}}).addTo(map);
+      L.tileLayer('https://tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png',{{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'}}).addTo(map);
       map.attributionControl.setPrefix(false);
       placeMap(); homeView();
       pin=L.marker(HOME,{{icon:marker(),keyboard:false}}).addTo(map); map.on('move zoom resize',flipLabel); flipLabel();

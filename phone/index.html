@@ -86,13 +86,13 @@ body{position:relative}
 .wtr .socs{display:none!important}
 .wtr .wsw{display:flex;align-items:center;gap:5px;margin-left:auto;border:0;background:none;padding:4px 0;font:inherit;font-size:12px;letter-spacing:.04em;color:#666;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .wsw .tg{position:relative;width:28px;height:15px;border-radius:8px;border:1px solid #3a3c37;background:#fff;transition:background .25s}
-.wsw .tg b{position:absolute;left:2px;top:2px;width:9px;height:9px;border-radius:50%;background:#ffd400;box-shadow:0 0 0 1px #3a3c37;transition:transform .25s}
+.wsw .tg b{position:absolute;left:2px;top:2px;width:9px;height:9px;border-radius:50%;background:#cdff3e;box-shadow:0 0 0 1px #3a3c37;transition:transform .25s}
 .wsw .tg b::after{content:"";position:absolute;inset:-1px;border-radius:50%;border:1px solid var(--red);opacity:0;animation:pdr 3.2s ease-out infinite}   /* the knob itself pulses, slowly */
 .wsw[aria-pressed=true] .tg b::after{animation:none}
-.wsw[aria-pressed=true] .tg{background:#ffd400} .wsw[aria-pressed=true] .tg b{transform:translateX(13px);background:var(--red)}
+.wsw[aria-pressed=true] .tg{background:#eaffae} .wsw[aria-pressed=true] .tg b{transform:translateX(13px);background:var(--red)}
 .wsw .wk{color:#000;font-weight:700} .wsw[aria-pressed=true] .wk{color:#666;font-weight:400} .wsw[aria-pressed=true] .wo{color:var(--red);font-weight:700}
 .wsw .wth{position:relative;width:24px;height:24px;margin-left:2px;flex:none} .wsw .wth img{width:100%;height:100%;object-fit:cover;border-radius:3px;outline:1px dotted #b8b8b8;outline-offset:1px}
-.wsw .wdot{position:absolute;right:-4px;top:-4px;width:8px;height:8px;border-radius:50%;background:#ffd400;box-shadow:0 0 0 1px #3a3c37}
+.wsw .wdot{position:absolute;right:-4px;top:-4px;width:8px;height:8px;border-radius:50%;background:#cdff3e;box-shadow:0 0 0 1px #3a3c37}
 .wsw .wdot::after{content:"";position:absolute;inset:-1px;border-radius:50%;border:1px solid var(--red);animation:pdr 1.8s ease-out infinite}
 .wsw[aria-pressed=true] .wth{display:none}
 .wonder{position:fixed;left:0;right:0;top:var(--head);bottom:0;z-index:30;overflow-y:auto;background:#fff;padding:0 18px 40px;-webkit-overflow-scrolling:touch}
@@ -102,7 +102,7 @@ body{position:relative}
 .wchips{position:sticky;top:0;z-index:2;display:flex;flex-direction:column;gap:6px;padding:10px 0;background:#fff;border-bottom:1px dashed var(--line)}
 .wrow{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch} .wrow::-webkit-scrollbar{display:none}
 .wch{flex:none;border:1px dotted #b8b8b8;background:#fff;border-radius:14px;padding:4px 11px;font:inherit;font-size:12px;color:#333;white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.wch.on{background:#ffd400;border-style:solid;border-color:#3a3c37;color:#000;font-weight:700}
+.wch.on{background:#eaffae;border-style:solid;border-color:#3a3c37;color:#000;font-weight:700}
 .wp{margin:26px 0 0} .wp[hidden]{display:none}
 .wt{margin:0 0 6px;font-size:12px;letter-spacing:.06em;color:#888}
 .wp img{display:block;width:100%;height:auto;max-height:78svh;object-fit:cover;outline:1px dotted #b8b8b8;outline-offset:-1px}
@@ -124,7 +124,7 @@ body{position:relative}
 .wbt:nth-child(1){background-image:var(--dh),var(--dh),var(--dv);background-position:left top,left bottom,right top;background-size:100% 1px,100% 1px,1px 100%}
 .wbt:nth-child(2){background-image:var(--dh),var(--dh);background-position:left top,left bottom;background-size:100% 1px,100% 1px}
 .wbt b{font-weight:700} .wbt small{font-size:12px;color:#444}
-.wbt.on{background-color:#ffd400} .wbt:active{background-color:#ffd400}
+.wbt.on{background-color:#eaffae} .wbt:active{background-color:#cdff3e}
 .wonder .wbars{display:none}
 .wband{position:relative;height:78px;margin:6px 0 0;overflow:hidden} .wband canvas{position:absolute;inset:0;width:100%;height:100%}
 .wband img{position:absolute;left:0;top:0;width:15px;height:32px;margin:-16px 0 0 -7px;will-change:transform;pointer-events:none}
@@ -145,7 +145,7 @@ body{position:relative}
 .wonder .wgrid > *{position:relative;box-sizing:border-box;border:0;margin:0;width:auto;height:auto}
 .wonder .wgrid .wg{aspect-ratio:auto;background:#f4f4f4;padding:0;overflow:hidden} .wonder .wgrid .wg img{width:100%;height:100%;object-fit:cover!important}   /* cropped to the cell, like the project tiles */
 .wcw{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:2px;background:#f2f2f2;font:inherit;color:#000;cursor:pointer;-webkit-tap-highlight-color:transparent;overflow:hidden}
-.wcw b{font-weight:700;line-height:1;white-space:nowrap} .wcw small{font-size:9px;color:#666} .wcw.on{background:#ffd400} .wcw.on b{color:var(--red)} .wcw:active{background:#ffd400}   /* a tight carpet: no gaps, only the white left over round each photo */
+.wcw b{font-weight:700;line-height:1;white-space:nowrap} .wcw small{font-size:9px;color:#666} .wcw.on{background:#eaffae} .wcw.on b{color:var(--red)} .wcw:active{background:#cdff3e}   /* a tight carpet: no gaps, only the white left over round each photo */
 .wonder .wg.t{display:none!important}   /* no text tiles in the carpet - photos only */
 .wonder .wg{display:block;aspect-ratio:1/1}
 /* photos in their own format (23 Oct, 00:50): a portrait fills the cell's height, a landscape its width; only the left-over is white, no frame, no crop */
@@ -182,7 +182,7 @@ body{position:relative}
 .wmap .wl{position:absolute;box-sizing:border-box;border:.5px solid #333;margin:0;background:#f1f1ef;-webkit-appearance:none;appearance:none;font-family:inherit;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:1px;
   font-weight:700;color:#111;line-height:1;white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent;letter-spacing:-.01em}
 .wmap .wl::before,.wmap .wl::after{content:none!important}
-.wmap .wl.new{background:#ffd400} .wmap .wl:active{background:#ffd400} .wmap .wl.txt{color:var(--red);font-weight:400;font-style:italic}
+.wmap .wl.new{background:#eaffae} .wmap .wl:active{background:#cdff3e} .wmap .wl.txt{color:var(--red);font-weight:400;font-style:italic}
 .wmore{margin:8px 0 0;text-align:center;font-size:12px;letter-spacing:.06em;color:#999}
 .wview{display:flex;justify-content:flex-end;gap:0;margin-top:2px} .wview button{border:0;background:none;font:inherit;font-size:12px;letter-spacing:.06em;color:#999;padding:2px 6px;cursor:pointer}
 .wview button.on{color:#000;font-weight:700} .wview button+button{border-left:1px solid #ccc}
@@ -200,7 +200,7 @@ body{position:relative}
 .wpop .wpnav button{display:flex;align-items:center;gap:6px;width:auto;height:auto;border:0;border-radius:0;background:none;font:inherit;font-size:14px;color:#000;padding:4px}
 .wpop[hidden]{display:none}
 .wpbar{flex:none;display:flex;align-items:center;gap:10px;padding:10px 18px;border-bottom:1px dashed var(--line)}
-.wback{border:1px solid #3a3c37;border-radius:14px;background:#ffd400;padding:5px 12px;font:inherit;font-size:14px;font-weight:700;cursor:pointer}
+.wback{border:1px solid #3a3c37;border-radius:14px;background:#eaffae;padding:5px 12px;font:inherit;font-size:14px;font-weight:700;cursor:pointer}
 #wpk{flex:1;font-size:12px;letter-spacing:.06em;color:#888;text-align:center}
 
 .wpbody{flex:1;overflow-y:auto;padding:4px 18px 30px} .wpbody .wp{margin-top:14px} .wpbody .wp[hidden]{display:block}
@@ -233,7 +233,7 @@ body:not(.side) .socs{display:flex}   /* in the top layouts (and the stack trial
 .rule.m{left:calc((var(--side) + 100% - 9px) / 2)} .stack .rule.m{left:calc(50% - .5px)} html.nomid .rule.m{display:none}
 .side.rail .sidebar,.side.rail header{border-right:0!important}
 /* section bar: same size, type and thickness as a tab in the side strip, a muted version of the lit tab's yellow-lime */
-.pbar{display:flex;align-items:center;justify-content:center;height:30px;margin:0 10px 10px;background:#ffd400;
+.pbar{display:flex;align-items:center;justify-content:center;height:30px;margin:0 10px 10px;background:#eaffae;
   font-size:12px;color:rgba(0,0,0,.78);white-space:nowrap}   /* page name in yellow-lime, as thick as the side tabs; the dotted line runs flush across its top edge */
 .pbar b{font-weight:700} .pbar small{font-size:8.5px;margin-left:4px}
 /* ?stack=1 (trial, 22 Oct): logo across the top, no side strip; the five page bars are thinner and stack up at the top of the screen as you pass
@@ -248,10 +248,10 @@ body:not(.side) .socs{display:flex}   /* in the top layouts (and the stack trial
 .stack main > .pbar{margin-top:46px}   /* a little air between a page and the next page's bar (only while it flows; stacked bars sit tight) */
 /* inside the pages the waiting bars are a pale grey, so they read apart from the content; on the start page all white */
 .stack.inpg main > .pbar{background-color:#f2f2f2}
-.stack main > .pbar.on{background-color:#ffd400!important}
+.stack main > .pbar.on{background-color:#eaffae!important}
 /* a tap shows first: the bar, tab or circle lights up, then the page moves (tapGo) */
-.stack main > .pbar.hit,.tab.hit{background-color:#ffd400!important}
-.pin.hit b{animation:none!important;background:#ffd400!important;box-shadow:inset 0 0 0 1px var(--red)} .pin.hit span{color:var(--red)}
+.stack main > .pbar.hit,.tab.hit{background-color:#cdff3e!important}
+.pin.hit b{animation:none!important;background:#cdff3e!important;box-shadow:inset 0 0 0 1px var(--red)} .pin.hit span{color:var(--red)}
 .stack .body{padding-top:10px}
 .stack .stage{height:calc(100svh - var(--head) - 2 * var(--bar) - 104px);min-height:330px}
 /* the start page fills the whole screen (largest viewport), so all five bars wait together at the bottom however the phone's toolbar is showing */
@@ -292,7 +292,7 @@ body:not(.side) .socs{display:flex}   /* in the top layouts (and the stack trial
 .stack:not(.inpg) main > .hb[data-pc="2"]{--pc:#dfe9fb;animation-delay:-1.4s} .stack:not(.inpg) main > .hb[data-pc="3"]{--pc:#fdf0c2;animation-delay:-2.1s}
 .stack:not(.inpg) main > .hb[data-pc="4"]{--pc:#ece2f8;animation-delay:-2.8s}
 @media (prefers-reduced-motion:reduce){.stack main > .hb{animation:none}}
-.stack main > .hb.on{background-color:#ffd400!important} .stack main > .hb.hit{background-color:#ffd400!important}
+.stack main > .hb.on{background-color:#eaffae!important} .stack main > .hb.hit{background-color:#cdff3e!important}
 .stack .stage{height:calc(100svh - var(--head) - 2 * var(--bar) - 126px)}
 .stack.pairs .stage{height:calc(100svh - var(--head) - 2 * var(--bar) - 48px)}
 .stack.pairs #legal{scroll-margin-top:62px}
@@ -332,9 +332,9 @@ html,body{overflow-x:clip}
 .pin b::after{border-color:var(--c2,var(--red));animation-delay:calc(var(--k) * 1.5s + .6s)}
 /* in turn each circle lights up yellow-lime (as if activated), sends out its rings, then turns grey again before the next one */
 .pin b{animation:pinon 9s ease-in-out infinite;animation-delay:calc(var(--k) * 1.5s)}
-@keyframes pinon{0%{background:#bfbfbf}2.5%{background:#ffd400}14%{background:#ffd400}16.7%{background:#bfbfbf}100%{background:#bfbfbf}}
+@keyframes pinon{0%{background:#bfbfbf}2.5%{background:#cdff3e}14%{background:#cdff3e}16.7%{background:#bfbfbf}100%{background:#bfbfbf}}
 .pin:nth-of-type(1){--c1:#ffd400;--c2:#2f8cff} .pin:nth-of-type(2){--c1:#2fbf4a;--c2:#ffd400}
-.pin:nth-of-type(3){--c1:#2f8cff;--c2:#ffd400} .pin:nth-of-type(4){--c1:#e30613;--c2:#2fbf4a} .pin:nth-of-type(5){--c1:#ffd400;--c2:#e30613} .pin:nth-of-type(6){--c1:#3a3c37;--c2:#ffd400}
+.pin:nth-of-type(3){--c1:#2f8cff;--c2:#cdff3e} .pin:nth-of-type(4){--c1:#e30613;--c2:#2fbf4a} .pin:nth-of-type(5){--c1:#cdff3e;--c2:#e30613} .pin:nth-of-type(6){--c1:#3a3c37;--c2:#ffd400}
 @keyframes pinring{0%{transform:scale(1);opacity:.9}12.5%{transform:scale(2.3);opacity:0}100%{transform:scale(2.3);opacity:0}}
 @media (prefers-reduced-motion:reduce){.pin b,.pin b::before,.pin b::after{animation:none}}
 .pin span{font-size:12px;line-height:1.15;background:rgba(255,255,255,.85);padding:1px 3px}
@@ -412,7 +412,7 @@ summary::-webkit-details-marker{display:none}
 summary b,.cvb b{color:var(--red);font-weight:700;font-size:14px;margin-left:-3px} .cvt{color:#000;font-weight:300;font-size:14px}
 .cvx{width:20px;height:20px;overflow:visible}
 .cvx .c{fill:#fff;stroke:var(--red);stroke-width:1.5} .cvx path{stroke:var(--red);stroke-width:1.6;stroke-linecap:round}
-.cvx .r1,.cvx .r2{fill:none;stroke:#ffd400;stroke-width:2.2;transform-box:fill-box;transform-origin:center;animation:cvp 1.8s ease-out infinite}
+.cvx .r1,.cvx .r2{fill:none;stroke:#cdff3e;stroke-width:2.2;transform-box:fill-box;transform-origin:center;animation:cvp 1.8s ease-out infinite}
 .cvx .r2{animation-delay:.9s}
 @keyframes cvp{0%{transform:scale(1);opacity:.95}100%{transform:scale(1.9);opacity:0}}
 details[open] > summary .cvx .v,[aria-expanded=true] .cvx .v{display:none} details[open] > summary .cvx .r1,details[open] > summary .cvx .r2,[aria-expanded=true] .cvx .r1,[aria-expanded=true] .cvx .r2{display:none}
@@ -450,7 +450,7 @@ dialog#game{inset:0;z-index:70;padding:0;overflow:hidden}
 .pplus{position:absolute;left:0;top:0;font-weight:700;font-size:16px;color:var(--red);pointer-events:none;z-index:3}
 .play .pdot{touch-action:none;width:56px;height:56px;margin:-28px 0 0 -28px}
 .pdot{position:absolute;left:0;top:0;width:44px;height:44px;margin:-22px 0 0 -22px;display:flex;align-items:center;justify-content:center;cursor:grab}
-.pdot b{width:10px;height:10px;border-radius:50%;background:#ffd400;box-shadow:0 0 0 1px #3a3c37;animation:pdp 1.4s ease-in-out infinite}
+.pdot b{width:10px;height:10px;border-radius:50%;background:#cdff3e;box-shadow:0 0 0 1px #3a3c37;animation:pdp 1.4s ease-in-out infinite}
 .pdot::before,.pdot::after{content:"";position:absolute;left:50%;top:50%;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;border:1px solid var(--red);opacity:0;animation:pdr 1.8s ease-out infinite}
 .pdot::after{animation-delay:.9s}
 @keyframes pdp{50%{transform:scale(1.25)}} @keyframes pdr{0%{transform:scale(1);opacity:.8}100%{transform:scale(4.2);opacity:0}}
@@ -982,15 +982,12 @@ html{--bar:0px!important}
  background:rgba(255,255,255,.94);border:1px dotted #b8b8b8;border-radius:0;opacity:0;pointer-events:none;transition:opacity .25s;-webkit-tap-highlight-color:transparent}
 #toTop.on{opacity:1;pointer-events:auto}
 #toTop svg{width:20px;height:20px;fill:none;stroke:#3a3c37;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-
-/* yellow-bright */
-.pbar{background-color:#efefef!important}.pbar.on,.pbar.hit,.tab.hit{background-color:#ffd400!important}
 </style>
 <script>/* no right-click / long-press menu and no dragging on pictures (24 Oct) - the link logos keep their menu */
 (function(){ const ph=e=>{ const im=e.target.closest&&e.target.closest('img'); return im&&!im.closest('a[href^="http"]'); };
   document.addEventListener('contextmenu',e=>{ if(ph(e)) e.preventDefault(); },true);
   document.addEventListener('dragstart',e=>{ if(e.target.closest&&e.target.closest('img')) e.preventDefault(); },true); })();</script>
-<script>/* automatic update check (25 Oct): reload once when a newer build is on the server */ (function(){ const V="20261106210000"; function check(){ fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{ if(!j||!j.v||j.v===V) return; try{ if(sessionStorage.getItem("dd-upd")===j.v) return; sessionStorage.setItem("dd-upd",j.v); }catch(e){} const q=new URLSearchParams(location.search); q.set("v",j.v); location.replace(location.pathname+"?"+q.toString()); }).catch(()=>{}); } addEventListener("load",check); document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible") check(); }); })();</script><button type="button" id="toTop" aria-label="back to the top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15L12 8L19 15"/></svg></button><script id="totop-js">(function(){var b=document.getElementById('toTop');if(!b)return;
+<script>/* automatic update check (25 Oct): reload once when a newer build is on the server */ (function(){ const V="20261106200000"; function check(){ fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{ if(!j||!j.v||j.v===V) return; try{ if(sessionStorage.getItem("dd-upd")===j.v) return; sessionStorage.setItem("dd-upd",j.v); }catch(e){} const q=new URLSearchParams(location.search); q.set("v",j.v); location.replace(location.pathname+"?"+q.toString()); }).catch(()=>{}); } addEventListener("load",check); document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible") check(); }); })();</script><button type="button" id="toTop" aria-label="back to the top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15L12 8L19 15"/></svg></button><script id="totop-js">(function(){var b=document.getElementById('toTop');if(!b)return;
 function upd(){var y=innerHeight-10;document.querySelectorAll('.pbar').forEach(function(p){var r=p.getBoundingClientRect(),bt=parseFloat(getComputedStyle(p).bottom);if(!isNaN(bt)&&r.height&&r.bottom>=innerHeight-bt-3&&r.top<y)y=r.top;});
  b.style.bottom=Math.max(10,innerHeight-y+8)+'px';b.classList.toggle('on',scrollY>260);}
 b.onclick=function(){scrollTo({top:0,behavior:'smooth'});};addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);upd();})();</script></body>

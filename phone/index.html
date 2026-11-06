@@ -256,7 +256,10 @@ body:not(.side) .socs{display:flex}   /* in the top layouts (and the stack trial
 .stack .stage{height:calc(100svh - var(--head) - 2 * var(--bar) - 104px);min-height:330px}
 /* the start page fills the whole screen (largest viewport), so all five bars wait together at the bottom however the phone's toolbar is showing */
 .stack #start{min-height:calc(100lvh - var(--head) - 2 * var(--bar) - 147px)}
-.stack.pairs #start{min-height:calc(100lvh - var(--head) - 2 * var(--bar) - 59px)}   /* just tall enough that all bars wait together at the bottom */
+/* 7 Nov (Steuart): a small white strip under the bottom bars, as in PASSAGE - helps not to hit the Android nav buttons by mistake */
+.stack{--foot:12px}
+.stack::after{content:"";position:fixed;left:8px;right:8px;bottom:0;height:calc(var(--foot) + env(safe-area-inset-bottom,0px));background:#fff;z-index:14;pointer-events:none}
+.stack.pairs #start{min-height:calc(100lvh - var(--head) - 2 * var(--bar) - 59px - var(--foot,0px))}   /* just tall enough that all bars wait together at the bottom */
 /* ?stack=2: half bars - each half moves on its own and locks in beside its partner */
 .stack main > .hb{position:sticky;z-index:14;display:flex;align-items:center;height:23px;padding:0 10px;font-size:12px;color:#000;cursor:pointer;-webkit-tap-highlight-color:transparent;
   transition:background-color .15s;
@@ -299,7 +302,7 @@ body:not(.side) .socs{display:flex}   /* in the top layouts (and the stack trial
 .stack main > #legal{margin-top:22px}   /* the same white before the impressum as before a section bar */
 .stack main > #start + .hb{margin-top:14px}   /* about us sits closer under the beetle (23 Oct) */   /* no bar of its own: lands just under the two rows of bars */
 .stack .pg:last-child{min-height:calc(100lvh - var(--head) - 2 * var(--bar) - 132px)}
-.stack.pairs .pg:last-child{min-height:calc(100lvh - var(--head) - 2 * var(--bar) - 44px)}   /* the last page can always scroll up into place */
+.stack.pairs .pg:last-child{min-height:calc(100lvh - var(--head) - 2 * var(--bar) - 44px - var(--foot,0px))}   /* the last page can always scroll up into place */
 .sbar{position:relative;z-index:1;height:1px;margin:10px 10px -1px}   /* one line between two pages, 10 px clear each side (the same as from the side lines to the content) */
 /* page boundary (21 Oct): the desktop's double edge ticks, pointing inwards from both guide lines, each running on as a dotted line right across;
    the two lines are the old title bar's height apart */
@@ -909,7 +912,7 @@ html.nochk .links.chk{gap:14px 10px} html.nochk .links.chk .lk{padding:0;backgro
       sec.before(b);
       b.classList.add('hb', right?'hr':'hl');
       b.dataset.pc=k%5;   /* 1 Nov: each half bar its own pale colour for the start-page pulse, as in PASSAGE */
-      b.style.top=`calc(var(--head) + var(--bar) + ${r*H}px)`; b.style.bottom=`calc(var(--bar) + env(safe-area-inset-bottom,0px) + ${(ROWS-1-r)*H}px)`;
+      b.style.top=`calc(var(--head) + var(--bar) + ${r*H}px)`; b.style.bottom=`calc(var(--bar) + var(--foot,0px) + env(safe-area-inset-bottom,0px) + ${(ROWS-1-r)*H}px)`;
       sec.style.scrollMarginTop=(r*H+22)+'px';   /* lands with its own half bar exactly in its place at the top */
       b.setAttribute('role','link'); b.tabIndex=0; b.addEventListener('click',()=>tapGo(b,sec)); });
     const up=b=>{ const r=b.getBoundingClientRect(); return r.bottom < innerHeight-parseFloat(getComputedStyle(b).bottom)-3; };   /* has left the bottom stack */
@@ -929,7 +932,7 @@ html.nochk .links.chk{gap:14px 10px} html.nochk .links.chk .lk{padding:0;backgro
   } else if(document.body.classList.contains('stack')){
     const H=22, bars=[...document.querySelectorAll('.pg .pbar')], n=bars.length;
     bars.forEach((b,k)=>{ const sec=b.closest('.pg'); sec.before(b);
-      b.style.top=`calc(var(--head) + var(--bar) + ${k*H}px)`; b.style.bottom=`calc(var(--bar) + env(safe-area-inset-bottom,0px) + ${(n-1-k)*H}px)`;
+      b.style.top=`calc(var(--head) + var(--bar) + ${k*H}px)`; b.style.bottom=`calc(var(--bar) + var(--foot,0px) + env(safe-area-inset-bottom,0px) + ${(n-1-k)*H}px)`;
       sec.style.scrollMarginTop=(k*H+22)+'px'; b.setAttribute('role','link'); b.tabIndex=0;
       b.addEventListener('click',()=>tapGo(b,sec)); });
     const up=b=>{ const r=b.getBoundingClientRect(); return r.bottom < innerHeight-parseFloat(getComputedStyle(b).bottom)-3; };   /* has left the bottom stack */

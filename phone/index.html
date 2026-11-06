@@ -984,13 +984,16 @@ html{--bar:0px!important}
 #toTop svg{width:20px;height:20px;fill:none;stroke:#3a3c37;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 
 /* ticks-short */
-.tk{background:repeating-linear-gradient(to right,#b8b8b8 0 4px,transparent 4px 6px) left top/7px 1px no-repeat,repeating-linear-gradient(to right,#b8b8b8 0 4px,transparent 4px 6px) left bottom/7px 1px no-repeat,repeating-linear-gradient(to right,#b8b8b8 0 4px,transparent 4px 6px) right top/7px 1px no-repeat,repeating-linear-gradient(to right,#b8b8b8 0 4px,transparent 4px 6px) right bottom/7px 1px no-repeat!important}
+.tk{background:repeating-linear-gradient(to right,#b8b8b8 0 4px,transparent 4px 6px) left top/var(--tw,7px) 1px no-repeat,repeating-linear-gradient(to right,#b8b8b8 0 4px,transparent 4px 6px) left bottom/var(--tw,7px) 1px no-repeat,repeating-linear-gradient(to right,#b8b8b8 0 4px,transparent 4px 6px) right top/var(--tw,7px) 1px no-repeat,repeating-linear-gradient(to right,#b8b8b8 0 4px,transparent 4px 6px) right bottom/var(--tw,7px) 1px no-repeat!important}
+
+/* edge-align */
+.sec1 main > section.pg:not(#start) > .body :is(p,h2,h3,h4,ul,ol,.lab,.firm,.lh){padding-left:0;padding-right:0}
 </style>
 <script>/* no right-click / long-press menu and no dragging on pictures (24 Oct) - the link logos keep their menu */
 (function(){ const ph=e=>{ const im=e.target.closest&&e.target.closest('img'); return im&&!im.closest('a[href^="http"]'); };
   document.addEventListener('contextmenu',e=>{ if(ph(e)) e.preventDefault(); },true);
   document.addEventListener('dragstart',e=>{ if(e.target.closest&&e.target.closest('img')) e.preventDefault(); },true); })();</script>
-<script>/* automatic update check (25 Oct): reload once when a newer build is on the server */ (function(){ const V="20261106233000"; function check(){ fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{ if(!j||!j.v||j.v===V) return; try{ if(sessionStorage.getItem("dd-upd")===j.v) return; sessionStorage.setItem("dd-upd",j.v); }catch(e){} const q=new URLSearchParams(location.search); q.set("v",j.v); location.replace(location.pathname+"?"+q.toString()); }).catch(()=>{}); } addEventListener("load",check); document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible") check(); }); })();</script><button type="button" id="toTop" aria-label="back to the top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15L12 8L19 15"/></svg></button><script id="totop-js">(function(){var b=document.getElementById('toTop');if(!b)return;
+<script>/* automatic update check (25 Oct): reload once when a newer build is on the server */ (function(){ const V="20261107000000"; function check(){ fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{ if(!j||!j.v||j.v===V) return; try{ if(sessionStorage.getItem("dd-upd")===j.v) return; sessionStorage.setItem("dd-upd",j.v); }catch(e){} const q=new URLSearchParams(location.search); q.set("v",j.v); location.replace(location.pathname+"?"+q.toString()); }).catch(()=>{}); } addEventListener("load",check); document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible") check(); }); })();</script><button type="button" id="toTop" aria-label="back to the top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15L12 8L19 15"/></svg></button><script id="totop-js">(function(){var b=document.getElementById('toTop');if(!b)return;
 function upd(){var y=innerHeight-10;document.querySelectorAll('.pbar').forEach(function(p){var r=p.getBoundingClientRect(),bt=parseFloat(getComputedStyle(p).bottom);if(!isNaN(bt)&&r.height&&r.bottom>=innerHeight-bt-3&&r.top<y)y=r.top;});
  b.style.bottom=Math.max(10,innerHeight-y+8)+'px';b.classList.toggle('on',scrollY>260);}
 b.onclick=function(){scrollTo({top:0,behavior:'smooth'});};addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);upd();})();</script><script id="ticks-js">(function(){var q=function(s){return document.querySelector(s)};
@@ -1004,7 +1007,7 @@ function place(){var t=q('.tk.t'),b=q('.tk.b'),m=q('.tk.m');if(!t||!b)return;
  function set(e,top,h){if(top===null){e.style.removeProperty('top');e.style.removeProperty('height');e.style.removeProperty('bottom');return;}e.style.setProperty('top',Math.round(top-off(e))+'px','important');e.style.setProperty('bottom','auto','important');e.style.setProperty('height',h+'px','important');e.style.setProperty('display','block','important');}
  if(hl!==null)set(t,hl,11);
  set(m,innerHeight/2-5.5,11);
- if(last){var rh=Math.round(last.getBoundingClientRect().height),bt=hs&&vis(hs)&&!last.classList.contains('pbar')?hs.getBoundingClientRect().bottom:innerHeight-(parseFloat(getComputedStyle(last).bottom)||0);set(b,bt-11,11);}else set(b,null);}
+ var bl=null;bars.forEach(function(x){var l=x.getBoundingClientRect().left;if(bl===null||l<bl)bl=l;});if(bl!==null)document.documentElement.style.setProperty('--tw',Math.max(4,Math.round(bl-8))+'px');if(last){var rh=Math.round(last.getBoundingClientRect().height),bt=hs&&vis(hs)&&!last.classList.contains('pbar')?hs.getBoundingClientRect().bottom:innerHeight-(parseFloat(getComputedStyle(last).bottom)||0);set(b,bt-11,11);}else set(b,null);}
 place();addEventListener('resize',place);setInterval(place,600);
 })();</script>
 </body>

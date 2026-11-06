@@ -912,7 +912,8 @@ html.nochk .links.chk{gap:14px 10px} html.nochk .links.chk .lk{padding:0;backgro
       sec.style.scrollMarginTop=(r*H+22)+'px';   /* lands with its own half bar exactly in its place at the top */
       b.setAttribute('role','link'); b.tabIndex=0; b.addEventListener('click',()=>tapGo(b,sec)); });
     const up=b=>{ const r=b.getBoundingClientRect(); return r.bottom < innerHeight-parseFloat(getComputedStyle(b).bottom)-3; };   /* has left the bottom stack */
-    const cur=()=>{ let c=-1; bars.forEach((b,k)=>{ if(up(b)) c=k; });
+    const arrived=b=>b.getBoundingClientRect().top<=parseFloat(getComputedStyle(b).top)+2;   /* the moving bar stays lit until it has arrived at the top */
+    const cur=()=>{ let c=-1; for(let k=0;k<bars.length;k++){ if(!up(bars[k])) continue; c=k; if(!arrived(bars[k])) break; }
       bars.forEach((b,k)=>b.classList.toggle('on',k===c)); document.body.classList.toggle('inpg',c>=0); };
     /* white backing behind the stacks, so no page shows through the empty half of a row */
     const bt=document.createElement('div'), bb=document.createElement('div'); bt.className='sback t'; bb.className='sback b'; document.body.append(bt,bb);
@@ -931,7 +932,8 @@ html.nochk .links.chk{gap:14px 10px} html.nochk .links.chk .lk{padding:0;backgro
       sec.style.scrollMarginTop=(k*H+22)+'px'; b.setAttribute('role','link'); b.tabIndex=0;
       b.addEventListener('click',()=>tapGo(b,sec)); });
     const up=b=>{ const r=b.getBoundingClientRect(); return r.bottom < innerHeight-parseFloat(getComputedStyle(b).bottom)-3; };   /* has left the bottom stack */
-    const cur=()=>{ let c=-1; bars.forEach((b,k)=>{ if(up(b)) c=k; });
+    const arrived=b=>b.getBoundingClientRect().top<=parseFloat(getComputedStyle(b).top)+2;   /* the moving bar stays lit until it has arrived at the top */
+    const cur=()=>{ let c=-1; for(let k=0;k<bars.length;k++){ if(!up(bars[k])) continue; c=k; if(!arrived(bars[k])) break; }
       bars.forEach((b,k)=>b.classList.toggle('on',k===c)); document.body.classList.toggle('inpg',c>=0); };
     addEventListener('scroll',cur,{passive:true}); cur();
   }

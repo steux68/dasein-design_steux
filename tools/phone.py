@@ -303,7 +303,7 @@ HTML = f'''<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="icon" type="image/png" href="../icon-192.png"><meta name="theme-color" content="#ffffff"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="dasein-design"><script id="start-top">(function(){{try{{if("scrollRestoration" in history)history.scrollRestoration="manual";var K="start-seen",LIM=5000,base=location.pathname+location.search;function get(){{try{{return +sessionStorage.getItem(K)||0}}catch(e){{return 0}}}}function put(){{try{{sessionStorage.setItem(K,String(Date.now()))}}catch(e){{}}}}function stale(){{var p=get();return p&&Date.now()-p>LIM}}function reset(){{try{{sessionStorage.removeItem(K)}}catch(e){{}}location.replace(base)}}if(stale()&&location.hash){{reset();return}}put();function back(){{if(stale())reset();else put()}}setInterval(function(){{if(document.visibilityState==="visible")put()}},3000);document.addEventListener("visibilitychange",function(){{if(document.visibilityState==="hidden")put();else back()}});addEventListener("pageshow",function(e){{if(e.persisted)location.reload();else back()}});addEventListener("focus",back);document.addEventListener("resume",back);addEventListener("pagehide",put);}}catch(e){{}}}})();</script><script id="sw-reg">if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("load",function(){{navigator.serviceWorker.register("../sw.js").catch(function(){{}});}});</script>
-<title>dasein-design · phone preview</title>
+<title>dasein-design · architecture + design · Wien</title>
 <link rel="stylesheet" href="../fonts.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
@@ -1288,7 +1288,10 @@ UPDATE = ('<script>/* automatic update check (25 Oct): reload once when a newer 
           ' try{ if(sessionStorage.getItem("dd-upd")===j.v) return; sessionStorage.setItem("dd-upd",j.v); }catch(e){}'
           ' const q=new URLSearchParams(location.search); q.set("v",j.v); location.replace(location.pathname+"?"+q.toString()); }).catch(()=>{}); }'
           ' addEventListener("load",check); document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible") check(); }); })();</script>')
-open(OUT, 'w').write(HTML.replace('</body>', NOCOPY + UPDATE + '</body>', 1))
+# 10 Nov 2026 (UI audit A1, A6): one frame only round tiles and pop-up photos (the fine dotted ::after line; the browser's own dotted border is hidden),
+# and buttons without a font of their own (scroll / back to the top) take the page font instead of Arial
+UIFIX = '<style>button{font-family:Calibri,Carlito,sans-serif}.tile,.phw{border-color:transparent!important}</style>'
+open(OUT, 'w').write(HTML.replace('</head>', UIFIX + '</head>', 1).replace('</body>', NOCOPY + UPDATE + '</body>', 1))
 open(os.path.join(ROOT, 'phone', 'version.json'), 'w').write('{"v":"' + VERSION + '"}\n')
 if __name__ == '__main__':
     print(len(pieces), 'pieces,', len(HTML) // 1024, 'KB ->', OUT)

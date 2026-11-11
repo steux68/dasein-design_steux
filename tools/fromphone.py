@@ -720,6 +720,9 @@ IMP_CSS = """
 .impfull{z-index:7;display:none;column-count:5;column-gap:20px;font-size:11px;line-height:1.42} .impfull h4{font-size:11px;margin-top:8px} .impfull .lp{font-size:10.5px} .impo .impfull{display:block} .impo .impb{visibility:hidden}
 .imptint{position:absolute;left:235px;top:815px;width:1080px;height:178px;background:#f4f4f2;transition:top .45s ease,height .45s ease}   /* the short impressum on a pale grey band from the tick mark above "contact" to the foot, a whole tick clear of the map (23 Oct, 13:31) */
 .impo .imptint{top:630px;height:363px}   /* "full impressum" grows the band up to just under the map, with the whole text */
+.impsc{position:absolute;z-index:7;display:none;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#b8b8b8 transparent} .impo .impsc{display:block}
+.impsc .impfull{display:block;position:static;width:100%;height:auto}   /* 11 Nov: the open impressum scrolls inside its band; the long Datenschutz block may break across columns so the five columns balance */
+.impfull .ib.lg,.impfull .ib.lg p{break-inside:auto;-webkit-column-break-inside:auto} .impfull .ib.lg{overflow:visible}
 .impo .impfull{animation:impin .35s .15s ease-out both} @keyframes impin{from{opacity:0}to{opacity:1}}
 @media (prefers-reduced-motion:reduce){.imptint{transition:none}.impo .impfull{animation:none}}
 .dimp{left:235px;top:960px;width:1080px;height:28px;padding:0 0 0 2px;
@@ -768,10 +771,10 @@ def _contact_imp(s):
     parts = re.findall(r'(<h4>.*?</h4>)(<p[^>]*>.*?</p>)', LEGAL_BODY, re.S)
     get = {re.sub('<.*?>', '', h): h + t for h, t in parts}
     lp = re.search(r'<p class="lp">.*?</p>', LEGAL_BODY).group(0)
-    legal = re.sub(r'(<h4>.*?</h4>)(<p[^>]*>.*?</p>)', r'<div class="ib">\1\2</div>', LEGAL_BODY, flags=re.S)
+    legal = re.sub(r'(<h4>.*?</h4>)(<p[^>]*>.*?</p>)', lambda m: '<div class="ib' + (' lg' if len(m.group(0)) > 900 else '') + '">' + m.group(1) + m.group(2) + '</div>', LEGAL_BODY, flags=re.S)
     add = (f'<div class="imptint" aria-hidden="true"></div><div class="impb" style="left:235px;top:825px;width:420px"><p class="lab2">IMPRESSUM</p>{lp}{get["Unternehmensgegenstand"]}</div>'
            f'<div class="impb" style="left:675px;top:825px;width:420px">{get["Medieninhaber, Herausgeber und Diensteanbieter"]}</div>'
-           f'<div class="impc impfull" style="left:235px;top:640px;width:1080px;height:312px"><p class="lab2">IMPRESSUM</p>{legal}</div>'
+           f'<div class="impsc" style="left:235px;top:640px;width:1080px;height:312px"><div class="impc impfull"><p class="lab2">IMPRESSUM</p>{legal}</div></div>'
            f'<button type="button" class="dcv dimp" id="dimp" aria-expanded="false">{PLUS}<span class="cvt"><span class="op">full</span><span class="cl">close</span></span><b>impressum</b></button>')
     a = '<section class="pg" id="contact"><div class="bg-white relative frame">'
     s = _rep(a, a + add, s)

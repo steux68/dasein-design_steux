@@ -64,7 +64,7 @@ hot += SEARCH.BUTTON   # thin red magnifier + search pop-up
 hot += '<a class="hot" href="#intro" style="left:115px;top:0;width:110px;height:365px" aria-label="dasein-design home"></a>'
 
 html = f'''<!doctype html>
-<html lang="de">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">

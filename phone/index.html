@@ -8,11 +8,11 @@
 <link rel="stylesheet" href="../fonts.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
-:root{--dh:repeating-linear-gradient(to right,var(--dot) 0 1px,transparent 1px 3px);--dv:repeating-linear-gradient(to bottom,var(--dot) 0 1px,transparent 1px 3px);--bar:30px;--red:#e30613;--lime:rgba(205,255,62,.86);--green:#a5e35a;--grey:#ebebeb;--line:#c4c4c4;--dot:#b8b8b8;--hp:1px;--head:118px;--side:0px;--ttl:44px}
+:root{--dh:repeating-linear-gradient(to right,var(--dot) 0 1px,transparent 1px 3px);--dv:repeating-linear-gradient(to bottom,var(--dot) 0 1px,transparent 1px 3px);--gh:repeating-linear-gradient(to right,var(--line) 0 4px,transparent 4px 7px);--gv:repeating-linear-gradient(to bottom,var(--line) 0 4px,transparent 4px 7px);--bar:30px;--red:#e30613;--lime:rgba(205,255,62,.86);--green:#a5e35a;--grey:#ebebeb;--line:#c4c4c4;--dot:#b8b8b8;--hp:1px;--head:118px;--side:0px;--ttl:44px}
 /* logo on the side: a narrow strip down the left with the mark and the name, the header only holds the tabs */
 .side{--side:42px}
 .sidebar{display:none}
-.side .sidebar{display:flex;position:fixed;left:0;top:0;bottom:0;width:var(--side);z-index:21;background:#fff;border-right:1px dashed var(--line);
+.side .sidebar{display:flex;position:fixed;left:0;top:0;bottom:0;width:var(--side);z-index:21;background:#fff;border-right:1px solid transparent;border-image:var(--gv) 1;
   flex-direction:column;align-items:center;padding:calc(env(safe-area-inset-top,0px) + 10px) 0 14px;text-decoration:none;color:var(--red)}
 .sidebar img{width:28px;height:28px;flex:none}
 .sidebar span{margin-top:14px;writing-mode:vertical-rl;transform:rotate(180deg);font-size:27px;line-height:1;white-space:nowrap}
@@ -21,10 +21,10 @@
 /* all on the side: the mark and name in one narrow column, the four tabs running down a second one; no bar across the top */
 .side.rail{--side:40px;--logoh:168px}
 /* all side: ONE narrow strip down the left - the mark and "dasein-design" (a little smaller) at the top, the four tabs below it, sharing the rest of the height */
-.side.rail .sidebar{width:var(--side);bottom:auto;height:calc(env(safe-area-inset-top,0px) + var(--logoh));padding-top:calc(env(safe-area-inset-top,0px) + 8px);padding-bottom:0;border-right:1px dashed var(--line)}
+.side.rail .sidebar{width:var(--side);bottom:auto;height:calc(env(safe-area-inset-top,0px) + var(--logoh));padding-top:calc(env(safe-area-inset-top,0px) + 8px);padding-bottom:0;border-right:1px solid transparent;border-image:var(--gv) 1}
 .side.rail .sidebar img{width:24px;height:24px}
 .side.rail .sidebar span{margin-top:9px;font-size:20px}
-.side.rail header{left:0;right:auto;top:calc(env(safe-area-inset-top,0px) + var(--logoh));bottom:0;width:var(--side);padding:6px 5px calc(env(safe-area-inset-bottom,0px) + 6px);border-bottom:0;border-right:1px dashed var(--line)}
+.side.rail header{left:0;right:auto;top:calc(env(safe-area-inset-top,0px) + var(--logoh));bottom:0;width:var(--side);padding:6px 5px calc(env(safe-area-inset-bottom,0px) + 6px);border-bottom:0;border-right:1px solid transparent;border-image:var(--gv) 1}
 .side.rail .row1{min-height:0;height:0}
 .side.rail nav{display:flex;flex-direction:column;height:100%;margin:0;gap:5px}
 .side.rail .tab{flex:1;min-height:0;height:auto;writing-mode:vertical-rl;transform:rotate(180deg);padding:3px 0;font-size:min(12.5px,1.75svh);gap:3px;overflow:hidden}
@@ -45,7 +45,7 @@ body{margin:0;background:#fff;color:#000;font:400 15px/1.35 Calibri,Carlito,sans
 a{color:inherit}
 /* header: logo, then the five tabs in two rows (3 + 2) */
 header{position:fixed;left:0;right:0;top:0;z-index:20;background:#fff;padding:calc(env(safe-area-inset-top,0px) + 8px) max(10px,env(safe-area-inset-right,0px)) 8px max(10px,env(safe-area-inset-left,0px));
-  border-bottom:1px dashed var(--line)}
+  border-bottom:1px solid transparent;border-image:var(--gh) 1}
 .row1{display:flex;align-items:center}
 .side .row1{min-height:14px}
 .logo{flex:none;white-space:nowrap;display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--red);height:34px}
@@ -69,10 +69,10 @@ body{position:relative}
 .pg{position:relative}   /* pages are as tall as their content, so the white above each page bar is always the same */
 /* thin white bars at the top and bottom of the screen with the N and S arrows: previous / next page */
 .bar{position:fixed;left:var(--side);right:8px;z-index:15;height:var(--bar);display:flex;align-items:center;justify-content:center;background:#fff}
-.bar.btop{top:var(--head);border-bottom:1px dashed var(--line)}
-.bar.bbot{bottom:0;height:calc(var(--bar) + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);border-top:1px dashed var(--line);align-items:flex-start}
+.bar.btop{top:var(--head);border-bottom:1px solid transparent;border-image:var(--gh) 1}
+.bar.bbot{bottom:0;height:calc(var(--bar) + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);border-top:1px solid transparent;border-image:var(--gh) 1;align-items:flex-start}
 .bar.bbot > button{height:var(--bar)}
-.bar.bbot::after{content:"";position:absolute;left:0;right:0;top:calc(var(--bar) - 1px);border-top:1px dashed var(--line);pointer-events:none}   /* a second line under the arrow, as at the top (23 Oct) */
+.bar.bbot::after{content:"";position:absolute;left:0;right:0;top:calc(var(--bar) - 1px);border-top:1px solid transparent;border-image:var(--gh) 1;pointer-events:none}   /* a second line under the arrow, as at the top (23 Oct) */
 .bar button{border:0;background:none;padding:3px 24px;display:flex;-webkit-tap-highlight-color:transparent;transition:opacity .2s}
 .bar button:disabled{opacity:.2}
 #goS .up{display:none!important;align-items:center;gap:6px} #goS.top .dn{display:none} #goS.top .up{display:flex!important}
@@ -99,7 +99,7 @@ body{position:relative}
 .wonder[hidden]{display:none}
 .whd{padding:22px 0 8px} .whd h2{margin:0;font-size:30px;font-weight:700;color:var(--red);letter-spacing:.01em} .whd p{margin:2px 0 0;font-size:14px;color:#666}
 .whd .wtrial{margin-top:6px;font-size:12px;letter-spacing:.06em;color:#aaa}
-.wchips{position:sticky;top:0;z-index:2;display:flex;flex-direction:column;gap:6px;padding:10px 0;background:#fff;border-bottom:1px dashed var(--line)}
+.wchips{position:sticky;top:0;z-index:2;display:flex;flex-direction:column;gap:6px;padding:10px 0;background:#fff;border-bottom:1px solid transparent;border-image:var(--gh) 1}
 .wrow{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch} .wrow::-webkit-scrollbar{display:none}
 .wch{flex:none;border:1px dotted #b8b8b8;background:#fff;border-radius:14px;padding:4px 11px;font:inherit;font-size:12px;color:#333;white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .wch.on{background:#cdff3e;border-style:solid;border-color:#3a3c37;color:#000;font-weight:700}
@@ -143,7 +143,7 @@ body{position:relative}
 .wonder .wgrid{display:block;position:relative;margin-top:6px;grid-template-columns:repeat(5,1fr);grid-auto-rows:calc((100vw - 36px - 12px) / 5);grid-auto-flow:dense;gap:3px;margin-top:10px}
 .wempty{display:block;background:#fff}
 .wonder .wgrid > *{position:relative;box-sizing:border-box;border:0;margin:0;width:auto;height:auto}
-.wonder .wgrid .wg{aspect-ratio:auto;background:#f4f4f4;padding:0;overflow:hidden} .wonder .wgrid .wg img{width:100%;height:100%;object-fit:cover!important}   /* cropped to the cell, like the project tiles */
+.wonder .wgrid .wg{aspect-ratio:auto;background:#f4f4f2;padding:0;overflow:hidden} .wonder .wgrid .wg img{width:100%;height:100%;object-fit:cover!important}   /* cropped to the cell, like the project tiles */
 .wcw{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:2px;background:#f2f2f2;font:inherit;color:#000;cursor:pointer;-webkit-tap-highlight-color:transparent;overflow:hidden}
 .wcw b{font-weight:700;line-height:1;white-space:nowrap} .wcw small{font-size:9px;color:#666} .wcw.on{background:#cdff3e} .wcw.on b{color:var(--red)} .wcw:active{background:#cdff3e}   /* a tight carpet: no gaps, only the white left over round each photo */
 .wonder .wg.t{display:none!important}   /* no text tiles in the carpet - photos only */
@@ -163,7 +163,7 @@ body{position:relative}
 .wcard .top{position:static;background:none;padding:8px 10px 4px}
 .wonder .wpbody{flex:1 1 auto;overflow-y:auto;padding:0 12px 6px}
 .wonder .wpop .wpnav{display:none}   /* 23 Oct: the arrows on the photo and the swipe are enough - no previous / next row */
-.wpbody .wpi{display:block;width:100%;aspect-ratio:1/1;object-fit:contain;background:#f6f6f6;margin:0;outline:1px dotted #b8b8b8;outline-offset:-1px}   /* the whole photo, whatever its format; grey fills the rest of the square, as in the project pop-up */
+.wpbody .wpi{display:block;width:100%;aspect-ratio:1/1;object-fit:contain;background:#f4f4f2;margin:0;outline:1px dotted #b8b8b8;outline-offset:-1px}   /* the whole photo, whatever its format; grey fills the rest of the square, as in the project pop-up */
 .wpbody .wpq{margin-top:0}
 .wph{position:relative;touch-action:pan-y}   /* W / E arrows on the photo, as in the project pop-up (23 Oct) */
 .wph button{position:absolute;top:50%;margin-top:-21px;width:42px;height:42px;border:0;padding:0;border-radius:50%;background:rgba(255,255,255,.82);display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent}
@@ -187,7 +187,7 @@ body{position:relative}
 .wview{display:flex;justify-content:flex-end;gap:0;margin-top:2px} .wview button{border:0;background:none;font:inherit;font-size:12px;letter-spacing:.06em;color:#999;padding:2px 6px;cursor:pointer}
 .wview button.on{color:#000;font-weight:700} .wview button+button{border-left:1px solid #ccc}
 .wgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:12px}
-.wg{position:relative;aspect-ratio:1/1;padding:0;border:0;background:#f4f4f4;overflow:hidden;cursor:pointer;font:inherit;text-align:left;-webkit-tap-highlight-color:transparent}
+.wg{position:relative;aspect-ratio:1/1;padding:0;border:0;background:#f4f4f2;overflow:hidden;cursor:pointer;font:inherit;text-align:left;-webkit-tap-highlight-color:transparent}
 .wg::after{content:"";position:absolute;inset:0;pointer-events:none;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat}
 .wg img{width:100%;height:100%;object-fit:cover;display:block}
 .wg .gc{position:absolute;left:0;right:0;bottom:0;padding:2px 5px 3px;background:rgba(68,68,68,.7);color:#fff;font-size:12px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -196,10 +196,10 @@ body{position:relative}
 .wg.t small{font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--red);font-weight:700}
 .wg[hidden]{display:none}
 .wpop{position:fixed;left:0;right:0;top:var(--head);bottom:0;z-index:35;background:#fff;display:flex;flex-direction:column}
-.wpop .wpnav{flex:none;display:flex;justify-content:space-between;align-items:center;padding:8px 14px calc(env(safe-area-inset-bottom,0px) + 10px);border-top:1px dashed var(--line)}
+.wpop .wpnav{flex:none;display:flex;justify-content:space-between;align-items:center;padding:8px 14px calc(env(safe-area-inset-bottom,0px) + 10px);border-top:1px solid transparent;border-image:var(--gh) 1}
 .wpop .wpnav button{display:flex;align-items:center;gap:6px;width:auto;height:auto;border:0;border-radius:0;background:none;font:inherit;font-size:14px;color:#000;padding:4px}
 .wpop[hidden]{display:none}
-.wpbar{flex:none;display:flex;align-items:center;gap:10px;padding:10px 18px;border-bottom:1px dashed var(--line)}
+.wpbar{flex:none;display:flex;align-items:center;gap:10px;padding:10px 18px;border-bottom:1px solid transparent;border-image:var(--gh) 1}
 .wback{border:1px solid #3a3c37;border-radius:14px;background:#cdff3e;padding:5px 12px;font:inherit;font-size:14px;font-weight:700;cursor:pointer}
 #wpk{flex:1;font-size:12px;letter-spacing:.06em;color:#888;text-align:center}
 
@@ -353,7 +353,7 @@ html,body{overflow-x:clip}
 .hint{text-align:center;font-size:12px;color:#666;letter-spacing:.06em;margin:0;padding:4px 0 10px}
 /* projects: tiles in two columns */
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.tile{position:relative;display:block;font:inherit;color:inherit;aspect-ratio:1/1;padding:0;border:0;background:#f4f4f4;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.tile{position:relative;display:block;font:inherit;color:inherit;aspect-ratio:1/1;padding:0;border:0;background:#f4f4f2;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .tile img{width:100%;height:100%;object-fit:cover;display:block}
 .tile::after{content:"";position:absolute;inset:0;pointer-events:none;
   background:repeating-linear-gradient(to right,var(--dot) 0 1px,transparent 1px 3px) left top/100% 1px no-repeat,repeating-linear-gradient(to right,var(--dot) 0 1px,transparent 1px 3px) left bottom/100% 1px no-repeat,
@@ -982,7 +982,7 @@ img{-webkit-user-drag:none;user-drag:none;-webkit-user-select:none;user-select:n
 /* totop */
 html{--bar:0px!important}
 .bar{border:0!important;background:none!important;pointer-events:none}.bar::after{display:none!important}.bar button{display:none!important}
-#toTop{position:fixed;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:40;width:34px;height:34px;padding:0;display:flex;align-items:center;justify-content:center;
+#toTop{position:fixed;right:18px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:40;width:34px;height:34px;padding:0;display:flex;align-items:center;justify-content:center;
  background:rgba(255,255,255,.94);border:1px dotted #b8b8b8;border-radius:0;opacity:0;pointer-events:none;transition:opacity .25s;-webkit-tap-highlight-color:transparent}
 #toTop.on{opacity:1;pointer-events:auto}
 #toTop svg{width:20px;height:20px;fill:none;stroke:#3a3c37;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
@@ -1007,7 +1007,7 @@ header{padding-left:18px!important;padding-right:18px!important}
 (function(){ const ph=e=>{ const im=e.target.closest&&e.target.closest('img'); return im&&!im.closest('a[href^="http"]'); };
   document.addEventListener('contextmenu',e=>{ if(ph(e)) e.preventDefault(); },true);
   document.addEventListener('dragstart',e=>{ if(e.target.closest&&e.target.closest('img')) e.preventDefault(); },true); })();</script>
-<script>/* automatic update check (25 Oct): reload once when a newer build is on the server */ (function(){ const V="20261111200647"; function check(){ fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{ if(!j||!j.v||j.v===V) return; try{ if(sessionStorage.getItem("dd-upd")===j.v) return; sessionStorage.setItem("dd-upd",j.v); }catch(e){} const q=new URLSearchParams(location.search); q.set("v",j.v); location.replace(location.pathname+"?"+q.toString()); }).catch(()=>{}); } addEventListener("load",check); document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible") check(); }); })();</script><button type="button" id="toTop" aria-label="back to the top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15L12 8L19 15"/></svg></button><script id="totop-js">(function(){var b=document.getElementById('toTop');if(!b)return;
+<script>/* automatic update check (25 Oct): reload once when a newer build is on the server */ (function(){ const V="20261111201104"; function check(){ fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{ if(!j||!j.v||j.v===V) return; try{ if(sessionStorage.getItem("dd-upd")===j.v) return; sessionStorage.setItem("dd-upd",j.v); }catch(e){} const q=new URLSearchParams(location.search); q.set("v",j.v); location.replace(location.pathname+"?"+q.toString()); }).catch(()=>{}); } addEventListener("load",check); document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible") check(); }); })();</script><button type="button" id="toTop" aria-label="back to the top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15L12 8L19 15"/></svg></button><script id="totop-js">(function(){var b=document.getElementById('toTop');if(!b)return;
 function upd(){var y=innerHeight-10;document.querySelectorAll('.pbar').forEach(function(p){var r=p.getBoundingClientRect(),bt=parseFloat(getComputedStyle(p).bottom);if(!isNaN(bt)&&r.height&&r.bottom>=innerHeight-bt-3&&r.top<y)y=r.top;});
  b.style.bottom=Math.max(10,innerHeight-y+8)+'px';b.classList.toggle('on',scrollY>260);}
 b.onclick=function(){scrollTo({top:0,behavior:'smooth'});};addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);upd();})();</script><script id="ticks-js">(function(){var q=function(s){return document.querySelector(s)};

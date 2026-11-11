@@ -522,7 +522,7 @@ WONDER_CSS = """
 .dwfb.on small{display:none} .dwfb.on::after{content:"× all";margin-left:4px;font-size:11px;font-weight:700;opacity:.85}   /* the chosen category offers the way back to all photos */
 .dwpop{position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.62);backdrop-filter:blur(1.5px)}
 .dwpop[hidden]{display:none}
-.dwcard{width:560px;background:#fff;box-shadow:0 2px 18px rgba(0,0,0,.18);border:1px dotted #b8b8b8;font-family:Calibri,Carlito,sans-serif}
+.dwcard{width:560px;background:#fff;box-shadow:0 2px 18px rgba(0,0,0,.18);--w:calc(1px / (var(--s,1) * var(--dpr,1)));border:1px solid transparent;background:#fff;background-origin:border-box;background-repeat:no-repeat;background-image:repeating-linear-gradient(to right,#b8b8b8 0 var(--w),transparent var(--w) calc(var(--w)*3)),repeating-linear-gradient(to right,#b8b8b8 0 var(--w),transparent var(--w) calc(var(--w)*3)),repeating-linear-gradient(to bottom,#b8b8b8 0 var(--w),transparent var(--w) calc(var(--w)*3)),repeating-linear-gradient(to bottom,#b8b8b8 0 var(--w),transparent var(--w) calc(var(--w)*3));background-position:left top,left bottom,left top,right top;background-size:100% var(--w),100% var(--w),var(--w) 100%,var(--w) 100%;font-family:Calibri,Carlito,sans-serif}
 .dwtop{display:flex;justify-content:space-between;align-items:center;padding:10px 14px 6px;font-size:13px;color:#666;letter-spacing:.06em} .dwtop b{color:#e30613;font-weight:400}
 .dwx{border:0;background:none;padding:2px;cursor:pointer} .dwx svg{width:24px;height:24px} .dwx .rg{fill:none;stroke:#3a3c37;stroke-width:.6} .dwx .xx{fill:none;stroke:#1a1a1a;stroke-width:1.15;stroke-linecap:round} .dwx:hover .rg,.dwx:focus-visible .rg{stroke:#e30613} .dwx .xx{transition:stroke .2s} .dwx:hover .xx,.dwx:focus-visible .xx{stroke:#e30613}
 .dwx:hover svg,.dwx:focus-visible svg{animation:lbxp 1.4s ease-in-out infinite} .dwx:focus-visible{outline:none}   /* the close pulses on hover, like the project pop-up's (23 Oct) */
@@ -530,7 +530,7 @@ WONDER_CSS = """
 .dwbody{padding:0 14px 8px} .dwbody img{display:block;width:100%;aspect-ratio:1/1;object-fit:contain;background:#f6f6f6;outline:1px dotted #b8b8b8;outline-offset:-1px}
 .dwbody img{cursor:none}   /* the floating W / E arrow takes over (23 Oct) */
 .dwbody .d{margin:10px 0 2px;font-size:13px;letter-spacing:.06em;color:#888} .dwbody .l{margin:0 0 4px;font-size:18px;color:#222}
-.dwnav{display:flex;justify-content:space-between;padding:8px 12px 10px;border-top:1px dashed #c4c4c4}
+.dwnav{display:flex;justify-content:space-between;padding:8px 12px 10px;border-top:1px solid transparent;border-image:repeating-linear-gradient(to right,#c4c4c4 0 4px,transparent 4px 7px) 1}
 .dwnav button{display:flex;align-items:center;gap:7px;border:0;background:none;font:14px Calibri,Carlito,sans-serif;cursor:pointer;padding:3px} .dwnav button:hover{color:#e30613}
 """
 

@@ -86,10 +86,10 @@ a[href^="tel:"]{color:#1e8e3e;text-decoration:none} a[href^="mailto:"]{color:#1a
 .hot.pin.near{animation:pinpulse 1.5s ease-in-out infinite}
 @media (prefers-reduced-motion:reduce){.hot.pin,.pin .cr{animation:none}}
 /* texts */
-.ptx{position:absolute;font:400 12px/1.4 Calibri,Carlito,sans-serif;color:#222;margin:0}
+.ptx{position:absolute;font:400 12px/1.3 Carlito,Calibri,sans-serif;color:#222;margin:0}
 .ptx p{margin:0 0 6px} .ptx .lab2{font-weight:700;font-size:11px;letter-spacing:.12em;color:#e30613;margin-bottom:4px}
-.ptx.bio{font-size:11px;line-height:1.35} .ptx.bio p{margin-bottom:4px}
-.ptx.end{font-family:Calibri,Carlito,sans-serif;font-weight:700;font-size:12px;line-height:normal;color:#000}   /* in the contact address type */
+.ptx.bio{font-size:11px;line-height:1.3} .ptx.bio p{margin-bottom:4px}
+.ptx.end{font-family:Carlito,Calibri,sans-serif;font-weight:700;font-size:12px;line-height:normal;color:#222}   /* in the contact address type */
 .ptx.end .hd{font-style:normal;font-weight:700;margin:0 .35em}
 .ptx.end .hd:first-child{margin-left:0}
 /* pop-up: close like the compass signs; the counter between previous and next */
@@ -100,13 +100,13 @@ a[href^="tel:"]{color:#1e8e3e;text-decoration:none} a[href^="mailto:"]{color:#1a
 /* project counter at the top, centred on the pop-up and level with the close cross, the previous / next project arrows either side (23 Oct) */
 .lbk{left:50%;right:auto;top:30px;transform:translateX(-50%);gap:10px;z-index:4}
 .lbk .ar{width:22px;height:22px}
-.lbk .lbkc{display:inline-block;min-width:13.5em;text-align:center;white-space:nowrap;font:400 13px/25px Calibri,Carlito,sans-serif;color:#666;letter-spacing:.06em;font-variant-numeric:tabular-nums}   /* room for three-figure numbers (100+) so the arrows never shift */
+.lbk .lbkc{display:inline-block;min-width:13.5em;text-align:center;white-space:nowrap;font:400 13px/25px Carlito,Calibri,sans-serif;color:#555;letter-spacing:.06em;font-variant-numeric:tabular-nums}   /* room for three-figure numbers (100+) so the arrows never shift */
 .lbk .lbkc b{color:#e30613;font-weight:400}
 /* the two long CVs on the us & our services page end just over half way down, faded, with a "full CV" opener; open, they run to the foot as designed */
 [data-node-id="1:622"],[data-node-id="1:623"]{max-height:165px;overflow:hidden;overscroll-behavior:contain;transition:max-height .45s ease;
   -webkit-mask-image:linear-gradient(#000 62%,transparent);mask-image:linear-gradient(#000 62%,transparent)}
 .frame.cvo1 [data-node-id="1:623"],.frame.cvo2 [data-node-id="1:622"]{max-height:335px;overflow-y:auto;-webkit-mask-image:none;mask-image:none}
-.dcv{position:absolute;z-index:6;display:flex;align-items:center;gap:6px;border:0;background:none;padding:0;cursor:pointer;font:400 13px/1 Calibri,Carlito,sans-serif;letter-spacing:.04em;color:#000}
+.dcv{position:absolute;z-index:6;display:flex;align-items:center;gap:8px;border:0;background:none;padding:0;cursor:pointer;font:400 13px/1 Carlito,Calibri,sans-serif;letter-spacing:.04em;color:#222}
 .dcv b{color:#e30613;font-weight:700;font-size:14px;margin-left:-2px} .dcv .cvt{font-weight:300}
 .dcv svg{width:20px;height:20px;overflow:visible}
 .dcv .c{fill:#fff;stroke:#e30613;stroke-width:1.5} .dcv path{stroke:#e30613;stroke-width:1.6;stroke-linecap:round}
@@ -132,21 +132,21 @@ a[href^="mailto:"],a[href^="mailto:"] span{text-decoration:none!important}
 /* impressum: a small dot above the copyright in the right-hand bar; it opens a pop-up */
 /* impressum: written upwards above the copyright like it - a circled i (like the ©) that flashes now and then; red on hover */
 .hot.imp{display:flex;justify-content:center;text-decoration:none}
-.hot.imp span{writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;font:400 11px Calibri,Carlito,sans-serif;letter-spacing:.03em;color:#777;transition:color .2s}
-.hot.imp b{font-weight:700;font-size:12px;color:#000;transition:color .2s}
-.hot.imp .ii{display:inline-block;width:13px;height:13px;line-height:11px;text-align:center;border:1.2px solid #000;border-radius:50%;font:700 9px/11px Calibri,Carlito,sans-serif;font-style:normal;color:#000;box-sizing:border-box;animation:iiflash 3.2s ease-in-out infinite}
-@keyframes iiflash{0%,70%,100%{border-color:#000;color:#000;background:transparent}80%{border-color:#e30613;color:#e30613;background:#cdff3e}}
+.hot.imp span{writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;font:400 11px Carlito,Calibri,sans-serif;letter-spacing:.03em;color:#8a8a86;transition:color .2s}
+.hot.imp b{font-weight:700;font-size:12px;color:#222;transition:color .2s}
+.hot.imp .ii{display:inline-block;width:13px;height:13px;line-height:11px;text-align:center;border:1.2px solid #000;border-radius:50%;font:700 9px/11px Carlito,Calibri,sans-serif;font-style:normal;color:#222;box-sizing:border-box;animation:iiflash 3.2s ease-in-out infinite}
+@keyframes iiflash{0%,70%,100%{border-color:#000;color:#222;background:transparent}80%{border-color:#e30613;color:#e30613;background:#cdff3e}}
 .hot.imp.cur span,.hot.imp.cur b,.hot.imp:hover span,.hot.imp:hover b,.hot.imp:focus-visible span,.hot.imp:focus-visible b{color:#e30613}
 .hot.imp:hover .ii{animation:none;border-color:#e30613;color:#e30613;background:#cdff3e} .hot.imp:focus-visible{outline:none}
 @media (prefers-reduced-motion:reduce){.hot.imp .ii{animation:none}}
-.impc{position:absolute;column-count:2;column-gap:20px;font:400 12px/1.5 Calibri,Carlito,sans-serif;color:#222}
+.impc{position:absolute;column-count:2;column-gap:20px;font:400 12px/1.3 Carlito,Calibri,sans-serif;color:#222}
 .impc .lab2{margin:0 0 6px;font-weight:700;font-size:11px;letter-spacing:.14em;color:#e30613;column-span:all}
-.impc .lp{color:#666;font-size:11.5px;margin:0 0 4px;column-span:all}
-.impc h4{margin:12px 0 2px;font-size:12px;font-weight:700;color:#000;break-after:avoid} .impc p{margin:0;break-inside:avoid}
+.impc .lp{color:#555;font-size:11.5px;margin:0 0 4px;column-span:all}
+.impc h4{margin:12px 0 2px;font-size:12px;font-weight:700;color:#222;break-after:avoid} .impc p{margin:0;break-inside:avoid}
 .impc .ib{break-inside:avoid;-webkit-column-break-inside:avoid;display:block;overflow:hidden}
 .impc a{color:#1a5fd0;text-decoration:none} .impc a[href^="tel:"]{color:#1e8e3e} .impc .todo{color:#e30613}
 .ci{display:inline-block;font-style:normal;width:.95em;height:.95em;line-height:.85em;text-align:center;border:.07em solid currentColor;border-radius:50%;font-size:.8em;vertical-align:.05em}
-.impl{pointer-events:auto;color:#000;text-decoration:none;font-weight:400;transition:color .2s}
+.impl{pointer-events:auto;color:#222;text-decoration:none;font-weight:400;transition:color .2s}
 .impl:hover,.impl:focus-visible,.impl.cur{color:#e30613;font-weight:700;outline:none}
 /* three clicks on the beetle: the heart */
 .heartfx{position:fixed;inset:0;z-index:9999;pointer-events:none;overflow:hidden}
@@ -284,19 +284,19 @@ BITS_CSS = """
 /* bits & bats: cards among the photos and the pop-up */
 #bits .bhit{position:absolute;z-index:4;padding:0;border:0;background:none;cursor:pointer}
 #bits .bhit:hover{outline:1px solid #e30613;outline-offset:-1px}
-#bits .bcard{position:absolute;z-index:5;width:200px;height:180px;padding:0;border:0;text-align:left;font:inherit;color:#222;cursor:pointer;overflow:hidden;font-family:Calibri,Carlito,sans-serif}
+#bits .bcard{position:absolute;z-index:5;width:200px;height:180px;padding:0;border:0;text-align:left;font:inherit;color:#222;cursor:pointer;overflow:hidden;font-family:Carlito,Calibri,sans-serif}
 #bits .bcard::after{content:"";position:absolute;inset:0;pointer-events:none;border:1px dotted #b8b8b8}
 #bits .bcard.news{background:#f4f4f4} #bits .bcard.note{background:#fffbd6}
 #bits .bcard:hover{outline:1px solid #e30613;outline-offset:-1px}
 #bits .bct{position:absolute;inset:0 0 35px;display:flex;flex-direction:column;gap:4px;padding:10px 10px 6px;overflow:hidden}
 #bits .bct small{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#e30613;font-weight:700}
 #bits .bct b{font-size:14px;line-height:1.2;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;flex:none}
-#bits .bct em{font-style:normal;font-size:11px;line-height:1.35;color:#555;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+#bits .bct em{font-style:normal;font-size:11px;line-height:1.3;color:#555;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 #bits .bcard.note .qm{font-style:normal;font-size:36px;line-height:.6;height:14px;color:#e30613}
-#bits .bcard.note .bct b{font-weight:400;font-style:italic;font-size:14px;line-height:1.3;-webkit-line-clamp:5}
+#bits .bcard.note .bct b{font-weight:400;font-style:italic;font-size:14px;line-height:1.4;-webkit-line-clamp:5}
 #bits .bcap{position:absolute;left:0;right:0;bottom:0;height:35px;padding:0 3px;display:flex;flex-direction:column;justify-content:center;background:rgba(68,68,68,.7);color:#fff;font-size:12px;line-height:normal}
 #bits .bcap b{font-weight:700} #bits .bcap span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-dialog.bv{position:fixed;inset:0;width:100vw;height:100vh;max-width:none;max-height:none;margin:0;padding:0;border:0;background:#fff;font-family:Calibri,Carlito,sans-serif;color:#000}
+dialog.bv{position:fixed;inset:0;width:100vw;height:100vh;max-width:none;max-height:none;margin:0;padding:0;border:0;background:#fff;font-family:Carlito,Calibri,sans-serif;color:#222}
 dialog.bv::backdrop{background:transparent}
 .bv .bvp{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(980px,88vw);height:min(820px,90vh);display:flex;flex-direction:column}
 .bv .bvt{display:flex;justify-content:flex-end;align-items:center;height:34px;flex:none}
@@ -311,8 +311,8 @@ dialog.bv::backdrop{background:transparent}
 .bv .bvc .todo{color:#e30613} .bv .bvc a.open{display:inline-block;margin-top:20px;font-size:17px;color:#1a5fd0;text-decoration:none;border-bottom:1px dotted #b8b8b8;padding-bottom:3px}
 .bv .bvc a.open:hover{color:#e30613}
 .bv .bvcap{flex:none;text-align:center;margin:14px 0 4px;font-size:16px;font-weight:700;color:#e30613;min-height:20px}
-.bv .bvn{flex:none;display:flex;justify-content:center;align-items:center;gap:18px;height:44px;font-size:14px;color:#666;letter-spacing:.06em}
-.bv .bvn button{display:flex;align-items:center;gap:8px;border:0;background:none;font:inherit;color:#000;cursor:pointer;padding:4px}
+.bv .bvn{flex:none;display:flex;justify-content:center;align-items:center;gap:18px;height:44px;font-size:14px;color:#555;letter-spacing:.06em}
+.bv .bvn button{display:flex;align-items:center;gap:8px;border:0;background:none;font:inherit;color:#222;cursor:pointer;padding:4px}
 .bv .bvn button:hover{color:#e30613}
 """
 
@@ -367,8 +367,8 @@ EXT_JS = r'''<script>/* every link to another site opens in a new tab / window, 
 # opens it full screen. Four foods - red dot 1, red ring 2, blue diamond 5, yellow star 10 - first to 100 wins.
 # On the desktop the dot follows the mouse once the game has started (no need to hold the button down)
 GAME_CSS = """
-.pgo{position:absolute;z-index:6;display:flex;align-items:center;border:0;background:none;padding:0;font:inherit;cursor:pointer;font-family:Calibri,Carlito,sans-serif}
-.pgo .pme{font-size:14px;letter-spacing:.08em;color:#666;white-space:nowrap} .pgo:hover .pme{color:#e30613}
+.pgo{position:absolute;z-index:6;display:flex;align-items:center;border:0;background:none;padding:0;font:inherit;cursor:pointer;font-family:Carlito,Calibri,sans-serif}
+.pgo .pme{font-size:14px;letter-spacing:.08em;color:#555;white-space:nowrap} .pgo:hover .pme{color:#e30613}
 .pgo .pld{width:34px;height:1px;margin:0 2px 0 7px;background:repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px)}
 .pdot{position:absolute;left:0;top:0;width:44px;height:44px;margin:-22px 0 0 -22px;display:flex;align-items:center;justify-content:center;cursor:grab}
 .pgo .pdot{position:relative;margin:0}
@@ -376,7 +376,7 @@ GAME_CSS = """
 .pdot::before,.pdot::after{content:"";position:absolute;left:50%;top:50%;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;border:1px solid #e30613;opacity:0;animation:pdr 1.8s ease-out infinite}
 .pdot::after{animation-delay:.9s}
 @keyframes pdp{50%{transform:scale(1.25)}} @keyframes pdr{0%{transform:scale(1);opacity:.8}100%{transform:scale(4.2);opacity:0}}
-dialog.game{position:fixed;inset:0;width:100vw;height:100vh;max-width:none;max-height:none;margin:0;padding:0;border:0;background:#fff;overflow:hidden;font-family:Calibri,Carlito,sans-serif}
+dialog.game{position:fixed;inset:0;width:100vw;height:100vh;max-width:none;max-height:none;margin:0;padding:0;border:0;background:#fff;overflow:hidden;font-family:Carlito,Calibri,sans-serif}
 dialog.game::backdrop{background:transparent}
 .play{position:absolute;inset:0;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;cursor:default}
 .play.go{cursor:none}
@@ -384,10 +384,10 @@ dialog.game::backdrop{background:transparent}
 .gx{position:absolute;right:22px;top:20px;z-index:4;border:0;background:none;padding:4px;cursor:pointer} .gx svg{width:28px;height:28px} .gx .rg{fill:none;stroke:#3a3c37;stroke-width:.6} .gx .xx{fill:none;stroke:#1a1a1a;stroke-width:1.15;stroke-linecap:round} .gx:hover .rg{stroke:#e30613}
 .pscore{position:absolute;left:30px;right:80px;top:26px;display:flex;justify-content:space-between;font-size:15px;letter-spacing:.06em;color:#555;pointer-events:none;z-index:2}
 .pscore b{color:#e30613;font-size:20px;margin-left:5px}
-.phint{position:absolute;left:0;right:0;top:30%;display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;pointer-events:none;transition:opacity .5s;z-index:2}
-.phint b{font-size:34px;color:#e30613} .phint span{font-size:19px;color:#222} .phint small{margin-top:10px;font-size:14px;letter-spacing:.08em;color:#888}
+.phint{position:absolute;left:0;right:0;top:30%;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;pointer-events:none;transition:opacity .5s;z-index:2}
+.phint b{font-size:34px;color:#e30613} .phint span{font-size:19px;color:#222} .phint small{margin-top:10px;font-size:14px;letter-spacing:.08em;color:#8a8a86}
 .play.go .phint{opacity:0}
-.pkey{display:flex;align-items:center;gap:6px;margin-top:14px;font-size:17px;color:#222}
+.pkey{display:flex;align-items:center;gap:8px;margin-top:14px;font-size:17px;color:#222}
 .pf{position:absolute;left:0;top:0;display:block;pointer-events:none}
 .pf.f1{width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:#e30613}
 .pf.f2{width:15px;height:15px;margin:-7.5px 0 0 -7.5px;border-radius:50%;border:3px solid #e30613;box-sizing:border-box}
@@ -409,7 +409,7 @@ GAME_JS = r"""<script>(function(){ const gd=document.getElementById('game'), pl=
   let W=0,H=0,N=10, d={x:0,y:0}, g={x:30,y:200,a:0}, run=false, last=0, walked=0, food=[], you=0, them=0, over=false, playing=false;
   const size=()=>{ W=pl.clientWidth; H=pl.clientHeight; N=Math.max(8,Math.min(16,Math.round(W*H/90000))); const r=devicePixelRatio||1; cv.width=Math.round(W*r); cv.height=Math.round(H*r); tc.setTransform(r,0,0,r,0,0); tc.fillStyle='rgba(58,60,55,.55)'; };
   const DD='<svg class="pdd" viewBox="-20 -20 40 40"><circle r="19" fill="#e30613"/><circle r="15.5" fill="none" stroke="#fff" stroke-width="1" stroke-dasharray="1 2.2"/>'
-    +'<text y="1" fill="#fff" font-family="Calibri,Carlito,sans-serif" font-weight="700" font-size="17" text-anchor="middle" dominant-baseline="central">dd</text></svg>';
+    +'<text y="1" fill="#fff" font-family="Carlito,Calibri,sans-serif" font-weight="700" font-size="17" text-anchor="middle" dominant-baseline="central">dd</text></svg>';
   function fly(e,x,y){ e.animate([{transform:`translate(${x}px,${y}px) scale(.3)`,opacity:1},{transform:`translate(${x}px,${y-28}px) scale(1.1)`,opacity:1,offset:.35},
       {transform:`translate(${x}px,${y-70}px) scale(.9)`,opacity:0}],{duration:1100,easing:'cubic-bezier(.2,.8,.3,1)'}).finished.then(()=>e.remove()).catch(()=>e.remove()); }
   function pop(x,y,v,byYou){ let e; if(byYou){ e=document.createElement('b'); e.className='pplus'; e.textContent='+'+v; } else { const w=document.createElement('div'); w.innerHTML=DD; e=w.firstChild; } pl.appendChild(e); fly(e,x,y); }
@@ -484,9 +484,9 @@ def _wonder_tiles():
 
 WONDER_CSS = """
 /* work ○ wonder on the desktop (23 Oct) */
-.dwsw{position:absolute;left:1115px;top:0;width:200px;height:25px;z-index:46;display:flex;align-items:center;justify-content:center;gap:7px;border:.5px dashed #fff;background:rgba(0,0,0,.05);
-  font-family:Calibri,Carlito,sans-serif;font-size:15px;color:#666;cursor:pointer;padding:0}
-.dwsw .wk{color:#000;font-weight:700} .dwsw[aria-pressed=true] .wk{color:#666;font-weight:400} .dwsw[aria-pressed=true] .wo{color:#e30613;font-weight:700}
+.dwsw{position:absolute;left:1115px;top:0;width:200px;height:25px;z-index:46;display:flex;align-items:center;justify-content:center;gap:8px;border:.5px dashed #fff;background:rgba(0,0,0,.05);
+  font-family:Carlito,Calibri,sans-serif;font-size:15px;color:#555;cursor:pointer;padding:0}
+.dwsw .wk{color:#222;font-weight:700} .dwsw[aria-pressed=true] .wk{color:#555;font-weight:400} .dwsw[aria-pressed=true] .wo{color:#e30613;font-weight:700}
 .dwsw .tg{position:relative;width:30px;height:15px;border-radius:8px;border:1px solid #3a3c37;background:#fff;transition:background .25s}
 .dwsw .tg b{position:absolute;left:2px;top:2px;width:9px;height:9px;border-radius:50%;background:#cdff3e;box-shadow:0 0 0 1px #3a3c37;transition:transform .25s}
 .dwsw .tg b::after{content:"";position:absolute;inset:-1px;border-radius:50%;border:1px solid #e30613;opacity:0;animation:dwp 3.2s ease-out infinite}
@@ -514,7 +514,7 @@ WONDER_CSS = """
 .dwtitle[hidden]{display:none}
 .dwfloat{position:absolute;left:10px;top:220px;width:1080px;height:22px;z-index:2}   /* ten categories, two to each column, in a row under the tabs, level with the dd mark */
 .dwsc{top:246px!important;padding-top:6px!important}   /* the category row sits on the tick at y 250 (by the i of dasein), the photos start 10 px under it */
-.dwfb{position:absolute;top:0;width:95px;height:22px;display:flex;align-items:center;justify-content:center;gap:4px;padding:0 4px;border:0;font:13px Calibri,Carlito,sans-serif;color:#000;white-space:nowrap;overflow:hidden;cursor:pointer}
+.dwfb{position:absolute;top:0;width:95px;height:22px;display:flex;align-items:center;justify-content:center;gap:4px;padding:0 4px;border:0;font:13px Carlito,Calibri,sans-serif;color:#222;white-space:nowrap;overflow:hidden;cursor:pointer}
 .dwfb b{font-weight:700} .dwfb small{font-size:9px;opacity:.7} .dwfb:hover{filter:brightness(1.08)}
 .dwfb:nth-child(1){background:#d4f06a} .dwfb:nth-child(2){background:#f2cf3a} .dwfb:nth-child(3){background:#4a8fe0;color:#fff} .dwfb:nth-child(4){background:#f2bccf}
 .dwfb:nth-child(5){background:#d03a3a;color:#fff} .dwfb:nth-child(6){background:#45ad5c;color:#fff} .dwfb:nth-child(7){background:#ee9233} .dwfb:nth-child(8){background:#9a7ee6;color:#fff} .dwfb:nth-child(9){background:#26a69c;color:#fff} .dwfb:nth-child(10){background:#2e3a72;color:#fff}
@@ -522,16 +522,16 @@ WONDER_CSS = """
 .dwfb.on small{display:none} .dwfb.on::after{content:"× all";margin-left:4px;font-size:11px;font-weight:700;opacity:.85}   /* the chosen category offers the way back to all photos */
 .dwpop{position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.62);backdrop-filter:blur(1.5px)}
 .dwpop[hidden]{display:none}
-.dwcard{width:560px;background:#fff;box-shadow:0 2px 18px rgba(0,0,0,.18);--w:calc(1px / (var(--s,1) * var(--dpr,1)));border:1px solid transparent;background:#fff;background-origin:border-box;background-repeat:no-repeat;background-image:repeating-linear-gradient(to right,#b8b8b8 0 var(--w),transparent var(--w) calc(var(--w)*3)),repeating-linear-gradient(to right,#b8b8b8 0 var(--w),transparent var(--w) calc(var(--w)*3)),repeating-linear-gradient(to bottom,#b8b8b8 0 var(--w),transparent var(--w) calc(var(--w)*3)),repeating-linear-gradient(to bottom,#b8b8b8 0 var(--w),transparent var(--w) calc(var(--w)*3));background-position:left top,left bottom,left top,right top;background-size:100% var(--w),100% var(--w),var(--w) 100%,var(--w) 100%;font-family:Calibri,Carlito,sans-serif}
-.dwtop{display:flex;justify-content:space-between;align-items:center;padding:10px 14px 6px;font-size:13px;color:#666;letter-spacing:.06em} .dwtop b{color:#e30613;font-weight:400}
+.dwcard{width:560px;background:#fff;box-shadow:0 2px 18px rgba(0,0,0,.18);--w:calc(1px / (var(--s,1) * var(--dpr,1)));border:1px solid transparent;background:#fff;background-origin:border-box;background-repeat:no-repeat;background-image:repeating-linear-gradient(to right,#b8b8b8 0 var(--w),transparent var(--w) calc(var(--w)*3)),repeating-linear-gradient(to right,#b8b8b8 0 var(--w),transparent var(--w) calc(var(--w)*3)),repeating-linear-gradient(to bottom,#b8b8b8 0 var(--w),transparent var(--w) calc(var(--w)*3)),repeating-linear-gradient(to bottom,#b8b8b8 0 var(--w),transparent var(--w) calc(var(--w)*3));background-position:left top,left bottom,left top,right top;background-size:100% var(--w),100% var(--w),var(--w) 100%,var(--w) 100%;font-family:Carlito,Calibri,sans-serif}
+.dwtop{display:flex;justify-content:space-between;align-items:center;padding:10px 14px 6px;font-size:13px;color:#555;letter-spacing:.06em} .dwtop b{color:#e30613;font-weight:400}
 .dwx{border:0;background:none;padding:2px;cursor:pointer} .dwx svg{width:24px;height:24px} .dwx .rg{fill:none;stroke:#3a3c37;stroke-width:.6} .dwx .xx{fill:none;stroke:#1a1a1a;stroke-width:1.15;stroke-linecap:round} .dwx:hover .rg,.dwx:focus-visible .rg{stroke:#e30613} .dwx .xx{transition:stroke .2s} .dwx:hover .xx,.dwx:focus-visible .xx{stroke:#e30613}
 .dwx:hover svg,.dwx:focus-visible svg{animation:lbxp 1.4s ease-in-out infinite} .dwx:focus-visible{outline:none}   /* the close pulses on hover, like the project pop-up's (23 Oct) */
 @media (prefers-reduced-motion:reduce){.dwx:hover svg,.dwx:focus-visible svg{animation:none}}
 .dwbody{padding:0 14px 8px} .dwbody img{display:block;width:100%;aspect-ratio:1/1;object-fit:contain;background:#f6f6f6;outline:1px dotted #b8b8b8;outline-offset:-1px}
 .dwbody img{cursor:none}   /* the floating W / E arrow takes over (23 Oct) */
-.dwbody .d{margin:10px 0 2px;font-size:13px;letter-spacing:.06em;color:#888} .dwbody .l{margin:0 0 4px;font-size:18px;color:#222}
+.dwbody .d{margin:10px 0 2px;font-size:13px;letter-spacing:.06em;color:#8a8a86} .dwbody .l{margin:0 0 4px;font-size:18px;color:#222}
 .dwnav{display:flex;justify-content:space-between;padding:8px 12px 10px;border-top:1px solid transparent;border-image:repeating-linear-gradient(to right,#c4c4c4 0 4px,transparent 4px 7px) 1}
-.dwnav button{display:flex;align-items:center;gap:7px;border:0;background:none;font:14px Calibri,Carlito,sans-serif;cursor:pointer;padding:3px} .dwnav button:hover{color:#e30613}
+.dwnav button{display:flex;align-items:center;gap:8px;border:0;background:none;font:14px Carlito,Calibri,sans-serif;cursor:pointer;padding:3px} .dwnav button:hover{color:#e30613}
 """
 
 WONDER_JS = r"""<script>(function(){ const sw=document.getElementById('dwsw'), wo=document.getElementById('dwon'), ti=document.getElementById('dwtitle'); if(!sw||!wo) return;
@@ -712,12 +712,12 @@ def _tint(s):
 IMP_CSS = """
 /* contact + impressum (23 Oct) */
 #contact [data-node-id="1:539"],#contact [data-node-id="8:3"],#contact [data-node-id="104:17"],#contact [data-node-id="104:18"]{display:none}
-.impb{position:absolute;font:400 11.5px/1.5 Calibri,Carlito,sans-serif;color:#222}
+.impb{position:absolute;font:400 11.5px/1.3 Carlito,Calibri,sans-serif;color:#222}
 .impb .lab2{margin:0 0 4px;font-weight:700;font-size:11px;letter-spacing:.14em;color:#e30613}
-.impb .lp{color:#666;font-size:11px;margin:0}
-.impb h4{margin:0 0 2px;font-size:11.5px;font-weight:700;color:#000} .impb p{margin:0} .impb .lp+h4{margin-top:8px}
+.impb .lp{color:#555;font-size:11px;margin:0}
+.impb h4{margin:0 0 2px;font-size:11.5px;font-weight:700;color:#222} .impb p{margin:0} .impb .lp+h4{margin-top:8px}
 .impb a,.impfull a{color:#1a5fd0;text-decoration:none} .impb a[href^="tel:"],.impfull a[href^="tel:"]{color:#1e8e3e}
-.impfull{z-index:7;display:none;column-count:5;column-gap:20px;font-size:11px;line-height:1.42} .impfull h4{font-size:11px;margin-top:8px} .impfull .lp{font-size:10.5px} .impo .impfull{display:block} .impo .impb{visibility:hidden}
+.impfull{z-index:7;display:none;column-count:5;column-gap:20px;font-size:11px;line-height:1.3} .impfull h4{font-size:11px;margin-top:8px} .impfull .lp{font-size:10.5px} .impo .impfull{display:block} .impo .impb{visibility:hidden}
 .imptint{position:absolute;left:235px;top:815px;width:1080px;height:178px;background:#f4f4f2;transition:top .45s ease,height .45s ease}   /* the short impressum on a pale grey band from the tick mark above "contact" to the foot, a whole tick clear of the map (23 Oct, 13:31) */
 .impo .imptint{top:630px;height:363px}   /* "full impressum" grows the band up to just under the map, with the whole text */
 .impsc{position:absolute;z-index:7;display:none;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#b8b8b8 transparent} .impo .impsc{display:block}

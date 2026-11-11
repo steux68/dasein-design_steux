@@ -75,7 +75,7 @@ html = f'''<!doctype html>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" data-live-map>
 <style>
 html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
-html,body,button,input,select,textarea,dialog{{font-family:Calibri,Carlito,sans-serif}}   /* one font everywhere, buttons included */
+html,body,button,input,select,textarea,dialog{{font-family:Carlito,Calibri,sans-serif}}   /* one font everywhere, buttons included */
 .strip{{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}}
 .holder{{position:relative;flex:none;width:calc(1440px * var(--s,.5));height:calc(1024px * var(--s,.5))}}
 .stage{{position:absolute;left:0;top:0;width:1440px;height:1024px;transform:scale(var(--s,.5));transform-origin:0 0;background:#fff;overflow:hidden}}
@@ -100,8 +100,8 @@ html,body,button,input,select,textarea,dialog{{font-family:Calibri,Carlito,sans-
 
 
 .hot.pin{{width:30px;height:30px;box-sizing:border-box;border-radius:50%;border:calc(1px / var(--s,1)) solid #000;background:#bfbfbf;
-  display:flex;align-items:center;justify-content:center;font:400 18px/1 Calibri,Carlito,sans-serif;color:#000;text-decoration:none;z-index:6;transition:background .15s}}
-.pin .pl{{position:absolute;top:50%;transform:translateY(-50%);white-space:nowrap;font:400 15px/1 Calibri,Carlito,sans-serif;color:#000;padding:4px 0}}
+  display:flex;align-items:center;justify-content:center;font:400 18px/1 Carlito,Calibri,sans-serif;color:#222;text-decoration:none;z-index:6;transition:background .15s}}
+.pin .pl{{position:absolute;top:50%;transform:translateY(-50%);white-space:nowrap;font:400 15px/1 Carlito,Calibri,sans-serif;color:#222;padding:4px 0}}
 .pin .pl.r{{left:calc(100% + 9px)}} .pin .pl.l{{right:calc(100% + 9px)}}
 .hot.pin:hover .pl,.hot.pin:focus-visible .pl{{color:#e30613}}
 /* numbered circles: the ring is a vector circle (even in every browser, unlike a border on the scaled page);
@@ -165,7 +165,7 @@ html,body,button,input,select,textarea,dialog{{font-family:Calibri,Carlito,sans-
 /* services: section headings in red, to match their red symbols */
 [data-node-id="1:554"] > p:first-child,[data-node-id="1:628"] > p:first-child,[data-node-id="1:633"] > p:first-child,[data-node-id="1:634"] > p:first-child{{color:#e30613}}
 /* arrow to the next page, with its label; on the last page it points up and leads back to the start */
-.nextp{{display:flex;align-items:center;gap:6px;text-decoration:none;color:#666;font:400 11px/1 Calibri,Carlito,sans-serif;letter-spacing:.06em;padding-left:20px}}
+.nextp{{display:flex;align-items:center;gap:8px;text-decoration:none;color:#555;font:400 11px/1 Carlito,Calibri,sans-serif;letter-spacing:.06em;padding-left:20px}}
 .nextp:hover{{color:#e30613}}
 .nextp .cn,.nextp.up .cs{{display:none}} .nextp.up .cn{{display:block}}   /* S: on to the next page; N on the last page: back to the top */
 /* first visit to the intro: the arrow nudges downwards and the label invites you in, until you first move on */
@@ -199,14 +199,14 @@ html,body,button,input,select,textarea,dialog{{font-family:Calibri,Carlito,sans-
 .pinsvg .pw{{fill:#fff}}
 .pinsvg .pr{{fill:none;stroke:#3a3c37;stroke-width:1;vector-effect:non-scaling-stroke}}
 .pinsvg .pa{{fill:#4d4f4a;stroke:#1a1a1a;stroke-width:1;vector-effect:non-scaling-stroke;stroke-linejoin:round}}
-.pinsvg text{{fill:#3a3c37;font:700 6.4px Calibri,Carlito,sans-serif;text-anchor:middle;dominant-baseline:central}}
+.pinsvg text{{fill:#3a3c37;font:700 6.4px Carlito,Calibri,sans-serif;text-anchor:middle;dominant-baseline:central}}
 /* address label: top right of the pin; it moves to the other side or below as the pin nears the map's edges */
-.plab{{position:absolute;left:calc(100% + .35em);bottom:62%;white-space:nowrap;background:rgba(255,255,255,.92);color:#000;
-  font-family:Calibri,Carlito,sans-serif;font-weight:400;line-height:1.25;padding:.3em .55em;text-align:left}}
+.plab{{position:absolute;left:calc(100% + .35em);bottom:62%;white-space:nowrap;background:rgba(255,255,255,.92);color:#222;
+  font-family:Carlito,Calibri,sans-serif;font-weight:400;line-height:1.25;padding:.3em .55em;text-align:left}}
 .plab b{{font-weight:700}}
 .pinH.l .plab{{left:auto;right:calc(100% + .35em)}}
 .pinH.b .plab{{bottom:auto;top:30%}}
-.leaflet-container .leaflet-control-attribution{{font:10px/1.3 Calibri,Carlito,sans-serif;background:rgba(255,255,255,.7)}}
+.leaflet-container .leaflet-control-attribution{{font:10px/1.3 Carlito,Calibri,sans-serif;background:rgba(255,255,255,.7)}}
 {LB.CSS}{BUG.CSS}{SEARCH.CSS}</style>
 </head>
 <body>

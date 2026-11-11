@@ -312,7 +312,7 @@ nav .tab:last-child:nth-child(odd){{grid-column:span 2}}
 *{{box-sizing:border-box}}
 html{{scroll-behavior:smooth;scroll-padding-top:calc(var(--head) + var(--bar))}}
 @media (prefers-reduced-motion:reduce){{html{{scroll-behavior:auto}}}}
-body{{margin:0;background:#fff;color:#222;font:400 15px/1.35 Calibri,Carlito,sans-serif;-webkit-text-size-adjust:100%}}
+body{{margin:0;background:#fff;color:#222;font:400 15px/1.4 Carlito,Calibri,sans-serif;-webkit-text-size-adjust:100%}}
 a{{color:inherit}}
 /* header: logo, then the five tabs in two rows (3 + 2) */
 header{{position:fixed;left:0;right:0;top:0;z-index:20;background:#fff;padding:calc(env(safe-area-inset-top,0px) + 8px) max(10px,env(safe-area-inset-right,0px)) 8px max(10px,env(safe-area-inset-left,0px));
@@ -326,8 +326,8 @@ header{{position:fixed;left:0;right:0;top:0;z-index:20;background:#fff;padding:c
    (whole logo scaled as one: at scale 1 it is 187 px wide from x 10; target width = half the screen - 14.5 px) */
 .stack .logo{{gap:calc(2.139vw - .62px)}} .stack .logo img{{width:calc(8.02vw - 2.33px);height:calc(8.02vw - 2.33px)}}
 .stack .logo span{{font-size:calc(7.219vw - 2.09px)}}
-nav{{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px}}
-.tab{{display:flex;align-items:center;justify-content:center;gap:3px;height:28px;padding:0 4px;background:var(--grey);text-decoration:none;
+nav{{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:8px}}
+.tab{{display:flex;align-items:center;justify-content:center;gap:4px;height:28px;padding:0 4px;background:var(--grey);text-decoration:none;
   font-size:14px;white-space:nowrap;-webkit-tap-highlight-color:transparent;transition:background .15s}}
 .tab small{{font-size:9px}}
 .tab:active{{background:var(--green)}}
@@ -345,55 +345,55 @@ body{{position:relative}}
 .bar.bbot::after{{content:"";position:absolute;left:0;right:0;top:calc(var(--bar) - 1px);border-top:1px solid transparent;border-image:var(--gh) 1;pointer-events:none}}   /* a second line under the arrow, as at the top (23 Oct) */
 .bar button{{border:0;background:none;padding:3px 24px;display:flex;-webkit-tap-highlight-color:transparent;transition:opacity .2s}}
 .bar button:disabled{{opacity:.2}}
-#goS .up{{display:none!important;align-items:center;gap:6px}} #goS.top .dn{{display:none}} #goS.top .up{{display:flex!important}}
+#goS .up{{display:none!important;align-items:center;gap:8px}} #goS.top .dn{{display:none}} #goS.top .up{{display:flex!important}}
 .bar button span{{display:flex}} #goS .su,#goN .ns{{display:none}}
 /* stack trial: the pages rise from the bottom as you swipe up, so the bottom arrow points up (N) and the top one down (S) */
 .stack #goS .dn,.stack #goN .nn{{display:none}} .stack #goS .su,.stack #goN .ns{{display:flex}} .stack #goS.top .su{{display:none}}
-.bar button{{align-items:center;gap:6px}} .bar .sc{{font-style:normal;font-size:12px;letter-spacing:.06em;color:#666}} #goS.top .sc{{display:none}}
-.socs{{display:none;margin-left:auto;gap:12px;align-items:center}} .soc{{display:flex}} .soc svg{{display:block}}
+.bar button{{align-items:center;gap:8px}} .bar .sc{{font-style:normal;font-size:12px;letter-spacing:.06em;color:#555}} #goS.top .sc{{display:none}}
+.socs{{display:none;margin-left:auto;gap:10px;align-items:center}} .soc{{display:flex}} .soc svg{{display:block}}
 /* work ○ wonder trial (?w=1) */
 .wsw{{display:none}}
 .wtr .socs{{display:none!important}}
-.wtr .wsw{{display:flex;align-items:center;gap:5px;margin-left:auto;border:0;background:none;padding:4px 0;font:inherit;font-size:12px;letter-spacing:.04em;color:#666;cursor:pointer;-webkit-tap-highlight-color:transparent}}
+.wtr .wsw{{display:flex;align-items:center;gap:4px;margin-left:auto;border:0;background:none;padding:4px 0;font:inherit;font-size:12px;letter-spacing:.04em;color:#555;cursor:pointer;-webkit-tap-highlight-color:transparent}}
 .wsw .tg{{position:relative;width:28px;height:15px;border-radius:8px;border:1px solid #3a3c37;background:#fff;transition:background .25s}}
 .wsw .tg b{{position:absolute;left:2px;top:2px;width:9px;height:9px;border-radius:50%;background:#cdff3e;box-shadow:0 0 0 1px #3a3c37;transition:transform .25s}}
 .wsw .tg b::after{{content:"";position:absolute;inset:-1px;border-radius:50%;border:1px solid var(--red);opacity:0;animation:pdr 3.2s ease-out infinite}}   /* the knob itself pulses, slowly */
 .wsw[aria-pressed=true] .tg b::after{{animation:none}}
 .wsw[aria-pressed=true] .tg{{background:#cdff3e}} .wsw[aria-pressed=true] .tg b{{transform:translateX(13px);background:var(--red)}}
-.wsw .wk{{color:#000;font-weight:700}} .wsw[aria-pressed=true] .wk{{color:#666;font-weight:400}} .wsw[aria-pressed=true] .wo{{color:var(--red);font-weight:700}}
+.wsw .wk{{color:#222;font-weight:700}} .wsw[aria-pressed=true] .wk{{color:#555;font-weight:400}} .wsw[aria-pressed=true] .wo{{color:var(--red);font-weight:700}}
 .wsw .wth{{position:relative;width:24px;height:24px;margin-left:2px;flex:none}} .wsw .wth img{{width:100%;height:100%;object-fit:cover;border-radius:3px;outline:1px dotted #b8b8b8;outline-offset:1px}}
 .wsw .wdot{{position:absolute;right:-4px;top:-4px;width:8px;height:8px;border-radius:50%;background:#cdff3e;box-shadow:0 0 0 1px #3a3c37}}
 .wsw .wdot::after{{content:"";position:absolute;inset:-1px;border-radius:50%;border:1px solid var(--red);animation:pdr 1.8s ease-out infinite}}
 .wsw[aria-pressed=true] .wth{{display:none}}
 .wonder{{position:fixed;left:0;right:0;top:var(--head);bottom:0;z-index:30;overflow-y:auto;background:#fff;padding:0 18px 40px;-webkit-overflow-scrolling:touch}}
 .wonder[hidden]{{display:none}}
-.whd{{padding:22px 0 8px}} .whd h2{{margin:0;font-size:30px;font-weight:700;color:var(--red);letter-spacing:.01em}} .whd p{{margin:2px 0 0;font-size:14px;color:#666}}
-.whd .wtrial{{margin-top:6px;font-size:12px;letter-spacing:.06em;color:#aaa}}
-.wchips{{position:sticky;top:0;z-index:2;display:flex;flex-direction:column;gap:6px;padding:10px 0;background:#fff;border-bottom:1px solid transparent;border-image:var(--gh) 1}}
-.wrow{{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}} .wrow::-webkit-scrollbar{{display:none}}
-.wch{{flex:none;border:1px dotted #b8b8b8;background:#fff;border-radius:14px;padding:4px 11px;font:inherit;font-size:12px;color:#333;white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent}}
-.wch.on{{background:#cdff3e;border-style:solid;border-color:#3a3c37;color:#000;font-weight:700}}
+.whd{{padding:22px 0 8px}} .whd h2{{margin:0;font-size:30px;font-weight:700;color:var(--red);letter-spacing:.01em}} .whd p{{margin:2px 0 0;font-size:14px;color:#555}}
+.whd .wtrial{{margin-top:6px;font-size:12px;letter-spacing:.06em;color:#8a8a86}}
+.wchips{{position:sticky;top:0;z-index:2;display:flex;flex-direction:column;gap:8px;padding:10px 0;background:#fff;border-bottom:1px solid transparent;border-image:var(--gh) 1}}
+.wrow{{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}} .wrow::-webkit-scrollbar{{display:none}}
+.wch{{flex:none;border:1px dotted #b8b8b8;background:#fff;border-radius:14px;padding:4px 11px;font:inherit;font-size:12px;color:#555;white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent}}
+.wch.on{{background:#cdff3e;border-style:solid;border-color:#3a3c37;color:#222;font-weight:700}}
 .wp{{margin:26px 0 0}} .wp[hidden]{{display:none}}
-.wt{{margin:0 0 6px;font-size:12px;letter-spacing:.06em;color:#888}}
+.wt{{margin:0 0 6px;font-size:12px;letter-spacing:.06em;color:#8a8a86}}
 .wp img{{display:block;width:100%;height:auto;max-height:78svh;object-fit:cover;outline:1px dotted #b8b8b8;outline-offset:-1px}}
 .wc{{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:7px 0 0;font-size:14px}} .wc b{{color:#222}}
 .wcat{{flex:none;font-size:12px;letter-spacing:.08em;color:var(--red)}}
 .wtxt{{padding:16px 14px 12px;background:#f4f4f2}} .wtxt.note{{background:#fffbd6}}
-.wtxt h3{{margin:2px 0 8px;font-size:16px;line-height:1.25;color:var(--red)}} .wtxt p{{margin:0;font-size:14px;line-height:1.5;color:#222}}
-.wtxt .wsrc{{font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--red)}} .wtxt.note .wsrc{{margin-top:8px;text-transform:none;letter-spacing:.02em;font-weight:400;color:#666}}
+.wtxt h3{{margin:2px 0 8px;font-size:16px;line-height:1.4;color:var(--red)}} .wtxt p{{margin:0;font-size:14px;line-height:1.4;color:#222}}
+.wtxt .wsrc{{font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--red)}} .wtxt.note .wsrc{{margin-top:8px;text-transform:none;letter-spacing:.02em;font-weight:400;color:#555}}
 .wqm{{display:block;font-style:normal;font-size:48px;line-height:.5;height:22px;color:var(--red)}} .wq{{font-size:16px!important;font-style:italic}}
 .wlink{{display:inline-block;margin-top:10px;font-size:14px;color:#1a5fd0;text-decoration:none}}
 .wtxt .wc{{margin-top:10px}} .wtxt .todo{{color:var(--red)}}
-.wend{{margin:34px 0 0;text-align:center;font-size:12px;letter-spacing:.06em;color:#aaa}}
+.wend{{margin:34px 0 0;text-align:center;font-size:12px;letter-spacing:.06em;color:#8a8a86}}
 /* wonder v3 (23 Oct, 00:40): six category bars like the main page's half bars, then one endless grid, four to a row */
 .wonder{{padding:0 18px 40px}}
 .wbars{{position:sticky;top:0;z-index:3;display:grid;grid-template-columns:1fr 1fr;background:#fff;padding-top:10px}}
-.wbt{{display:flex;align-items:center;gap:5px;height:23px;padding:0 10px;border:0;font:inherit;font-size:12px;color:#000;text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent;
+.wbt{{display:flex;align-items:center;gap:4px;height:23px;padding:0 10px;border:0;font:inherit;font-size:12px;color:#222;text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent;
   background-color:#f2f2f2;background-image:var(--dh);background-position:left bottom;background-size:100% 1px;background-repeat:no-repeat}}
 .wbt:nth-child(odd){{background-image:var(--dh),var(--dv);background-position:left bottom,right top;background-size:100% 1px,1px 100%}}
 .wbt:nth-child(1){{background-image:var(--dh),var(--dh),var(--dv);background-position:left top,left bottom,right top;background-size:100% 1px,100% 1px,1px 100%}}
 .wbt:nth-child(2){{background-image:var(--dh),var(--dh);background-position:left top,left bottom;background-size:100% 1px,100% 1px}}
-.wbt b{{font-weight:700}} .wbt small{{font-size:12px;color:#444}}
+.wbt b{{font-weight:700}} .wbt small{{font-size:12px;color:#555}}
 .wbt.on{{background-color:#cdff3e}} .wbt:active{{background-color:#cdff3e}}
 .wonder .wbars{{display:none}}
 .wband{{position:relative;height:78px;margin:6px 0 0;overflow:hidden}} .wband canvas{{position:absolute;inset:0;width:100%;height:100%}}
@@ -402,7 +402,7 @@ body{{position:relative}}
 .wonder .wcats .wfb{{position:static;transform:none!important;box-shadow:none;height:22px;padding:0 2px;justify-content:center;font-size:12px;overflow:hidden}}
 .wonder .wcats .wfb b{{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
 .wonder .wcats .wfb.on{{box-shadow:inset 0 0 0 2px #111}} .wonder .wcats .wfb.on::after{{content:"×";margin-left:3px;font-size:12px;font-weight:700}}
-.wfb{{position:absolute;left:0;top:0;display:flex;align-items:center;gap:5px;height:23px;padding:0 10px;border:0;font:inherit;font-size:12px;color:#000;white-space:nowrap;cursor:pointer;pointer-events:auto;
+.wfb{{position:absolute;left:0;top:0;display:flex;align-items:center;gap:4px;height:23px;padding:0 10px;border:0;font:inherit;font-size:12px;color:#222;white-space:nowrap;cursor:pointer;pointer-events:auto;
   background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,rgba(242,242,242,.93);box-shadow:0 1px 6px rgba(0,0,0,.18);will-change:transform;-webkit-tap-highlight-color:transparent}}
 .wfb b{{font-weight:700}} .wfb small{{font-size:12px;color:inherit;opacity:.7}}
 /* eight categories, eight colours (23 Oct) - no grey; the chosen one gets a dark ring */
@@ -410,12 +410,12 @@ body{{position:relative}}
 .wfb:nth-child(1){{background-color:#d4f06a}} .wfb:nth-child(2){{background-color:#f2cf3a}} .wfb:nth-child(3){{background-color:#4a8fe0;color:#fff}} .wfb:nth-child(4){{background-color:#f2bccf}}
 .wfb:nth-child(5){{background-color:#d03a3a;color:#fff}} .wfb:nth-child(6){{background-color:#45ad5c;color:#fff}} .wfb:nth-child(7){{background-color:#ee9233}} .wfb:nth-child(8){{background-color:#9a7ee6;color:#fff}} .wfb:nth-child(9){{background-color:#26a69c;color:#fff}} .wfb:nth-child(10){{background-color:#2e3a72;color:#fff}}
 .wfb.on{{box-shadow:0 0 0 2px #111,0 1px 6px rgba(0,0,0,.25)}} .wfb.on small{{display:none}} .wfb.on::after{{content:"× all";margin-left:4px;font-size:12px;font-weight:700;opacity:.85}} .wfb:active{{filter:brightness(1.1)}}   /* the six categories float above the grid, as the half title bars do on the main page */
-.wonder .wgrid{{display:block;position:relative;margin-top:6px;grid-template-columns:repeat(5,1fr);grid-auto-rows:calc((100vw - 36px - 12px) / 5);grid-auto-flow:dense;gap:3px;margin-top:10px}}
+.wonder .wgrid{{display:block;position:relative;margin-top:6px;grid-template-columns:repeat(5,1fr);grid-auto-rows:calc((100vw - 36px - 12px) / 5);grid-auto-flow:dense;gap:4px;margin-top:10px}}
 .wempty{{display:block;background:#fff}}
 .wonder .wgrid > *{{position:relative;box-sizing:border-box;border:0;margin:0;width:auto;height:auto}}
 .wonder .wgrid .wg{{aspect-ratio:auto;background:#f4f4f2;padding:0;overflow:hidden}} .wonder .wgrid .wg img{{width:100%;height:100%;object-fit:cover!important}}   /* cropped to the cell, like the project tiles */
-.wcw{{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:2px;background:#f2f2f2;font:inherit;color:#000;cursor:pointer;-webkit-tap-highlight-color:transparent;overflow:hidden}}
-.wcw b{{font-weight:700;line-height:1;white-space:nowrap}} .wcw small{{font-size:9px;color:#666}} .wcw.on{{background:#cdff3e}} .wcw.on b{{color:var(--red)}} .wcw:active{{background:#cdff3e}}   /* a tight carpet: no gaps, only the white left over round each photo */
+.wcw{{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:2px;background:#f2f2f2;font:inherit;color:#222;cursor:pointer;-webkit-tap-highlight-color:transparent;overflow:hidden}}
+.wcw b{{font-weight:700;line-height:1;white-space:nowrap}} .wcw small{{font-size:9px;color:#555}} .wcw.on{{background:#cdff3e}} .wcw.on b{{color:var(--red)}} .wcw:active{{background:#cdff3e}}   /* a tight carpet: no gaps, only the white left over round each photo */
 .wonder .wg.t{{display:none!important}}   /* no text tiles in the carpet - photos only */
 .wonder .wg{{display:block;aspect-ratio:1/1}}
 /* photos in their own format (23 Oct, 00:50): a portrait fills the cell's height, a landscape its width; only the left-over is white, no frame, no crop */
@@ -440,8 +440,8 @@ body{{position:relative}}
 .wph .pw{{left:6px}} .wph .pe{{right:6px}}
 .wsq{{aspect-ratio:1/1;display:flex;flex-direction:column;justify-content:center;gap:8px;padding:18px;background:#f4f4f2;box-sizing:border-box;outline:1px dotted #b8b8b8;outline-offset:-1px}}
 .wsq.n{{background:#fffbd6}} .wsq small{{font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--red)}} .wsq .wpl{{font-size:20px;line-height:1.35}}
-.wpbody .wpd{{margin:10px 0 2px;font-size:12px;letter-spacing:.06em;color:#888}}
-.wpbody .wpl{{margin:0 0 4px;font-size:16px;line-height:1.45;color:#222}} .wpbody .wpl.q{{font-style:italic}}
+.wpbody .wpd{{margin:10px 0 2px;font-size:12px;letter-spacing:.06em;color:#8a8a86}}
+.wpbody .wpl{{margin:0 0 4px;font-size:16px;line-height:1.4;color:#222}} .wpbody .wpl.q{{font-style:italic}}
 .wpbody .wpq{{display:block;font-style:normal;font-size:70px;line-height:.5;height:30px;margin-top:30px;color:var(--red)}}
 .wpbody a{{display:inline-block;margin-top:12px;font-size:14px;color:#1a5fd0;text-decoration:none}}
 /* the map (23 Oct): every post a rectangle, grouped by category, the newer ones bigger - like a word treemap */
@@ -450,28 +450,28 @@ body{{position:relative}}
 .wmap .wb{{position:absolute;box-sizing:border-box;border:2px solid #111;pointer-events:none}}
 .wmap .wb i{{position:absolute;left:3px;top:1px;font-style:normal;font-size:8.5px;letter-spacing:.08em;color:var(--red);background:#f1f1ef;padding:0 2px;line-height:1.3}}
 .wmap .wl{{position:absolute;box-sizing:border-box;border:.5px solid #333;margin:0;background:#f1f1ef;-webkit-appearance:none;appearance:none;font-family:inherit;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:1px;
-  font-weight:700;color:#111;line-height:1;white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent;letter-spacing:-.01em}}
+  font-weight:700;color:#222;line-height:1;white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent;letter-spacing:-.01em}}
 .wmap .wl::before,.wmap .wl::after{{content:none!important}}
 .wmap .wl.new{{background:#cdff3e}} .wmap .wl:active{{background:#cdff3e}} .wmap .wl.txt{{color:var(--red);font-weight:400;font-style:italic}}
-.wmore{{margin:8px 0 0;text-align:center;font-size:12px;letter-spacing:.06em;color:#999}}
-.wview{{display:flex;justify-content:flex-end;gap:0;margin-top:2px}} .wview button{{border:0;background:none;font:inherit;font-size:12px;letter-spacing:.06em;color:#999;padding:2px 6px;cursor:pointer}}
-.wview button.on{{color:#000;font-weight:700}} .wview button+button{{border-left:1px solid #ccc}}
-.wgrid{{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:12px}}
+.wmore{{margin:8px 0 0;text-align:center;font-size:12px;letter-spacing:.06em;color:#8a8a86}}
+.wview{{display:flex;justify-content:flex-end;gap:0;margin-top:2px}} .wview button{{border:0;background:none;font:inherit;font-size:12px;letter-spacing:.06em;color:#8a8a86;padding:2px 6px;cursor:pointer}}
+.wview button.on{{color:#222;font-weight:700}} .wview button+button{{border-left:1px solid #ccc}}
+.wgrid{{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}}
 .wg{{position:relative;aspect-ratio:1/1;padding:0;border:0;background:#f4f4f2;overflow:hidden;cursor:pointer;font:inherit;text-align:left;-webkit-tap-highlight-color:transparent}}
 .wg::after{{content:"";position:absolute;inset:0;pointer-events:none;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat}}
 .wg img{{width:100%;height:100%;object-fit:cover;display:block}}
 .wg .gc{{position:absolute;left:0;right:0;bottom:0;padding:2px 5px 3px;background:rgba(68,68,68,.7);color:#fff;font-size:12px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
-.wg.t{{background:#f4f4f2;padding:8px 7px 20px;display:flex;flex-direction:column;gap:3px}} .wg.t.note{{background:#fffbd6}}
+.wg.t{{background:#f4f4f2;padding:8px 7px 20px;display:flex;flex-direction:column;gap:4px}} .wg.t.note{{background:#fffbd6}}
 .wg.t b{{font-size:12px;line-height:1.2;color:var(--red);display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}} .wg.t.note b{{color:#222;font-weight:400;font-style:italic}}
 .wg.t small{{font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--red);font-weight:700}}
 .wg[hidden]{{display:none}}
 .wpop{{position:fixed;left:0;right:0;top:var(--head);bottom:0;z-index:35;background:#fff;display:flex;flex-direction:column}}
 .wpop .wpnav{{flex:none;display:flex;justify-content:space-between;align-items:center;padding:8px 14px calc(env(safe-area-inset-bottom,0px) + 10px);border-top:1px solid transparent;border-image:var(--gh) 1}}
-.wpop .wpnav button{{display:flex;align-items:center;gap:6px;width:auto;height:auto;border:0;border-radius:0;background:none;font:inherit;font-size:14px;color:#000;padding:4px}}
+.wpop .wpnav button{{display:flex;align-items:center;gap:8px;width:auto;height:auto;border:0;border-radius:0;background:none;font:inherit;font-size:14px;color:#222;padding:4px}}
 .wpop[hidden]{{display:none}}
 .wpbar{{flex:none;display:flex;align-items:center;gap:10px;padding:10px 18px;border-bottom:1px solid transparent;border-image:var(--gh) 1}}
 .wback{{border:1px solid #3a3c37;border-radius:14px;background:#cdff3e;padding:5px 12px;font:inherit;font-size:14px;font-weight:700;cursor:pointer}}
-#wpk{{flex:1;font-size:12px;letter-spacing:.06em;color:#888;text-align:center}}
+#wpk{{flex:1;font-size:12px;letter-spacing:.06em;color:#8a8a86;text-align:center}}
 
 .wpbody{{flex:1;overflow-y:auto;padding:4px 18px 30px}} .wpbody .wp{{margin-top:14px}} .wpbody .wp[hidden]{{display:block}}
 .socs{{display:flex}}   /* in the top layouts (and the stack trials) the three marks sit at the right of the logo */
@@ -511,7 +511,7 @@ body{{position:relative}}
 .stack main{{padding-left:8px}} .stack .rule.l{{left:7px}} .stack .bar{{left:8px}}
 .stack .sbar{{display:none}}
 .stack main > .pbar{{position:sticky;z-index:14;margin:0 10px;font-size:12px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background-color .15s;
-  justify-content:flex-start;padding:0 10px;height:23px;margin-bottom:-1px;color:#000;
+  justify-content:flex-start;padding:0 10px;height:23px;margin-bottom:-1px;color:#222;
   background:repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left top/100% 1px no-repeat,repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left bottom/100% 1px no-repeat,#fff}}
 /* white bars with a thin dotted line between them (each overlaps the one before by 1 px, so the lines never double); only the page you are in is yellow-lime */
 .stack main > .pbar{{margin-top:46px}}   /* a little air between a page and the next page's bar (only while it flows; stacked bars sit tight) */
@@ -530,7 +530,7 @@ body{{position:relative}}
 .stack::after{{content:"";position:fixed;left:8px;right:8px;bottom:0;height:calc(var(--foot) + env(safe-area-inset-bottom,0px));background:#fff;z-index:14;pointer-events:none}}
 .stack.pairs #start{{min-height:calc(100lvh - var(--head) - 2 * var(--bar) - 59px - var(--foot,0px))}}   /* just tall enough that all bars wait together at the bottom */
 /* ?stack=2: half bars - each half moves on its own and locks in beside its partner */
-.stack main > .hb{{position:sticky;z-index:14;display:flex;align-items:center;height:23px;padding:0 10px;font-size:12px;color:#000;cursor:pointer;-webkit-tap-highlight-color:transparent;
+.stack main > .hb{{position:sticky;z-index:14;display:flex;align-items:center;height:23px;padding:0 10px;font-size:12px;color:#222;cursor:pointer;-webkit-tap-highlight-color:transparent;
   transition:background-color .15s;
   background:repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left top/100% 1px no-repeat,repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left bottom/100% 1px no-repeat,#fff}}
 /* trials (22 Oct): make each section read as one piece - ?sec=1 pale ground on every other section, ?sec=2 a dotted frame round each, ?sec=3 the section you are in turns pale lime */
@@ -593,7 +593,7 @@ html,body{{overflow-x:clip}}
 .heartfx{{position:fixed;inset:0;z-index:60;pointer-events:none;overflow:hidden}}
 .heartfx svg{{position:absolute;left:0;top:0;width:60px;height:60px;margin:-30px 0 0 -30px;fill:var(--red);will-change:transform,opacity}}
 .heartfx .sm{{width:16px;height:16px;margin:-8px 0 0 -8px}}
-.pin{{position:absolute;display:flex;flex-direction:column;align-items:center;gap:3px;width:25vw;max-width:110px;text-decoration:none;text-align:center;-webkit-tap-highlight-color:transparent}}
+.pin{{position:absolute;display:flex;flex-direction:column;align-items:center;gap:4px;width:25vw;max-width:110px;text-decoration:none;text-align:center;-webkit-tap-highlight-color:transparent}}
 .pin.l{{left:6px}} .pin.r{{right:6px}}
 .pin b{{display:flex;align-items:center;justify-content:center;width:23px;height:23px;border-radius:50%;background:#bfbfbf;font-weight:400;font-size:12px;
   box-shadow:inset 0 0 0 1px #000;transition:background .15s}}
@@ -619,7 +619,7 @@ html,body{{overflow-x:clip}}
 .leads circle{{fill:#ffd400;stroke:#000;stroke-width:1.2}}
 .pin:active b{{animation:none;background:var(--green);box-shadow:inset 0 0 0 1px var(--red)}}
 .pin:active span{{color:var(--red)}}
-.hint{{text-align:center;font-size:12px;color:#666;letter-spacing:.06em;margin:0;padding:4px 0 10px}}
+.hint{{text-align:center;font-size:12px;color:#555;letter-spacing:.06em;margin:0;padding:4px 0 10px}}
 /* projects: tiles in two columns */
 .grid{{display:grid;grid-template-columns:1fr 1fr;gap:8px}}
 .tile{{position:relative;display:block;font:inherit;color:inherit;aspect-ratio:1/1;padding:0;border:0;background:#f4f4f2;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent}}
@@ -638,39 +638,39 @@ html,body{{overflow-x:clip}}
 .box .firm{{margin:0}}
 #contact .body > .box:first-child{{margin-top:0}}
 .lab{{margin:6px 0 6px;font-size:12px;font-weight:700;letter-spacing:.12em;color:var(--red)}}   /* small red subtitles, bold like the current tab */
-.firm{{margin:0 0 6px;font-size:16px}} .firm span{{font-size:14px;color:#666}}
+.firm{{margin:0 0 6px;font-size:16px}} .firm span{{font-size:14px;color:#555}}
 .duo{{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:26px 0 0}}
 .who{{min-width:0;display:flex;flex-direction:column;align-items:flex-start}}
 /* ID card on top, filling the column (number, birth date and signature blurred) */
 .who .idw{{display:block;align-self:stretch;position:relative}}   /* the ID card fills the column, no frame of its own (Steuart, 21 Oct) */
 .who .idc{{display:block;width:100%;height:auto;border-radius:6px}}
 .who .idc.sq{{width:63.4%;border-radius:0}}   /* Steuart's portrait square, as tall as Cuong's card (23 Oct) */
-.cvr{{margin:0;font-size:12px;color:#666}}
+.cvr{{margin:0;font-size:12px;color:#555}}
 .who .role .rs,.cvr .rs{{display:inline-block;width:2.5px;height:.95em;margin:0 6px;vertical-align:-.1em;background:#3a3c37}}
-.who .role{{margin:8px 0 0;font-size:12px;color:#666}}
+.who .role{{margin:8px 0 0;font-size:12px;color:#555}}
 .who h3,.cvn{{margin:1px 0 0;font-weight:400;font-size:14px;line-height:1.15;color:var(--red)}} .who h3 b,.cvn b{{font-weight:700}}
 .who .q,.cvn .q{{margin:2px 0 0;font-size:12px;font-style:italic;font-weight:400;color:#555}}
 .cvn .q{{margin-left:3px}}
-.who .fx{{margin:6px 0 0;font-size:12px;line-height:1.3;color:#444}} .who .fx b{{font-weight:700;color:#222}}
+.who .fx{{margin:6px 0 0;font-size:12px;line-height:1.3;color:#555}} .who .fx b{{font-weight:700;color:#222}}
 .who .kt{{display:flex;flex-direction:column;align-items:flex-start;gap:2px;margin:auto 0 0;padding-top:7px;font-size:min(12px,3.05vw);line-height:1.35;white-space:nowrap}}
 .who .kt a{{text-decoration:none}}
 /* short text about the practice */
 .intro2{{margin:8px 0 0;font-size:14px;line-height:1.4;color:#222}}
 p.bt,.sp{{margin:8px 0 0;font-size:14px;line-height:1.4;color:#222}} .sp{{margin-top:3px;font-size:14px}}
-.sh{{display:flex;align-items:center;gap:7px;margin:12px 0 2px;font-size:14px;font-weight:700;color:var(--red);letter-spacing:.02em}} .sh img{{width:18px;height:18px}}
+.sh{{display:flex;align-items:center;gap:8px;margin:12px 0 2px;font-size:14px;font-weight:700;color:var(--red);letter-spacing:.02em}} .sh img{{width:18px;height:18px}}
 .bio p{{margin:8px 0 0;font-size:14px;line-height:1.4;color:#222}}
 /* full bio and our services: two openers side by side, each unfolding underneath (one at a time) */
 .opn{{display:flex;gap:18px;flex-wrap:wrap}}
 /* openers (full bio, full services) sit on their subtitle's line, at the right */
 .lh{{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 6px}} .lh .lab{{margin:0}} .lh .cvb{{margin:0;padding:0}}
 .fold > summary{{display:none}} .fold{{margin:0}}
-.svc h4{{display:flex;align-items:center;gap:7px;margin:12px 0 2px;font-size:14px;font-weight:700;color:var(--red);letter-spacing:.02em}}
+.svc h4{{display:flex;align-items:center;gap:8px;margin:12px 0 2px;font-size:14px;font-weight:700;color:var(--red);letter-spacing:.02em}}
 .svc h4 img{{width:18px;height:18px}}
 .sv3{{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0 6px}}
 #us .cvp + .box{{margin-top:26px}}
-.sv3 div{{display:flex;flex-direction:column;align-items:center;text-align:center;gap:3px}}
+.sv3 div{{display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px}}
 .sv3 img{{width:25px;height:25px}} .sv3 b{{font-size:14px;color:var(--red);letter-spacing:.03em}}
-.sv3 span{{font-size:12px;line-height:1.3;color:#444}}
+.sv3 span{{font-size:12px;line-height:1.3;color:#555}}
 .svc p{{margin:3px 0 0;font-size:14px;line-height:1.4;color:#222}}
 /* the CVs open under both columns */
 .cvp > summary{{display:none}} .cvp{{margin:0}} .cvp .box{{margin-top:26px}} .cvp .cvb{{margin-top:10px}}
@@ -679,9 +679,9 @@ p.bt,.sp{{margin:8px 0 0;font-size:14px;line-height:1.4;color:#222}} .sp{{margin
   background:repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left top/100% 1px no-repeat,repeating-linear-gradient(to right,#b8b8b8 0 1px,transparent 1px 3px) left bottom/100% 1px no-repeat,#fff}}
 details,.cvb{{margin:4px 0 0}}
 /* "CV (+) full CV": a red cross in a circle that sends out pulsing yellow-lime rings; open, it becomes a minus and reads "close" */
-summary,.cvb{{border:0;background:none;font-family:inherit;color:inherit;display:inline-flex;align-items:center;gap:7px;cursor:pointer;list-style:none;font-size:14px;letter-spacing:.04em;padding:1px 0;-webkit-tap-highlight-color:transparent}}
+summary,.cvb{{border:0;background:none;font-family:inherit;color:inherit;display:inline-flex;align-items:center;gap:8px;cursor:pointer;list-style:none;font-size:14px;letter-spacing:.04em;padding:1px 0;-webkit-tap-highlight-color:transparent}}
 summary::-webkit-details-marker{{display:none}}
-summary b,.cvb b{{color:var(--red);font-weight:700;font-size:14px;margin-left:-3px}} .cvt{{color:#000;font-weight:300;font-size:14px}}
+summary b,.cvb b{{color:var(--red);font-weight:700;font-size:14px;margin-left:-3px}} .cvt{{color:#222;font-weight:300;font-size:14px}}
 .cvx{{width:20px;height:20px;overflow:visible}}
 .cvx .c{{fill:#fff;stroke:var(--red);stroke-width:1.5}} .cvx path{{stroke:var(--red);stroke-width:1.6;stroke-linecap:round}}
 .cvx .r1,.cvx .r2{{fill:none;stroke:#cdff3e;stroke-width:2.2;transform-box:fill-box;transform-origin:center;animation:cvp 1.8s ease-out infinite}}
@@ -692,27 +692,27 @@ details[open] > summary .cvt,[aria-expanded=true] .cvt{{font-size:0}} details[op
 @media (prefers-reduced-motion:reduce){{.cvx .r1,.cvx .r2{{display:none}}}}
 details h4{{margin:12px 0 2px;font-size:14px;color:var(--red);font-weight:700}}
 details ul{{margin:0;padding:0 0 0 14px;font-size:14px;line-height:1.4;color:#222}} details li{{margin:2px 0}}
-.addr{{margin:0;font-size:14px;line-height:1.35}}   /* compact: two short lines */
-.ctx{{margin:22px 0 0;text-align:center;font-size:min(13.5px,3.6vw);line-height:1.35;color:#000;white-space:nowrap}}   /* closing line, in the address type (not italic) */   /* closing line, like a full stop: two centred lines, a dash before and after */
+.addr{{margin:0;font-size:14px;line-height:1.4}}   /* compact: two short lines */
+.ctx{{margin:22px 0 0;text-align:center;font-size:min(13.5px,3.6vw);line-height:1.35;color:#222;white-space:nowrap}}   /* closing line, in the address type (not italic) */   /* closing line, like a full stop: two centred lines, a dash before and after */
 .ctx .hd{{font-style:normal;margin:0 .4em}}
 /* the partners on the contact page too (as on the desktop), compact */
 .pcs{{margin:12px 0 0;font-size:min(13px,3.4vw);line-height:1.4}} .pcs p{{margin:0 0 8px}} .pcs b{{font-weight:700}} .pcs a{{text-decoration:none}}
 /* copyright, as at the foot of the desktop side bar */
-.legal h4{{margin:12px 0 2px;font-size:12px;font-weight:700;color:#000}} .legal p{{margin:0;font-size:12px;line-height:1.45;color:#222}} .legal .lp{{color:#666;font-size:12px}}
+.legal h4{{margin:12px 0 2px;font-size:12px;font-weight:700;color:#222}} .legal p{{margin:0;font-size:12px;line-height:1.3;color:#222}} .legal .lp{{color:#555;font-size:12px}}
 .legal a{{color:#1a5fd0;text-decoration:none}} .legal a[href^="tel:"]{{color:#1e8e3e}} .legal .todo{{color:#e30613}}
 .ptrail{{position:absolute;inset:0;width:100%;height:100%}}
 /* the end of the page: mark + copyright, and the pulsing dot that opens the game */
 .fin{{position:relative;display:flex;justify-content:center;margin:26px 0 10px;min-height:86px}}
-.todesk{{display:block;margin-top:6px;font-size:12px;letter-spacing:.06em;color:#888;text-decoration:none}}
+.todesk{{display:block;margin-top:6px;font-size:12px;letter-spacing:.06em;color:#8a8a86;text-decoration:none}}
 .finm{{display:flex;flex-direction:column;align-items:center;gap:2px}} .finm img{{width:26px;height:26px}} .finm span{{font-size:16px;color:var(--red)}} .finm b{{font-weight:700}} .finm .copy{{margin:4px 0 0}}
 .pgo{{position:absolute;right:6px;top:2px;display:flex;align-items:center;gap:0;border:0;background:none;padding:0;font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}}
-.pgo .pme{{font-size:12px;letter-spacing:.08em;color:#666;white-space:nowrap}}
+.pgo .pme{{font-size:12px;letter-spacing:.08em;color:#555;white-space:nowrap}}
 .pgo .pld{{width:22px;height:1px;margin:0 2px 0 5px;background:var(--dh)}}
 .pgo .pdot{{position:relative;margin:0;width:40px;height:40px;cursor:pointer}}
 dialog#game{{inset:0;z-index:70;padding:0;overflow:hidden}}
 .play{{position:absolute;inset:0;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;background:#fff}}
 .gx{{position:absolute;right:10px;top:calc(env(safe-area-inset-top,0px) + 10px);z-index:4}}
-.pkey{{display:flex;align-items:center;gap:5px;margin-top:10px;font-size:14px;color:#222}} 
+.pkey{{display:flex;align-items:center;gap:4px;margin-top:10px;font-size:14px;color:#222}} 
 .pf{{position:absolute;left:0;top:0;display:block;pointer-events:none}}
 .pf.f1{{width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;background:var(--red)}}
 .pf.f2{{width:13px;height:13px;margin:-6.5px 0 0 -6.5px;border-radius:50%;border:2.5px solid var(--red);box-sizing:border-box}}
@@ -730,20 +730,20 @@ dialog#game{{inset:0;z-index:70;padding:0;overflow:hidden}}
 .stack{{--stk:132px}} .stack.pairs{{--stk:44px}}
 .pscore{{position:absolute;left:12px;right:12px;top:calc(env(safe-area-inset-top,0px) + 48px);display:flex;justify-content:space-between;font-size:12px;letter-spacing:.06em;color:#555;pointer-events:none;z-index:2}}
 .pscore b{{color:var(--red);font-size:14px;margin-left:4px}}
-.phint{{position:absolute;left:0;right:0;top:30%;display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center;pointer-events:none;transition:opacity .5s;z-index:2}}
-.phint b{{font-size:21px;color:var(--red)}} .phint span{{font-size:14px;color:#222}} .phint small{{margin-top:6px;font-size:12px;letter-spacing:.08em;color:#888}}
+.phint{{position:absolute;left:0;right:0;top:30%;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;pointer-events:none;transition:opacity .5s;z-index:2}}
+.phint b{{font-size:21px;color:var(--red)}} .phint span{{font-size:14px;color:#222}} .phint small{{margin-top:6px;font-size:12px;letter-spacing:.08em;color:#8a8a86}}
 .play.go .phint{{opacity:0}}
 .pfood{{position:absolute;left:0;top:0;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:var(--red);box-shadow:0 0 0 2px #fff,0 0 0 3px rgba(227,6,19,.35);pointer-events:none}}
 .pend{{position:absolute;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);display:flex;flex-direction:column;align-items:center;gap:2px;pointer-events:none;z-index:2}}
 .pend img{{width:26px;height:26px}} .pend span{{font-size:16px;color:var(--red)}} .pend b{{font-weight:700}} .pend .copy{{margin:4px 0 0}}
 .pmsg{{position:absolute;left:0;right:0;top:44%;text-align:center;font-size:22px;font-weight:700;color:var(--red);pointer-events:none;z-index:3}}
 .pdd{{position:absolute;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;pointer-events:none}}   /* the round dd badge the beetle sends out when it catches the dot */
-.copy{{margin:18px 0 0;text-align:center;font-size:12px;letter-spacing:.06em;color:#888}}   /* closing line, like a full stop */
+.copy{{margin:18px 0 0;text-align:center;font-size:12px;letter-spacing:.06em;color:#8a8a86}}   /* closing line, like a full stop */
 p.lab:not(.first){{margin-top:26px}}
 .box .lab.first{{margin-top:0}}
 .mapw{{position:relative;z-index:0;isolation:isolate;margin:10px 0 0}}
 .map{{height:56svh;min-height:300px;background:#eee}}
-.mz{{position:absolute;right:9px;top:9px;z-index:500;display:flex;flex-direction:column;gap:5px}}
+.mz{{position:absolute;right:9px;top:9px;z-index:500;display:flex;flex-direction:column;gap:4px}}
 .mz button{{width:36px;height:36px;border:0;border-radius:50%;background:none;padding:0;-webkit-tap-highlight-color:transparent}}
 .mz #zhome{{margin-top:9px}}
 .mz svg{{display:block;width:100%;height:100%;overflow:visible}}
@@ -760,23 +760,23 @@ a[href^="tel:"]{{color:#1e8e3e}} a[href^="mailto:"],.mapl a{{color:#1a5fd0}}
 .pinsvg .pb{{fill:#3a3c37}} .pinsvg .pw{{fill:#fff}}
 .pinsvg .pr{{fill:none;stroke:#3a3c37;stroke-width:1;vector-effect:non-scaling-stroke}}
 .pinsvg .pa{{fill:#4d4f4a;stroke:#1a1a1a;stroke-width:1;vector-effect:non-scaling-stroke;stroke-linejoin:round}}
-.pinsvg text{{fill:#3a3c37;font:700 6.4px Calibri,Carlito,sans-serif;text-anchor:middle;dominant-baseline:central}}
-.plab{{position:absolute;left:calc(100% + .35em);bottom:62%;white-space:nowrap;background:rgba(255,255,255,.92);color:#000;font:400 12px/1.25 Calibri,Carlito,sans-serif;padding:.3em .55em}}
+.pinsvg text{{fill:#3a3c37;font:700 6.4px Carlito,Calibri,sans-serif;text-anchor:middle;dominant-baseline:central}}
+.plab{{position:absolute;left:calc(100% + .35em);bottom:62%;white-space:nowrap;background:rgba(255,255,255,.92);color:#222;font:400 12px/1.3 Carlito,Calibri,sans-serif;padding:.3em .55em}}
 .plab b{{font-weight:700}}
-.leaflet-container{{font-family:Calibri,Carlito,sans-serif}} .leaflet-control-attribution{{font-size:12px!important}} .soon a{{color:var(--red)}}
+.leaflet-container{{font-family:Carlito,Calibri,sans-serif}} .leaflet-control-attribution{{font-size:12px!important}} .soon a{{color:var(--red)}}
 /* project pop-up: full screen, swipe through the photos */
 /* pop-ups leave the side strip (and in the other versions the header) free, so the logo and the tabs stay in reach */
-dialog{{position:fixed;inset:var(--head) 8px 0 var(--side);z-index:40;width:auto;height:auto;max-width:none;max-height:none;margin:0;padding:0;border:0;background:#fff;overflow-y:auto;color:#000}}
+dialog{{position:fixed;inset:var(--head) 8px 0 var(--side);z-index:40;width:auto;height:auto;max-width:none;max-height:none;margin:0;padding:0;border:0;background:#fff;overflow-y:auto;color:#222}}
 html.dlg{{overflow:hidden}}
 .top{{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top,0px) + 8px) 10px 8px;background:rgba(255,255,255,.94)}}
-.cnt{{display:flex;align-items:center;gap:6px;font-size:14px;color:#666;letter-spacing:.06em}}
+.cnt{{display:flex;align-items:center;gap:8px;font-size:14px;color:#555;letter-spacing:.06em}}
 .cnt b{{color:var(--red);font-weight:400}}
 .cnt button,.x{{border:0;background:none;padding:6px;margin:-6px;display:flex}}
 .top.tc{{display:grid;grid-template-columns:1fr auto 1fr;align-items:center}} .top.tc .x{{justify-self:end}}   /* project pop-up (23 Oct): "projects 06 / 11" in the middle at the top, the small W / E project arrows right beside it */
 .cnt.pk{{gap:10px;font-size:14px}} .cnt.pk button{{margin:-6px 0;outline:none;-webkit-tap-highlight-color:transparent}}
 .x{{outline:none;-webkit-tap-highlight-color:transparent}} .x svg{{width:22px;height:22px}} .x .rg{{fill:none;stroke:#3a3c37;stroke-width:var(--hp)}} .x .xx{{fill:none;stroke:#1a1a1a;stroke-width:1.15;stroke-linecap:round}}
 .ar{{overflow:visible}} .ar .rg{{fill:none;stroke:#3a3c37;stroke-width:var(--hp)}} .ar .dt{{fill:#4d4f4a;stroke:#1a1a1a;stroke-width:var(--hp);stroke-linejoin:round}}
-.ar text{{fill:#3a3c37;font:700 6.4px Calibri,Carlito,sans-serif;text-anchor:middle;dominant-baseline:central}} .ar .tr{{display:none}}
+.ar text{{fill:#3a3c37;font:700 6.4px Carlito,Calibri,sans-serif;text-anchor:middle;dominant-baseline:central}} .ar .tr{{display:none}}
 .photos{{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;background:#fff}}
 .phw::after{{display:none}}   /* one clean photo: no frame, no grey bands */
 .phw::after{{content:"";position:absolute;inset:0;pointer-events:none;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat}}
@@ -790,25 +790,25 @@ dialog .top{{flex:none}}
   -webkit-tap-highlight-color:transparent;transition:opacity .2s}}
 .phw .pw{{left:6px}} .phw .pe{{right:6px}}
 .phw button:disabled{{opacity:0;pointer-events:none}}
-.pcount{{font-size:12px;color:#888;letter-spacing:.06em;padding:6px 12px 0}}
-.dots{{display:flex;gap:5px;justify-content:center;padding:6px 0 0}}
+.pcount{{font-size:12px;color:#8a8a86;letter-spacing:.06em;padding:6px 12px 0}}
+.dots{{display:flex;gap:4px;justify-content:center;padding:6px 0 0}}
 .dots i{{width:6px;height:6px;border-radius:50%;background:#ccc}} .dots i.on{{background:var(--red)}}
 .txt{{flex:1;min-height:0;overflow:hidden;position:relative;padding:4px 10px 0}}
 .txt::after{{content:"";position:absolute;left:0;right:0;bottom:0;height:14px;background:linear-gradient(rgba(255,255,255,0),rgba(255,255,255,.96))}}
 .txt h2{{margin:4px 0 0;color:var(--red);font-size:16px;line-height:1.15}}
-.txt p{{margin:5px 0 0;font-size:14px;line-height:1.36;color:#222}}
+.txt p{{margin:5px 0 0;font-size:14px;line-height:1.4;color:#222}}
 .txt dl{{margin:8px 0 0;padding-top:6px;background:var(--dh) left top/100% 1px no-repeat;display:grid;grid-template-columns:auto 1fr auto 1fr;gap:2px 8px;font-size:12px;line-height:1.3}}
-.txt dt{{color:#888}} .txt dd{{margin:0}}
+.txt dt{{color:#8a8a86}} .txt dd{{margin:0}}
 .nav2{{flex:none;display:flex;justify-content:space-between;align-items:center;margin:0 10px;padding:4px 0 calc(env(safe-area-inset-bottom,0px) + 8px);background:var(--dh) left top/100% 1px no-repeat}}
-.nav2 button{{display:flex;align-items:center;gap:6px;border:0;background:none;font:400 12px Calibri,Carlito,sans-serif;letter-spacing:.06em;color:#666;padding:6px 0}}
+.nav2 button{{display:flex;align-items:center;gap:8px;border:0;background:none;font:400 12px Carlito,Calibri,sans-serif;letter-spacing:.06em;color:#555;padding:6px 0}}
 /* downloads & links */
-.intro{{margin:0 0 8px;font-size:14px;line-height:1.45;color:#333}}
+.intro{{margin:0 0 8px;font-size:14px;line-height:1.4;color:#555}}
 .pdfs{{list-style:none;margin:10px 0 0;padding:0}}
-.pdfs{{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px}}   /* the four PDFs in two rows of two */
-.pdfs li{{display:flex;align-items:center;gap:8px;padding:4px 0}} .pdfs span{{font-size:14px!important;line-height:1.25}}
+.pdfs{{display:grid;grid-template-columns:1fr 1fr;gap:8px 10px}}   /* the four PDFs in two rows of two */
+.pdfs li{{display:flex;align-items:center;gap:8px;padding:4px 0}} .pdfs span{{font-size:14px!important;line-height:1.4}}
 .pdfs li:last-child{{background:none}}
 .pdfs img{{width:26px;height:auto}}
-.pdfs span{{font-size:14px}} .pdfs small{{display:block;font-size:12px;color:#999;letter-spacing:.04em}}
+.pdfs span{{font-size:14px}} .pdfs small{{display:block;font-size:12px;color:#8a8a86;letter-spacing:.04em}}
 .links{{display:grid;grid-template-columns:1fr 1fr;gap:14px 10px;margin-top:12px}}
 /* checkerboard (24 Oct, Steuart): each link - logo, name and line - sits on its own square, grey and white taking turns like a draughts board, so it is clear which text belongs to which logo; ?chk=0 shows the old look */
 .links.chk{{gap:0}} .links.chk .lk{{padding:10px 10px 12px;background:#f4f4f2}}
@@ -831,7 +831,7 @@ html.nochk .links.chk{{gap:14px 10px}} html.nochk .links.chk .lk{{padding:0;back
 .lg::after{{content:"";position:absolute;inset:0;pointer-events:none;
   background:repeating-linear-gradient(to right,var(--dot) 0 1px,transparent 1px 3px) left top/100% 1px no-repeat,repeating-linear-gradient(to right,var(--dot) 0 1px,transparent 1px 3px) left bottom/100% 1px no-repeat,
   repeating-linear-gradient(to bottom,var(--dot) 0 1px,transparent 1px 3px) left top/1px 100% no-repeat,repeating-linear-gradient(to bottom,var(--dot) 0 1px,transparent 1px 3px) right top/1px 100% no-repeat}}
-.lk b{{margin-top:5px;font-size:14px;color:var(--red)}} .lk small{{font-size:12px;line-height:1.25;color:#555}}
+.lk b{{margin-top:5px;font-size:14px;color:var(--red)}} .lk small{{font-size:12px;line-height:1.3;color:#555}}
 .lk:active .lg{{background:var(--green)}}
 /* bits & bats: two columns, the tall pictures over two rows */
 .bgrid{{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:calc((100vw - var(--side) - 28px) / 2 * .9);grid-auto-flow:dense;gap:8px}}
@@ -844,17 +844,17 @@ html.nochk .links.chk{{gap:14px 10px}} html.nochk .links.chk .lk{{padding:0;back
 .card .ct small{{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--red);font-weight:700}}
 .card .ct b{{font-size:14px;line-height:1.2;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;flex:none}}
 .card.note .qm{{font-style:normal;font-size:36px;line-height:.6;color:var(--red);height:14px;flex:none}}
-.card .ex{{font-style:normal;font-size:12px;line-height:1.35;color:#555;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}} .card .mo{{font-size:12px;color:var(--red);flex:none}}
+.card .ex{{font-style:normal;font-size:12px;line-height:1.3;color:#555;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}} .card .mo{{font-size:12px;color:var(--red);flex:none}}
 .card.note .ex{{display:none}}
-.card.note .ct b{{font-weight:400;font-style:italic;font-size:14px;line-height:1.3;-webkit-line-clamp:4}}
+.card.note .ct b{{font-weight:400;font-style:italic;font-size:14px;line-height:1.4;-webkit-line-clamp:4}}
 .cwc{{padding:6px 14px 30px;overflow:auto}} .cwc .lab{{margin-top:10px}} .cwc h2{{margin:6px 0 10px;font-size:20px;line-height:1.2;color:var(--red)}}
-.cwc p{{margin:0;font-size:14px;line-height:1.5;color:#222}} .cwc .q{{font-size:19px;line-height:1.45}} .cwc .todo{{color:var(--red)}}
+.cwc p{{margin:0;font-size:14px;line-height:1.4;color:#222}} .cwc .q{{font-size:19px;line-height:1.45}} .cwc .todo{{color:var(--red)}}
 .cwc .qm{{display:block;font-style:normal;font-size:64px;line-height:.5;height:30px;margin-top:22px;color:var(--red)}}
 .cwc .open{{display:inline-block;margin-top:16px;font-size:14px;color:#1a5fd0;text-decoration:none;padding:6px 0;background:var(--dh) left bottom/100% 1px no-repeat}}
 /* one picture full screen, swipe to the next */
 #iv .photos img{{height:70svh}}
 .ivcap{{padding:10px 10px 30px;color:var(--red);font-size:16px;font-weight:700}}
-.ivcap small{{display:block;margin-top:4px;color:#888;font-weight:400;font-size:12px;letter-spacing:.06em}}
+.ivcap small{{display:block;margin-top:4px;color:#8a8a86;font-weight:400;font-size:12px;letter-spacing:.06em}}
 </style>
 </head>
 <body>
@@ -1276,6 +1276,7 @@ header{padding-left:18px!important;padding-right:18px!important}
  background-image:var(--dh),var(--dh),var(--dv),var(--dv);background-position:left top,left bottom,left top,right top;background-size:100% 1px,100% 1px,1px 100%,1px 100%}
 .wp img,.wpbody .wpi,.wsw .wth img,.wsq{outline:0!important}
 .tile::after,.phw::after{display:none!important}
+.mapl a{text-decoration:none}   /* B10: links are regular blue, never underlined */
 /* C3 (11 Nov): invisible larger touch areas, about 40 px - the look is unchanged */
 .wtr .wsw{position:relative}
 .wsw::before{content:"";position:absolute;left:-8px;right:-8px;top:50%;height:44px;transform:translateY(-50%)}
@@ -1300,7 +1301,7 @@ function place(){var t=q('.tk.t'),b=q('.tk.b'),m=q('.tk.m');if(!t||!b)return;
 place();addEventListener('resize',place);setInterval(place,600);
 })();</script>
 '''
-UIFIX = '<style>button{font-family:Calibri,Carlito,sans-serif}</style>'   # 11 Nov (UI audit A6): buttons without a font of their own (scroll / back to the top) take the page font instead of Arial
+UIFIX = '<style>button{font-family:Carlito,Calibri,sans-serif}</style>'   # 11 Nov (UI audit A6): buttons without a font of their own (scroll / back to the top) take the page font instead of Arial
 NOCOPY = NOCOPY.replace('</style>', LIVE_CSS + '</style>', 1)
 open(OUT, 'w').write(HTML.replace('</head>', UIFIX + '</head>', 1).replace('</body>', NOCOPY + UPDATE + LIVE_JS + '</body>', 1))
 open(os.path.join(ROOT, 'phone', 'version.json'), 'w').write('{"v":"' + VERSION + '"}\n')

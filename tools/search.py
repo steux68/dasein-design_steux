@@ -27,19 +27,19 @@ CSS = '''
 .sbtn:focus-visible{outline:none}
 @media (prefers-reduced-motion:reduce){.sbtn svg{animation:none!important}}
 .spop{position:absolute;z-index:40;box-sizing:border-box;padding:10px 12px 12px;background:rgba(255,255,255,.9);
-  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:0 8px 28px rgba(0,0,0,.10);font-family:Calibri,Carlito,sans-serif}
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:0 8px 28px rgba(0,0,0,.10);font-family:Carlito,Calibri,sans-serif}
 .spop input{display:block;width:100%;box-sizing:border-box;margin:0;padding:4px 0;border:0;border-bottom:var(--hp) dotted #b8b8b8;border-radius:0;
-  background:none;font:400 15px/1.2 Calibri,Carlito,sans-serif;color:#000;outline:none;-webkit-appearance:none;appearance:none}
+  background:none;font:400 15px/1.2 Carlito,Calibri,sans-serif;color:#222;outline:none;-webkit-appearance:none;appearance:none}
 .spop input::placeholder{color:#e30613;opacity:1}
 .spop input::-webkit-search-cancel-button{-webkit-appearance:none}
 #sres{max-height:520px;overflow-y:auto;scrollbar-width:thin}
 .sr{display:block;width:100%;box-sizing:border-box;text-align:left;margin:0;padding:6px 0;border:0;border-bottom:var(--hp) dotted #d6d6d6;background:none;cursor:pointer;
-  font:400 12.5px/1.3 Calibri,Carlito,sans-serif;color:#222}
+  font:400 12.5px/1.3 Carlito,Calibri,sans-serif;color:#222}
 .sr .sp{display:block;color:#e30613;font-size:10.5px;letter-spacing:.06em}
 .sr mark{background:#d4fb4d;color:inherit;padding:0 1px}
 .sr:hover .st,.sr:focus-visible .st{color:#e30613}
 .sr:focus-visible{outline:none}
-.snone{padding-top:7px;font-size:12px;color:#888}
+.snone{padding-top:7px;font-size:12px;color:#8a8a86}
 .sflash{background:rgba(212,251,77,.9)!important;box-shadow:0 0 0 3px rgba(212,251,77,.9)}
 /* map zoom: white circles with a thin red + / -, like the search magnifier */
 .mz{gap:4px!important}

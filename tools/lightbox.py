@@ -96,11 +96,11 @@ CSS = '''
 .pcar .tr{animation:arring 1.4s ease-out infinite}
 .pcar .dt{transform-box:fill-box;transform-origin:center}
 /* project pop-up: only the main area is veiled and blurred; side bars, title and menu stay sharp */
-dialog.lb{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;background:transparent;overflow:hidden;color:#000}
+dialog.lb{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;background:transparent;overflow:hidden;color:#222}
 dialog.lb::backdrop{background:transparent}
 dialog.lb[open]{display:flex;align-items:center;justify-content:center}
 .lbh{position:relative;flex:none;width:calc(1440px * var(--s,.5));height:calc(1024px * var(--s,.5))}
-.lbs{position:absolute;left:0;top:0;width:1440px;height:1024px;transform:scale(var(--s,.5));transform-origin:0 0;font-family:Calibri,Carlito,sans-serif}
+.lbs{position:absolute;left:0;top:0;width:1440px;height:1024px;transform:scale(var(--s,.5));transform-origin:0 0;font-family:Carlito,Calibri,sans-serif}
 .lbv{position:absolute;left:225px;top:32px;width:1100px;height:992px;background:rgba(255,255,255,.35);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px)}
 dialog.lb[open] .lbv{animation:lbveil .3s ease-out both}
 @keyframes lbveil{from{background:rgba(255,255,255,0);-webkit-backdrop-filter:blur(0);backdrop-filter:blur(0)}}
@@ -121,7 +121,7 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
    repeating-linear-gradient(to bottom,var(--c) 0 var(--d),transparent var(--d) var(--p)) left top/var(--w) 100% no-repeat,
    repeating-linear-gradient(to bottom,var(--c) 0 var(--d),transparent var(--d) var(--p)) right top/var(--w) 100% no-repeat}
 /* top line: counter on the left, close on the right */
-.lbk{position:absolute;left:26px;top:30px;height:25px;display:flex;align-items:center;gap:8px;font:400 13px/25px Calibri,Carlito,sans-serif;color:#666;letter-spacing:.06em}
+.lbk{position:absolute;left:26px;top:30px;height:25px;display:flex;align-items:center;gap:8px;font:400 13px/25px Carlito,Calibri,sans-serif;color:#555;letter-spacing:.06em}
 .lbkb{display:flex;align-items:center;border:0;background:none;padding:0;cursor:pointer}
 .lbkb:focus-visible{outline:none}
 .lbk b{color:#e30613;font-weight:400}
@@ -147,7 +147,7 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
 .ar{overflow:visible;flex:none}
 .ar .rg{fill:none;stroke:#3a3c37;stroke-width:var(--hp)}
 .ar .dt{fill:#4d4f4a;stroke:#1a1a1a;stroke-width:var(--hp);stroke-linejoin:round}
-.ar text{fill:#3a3c37;font:700 6.4px Calibri,Carlito,sans-serif;text-anchor:middle;dominant-baseline:central}
+.ar text{fill:#3a3c37;font:700 6.4px Carlito,Calibri,sans-serif;text-anchor:middle;dominant-baseline:central}
 .tr{fill:none;stroke:#3a3c37;stroke-width:var(--hp);opacity:0;transform-box:fill-box;transform-origin:center}
 .lbm button:hover .tr,.lbm button:focus-visible .tr,.lbkb:hover .tr,.lbkb:focus-visible .tr,.lbsa:not(:disabled):hover .tr,.nextp:hover .tr,.nextp:focus-visible .tr,.nextp.hint .tr{animation:arring 1.4s ease-out infinite}
 .tr2{animation-delay:.7s!important}
@@ -155,14 +155,14 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
 @media (prefers-reduced-motion:reduce){.tr{animation:none!important}}
 /* beside the photo: title, text, then the project details */
 .lbc{position:absolute;left:580px;top:75px;width:310px;height:390px;overflow-y:auto;scrollbar-width:thin}
-.lbt{margin:0;font:700 20px/1.15 Calibri,Carlito,sans-serif;color:#e30613}
-.lbtx{margin:12px 0 0;font:400 14px/1.4 Calibri,Carlito,sans-serif;color:#222;display:flex;flex-direction:column;gap:8px}
+.lbt{margin:0;font:700 20px/1.15 Carlito,Calibri,sans-serif;color:#e30613}
+.lbtx{margin:12px 0 0;font:400 14px/1.4 Carlito,Calibri,sans-serif;color:#222;display:flex;flex-direction:column;gap:8px}
 .lbtx p{margin:0}
-.lbdt{margin:18px 0 0;padding-top:12px;border-top:calc(1px / (var(--s,1) * var(--dpr,1))) dotted #b8b8b8;display:grid;grid-template-columns:62px 1fr;gap:5px 10px;font:400 13px/1.3 Calibri,Carlito,sans-serif}
-.lbdt dt{color:#888;letter-spacing:.04em}
-.lbdt dd{margin:0;color:#000}
+.lbdt{margin:18px 0 0;padding-top:12px;border-top:calc(1px / (var(--s,1) * var(--dpr,1))) dotted #b8b8b8;display:grid;grid-template-columns:62px 1fr;gap:4px 10px;font:400 13px/1.4 Carlito,Calibri,sans-serif}
+.lbdt dt{color:#8a8a86;letter-spacing:.04em}
+.lbdt dd{margin:0;color:#222}
 /* photo strip of this project, for quick navigation */
-.lbsl{position:absolute;left:30px;top:490px;font:400 11px/1 Calibri,Carlito,sans-serif;color:#888;letter-spacing:.06em}
+.lbsl{position:absolute;left:30px;top:490px;font:400 11px/1 Carlito,Calibri,sans-serif;color:#8a8a86;letter-spacing:.06em}
 .lbsw{position:absolute;left:30px;top:508px;width:860px;height:120px;display:flex;align-items:center;gap:8px}
 .lbsa{flex:none;width:22px;height:120px;border:0;padding:0;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .lbsa:disabled{opacity:.25;cursor:default}
@@ -186,7 +186,7 @@ dialog.lb[open] .lbp{animation:lbin .3s ease-out both}
 .lbst button:focus-visible{outline:none}
 /* bottom line: previous / next project */
 .lbm{position:absolute;left:30px;right:30px;bottom:30px;display:flex;justify-content:space-between}
-.lbm button{display:flex;align-items:center;gap:6px;border:0;background:none;padding:0;cursor:pointer;font:400 11px/1 Calibri,Carlito,sans-serif;letter-spacing:.06em;color:#666}
+.lbm button{display:flex;align-items:center;gap:8px;border:0;background:none;padding:0;cursor:pointer;font:400 11px/1 Carlito,Calibri,sans-serif;letter-spacing:.06em;color:#555}
 .lbm button:hover,.lbm button:focus-visible{color:#e30613;outline:none}
 '''
 

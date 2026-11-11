@@ -64,9 +64,9 @@ TABS = [('us', 'about us', '01'), ('projects', 'projects', '02'), ('downloads', 
 TABHTML = ''.join(f'<a class="tab" href="#{i}" data-pg="{i}"><span>{n.replace("&", "&amp;")}</span> <small>[{k}]</small></a>' for i, n, k in TABS if i != 'legal')   # 23 Oct: four buttons; the impressum is reached from the beetle's § circle
 # circles beside the beetle: left and right, top to bottom (five, 21 Oct)
 # where each circle's dotted line ends on the upright beetle (fractions of its box): mouth, right front leg (claw), left middle leg, right back leg
-AIM = [(.425, .205), (.715, .365), (.258, .53), (.69, .80), (.31, .905)]   # five since 23 Oct (bits & bats gone); 25 Oct: 01 moved from the mouth (.51, .245) onto the small left feeler, clear of the middle guide line
+AIM = [(.425, .205), (.715, .365), (.258, .53), (.69, .80), (.31, .905)]   # five since 23 Oct (bits & bats gone); 11 Nov: circle 01 sits higher (top 4%) so its line runs above the left pincer, and "downloads & links" wraps to two lines so it clears the middle edge tick; 25 Oct: 01 moved from the mouth (.51, .245) onto the small left feeler, clear of the middle guide line
 _AIM6 = [(.51, .245), (.715, .365), (.258, .53), (.80, .605), (.31, .905), (.69, .80)]   # ... 06 impressum: right back leg
-PINS = ''.join(f'<a class="pin {"l" if k % 2 == 0 else "r"}" href="#{i}" data-fx="{AIM[k][0]}" data-fy="{AIM[k][1]}" style="top:{8 + k * 19}%;--k:{k}"><b>{num}</b><span>{n.replace("&", "&amp;")}</span></a>'
+PINS = ''.join(f'<a class="pin {"l" if k % 2 == 0 else "r"}" href="#{i}" data-fx="{AIM[k][0]}" data-fy="{AIM[k][1]}" style="top:{4 if k == 0 else 8 + k * 19}%;--k:{k}"><b>{num}</b><span>{n.replace(" & ", "<br>&amp; ")}</span></a>'
                for k, (i, n, num) in enumerate(TABS))
 
 P = [{'t': p['t'], 'x': p['x'], 'd': p['d'], 'imgs': ['../' + s for s in p['imgs']]} for p in LB.PROJECTS]
@@ -1077,6 +1077,7 @@ html.nochk .links.chk{{gap:14px 10px}} html.nochk .links.chk .lk{{padding:0;back
   }}
   const relayout=()=>{{ fitHead(); requestAnimationFrame(drawLeads); }};
   addEventListener('resize',relayout);
+  if(window.ResizeObserver) new ResizeObserver(()=>requestAnimationFrame(drawLeads)).observe(stage);   /* 11 Nov: redraw the lines whenever the stage changes size (fonts loading, browser bars on phones) */
   document.querySelectorAll('[data-logo]').forEach(b=>b.addEventListener('click',()=>{{ setLogo(b.dataset.logo); relayout(); }}));
   setLogo(B.classList.contains('rail')?'rail':B.classList.contains('side')?'side':'top'); relayout();
   /* bits & bats: one picture full screen, swipe to the next */

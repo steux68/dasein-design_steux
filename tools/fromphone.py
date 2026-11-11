@@ -815,8 +815,8 @@ def patch(s):
     end = f'<div class="ptx end" style="left:235px;top:930px;width:205px">{CONTACT_TXT}</div>'
     s = _rep('<section class="pg" id="contact"><div class="bg-white relative frame">', '<section class="pg" id="contact"><div class="bg-white relative frame">' + end, s)
     # ---- dasein-design in red, phone / e-mail links
-    s = _rep('<p class="fcal-r leading-[normal] mb-0 text-[10px]">dasein-design [architecture+design] [Wien]</p>',
-             '<p class="fcal-r leading-[normal] mb-0 text-[10px]"><b class="dd">dasein-design</b> [architecture+design] [Wien]</p>', s)
+    s = _rep('<p class="fcal-r leading-[normal] mb-0 text-[12px]">dasein-design [architecture+design] [Wien]</p>',
+             '<p class="fcal-r leading-[normal] mb-0 text-[12px]"><b class="dd">dasein-design</b> [architecture+design] [Wien]</p>', s)
     for num, tel in (('+43 [0] 699 1941 9240', '+436991941 9240'), ('+43 [0] 676 4822 464', '+436764822464')):
         tel = tel.replace(' ', '')
         s = s.replace(f'not-italic"> {num} </span>', f'not-italic"> <a href="tel:{tel}">{num}</a> </span>')

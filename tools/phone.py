@@ -308,45 +308,16 @@ HTML = f'''<!doctype html>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
 :root{{--dh:repeating-linear-gradient(to right,var(--dot) 0 1px,transparent 1px 3px);--dv:repeating-linear-gradient(to bottom,var(--dot) 0 1px,transparent 1px 3px);--gh:repeating-linear-gradient(to right,var(--line) 0 4px,transparent 4px 7px);--gv:repeating-linear-gradient(to bottom,var(--line) 0 4px,transparent 4px 7px);--bar:30px;--red:#e30613;--lime:rgba(205,255,62,.86);--green:#a5e35a;--grey:#ebebeb;--line:#c4c4c4;--dot:#b8b8b8;--hp:1px;--head:118px;--side:0px;--ttl:44px}}
-/* logo on the side: a narrow strip down the left with the mark and the name, the header only holds the tabs */
-.side{{--side:42px}}
-.sidebar{{display:none}}
-.side .sidebar{{display:flex;position:fixed;left:0;top:0;bottom:0;width:var(--side);z-index:21;background:#fff;border-right:1px solid transparent;border-image:var(--gv) 1;
-  flex-direction:column;align-items:center;padding:calc(env(safe-area-inset-top,0px) + 10px) 0 14px;text-decoration:none;color:var(--red)}}
-.sidebar img{{width:28px;height:28px;flex:none}}
-.sidebar span{{margin-top:14px;writing-mode:vertical-rl;transform:rotate(180deg);font-size:27px;line-height:1;white-space:nowrap}}
-.sidebar b{{font-weight:700}}
-.side .row1 .logo{{display:none}}
-/* all on the side: the mark and name in one narrow column, the four tabs running down a second one; no bar across the top */
-.side.rail{{--side:40px;--logoh:168px}}
-/* all side: ONE narrow strip down the left - the mark and "dasein-design" (a little smaller) at the top, the four tabs below it, sharing the rest of the height */
-.side.rail .sidebar{{width:var(--side);bottom:auto;height:calc(env(safe-area-inset-top,0px) + var(--logoh));padding-top:calc(env(safe-area-inset-top,0px) + 8px);padding-bottom:0;border-right:1px solid transparent;border-image:var(--gv) 1}}
-.side.rail .sidebar img{{width:24px;height:24px}}
-.side.rail .sidebar span{{margin-top:9px;font-size:20px}}
-.side.rail header{{left:0;right:auto;top:calc(env(safe-area-inset-top,0px) + var(--logoh));bottom:0;width:var(--side);padding:6px 5px calc(env(safe-area-inset-bottom,0px) + 6px);border-bottom:0;border-right:1px solid transparent;border-image:var(--gv) 1}}
-.side.rail .row1{{min-height:0;height:0}}
-.side.rail nav{{display:flex;flex-direction:column;height:100%;margin:0;gap:5px}}
-.side.rail .tab{{flex:1;min-height:0;height:auto;writing-mode:vertical-rl;transform:rotate(180deg);padding:3px 0;font-size:min(12.5px,1.75svh);gap:3px;overflow:hidden}}
-.side.rail .tab small{{font-size:8.5px}}
-/* the split first tab: two halves, 2 px apart, sharing one tab's place */
-.side.rail .tab.half{{flex:.5}}   /* about us at the top and contact at the bottom are half tabs */
-.side.rail .tab.half{{font-size:min(12.5px,1.6svh);gap:2px}} .side.rail .tab.half small{{font-size:min(8.5px,1.15svh)}}   /* halves keep their number: a touch smaller type on short phones */
 nav .tab:last-child:nth-child(odd){{grid-column:span 2}}
-.note2{{display:none}}
-.side.rail .row1 .note{{display:none}}
-.side.rail .note2{{display:block;text-align:center;margin:-6px 0 0;padding-bottom:8px}}
-.side header{{left:var(--side)}}
-.side main{{padding-left:var(--side)}}
 *{{box-sizing:border-box}}
 html{{scroll-behavior:smooth;scroll-padding-top:calc(var(--head) + var(--bar))}}
 @media (prefers-reduced-motion:reduce){{html{{scroll-behavior:auto}}}}
-body{{margin:0;background:#fff;color:#000;font:400 15px/1.35 Calibri,Carlito,sans-serif;-webkit-text-size-adjust:100%}}
+body{{margin:0;background:#fff;color:#222;font:400 15px/1.35 Calibri,Carlito,sans-serif;-webkit-text-size-adjust:100%}}
 a{{color:inherit}}
 /* header: logo, then the five tabs in two rows (3 + 2) */
 header{{position:fixed;left:0;right:0;top:0;z-index:20;background:#fff;padding:calc(env(safe-area-inset-top,0px) + 8px) max(10px,env(safe-area-inset-right,0px)) 8px max(10px,env(safe-area-inset-left,0px));
   border-bottom:1px solid transparent;border-image:var(--gh) 1}}
 .row1{{display:flex;align-items:center}}
-.side .row1{{min-height:14px}}
 .logo{{flex:none;white-space:nowrap;display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--red);height:34px}}
 .logo img{{width:30px;height:30px}}
 .logo span{{font-size:27px;line-height:1;letter-spacing:-.01em}}
@@ -503,7 +474,7 @@ body{{position:relative}}
 #wpk{{flex:1;font-size:12px;letter-spacing:.06em;color:#888;text-align:center}}
 
 .wpbody{{flex:1;overflow-y:auto;padding:4px 18px 30px}} .wpbody .wp{{margin-top:14px}} .wpbody .wp[hidden]{{display:block}}
-body:not(.side) .socs{{display:flex}}   /* in the top layouts (and the stack trials) the three marks sit at the right of the logo */
+.socs{{display:flex}}   /* in the top layouts (and the stack trials) the three marks sit at the right of the logo */
 
 #goS .up i{{font-style:normal;font-size:12px;letter-spacing:.06em;color:#3a3c37}}
 /* the round arrow itself sits exactly in the middle (where the half bars meet); its words hang off to the right */
@@ -530,14 +501,13 @@ body:not(.side) .socs{{display:flex}}   /* in the top layouts (and the stack tri
 .tk.m{{top:calc(50% + var(--head) / 2 - env(safe-area-inset-bottom,0px) / 2 - 5px)}}
 /* trial (24 Oct, Steuart): a third dashed line down the middle, exactly halfway between the two side lines; ?mid=0 hides it */
 .rule.m{{left:calc((var(--side) + 100% - 9px) / 2)}} .stack .rule.m{{left:calc(50% - .5px)}} html.nomid .rule.m{{display:none}}
-.side.rail .sidebar,.side.rail header{{border-right:0!important}}
 /* section bar: same size, type and thickness as a tab in the side strip, a muted version of the lit tab's yellow-lime */
 .pbar{{display:flex;align-items:center;justify-content:center;height:30px;margin:0 10px 10px;background:#cdff3e;
   font-size:12px;color:rgba(0,0,0,.78);white-space:nowrap}}   /* page name in yellow-lime, as thick as the side tabs; the dotted line runs flush across its top edge */
 .pbar b{{font-weight:700}} .pbar small{{font-size:8.5px;margin-left:4px}}
 /* ?stack=1 (trial, 22 Oct): logo across the top, no side strip; the five page bars are thinner and stack up at the top of the screen as you pass
    their pages and wait at the bottom for the pages still to come - always all five on screen, a tap goes there */
-.stack header nav,.stack header .note{{display:none}}
+.stack header nav{{display:none}}
 .stack main{{padding-left:8px}} .stack .rule.l{{left:7px}} .stack .bar{{left:8px}}
 .stack .sbar{{display:none}}
 .stack main > .pbar{{position:sticky;z-index:14;margin:0 10px;font-size:12px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background-color .15s;
@@ -831,10 +801,6 @@ dialog .top{{flex:none}}
 .txt dt{{color:#888}} .txt dd{{margin:0}}
 .nav2{{flex:none;display:flex;justify-content:space-between;align-items:center;margin:0 10px;padding:4px 0 calc(env(safe-area-inset-bottom,0px) + 8px);background:var(--dh) left top/100% 1px no-repeat}}
 .nav2 button{{display:flex;align-items:center;gap:6px;border:0;background:none;font:400 12px Calibri,Carlito,sans-serif;letter-spacing:.06em;color:#666;padding:6px 0}}
-.note{{margin-left:auto;padding-left:8px;align-self:flex-start;text-align:right;font-size:12px;line-height:1.35;color:#888;letter-spacing:.03em}}
-.note a{{color:var(--red)}}
-.note button{{border:0;background:none;padding:0 2px;font:inherit;color:#888;letter-spacing:inherit}}
-.note button[aria-pressed="true"]{{color:var(--red);text-decoration:underline}}
 /* downloads & links */
 .intro{{margin:0 0 8px;font-size:14px;line-height:1.45;color:#333}}
 .pdfs{{list-style:none;margin:10px 0 0;padding:0}}
@@ -892,14 +858,9 @@ html.nochk .links.chk{{gap:14px 10px}} html.nochk .links.chk .lk{{padding:0;back
 </style>
 </head>
 <body>
-<script>/* three versions: logo and tabs all down the side (default) · logo on the side, tabs on top · logo and tabs across the top
-   ?logo=rail / side / top, remembered on this phone */
-(function(){{ let m='rail'; try{{ m=new URLSearchParams(location.search).get('logo')||localStorage.getItem('ddlogo2')||'rail';
-    const sk=new URLSearchParams(location.search).get('stack')||'2';   /* the half bars are the standard since 23 Oct; ?stack=0 gives the side strip */ if(sk==='1'||sk==='2'){{ document.body.classList.add('stack'); m='top'; }} if(sk==='2') document.body.classList.add('pairs'); if(new URLSearchParams(location.search).get('w')!=='0') document.body.classList.add('wtr');   /* work / wonder is the standard since 23 Oct; ?w=0 hides the switch */ const sc=new URLSearchParams(location.search).get('sec'); document.body.classList.add('sec'+(['0','1','2','3'].includes(sc)?sc:'1'));   /* pale grey (sec1) is the standard since 22 Oct; ?sec=0 turns it off */ }}catch(e){{}}
-  if(m!=='top') document.body.classList.add('side'); if(m==='rail') document.body.classList.add('rail'); }})();</script>
-<a class="sidebar" href="#start" aria-label="dasein-design, start"><img src="../img/m-mark.png" alt=""><span>dasein<b>-design</b></span></a>
+<script>document.body.classList.add('stack','pairs','wtr');</script>
 <header>
-<div class="row1"><a class="logo" href="#start" aria-label="dasein-design, start"><img src="../img/m-mark.png" alt=""><span>dasein<b>-design</b></span></a>{SOCIAL}{WSWITCH}<span class="note">preview · <button type="button" data-logo="rail">all side</button>/<button type="button" data-logo="side">logo side</button>/<button type="button" data-logo="top">top</button> · <a href="../">full site</a></span></div>
+<div class="row1"><a class="logo" href="#start" aria-label="dasein-design, start"><img src="../img/m-mark.png" alt=""><span>dasein<b>-design</b></span></a>{SOCIAL}{WSWITCH}</div>
 <nav>{TABHTML}</nav>
 </header>
 <main>
@@ -936,7 +897,7 @@ html.nochk .links.chk{{gap:14px 10px}} html.nochk .links.chk .lk{{padding:0;back
   function openDlg(d){{ d.show(); document.documentElement.classList.add('dlg'); }}
   function closeDlgs(){{ document.querySelectorAll('dialog[open]').forEach(d=>d.close()); document.documentElement.classList.remove('dlg'); }}
   document.querySelectorAll('dialog').forEach(d=>d.addEventListener('close',()=>{{ if(!document.querySelector('dialog[open]')) document.documentElement.classList.remove('dlg'); }}));
-  document.querySelectorAll('.sidebar,.tab,.logo').forEach(a=>a.addEventListener('click',closeDlgs));
+  document.querySelectorAll('.tab,.logo').forEach(a=>a.addEventListener('click',closeDlgs));
   addEventListener('keydown',e=>{{ if(e.key==='Escape') closeDlgs(); }});
   /* an open CV closes by itself when it has been scrolled out of view */
   const cvio=new IntersectionObserver(es=>es.forEach(e=>{{ const d=e.target; if(e.isIntersecting||!d.open) return;
@@ -1058,10 +1019,8 @@ html.nochk .links.chk{{gap:14px 10px}} html.nochk .links.chk .lk{{padding:0;back
     addEventListener('keydown',e=>{{ if(e.key==='Escape'){{ if(!wp.hidden) wp.hidden=true; else set(false); }} }});
     addEventListener('resize',()=>{{ if(!wd.hidden) carpet(); }}); }})();
   const B=document.body;
-  const setLogo=m=>{{ B.classList.toggle('side',m!=='top'); B.classList.toggle('rail',m==='rail'); try{{ if(!B.classList.contains('stack')) localStorage.setItem('ddlogo2',m); }}catch(e){{}}
-    document.querySelectorAll('[data-logo]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.logo===m))); }};
   /* the arrow bar tucks 1px under the header (never a hairline gap where the page shows through); re-measured when fonts arrive or the header changes */
-  const fitHead=()=>document.documentElement.style.setProperty('--head',(B.classList.contains('rail')?0:Math.max(0,Math.floor(document.querySelector('header').getBoundingClientRect().height)-1))+'px');
+  const fitHead=()=>document.documentElement.style.setProperty('--head',Math.max(0,Math.floor(document.querySelector('header').getBoundingClientRect().height)-1)+'px');
   if(document.fonts) document.fonts.ready.then(fitHead); if(window.ResizeObserver) new ResizeObserver(()=>fitHead()).observe(document.querySelector('header'));
   /* dotted leader lines: from the inner side of each circle across, then up or down onto the beetle, with a small arrowhead */
   const stage=document.querySelector('.stage'), leads=document.getElementById('leads'), btl=document.getElementById('beetle');
@@ -1078,8 +1037,7 @@ html.nochk .links.chk{{gap:14px 10px}} html.nochk .links.chk .lk{{padding:0;back
   const relayout=()=>{{ fitHead(); requestAnimationFrame(drawLeads); }};
   addEventListener('resize',relayout);
   if(window.ResizeObserver) new ResizeObserver(()=>requestAnimationFrame(drawLeads)).observe(stage);   /* 11 Nov: redraw the lines whenever the stage changes size (fonts loading, browser bars on phones) */
-  document.querySelectorAll('[data-logo]').forEach(b=>b.addEventListener('click',()=>{{ setLogo(b.dataset.logo); relayout(); }}));
-  setLogo(B.classList.contains('rail')?'rail':B.classList.contains('side')?'side':'top'); relayout();
+  relayout();
   /* bits & bats: one picture full screen, swipe to the next */
   const BI={json.dumps(BIMGS)}, BC={json.dumps(BCAPS)}, iv=document.getElementById('iv'), iph=document.getElementById('iph');
   const tw=n=>String(n).padStart(2,'0');
@@ -1318,6 +1276,11 @@ header{padding-left:18px!important;padding-right:18px!important}
  background-image:var(--dh),var(--dh),var(--dv),var(--dv);background-position:left top,left bottom,left top,right top;background-size:100% 1px,100% 1px,1px 100%,1px 100%}
 .wp img,.wpbody .wpi,.wsw .wth img,.wsq{outline:0!important}
 .tile::after,.phw::after{display:none!important}
+/* C3 (11 Nov): invisible larger touch areas, about 40 px - the look is unchanged */
+.wtr .wsw{position:relative}
+.wsw::before{content:"";position:absolute;left:-8px;right:-8px;top:50%;height:44px;transform:translateY(-50%)}
+a[href^="tel:"],a[href^="mailto:"]{position:relative}
+a[href^="tel:"]::after,a[href^="mailto:"]::after{content:"";position:absolute;left:-3px;right:-3px;top:-11px;bottom:-11px}
 '''
 LIVE_JS = r'''<button type="button" id="toTop" aria-label="back to the top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15L12 8L19 15"/></svg></button><script id="totop-js">(function(){var b=document.getElementById('toTop');if(!b)return;
 function upd(){var y=innerHeight-10;document.querySelectorAll('.pbar').forEach(function(p){var r=p.getBoundingClientRect(),bt=parseFloat(getComputedStyle(p).bottom);if(!isNaN(bt)&&r.height&&r.bottom>=innerHeight-bt-3&&r.top<y)y=r.top;});

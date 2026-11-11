@@ -298,7 +298,7 @@ GAME = ('<dialog id="game" aria-label="beetle game"><div class="play" id="play">
 
 
 HTML = f'''<!doctype html>
-<html lang="de">
+<html lang="en">
 <head><script>/* 24 Oct (Steuart): the phone site always opens on the start page - no remembered scroll position, no #page in the address; coming back from the browser's page cache starts fresh too */ (function(){{ try{{ if("scrollRestoration" in history) history.scrollRestoration="manual"; if(location.hash) history.replaceState(null,"",location.pathname+location.search); }}catch(e){{}} addEventListener("load",()=>scrollTo(0,0)); addEventListener("pageshow",e=>{{ if(e.persisted) location.reload(); }}); }})();</script><script>if(/[?&]chk=0/.test(location.search)) document.documentElement.classList.add("nochk"); if(/[?&]mid=0/.test(location.search)) document.documentElement.classList.add("nomid");</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -357,7 +357,7 @@ header{{position:fixed;left:0;right:0;top:0;z-index:20;background:#fff;padding:c
 .stack .logo span{{font-size:calc(7.219vw - 2.09px)}}
 nav{{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px}}
 .tab{{display:flex;align-items:center;justify-content:center;gap:3px;height:28px;padding:0 4px;background:var(--grey);text-decoration:none;
-  font-size:13.5px;white-space:nowrap;-webkit-tap-highlight-color:transparent;transition:background .15s}}
+  font-size:14px;white-space:nowrap;-webkit-tap-highlight-color:transparent;transition:background .15s}}
 .tab small{{font-size:9px}}
 .tab:active{{background:var(--green)}}
 .tab.cur{{background:var(--lime);font-weight:700}}
@@ -378,7 +378,7 @@ body{{position:relative}}
 .bar button span{{display:flex}} #goS .su,#goN .ns{{display:none}}
 /* stack trial: the pages rise from the bottom as you swipe up, so the bottom arrow points up (N) and the top one down (S) */
 .stack #goS .dn,.stack #goN .nn{{display:none}} .stack #goS .su,.stack #goN .ns{{display:flex}} .stack #goS.top .su{{display:none}}
-.bar button{{align-items:center;gap:6px}} .bar .sc{{font-style:normal;font-size:11px;letter-spacing:.06em;color:#666}} #goS.top .sc{{display:none}}
+.bar button{{align-items:center;gap:6px}} .bar .sc{{font-style:normal;font-size:12px;letter-spacing:.06em;color:#666}} #goS.top .sc{{display:none}}
 .socs{{display:none;margin-left:auto;gap:12px;align-items:center}} .soc{{display:flex}} .soc svg{{display:block}}
 /* work ○ wonder trial (?w=1) */
 .wsw{{display:none}}
@@ -388,7 +388,7 @@ body{{position:relative}}
 .wsw .tg b{{position:absolute;left:2px;top:2px;width:9px;height:9px;border-radius:50%;background:#cdff3e;box-shadow:0 0 0 1px #3a3c37;transition:transform .25s}}
 .wsw .tg b::after{{content:"";position:absolute;inset:-1px;border-radius:50%;border:1px solid var(--red);opacity:0;animation:pdr 3.2s ease-out infinite}}   /* the knob itself pulses, slowly */
 .wsw[aria-pressed=true] .tg b::after{{animation:none}}
-.wsw[aria-pressed=true] .tg{{background:#eaffae}} .wsw[aria-pressed=true] .tg b{{transform:translateX(13px);background:var(--red)}}
+.wsw[aria-pressed=true] .tg{{background:#cdff3e}} .wsw[aria-pressed=true] .tg b{{transform:translateX(13px);background:var(--red)}}
 .wsw .wk{{color:#000;font-weight:700}} .wsw[aria-pressed=true] .wk{{color:#666;font-weight:400}} .wsw[aria-pressed=true] .wo{{color:var(--red);font-weight:700}}
 .wsw .wth{{position:relative;width:24px;height:24px;margin-left:2px;flex:none}} .wsw .wth img{{width:100%;height:100%;object-fit:cover;border-radius:3px;outline:1px dotted #b8b8b8;outline-offset:1px}}
 .wsw .wdot{{position:absolute;right:-4px;top:-4px;width:8px;height:8px;border-radius:50%;background:#cdff3e;box-shadow:0 0 0 1px #3a3c37}}
@@ -396,22 +396,22 @@ body{{position:relative}}
 .wsw[aria-pressed=true] .wth{{display:none}}
 .wonder{{position:fixed;left:0;right:0;top:var(--head);bottom:0;z-index:30;overflow-y:auto;background:#fff;padding:0 18px 40px;-webkit-overflow-scrolling:touch}}
 .wonder[hidden]{{display:none}}
-.whd{{padding:22px 0 8px}} .whd h2{{margin:0;font-size:30px;font-weight:700;color:var(--red);letter-spacing:.01em}} .whd p{{margin:2px 0 0;font-size:13px;color:#666}}
-.whd .wtrial{{margin-top:6px;font-size:11px;letter-spacing:.06em;color:#aaa}}
+.whd{{padding:22px 0 8px}} .whd h2{{margin:0;font-size:30px;font-weight:700;color:var(--red);letter-spacing:.01em}} .whd p{{margin:2px 0 0;font-size:14px;color:#666}}
+.whd .wtrial{{margin-top:6px;font-size:12px;letter-spacing:.06em;color:#aaa}}
 .wchips{{position:sticky;top:0;z-index:2;display:flex;flex-direction:column;gap:6px;padding:10px 0;background:#fff;border-bottom:1px dashed var(--line)}}
 .wrow{{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}} .wrow::-webkit-scrollbar{{display:none}}
-.wch{{flex:none;border:1px dotted #b8b8b8;background:#fff;border-radius:14px;padding:4px 11px;font:inherit;font-size:12.5px;color:#333;white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent}}
-.wch.on{{background:#eaffae;border-style:solid;border-color:#3a3c37;color:#000;font-weight:700}}
+.wch{{flex:none;border:1px dotted #b8b8b8;background:#fff;border-radius:14px;padding:4px 11px;font:inherit;font-size:12px;color:#333;white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent}}
+.wch.on{{background:#cdff3e;border-style:solid;border-color:#3a3c37;color:#000;font-weight:700}}
 .wp{{margin:26px 0 0}} .wp[hidden]{{display:none}}
-.wt{{margin:0 0 6px;font-size:11.5px;letter-spacing:.06em;color:#888}}
+.wt{{margin:0 0 6px;font-size:12px;letter-spacing:.06em;color:#888}}
 .wp img{{display:block;width:100%;height:auto;max-height:78svh;object-fit:cover;outline:1px dotted #b8b8b8;outline-offset:-1px}}
 .wc{{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:7px 0 0;font-size:14px}} .wc b{{color:#222}}
-.wcat{{flex:none;font-size:11px;letter-spacing:.08em;color:var(--red)}}
+.wcat{{flex:none;font-size:12px;letter-spacing:.08em;color:var(--red)}}
 .wtxt{{padding:16px 14px 12px;background:#f4f4f2}} .wtxt.note{{background:#fffbd6}}
-.wtxt h3{{margin:2px 0 8px;font-size:18px;line-height:1.25;color:var(--red)}} .wtxt p{{margin:0;font-size:14.5px;line-height:1.5;color:#222}}
-.wtxt .wsrc{{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--red)}} .wtxt.note .wsrc{{margin-top:8px;text-transform:none;letter-spacing:.02em;font-weight:400;color:#666}}
-.wqm{{display:block;font-style:normal;font-size:48px;line-height:.5;height:22px;color:var(--red)}} .wq{{font-size:17px!important;font-style:italic}}
-.wlink{{display:inline-block;margin-top:10px;font-size:13.5px;color:#1a5fd0;text-decoration:none}}
+.wtxt h3{{margin:2px 0 8px;font-size:16px;line-height:1.25;color:var(--red)}} .wtxt p{{margin:0;font-size:14px;line-height:1.5;color:#222}}
+.wtxt .wsrc{{font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--red)}} .wtxt.note .wsrc{{margin-top:8px;text-transform:none;letter-spacing:.02em;font-weight:400;color:#666}}
+.wqm{{display:block;font-style:normal;font-size:48px;line-height:.5;height:22px;color:var(--red)}} .wq{{font-size:16px!important;font-style:italic}}
+.wlink{{display:inline-block;margin-top:10px;font-size:14px;color:#1a5fd0;text-decoration:none}}
 .wtxt .wc{{margin-top:10px}} .wtxt .todo{{color:var(--red)}}
 .wend{{margin:34px 0 0;text-align:center;font-size:12px;letter-spacing:.06em;color:#aaa}}
 /* wonder v3 (23 Oct, 00:40): six category bars like the main page's half bars, then one endless grid, four to a row */
@@ -422,29 +422,29 @@ body{{position:relative}}
 .wbt:nth-child(odd){{background-image:var(--dh),var(--dv);background-position:left bottom,right top;background-size:100% 1px,1px 100%}}
 .wbt:nth-child(1){{background-image:var(--dh),var(--dh),var(--dv);background-position:left top,left bottom,right top;background-size:100% 1px,100% 1px,1px 100%}}
 .wbt:nth-child(2){{background-image:var(--dh),var(--dh);background-position:left top,left bottom;background-size:100% 1px,100% 1px}}
-.wbt b{{font-weight:700}} .wbt small{{font-size:10px;color:#444}}
-.wbt.on{{background-color:#eaffae}} .wbt:active{{background-color:#cdff3e}}
+.wbt b{{font-weight:700}} .wbt small{{font-size:12px;color:#444}}
+.wbt.on{{background-color:#cdff3e}} .wbt:active{{background-color:#cdff3e}}
 .wonder .wbars{{display:none}}
 .wband{{position:relative;height:78px;margin:6px 0 0;overflow:hidden}} .wband canvas{{position:absolute;inset:0;width:100%;height:100%}}
 .wband img{{position:absolute;left:0;top:0;width:15px;height:32px;margin:-16px 0 0 -7px;will-change:transform;pointer-events:none}}
 .wcats{{position:sticky;top:0;z-index:3;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:6px 0;background:#fff}}
-.wonder .wcats .wfb{{position:static;transform:none!important;box-shadow:none;height:22px;padding:0 2px;justify-content:center;font-size:10.5px;overflow:hidden}}
+.wonder .wcats .wfb{{position:static;transform:none!important;box-shadow:none;height:22px;padding:0 2px;justify-content:center;font-size:12px;overflow:hidden}}
 .wonder .wcats .wfb b{{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
 .wonder .wcats .wfb.on{{box-shadow:inset 0 0 0 2px #111}} .wonder .wcats .wfb.on::after{{content:"×";margin-left:3px;font-size:12px;font-weight:700}}
 .wfb{{position:absolute;left:0;top:0;display:flex;align-items:center;gap:5px;height:23px;padding:0 10px;border:0;font:inherit;font-size:12px;color:#000;white-space:nowrap;cursor:pointer;pointer-events:auto;
   background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,rgba(242,242,242,.93);box-shadow:0 1px 6px rgba(0,0,0,.18);will-change:transform;-webkit-tap-highlight-color:transparent}}
-.wfb b{{font-weight:700}} .wfb small{{font-size:10px;color:inherit;opacity:.7}}
+.wfb b{{font-weight:700}} .wfb small{{font-size:12px;color:inherit;opacity:.7}}
 /* eight categories, eight colours (23 Oct) - no grey; the chosen one gets a dark ring */
 .wfb{{background-image:none!important;border-radius:2px}}
 .wfb:nth-child(1){{background-color:#d4f06a}} .wfb:nth-child(2){{background-color:#f2cf3a}} .wfb:nth-child(3){{background-color:#4a8fe0;color:#fff}} .wfb:nth-child(4){{background-color:#f2bccf}}
 .wfb:nth-child(5){{background-color:#d03a3a;color:#fff}} .wfb:nth-child(6){{background-color:#45ad5c;color:#fff}} .wfb:nth-child(7){{background-color:#ee9233}} .wfb:nth-child(8){{background-color:#9a7ee6;color:#fff}} .wfb:nth-child(9){{background-color:#26a69c;color:#fff}} .wfb:nth-child(10){{background-color:#2e3a72;color:#fff}}
-.wfb.on{{box-shadow:0 0 0 2px #111,0 1px 6px rgba(0,0,0,.25)}} .wfb.on small{{display:none}} .wfb.on::after{{content:"× all";margin-left:4px;font-size:11px;font-weight:700;opacity:.85}} .wfb:active{{filter:brightness(1.1)}}   /* the six categories float above the grid, as the half title bars do on the main page */
+.wfb.on{{box-shadow:0 0 0 2px #111,0 1px 6px rgba(0,0,0,.25)}} .wfb.on small{{display:none}} .wfb.on::after{{content:"× all";margin-left:4px;font-size:12px;font-weight:700;opacity:.85}} .wfb:active{{filter:brightness(1.1)}}   /* the six categories float above the grid, as the half title bars do on the main page */
 .wonder .wgrid{{display:block;position:relative;margin-top:6px;grid-template-columns:repeat(5,1fr);grid-auto-rows:calc((100vw - 36px - 12px) / 5);grid-auto-flow:dense;gap:3px;margin-top:10px}}
 .wempty{{display:block;background:#fff}}
 .wonder .wgrid > *{{position:relative;box-sizing:border-box;border:0;margin:0;width:auto;height:auto}}
 .wonder .wgrid .wg{{aspect-ratio:auto;background:#f4f4f4;padding:0;overflow:hidden}} .wonder .wgrid .wg img{{width:100%;height:100%;object-fit:cover!important}}   /* cropped to the cell, like the project tiles */
 .wcw{{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:2px;background:#f2f2f2;font:inherit;color:#000;cursor:pointer;-webkit-tap-highlight-color:transparent;overflow:hidden}}
-.wcw b{{font-weight:700;line-height:1;white-space:nowrap}} .wcw small{{font-size:9px;color:#666}} .wcw.on{{background:#eaffae}} .wcw.on b{{color:var(--red)}} .wcw:active{{background:#cdff3e}}   /* a tight carpet: no gaps, only the white left over round each photo */
+.wcw b{{font-weight:700;line-height:1;white-space:nowrap}} .wcw small{{font-size:9px;color:#666}} .wcw.on{{background:#cdff3e}} .wcw.on b{{color:var(--red)}} .wcw:active{{background:#cdff3e}}   /* a tight carpet: no gaps, only the white left over round each photo */
 .wonder .wg.t{{display:none!important}}   /* no text tiles in the carpet - photos only */
 .wonder .wg{{display:block;aspect-ratio:1/1}}
 /* photos in their own format (23 Oct, 00:50): a portrait fills the cell's height, a landscape its width; only the left-over is white, no frame, no crop */
@@ -468,7 +468,7 @@ body{{position:relative}}
 .wph button{{position:absolute;top:50%;margin-top:-21px;width:42px;height:42px;border:0;padding:0;border-radius:50%;background:rgba(255,255,255,.82);display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent}}
 .wph .pw{{left:6px}} .wph .pe{{right:6px}}
 .wsq{{aspect-ratio:1/1;display:flex;flex-direction:column;justify-content:center;gap:8px;padding:18px;background:#f4f4f2;box-sizing:border-box;outline:1px dotted #b8b8b8;outline-offset:-1px}}
-.wsq.n{{background:#fffbd6}} .wsq small{{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--red)}} .wsq .wpl{{font-size:20px;line-height:1.35}}
+.wsq.n{{background:#fffbd6}} .wsq small{{font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--red)}} .wsq .wpl{{font-size:20px;line-height:1.35}}
 .wpbody .wpd{{margin:10px 0 2px;font-size:12px;letter-spacing:.06em;color:#888}}
 .wpbody .wpl{{margin:0 0 4px;font-size:16px;line-height:1.45;color:#222}} .wpbody .wpl.q{{font-style:italic}}
 .wpbody .wpq{{display:block;font-style:normal;font-size:70px;line-height:.5;height:30px;margin-top:30px;color:var(--red)}}
@@ -481,25 +481,25 @@ body{{position:relative}}
 .wmap .wl{{position:absolute;box-sizing:border-box;border:.5px solid #333;margin:0;background:#f1f1ef;-webkit-appearance:none;appearance:none;font-family:inherit;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:1px;
   font-weight:700;color:#111;line-height:1;white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent;letter-spacing:-.01em}}
 .wmap .wl::before,.wmap .wl::after{{content:none!important}}
-.wmap .wl.new{{background:#eaffae}} .wmap .wl:active{{background:#cdff3e}} .wmap .wl.txt{{color:var(--red);font-weight:400;font-style:italic}}
-.wmore{{margin:8px 0 0;text-align:center;font-size:11.5px;letter-spacing:.06em;color:#999}}
+.wmap .wl.new{{background:#cdff3e}} .wmap .wl:active{{background:#cdff3e}} .wmap .wl.txt{{color:var(--red);font-weight:400;font-style:italic}}
+.wmore{{margin:8px 0 0;text-align:center;font-size:12px;letter-spacing:.06em;color:#999}}
 .wview{{display:flex;justify-content:flex-end;gap:0;margin-top:2px}} .wview button{{border:0;background:none;font:inherit;font-size:12px;letter-spacing:.06em;color:#999;padding:2px 6px;cursor:pointer}}
 .wview button.on{{color:#000;font-weight:700}} .wview button+button{{border-left:1px solid #ccc}}
 .wgrid{{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:12px}}
 .wg{{position:relative;aspect-ratio:1/1;padding:0;border:0;background:#f4f4f4;overflow:hidden;cursor:pointer;font:inherit;text-align:left;-webkit-tap-highlight-color:transparent}}
 .wg::after{{content:"";position:absolute;inset:0;pointer-events:none;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat}}
 .wg img{{width:100%;height:100%;object-fit:cover;display:block}}
-.wg .gc{{position:absolute;left:0;right:0;bottom:0;padding:2px 5px 3px;background:rgba(68,68,68,.7);color:#fff;font-size:9.5px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.wg .gc{{position:absolute;left:0;right:0;bottom:0;padding:2px 5px 3px;background:rgba(68,68,68,.7);color:#fff;font-size:12px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
 .wg.t{{background:#f4f4f2;padding:8px 7px 20px;display:flex;flex-direction:column;gap:3px}} .wg.t.note{{background:#fffbd6}}
-.wg.t b{{font-size:11.5px;line-height:1.2;color:var(--red);display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}} .wg.t.note b{{color:#222;font-weight:400;font-style:italic}}
+.wg.t b{{font-size:12px;line-height:1.2;color:var(--red);display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}} .wg.t.note b{{color:#222;font-weight:400;font-style:italic}}
 .wg.t small{{font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--red);font-weight:700}}
 .wg[hidden]{{display:none}}
 .wpop{{position:fixed;left:0;right:0;top:var(--head);bottom:0;z-index:35;background:#fff;display:flex;flex-direction:column}}
 .wpop .wpnav{{flex:none;display:flex;justify-content:space-between;align-items:center;padding:8px 14px calc(env(safe-area-inset-bottom,0px) + 10px);border-top:1px dashed var(--line)}}
-.wpop .wpnav button{{display:flex;align-items:center;gap:6px;width:auto;height:auto;border:0;border-radius:0;background:none;font:inherit;font-size:13px;color:#000;padding:4px}}
+.wpop .wpnav button{{display:flex;align-items:center;gap:6px;width:auto;height:auto;border:0;border-radius:0;background:none;font:inherit;font-size:14px;color:#000;padding:4px}}
 .wpop[hidden]{{display:none}}
 .wpbar{{flex:none;display:flex;align-items:center;gap:10px;padding:10px 18px;border-bottom:1px dashed var(--line)}}
-.wback{{border:1px solid #3a3c37;border-radius:14px;background:#eaffae;padding:5px 12px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}}
+.wback{{border:1px solid #3a3c37;border-radius:14px;background:#cdff3e;padding:5px 12px;font:inherit;font-size:14px;font-weight:700;cursor:pointer}}
 #wpk{{flex:1;font-size:12px;letter-spacing:.06em;color:#888;text-align:center}}
 
 .wpbody{{flex:1;overflow-y:auto;padding:4px 18px 30px}} .wpbody .wp{{margin-top:14px}} .wpbody .wp[hidden]{{display:block}}
@@ -532,8 +532,8 @@ body:not(.side) .socs{{display:flex}}   /* in the top layouts (and the stack tri
 .rule.m{{left:calc((var(--side) + 100% - 9px) / 2)}} .stack .rule.m{{left:calc(50% - .5px)}} html.nomid .rule.m{{display:none}}
 .side.rail .sidebar,.side.rail header{{border-right:0!important}}
 /* section bar: same size, type and thickness as a tab in the side strip, a muted version of the lit tab's yellow-lime */
-.pbar{{display:flex;align-items:center;justify-content:center;height:30px;margin:0 10px 10px;background:#eaffae;
-  font-size:12.5px;color:rgba(0,0,0,.78);white-space:nowrap}}   /* page name in yellow-lime, as thick as the side tabs; the dotted line runs flush across its top edge */
+.pbar{{display:flex;align-items:center;justify-content:center;height:30px;margin:0 10px 10px;background:#cdff3e;
+  font-size:12px;color:rgba(0,0,0,.78);white-space:nowrap}}   /* page name in yellow-lime, as thick as the side tabs; the dotted line runs flush across its top edge */
 .pbar b{{font-weight:700}} .pbar small{{font-size:8.5px;margin-left:4px}}
 /* ?stack=1 (trial, 22 Oct): logo across the top, no side strip; the five page bars are thinner and stack up at the top of the screen as you pass
    their pages and wait at the bottom for the pages still to come - always all five on screen, a tap goes there */
@@ -547,7 +547,7 @@ body:not(.side) .socs{{display:flex}}   /* in the top layouts (and the stack tri
 .stack main > .pbar{{margin-top:46px}}   /* a little air between a page and the next page's bar (only while it flows; stacked bars sit tight) */
 /* inside the pages the waiting bars are a pale grey, so they read apart from the content; on the start page all white */
 .stack.inpg main > .pbar{{background-color:#f2f2f2}}
-.stack main > .pbar.on{{background-color:#eaffae!important}}
+.stack main > .pbar.on{{background-color:#cdff3e!important}}
 /* a tap shows first: the bar, tab or circle lights up, then the page moves (tapGo) */
 .stack main > .pbar.hit,.tab.hit{{background-color:#cdff3e!important}}
 .pin.hit b{{animation:none!important;background:#cdff3e!important;box-shadow:inset 0 0 0 1px var(--red)}} .pin.hit span{{color:var(--red)}}
@@ -594,7 +594,7 @@ body:not(.side) .socs{{display:flex}}   /* in the top layouts (and the stack tri
 .stack:not(.inpg) main > .hb[data-pc="2"]{{--pc:#dfe9fb;animation-delay:-1.4s}} .stack:not(.inpg) main > .hb[data-pc="3"]{{--pc:#fdf0c2;animation-delay:-2.1s}}
 .stack:not(.inpg) main > .hb[data-pc="4"]{{--pc:#ece2f8;animation-delay:-2.8s}}
 @media (prefers-reduced-motion:reduce){{.stack main > .hb{{animation:none}}}}
-.stack main > .hb.on{{background-color:#eaffae!important}} .stack main > .hb.hit{{background-color:#cdff3e!important}}
+.stack main > .hb.on{{background-color:#cdff3e!important}} .stack main > .hb.hit{{background-color:#cdff3e!important}}
 .stack .stage{{height:calc(100svh - var(--head) - 2 * var(--bar) - 126px)}}
 .stack.pairs .stage{{height:calc(100svh - var(--head) - 2 * var(--bar) - 48px)}}
 .stack.pairs #legal{{scroll-margin-top:62px}}
@@ -625,7 +625,7 @@ html,body{{overflow-x:clip}}
 .heartfx .sm{{width:16px;height:16px;margin:-8px 0 0 -8px}}
 .pin{{position:absolute;display:flex;flex-direction:column;align-items:center;gap:3px;width:25vw;max-width:110px;text-decoration:none;text-align:center;-webkit-tap-highlight-color:transparent}}
 .pin.l{{left:6px}} .pin.r{{right:6px}}
-.pin b{{display:flex;align-items:center;justify-content:center;width:23px;height:23px;border-radius:50%;background:#bfbfbf;font-weight:400;font-size:11.5px;
+.pin b{{display:flex;align-items:center;justify-content:center;width:23px;height:23px;border-radius:50%;background:#bfbfbf;font-weight:400;font-size:12px;
   box-shadow:inset 0 0 0 1px #000;transition:background .15s}}
 .pin b{{position:relative}}
 /* thin red rings ripple out of the circles one after another - 01, 02, 03, 04, then from the start - to show they can be tapped */
@@ -658,7 +658,7 @@ html,body{{overflow-x:clip}}
   background:repeating-linear-gradient(to right,var(--dot) 0 1px,transparent 1px 3px) left top/100% 1px no-repeat,repeating-linear-gradient(to right,var(--dot) 0 1px,transparent 1px 3px) left bottom/100% 1px no-repeat,
   repeating-linear-gradient(to bottom,var(--dot) 0 1px,transparent 1px 3px) left top/1px 100% no-repeat,repeating-linear-gradient(to bottom,var(--dot) 0 1px,transparent 1px 3px) right top/1px 100% no-repeat}}
 .cap{{position:absolute;left:0;right:0;bottom:0;padding:4px 6px 5px;background:rgba(68,68,68,.7);color:#fff;text-align:left;line-height:1.15}}
-.cap b{{display:block;font-size:11.5px}} .cap small{{font-size:10px}}
+.cap b{{display:block;font-size:12px}} .cap small{{font-size:12px}}
 .tile:active{{outline:1px solid var(--red);outline-offset:-1px}}
 .soon{{margin:20px 4px;color:#555}}
 /* about us & contact: every block in a dotted box, 8 px apart, like the project tiles */
@@ -667,28 +667,28 @@ html,body{{overflow-x:clip}}
 .body > .box:first-child{{margin-top:4px}}
 .box .firm{{margin:0}}
 #contact .body > .box:first-child{{margin-top:0}}
-.lab{{margin:6px 0 6px;font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--red)}}   /* small red subtitles, bold like the current tab */
-.firm{{margin:0 0 6px;font-size:16px}} .firm span{{font-size:13px;color:#666}}
+.lab{{margin:6px 0 6px;font-size:12px;font-weight:700;letter-spacing:.12em;color:var(--red)}}   /* small red subtitles, bold like the current tab */
+.firm{{margin:0 0 6px;font-size:16px}} .firm span{{font-size:14px;color:#666}}
 .duo{{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:26px 0 0}}
 .who{{min-width:0;display:flex;flex-direction:column;align-items:flex-start}}
 /* ID card on top, filling the column (number, birth date and signature blurred) */
 .who .idw{{display:block;align-self:stretch;position:relative}}   /* the ID card fills the column, no frame of its own (Steuart, 21 Oct) */
 .who .idc{{display:block;width:100%;height:auto;border-radius:6px}}
 .who .idc.sq{{width:63.4%;border-radius:0}}   /* Steuart's portrait square, as tall as Cuong's card (23 Oct) */
-.cvr{{margin:0;font-size:11.5px;color:#666}}
+.cvr{{margin:0;font-size:12px;color:#666}}
 .who .role .rs,.cvr .rs{{display:inline-block;width:2.5px;height:.95em;margin:0 6px;vertical-align:-.1em;background:#3a3c37}}
-.who .role{{margin:8px 0 0;font-size:11.5px;color:#666}}
-.who h3,.cvn{{margin:1px 0 0;font-weight:400;font-size:15px;line-height:1.15;color:var(--red)}} .who h3 b,.cvn b{{font-weight:700}}
-.who .q,.cvn .q{{margin:2px 0 0;font-size:11.5px;font-style:italic;font-weight:400;color:#555}}
+.who .role{{margin:8px 0 0;font-size:12px;color:#666}}
+.who h3,.cvn{{margin:1px 0 0;font-weight:400;font-size:14px;line-height:1.15;color:var(--red)}} .who h3 b,.cvn b{{font-weight:700}}
+.who .q,.cvn .q{{margin:2px 0 0;font-size:12px;font-style:italic;font-weight:400;color:#555}}
 .cvn .q{{margin-left:3px}}
-.who .fx{{margin:6px 0 0;font-size:11px;line-height:1.3;color:#444}} .who .fx b{{font-weight:700;color:#222}}
+.who .fx{{margin:6px 0 0;font-size:12px;line-height:1.3;color:#444}} .who .fx b{{font-weight:700;color:#222}}
 .who .kt{{display:flex;flex-direction:column;align-items:flex-start;gap:2px;margin:auto 0 0;padding-top:7px;font-size:min(12px,3.05vw);line-height:1.35;white-space:nowrap}}
 .who .kt a{{text-decoration:none}}
 /* short text about the practice */
-.intro2{{margin:8px 0 0;font-size:13.5px;line-height:1.4;color:#222}}
-p.bt,.sp{{margin:8px 0 0;font-size:13.5px;line-height:1.4;color:#222}} .sp{{margin-top:3px;font-size:13px}}
+.intro2{{margin:8px 0 0;font-size:14px;line-height:1.4;color:#222}}
+p.bt,.sp{{margin:8px 0 0;font-size:14px;line-height:1.4;color:#222}} .sp{{margin-top:3px;font-size:14px}}
 .sh{{display:flex;align-items:center;gap:7px;margin:12px 0 2px;font-size:14px;font-weight:700;color:var(--red);letter-spacing:.02em}} .sh img{{width:18px;height:18px}}
-.bio p{{margin:8px 0 0;font-size:13.5px;line-height:1.4;color:#222}}
+.bio p{{margin:8px 0 0;font-size:14px;line-height:1.4;color:#222}}
 /* full bio and our services: two openers side by side, each unfolding underneath (one at a time) */
 .opn{{display:flex;gap:18px;flex-wrap:wrap}}
 /* openers (full bio, full services) sit on their subtitle's line, at the right */
@@ -699,9 +699,9 @@ p.bt,.sp{{margin:8px 0 0;font-size:13.5px;line-height:1.4;color:#222}} .sp{{marg
 .sv3{{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0 6px}}
 #us .cvp + .box{{margin-top:26px}}
 .sv3 div{{display:flex;flex-direction:column;align-items:center;text-align:center;gap:3px}}
-.sv3 img{{width:25px;height:25px}} .sv3 b{{font-size:13px;color:var(--red);letter-spacing:.03em}}
-.sv3 span{{font-size:11.5px;line-height:1.3;color:#444}}
-.svc p{{margin:3px 0 0;font-size:13px;line-height:1.4;color:#222}}
+.sv3 img{{width:25px;height:25px}} .sv3 b{{font-size:14px;color:var(--red);letter-spacing:.03em}}
+.sv3 span{{font-size:12px;line-height:1.3;color:#444}}
+.svc p{{margin:3px 0 0;font-size:14px;line-height:1.4;color:#222}}
 /* the CVs open under both columns */
 .cvp > summary{{display:none}} .cvp{{margin:0}} .cvp .box{{margin-top:26px}} .cvp .cvb{{margin-top:10px}}
 /* full CV: the same white bar as the other openers, one per column, the gap between the columns showing they are two */
@@ -711,38 +711,38 @@ details,.cvb{{margin:4px 0 0}}
 /* "CV (+) full CV": a red cross in a circle that sends out pulsing yellow-lime rings; open, it becomes a minus and reads "close" */
 summary,.cvb{{border:0;background:none;font-family:inherit;color:inherit;display:inline-flex;align-items:center;gap:7px;cursor:pointer;list-style:none;font-size:14px;letter-spacing:.04em;padding:1px 0;-webkit-tap-highlight-color:transparent}}
 summary::-webkit-details-marker{{display:none}}
-summary b,.cvb b{{color:var(--red);font-weight:700;font-size:15px;margin-left:-3px}} .cvt{{color:#000;font-weight:300;font-size:13px}}
+summary b,.cvb b{{color:var(--red);font-weight:700;font-size:14px;margin-left:-3px}} .cvt{{color:#000;font-weight:300;font-size:14px}}
 .cvx{{width:20px;height:20px;overflow:visible}}
 .cvx .c{{fill:#fff;stroke:var(--red);stroke-width:1.5}} .cvx path{{stroke:var(--red);stroke-width:1.6;stroke-linecap:round}}
 .cvx .r1,.cvx .r2{{fill:none;stroke:#cdff3e;stroke-width:2.2;transform-box:fill-box;transform-origin:center;animation:cvp 1.8s ease-out infinite}}
 .cvx .r2{{animation-delay:.9s}}
 @keyframes cvp{{0%{{transform:scale(1);opacity:.95}}100%{{transform:scale(1.9);opacity:0}}}}
 details[open] > summary .cvx .v,[aria-expanded=true] .cvx .v{{display:none}} details[open] > summary .cvx .r1,details[open] > summary .cvx .r2,[aria-expanded=true] .cvx .r1,[aria-expanded=true] .cvx .r2{{display:none}}
-details[open] > summary .cvt,[aria-expanded=true] .cvt{{font-size:0}} details[open] > summary .cvt::after,[aria-expanded=true] .cvt::after{{content:"close";font-size:13px}}
+details[open] > summary .cvt,[aria-expanded=true] .cvt{{font-size:0}} details[open] > summary .cvt::after,[aria-expanded=true] .cvt::after{{content:"close";font-size:14px}}
 @media (prefers-reduced-motion:reduce){{.cvx .r1,.cvx .r2{{display:none}}}}
-details h4{{margin:12px 0 2px;font-size:13px;color:var(--red);font-weight:700}}
-details ul{{margin:0;padding:0 0 0 14px;font-size:13px;line-height:1.4;color:#222}} details li{{margin:2px 0}}
-.addr{{margin:0;font-size:13.5px;line-height:1.35}}   /* compact: two short lines */
+details h4{{margin:12px 0 2px;font-size:14px;color:var(--red);font-weight:700}}
+details ul{{margin:0;padding:0 0 0 14px;font-size:14px;line-height:1.4;color:#222}} details li{{margin:2px 0}}
+.addr{{margin:0;font-size:14px;line-height:1.35}}   /* compact: two short lines */
 .ctx{{margin:22px 0 0;text-align:center;font-size:min(13.5px,3.6vw);line-height:1.35;color:#000;white-space:nowrap}}   /* closing line, in the address type (not italic) */   /* closing line, like a full stop: two centred lines, a dash before and after */
 .ctx .hd{{font-style:normal;margin:0 .4em}}
 /* the partners on the contact page too (as on the desktop), compact */
 .pcs{{margin:12px 0 0;font-size:min(13px,3.4vw);line-height:1.4}} .pcs p{{margin:0 0 8px}} .pcs b{{font-weight:700}} .pcs a{{text-decoration:none}}
 /* copyright, as at the foot of the desktop side bar */
-.legal h4{{margin:12px 0 2px;font-size:12px;font-weight:700;color:#000}} .legal p{{margin:0;font-size:12.5px;line-height:1.45;color:#222}} .legal .lp{{color:#666;font-size:11.5px}}
+.legal h4{{margin:12px 0 2px;font-size:12px;font-weight:700;color:#000}} .legal p{{margin:0;font-size:12px;line-height:1.45;color:#222}} .legal .lp{{color:#666;font-size:12px}}
 .legal a{{color:#1a5fd0;text-decoration:none}} .legal a[href^="tel:"]{{color:#1e8e3e}} .legal .todo{{color:#e30613}}
 .ptrail{{position:absolute;inset:0;width:100%;height:100%}}
 /* the end of the page: mark + copyright, and the pulsing dot that opens the game */
 .fin{{position:relative;display:flex;justify-content:center;margin:26px 0 10px;min-height:86px}}
-.todesk{{display:block;margin-top:6px;font-size:11px;letter-spacing:.06em;color:#888;text-decoration:none}}
-.finm{{display:flex;flex-direction:column;align-items:center;gap:2px}} .finm img{{width:26px;height:26px}} .finm span{{font-size:17px;color:var(--red)}} .finm b{{font-weight:700}} .finm .copy{{margin:4px 0 0}}
+.todesk{{display:block;margin-top:6px;font-size:12px;letter-spacing:.06em;color:#888;text-decoration:none}}
+.finm{{display:flex;flex-direction:column;align-items:center;gap:2px}} .finm img{{width:26px;height:26px}} .finm span{{font-size:16px;color:var(--red)}} .finm b{{font-weight:700}} .finm .copy{{margin:4px 0 0}}
 .pgo{{position:absolute;right:6px;top:2px;display:flex;align-items:center;gap:0;border:0;background:none;padding:0;font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}}
-.pgo .pme{{font-size:11px;letter-spacing:.08em;color:#666;white-space:nowrap}}
+.pgo .pme{{font-size:12px;letter-spacing:.08em;color:#666;white-space:nowrap}}
 .pgo .pld{{width:22px;height:1px;margin:0 2px 0 5px;background:var(--dh)}}
 .pgo .pdot{{position:relative;margin:0;width:40px;height:40px;cursor:pointer}}
 dialog#game{{inset:0;z-index:70;padding:0;overflow:hidden}}
 .play{{position:absolute;inset:0;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;background:#fff}}
 .gx{{position:absolute;right:10px;top:calc(env(safe-area-inset-top,0px) + 10px);z-index:4}}
-.pkey{{display:flex;align-items:center;gap:5px;margin-top:10px;font-size:13px;color:#222}} 
+.pkey{{display:flex;align-items:center;gap:5px;margin-top:10px;font-size:14px;color:#222}} 
 .pf{{position:absolute;left:0;top:0;display:block;pointer-events:none}}
 .pf.f1{{width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;background:var(--red)}}
 .pf.f2{{width:13px;height:13px;margin:-6.5px 0 0 -6.5px;border-radius:50%;border:2.5px solid var(--red);box-sizing:border-box}}
@@ -759,16 +759,16 @@ dialog#game{{inset:0;z-index:70;padding:0;overflow:hidden}}
 .pbug{{position:absolute;left:0;top:0;width:38px;height:84px;margin:-42px 0 0 -19px;pointer-events:none;will-change:transform}}
 .stack{{--stk:132px}} .stack.pairs{{--stk:44px}}
 .pscore{{position:absolute;left:12px;right:12px;top:calc(env(safe-area-inset-top,0px) + 48px);display:flex;justify-content:space-between;font-size:12px;letter-spacing:.06em;color:#555;pointer-events:none;z-index:2}}
-.pscore b{{color:var(--red);font-size:15px;margin-left:4px}}
+.pscore b{{color:var(--red);font-size:14px;margin-left:4px}}
 .phint{{position:absolute;left:0;right:0;top:30%;display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center;pointer-events:none;transition:opacity .5s;z-index:2}}
-.phint b{{font-size:21px;color:var(--red)}} .phint span{{font-size:14px;color:#222}} .phint small{{margin-top:6px;font-size:11.5px;letter-spacing:.08em;color:#888}}
+.phint b{{font-size:21px;color:var(--red)}} .phint span{{font-size:14px;color:#222}} .phint small{{margin-top:6px;font-size:12px;letter-spacing:.08em;color:#888}}
 .play.go .phint{{opacity:0}}
 .pfood{{position:absolute;left:0;top:0;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:var(--red);box-shadow:0 0 0 2px #fff,0 0 0 3px rgba(227,6,19,.35);pointer-events:none}}
 .pend{{position:absolute;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);display:flex;flex-direction:column;align-items:center;gap:2px;pointer-events:none;z-index:2}}
-.pend img{{width:26px;height:26px}} .pend span{{font-size:17px;color:var(--red)}} .pend b{{font-weight:700}} .pend .copy{{margin:4px 0 0}}
+.pend img{{width:26px;height:26px}} .pend span{{font-size:16px;color:var(--red)}} .pend b{{font-weight:700}} .pend .copy{{margin:4px 0 0}}
 .pmsg{{position:absolute;left:0;right:0;top:44%;text-align:center;font-size:22px;font-weight:700;color:var(--red);pointer-events:none;z-index:3}}
 .pdd{{position:absolute;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;pointer-events:none}}   /* the round dd badge the beetle sends out when it catches the dot */
-.copy{{margin:18px 0 0;text-align:center;font-size:10.5px;letter-spacing:.06em;color:#888}}   /* closing line, like a full stop */
+.copy{{margin:18px 0 0;text-align:center;font-size:12px;letter-spacing:.06em;color:#888}}   /* closing line, like a full stop */
 p.lab:not(.first){{margin-top:26px}}
 .box .lab.first{{margin-top:0}}
 .mapw{{position:relative;z-index:0;isolation:isolate;margin:10px 0 0}}
@@ -793,21 +793,22 @@ a[href^="tel:"]{{color:#1e8e3e}} a[href^="mailto:"],.mapl a{{color:#1a5fd0}}
 .pinsvg text{{fill:#3a3c37;font:700 6.4px Calibri,Carlito,sans-serif;text-anchor:middle;dominant-baseline:central}}
 .plab{{position:absolute;left:calc(100% + .35em);bottom:62%;white-space:nowrap;background:rgba(255,255,255,.92);color:#000;font:400 12px/1.25 Calibri,Carlito,sans-serif;padding:.3em .55em}}
 .plab b{{font-weight:700}}
-.leaflet-container{{font-family:Calibri,Carlito,sans-serif}} .leaflet-control-attribution{{font-size:10px!important}} .soon a{{color:var(--red)}}
+.leaflet-container{{font-family:Calibri,Carlito,sans-serif}} .leaflet-control-attribution{{font-size:12px!important}} .soon a{{color:var(--red)}}
 /* project pop-up: full screen, swipe through the photos */
 /* pop-ups leave the side strip (and in the other versions the header) free, so the logo and the tabs stay in reach */
 dialog{{position:fixed;inset:var(--head) 8px 0 var(--side);z-index:40;width:auto;height:auto;max-width:none;max-height:none;margin:0;padding:0;border:0;background:#fff;overflow-y:auto;color:#000}}
 html.dlg{{overflow:hidden}}
 .top{{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top,0px) + 8px) 10px 8px;background:rgba(255,255,255,.94)}}
-.cnt{{display:flex;align-items:center;gap:6px;font-size:13px;color:#666;letter-spacing:.06em}}
+.cnt{{display:flex;align-items:center;gap:6px;font-size:14px;color:#666;letter-spacing:.06em}}
 .cnt b{{color:var(--red);font-weight:400}}
 .cnt button,.x{{border:0;background:none;padding:6px;margin:-6px;display:flex}}
 .top.tc{{display:grid;grid-template-columns:1fr auto 1fr;align-items:center}} .top.tc .x{{justify-self:end}}   /* project pop-up (23 Oct): "projects 06 / 11" in the middle at the top, the small W / E project arrows right beside it */
-.cnt.pk{{gap:10px;font-size:13.5px}} .cnt.pk button{{margin:-6px 0;outline:none;-webkit-tap-highlight-color:transparent}}
+.cnt.pk{{gap:10px;font-size:14px}} .cnt.pk button{{margin:-6px 0;outline:none;-webkit-tap-highlight-color:transparent}}
 .x{{outline:none;-webkit-tap-highlight-color:transparent}} .x svg{{width:22px;height:22px}} .x .rg{{fill:none;stroke:#3a3c37;stroke-width:var(--hp)}} .x .xx{{fill:none;stroke:#1a1a1a;stroke-width:1.15;stroke-linecap:round}}
 .ar{{overflow:visible}} .ar .rg{{fill:none;stroke:#3a3c37;stroke-width:var(--hp)}} .ar .dt{{fill:#4d4f4a;stroke:#1a1a1a;stroke-width:var(--hp);stroke-linejoin:round}}
 .ar text{{fill:#3a3c37;font:700 6.4px Calibri,Carlito,sans-serif;text-anchor:middle;dominant-baseline:central}} .ar .tr{{display:none}}
-.photos{{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;background:#f6f6f6}}
+.photos{{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;background:#fff}}
+.phw::after{{display:none}}   /* one clean photo: no frame, no grey bands */
 .phw::after{{content:"";position:absolute;inset:0;pointer-events:none;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat}}
 .photos::-webkit-scrollbar{{display:none}}
 .photos img{{flex:none;width:100%;height:44svh;object-fit:contain;scroll-snap-align:center}}
@@ -819,18 +820,18 @@ dialog .top{{flex:none}}
   -webkit-tap-highlight-color:transparent;transition:opacity .2s}}
 .phw .pw{{left:6px}} .phw .pe{{right:6px}}
 .phw button:disabled{{opacity:0;pointer-events:none}}
-.pcount{{font-size:11px;color:#888;letter-spacing:.06em;padding:6px 12px 0}}
+.pcount{{font-size:12px;color:#888;letter-spacing:.06em;padding:6px 12px 0}}
 .dots{{display:flex;gap:5px;justify-content:center;padding:6px 0 0}}
 .dots i{{width:6px;height:6px;border-radius:50%;background:#ccc}} .dots i.on{{background:var(--red)}}
 .txt{{flex:1;min-height:0;overflow:hidden;position:relative;padding:4px 10px 0}}
 .txt::after{{content:"";position:absolute;left:0;right:0;bottom:0;height:14px;background:linear-gradient(rgba(255,255,255,0),rgba(255,255,255,.96))}}
-.txt h2{{margin:4px 0 0;color:var(--red);font-size:18px;line-height:1.15}}
-.txt p{{margin:5px 0 0;font-size:13.5px;line-height:1.36;color:#222}}
+.txt h2{{margin:4px 0 0;color:var(--red);font-size:16px;line-height:1.15}}
+.txt p{{margin:5px 0 0;font-size:14px;line-height:1.36;color:#222}}
 .txt dl{{margin:8px 0 0;padding-top:6px;background:var(--dh) left top/100% 1px no-repeat;display:grid;grid-template-columns:auto 1fr auto 1fr;gap:2px 8px;font-size:12px;line-height:1.3}}
 .txt dt{{color:#888}} .txt dd{{margin:0}}
 .nav2{{flex:none;display:flex;justify-content:space-between;align-items:center;margin:0 10px;padding:4px 0 calc(env(safe-area-inset-bottom,0px) + 8px);background:var(--dh) left top/100% 1px no-repeat}}
 .nav2 button{{display:flex;align-items:center;gap:6px;border:0;background:none;font:400 12px Calibri,Carlito,sans-serif;letter-spacing:.06em;color:#666;padding:6px 0}}
-.note{{margin-left:auto;padding-left:8px;align-self:flex-start;text-align:right;font-size:10px;line-height:1.35;color:#888;letter-spacing:.03em}}
+.note{{margin-left:auto;padding-left:8px;align-self:flex-start;text-align:right;font-size:12px;line-height:1.35;color:#888;letter-spacing:.03em}}
 .note a{{color:var(--red)}}
 .note button{{border:0;background:none;padding:0 2px;font:inherit;color:#888;letter-spacing:inherit}}
 .note button[aria-pressed="true"]{{color:var(--red);text-decoration:underline}}
@@ -838,10 +839,10 @@ dialog .top{{flex:none}}
 .intro{{margin:0 0 8px;font-size:14px;line-height:1.45;color:#333}}
 .pdfs{{list-style:none;margin:10px 0 0;padding:0}}
 .pdfs{{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px}}   /* the four PDFs in two rows of two */
-.pdfs li{{display:flex;align-items:center;gap:8px;padding:4px 0}} .pdfs span{{font-size:13.5px!important;line-height:1.25}}
+.pdfs li{{display:flex;align-items:center;gap:8px;padding:4px 0}} .pdfs span{{font-size:14px!important;line-height:1.25}}
 .pdfs li:last-child{{background:none}}
 .pdfs img{{width:26px;height:auto}}
-.pdfs span{{font-size:15px}} .pdfs small{{display:block;font-size:11px;color:#999;letter-spacing:.04em}}
+.pdfs span{{font-size:14px}} .pdfs small{{display:block;font-size:12px;color:#999;letter-spacing:.04em}}
 .links{{display:grid;grid-template-columns:1fr 1fr;gap:14px 10px;margin-top:12px}}
 /* checkerboard (24 Oct, Steuart): each link - logo, name and line - sits on its own square, grey and white taking turns like a draughts board, so it is clear which text belongs to which logo; ?chk=0 shows the old look */
 .links.chk{{gap:0}} .links.chk .lk{{padding:10px 10px 12px;background:#f4f4f2}}
@@ -856,7 +857,7 @@ html.nochk .links.chk{{gap:14px 10px}} html.nochk .links.chk .lk{{padding:0;back
 /* open: the bar drops back under the grid */
 .more[aria-expanded=true]{{margin-top:8px}}
 .more .cl{{display:none}} .more[aria-expanded=true] .cl{{display:inline}} .more[aria-expanded=true] .op{{display:none}}
-.more[aria-expanded=true] .cvt::after{{content:none}} .more[aria-expanded=true] .cvt{{font-size:13px}}
+.more[aria-expanded=true] .cvt::after{{content:none}} .more[aria-expanded=true] .cvt{{font-size:14px}}
 @media (prefers-reduced-motion:reduce){{.cut{{transition:none}}}}
 .lk{{display:flex;flex-direction:column;text-decoration:none;-webkit-tap-highlight-color:transparent}}
 .lg{{display:flex;align-items:center;justify-content:center;height:50px;padding:9px 12px;background:#fff;position:relative}}   /* low rectangles: each logo (trimmed to its edges, m-lg-*) at most 32 px high, a small margin all round */
@@ -864,7 +865,7 @@ html.nochk .links.chk{{gap:14px 10px}} html.nochk .links.chk .lk{{padding:0;back
 .lg::after{{content:"";position:absolute;inset:0;pointer-events:none;
   background:repeating-linear-gradient(to right,var(--dot) 0 1px,transparent 1px 3px) left top/100% 1px no-repeat,repeating-linear-gradient(to right,var(--dot) 0 1px,transparent 1px 3px) left bottom/100% 1px no-repeat,
   repeating-linear-gradient(to bottom,var(--dot) 0 1px,transparent 1px 3px) left top/1px 100% no-repeat,repeating-linear-gradient(to bottom,var(--dot) 0 1px,transparent 1px 3px) right top/1px 100% no-repeat}}
-.lk b{{margin-top:5px;font-size:13.5px;color:var(--red)}} .lk small{{font-size:11.5px;line-height:1.25;color:#555}}
+.lk b{{margin-top:5px;font-size:14px;color:var(--red)}} .lk small{{font-size:12px;line-height:1.25;color:#555}}
 .lk:active .lg{{background:var(--green)}}
 /* bits & bats: two columns, the tall pictures over two rows */
 .bgrid{{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:calc((100vw - var(--side) - 28px) / 2 * .9);grid-auto-flow:dense;gap:8px}}
@@ -874,19 +875,19 @@ html.nochk .links.chk{{gap:14px 10px}} html.nochk .links.chk .lk{{padding:0;back
 .bgrid .card{{display:block;width:100%;text-align:left;color:#222}}
 .card.news{{background:#f4f4f4}} .card.note{{background:#fffbd6}}
 .card .ct{{position:absolute;inset:0 0 34px;display:flex;flex-direction:column;gap:4px;padding:9px 9px 6px;overflow:hidden}}
-.card .ct small{{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--red);font-weight:700}}
+.card .ct small{{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--red);font-weight:700}}
 .card .ct b{{font-size:14px;line-height:1.2;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;flex:none}}
 .card.note .qm{{font-style:normal;font-size:36px;line-height:.6;color:var(--red);height:14px;flex:none}}
-.card .ex{{font-style:normal;font-size:11.5px;line-height:1.35;color:#555;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}} .card .mo{{font-size:12px;color:var(--red);flex:none}}
+.card .ex{{font-style:normal;font-size:12px;line-height:1.35;color:#555;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}} .card .mo{{font-size:12px;color:var(--red);flex:none}}
 .card.note .ex{{display:none}}
 .card.note .ct b{{font-weight:400;font-style:italic;font-size:14px;line-height:1.3;-webkit-line-clamp:4}}
 .cwc{{padding:6px 14px 30px;overflow:auto}} .cwc .lab{{margin-top:10px}} .cwc h2{{margin:6px 0 10px;font-size:20px;line-height:1.2;color:var(--red)}}
-.cwc p{{margin:0;font-size:15px;line-height:1.5;color:#222}} .cwc .q{{font-size:19px;line-height:1.45}} .cwc .todo{{color:var(--red)}}
+.cwc p{{margin:0;font-size:14px;line-height:1.5;color:#222}} .cwc .q{{font-size:19px;line-height:1.45}} .cwc .todo{{color:var(--red)}}
 .cwc .qm{{display:block;font-style:normal;font-size:64px;line-height:.5;height:30px;margin-top:22px;color:var(--red)}}
 .cwc .open{{display:inline-block;margin-top:16px;font-size:14px;color:#1a5fd0;text-decoration:none;padding:6px 0;background:var(--dh) left bottom/100% 1px no-repeat}}
 /* one picture full screen, swipe to the next */
 #iv .photos img{{height:70svh}}
-.ivcap{{padding:10px 10px 30px;color:var(--red);font-size:17px;font-weight:700}}
+.ivcap{{padding:10px 10px 30px;color:var(--red);font-size:16px;font-weight:700}}
 .ivcap small{{display:block;margin-top:4px;color:#888;font-weight:400;font-size:12px;letter-spacing:.06em}}
 </style>
 </head>
@@ -1214,8 +1215,9 @@ html.nochk .links.chk{{gap:14px 10px}} html.nochk .links.chk .lk{{padding:0;back
       sec.style.scrollMarginTop=(r*H+22)+'px';   /* lands with its own half bar exactly in its place at the top */
       b.setAttribute('role','link'); b.tabIndex=0; b.addEventListener('click',()=>tapGo(b,sec)); }});
     const up=b=>{{ const r=b.getBoundingClientRect(); return r.bottom < innerHeight-parseFloat(getComputedStyle(b).bottom)-3; }};   /* has left the bottom stack */
+    const arrived=b=>b.getBoundingClientRect().top<=parseFloat(getComputedStyle(b).top)+2;   /* the moving bar stays lit until it has arrived at the top */
     const cur=()=>{{ let c=-1; bars.forEach((b,k)=>{{ if(up(b)) c=k; }});
-      bars.forEach((b,k)=>b.classList.toggle('on',k===c)); document.body.classList.toggle('inpg',c>=0); }};
+      bars.forEach((b,k)=>b.classList.toggle('on',k===c||(up(b)&&!arrived(b)))); document.body.classList.toggle('inpg',c>=0); }};
     /* white backing behind the stacks, so no page shows through the empty half of a row */
     const bt=document.createElement('div'), bb=document.createElement('div'); bt.className='sback t'; bb.className='sback b'; document.body.append(bt,bb);
     const back=()=>{{ const t0=document.querySelector('.bar.btop').getBoundingClientRect().bottom, b0=document.querySelector('.bar.bbot').getBoundingClientRect().top;
@@ -1233,8 +1235,9 @@ html.nochk .links.chk{{gap:14px 10px}} html.nochk .links.chk .lk{{padding:0;back
       sec.style.scrollMarginTop=(k*H+22)+'px'; b.setAttribute('role','link'); b.tabIndex=0;
       b.addEventListener('click',()=>tapGo(b,sec)); }});
     const up=b=>{{ const r=b.getBoundingClientRect(); return r.bottom < innerHeight-parseFloat(getComputedStyle(b).bottom)-3; }};   /* has left the bottom stack */
+    const arrived=b=>b.getBoundingClientRect().top<=parseFloat(getComputedStyle(b).top)+2;   /* the moving bar stays lit until it has arrived at the top */
     const cur=()=>{{ let c=-1; bars.forEach((b,k)=>{{ if(up(b)) c=k; }});
-      bars.forEach((b,k)=>b.classList.toggle('on',k===c)); document.body.classList.toggle('inpg',c>=0); }};
+      bars.forEach((b,k)=>b.classList.toggle('on',k===c||(up(b)&&!arrived(b)))); document.body.classList.toggle('inpg',c>=0); }};
     addEventListener('scroll',cur,{{passive:true}}); cur();
   }}
   if(document.body.classList.contains('sec3')){{ const secs=[...document.querySelectorAll('main > section.pg:not(#start)')];
@@ -1288,10 +1291,54 @@ UPDATE = ('<script>/* automatic update check (25 Oct): reload once when a newer 
           ' try{ if(sessionStorage.getItem("dd-upd")===j.v) return; sessionStorage.setItem("dd-upd",j.v); }catch(e){}'
           ' const q=new URLSearchParams(location.search); q.set("v",j.v); location.replace(location.pathname+"?"+q.toString()); }).catch(()=>{}); }'
           ' addEventListener("load",check); document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible") check(); }); })();</script>')
-# 10 Nov 2026 (UI audit A1, A6): one frame only round tiles and pop-up photos (the fine dotted ::after line; the browser's own dotted border is hidden),
-# and buttons without a font of their own (scroll / back to the top) take the page font instead of Arial
-UIFIX = '<style>button{font-family:Calibri,Carlito,sans-serif}.tile,.phw{border-color:transparent!important}</style>'
-open(OUT, 'w').write(HTML.replace('</head>', UIFIX + '</head>', 1).replace('</body>', NOCOPY + UPDATE + '</body>', 1))
+
+# ---- edits made straight in the live page on 6-7 Nov (chevron, edge ticks, edge alignment, photo borders); kept here verbatim so a rebuild keeps them ----
+LIVE_CSS = r'''
+/* totop */
+html{--bar:0px!important}
+.bar{border:0!important;background:none!important;pointer-events:none}.bar::after{display:none!important}.bar button{display:none!important}
+#toTop{position:fixed;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:40;width:34px;height:34px;padding:0;display:flex;align-items:center;justify-content:center;
+ background:rgba(255,255,255,.94);border:1px dotted #b8b8b8;border-radius:0;opacity:0;pointer-events:none;transition:opacity .25s;-webkit-tap-highlight-color:transparent}
+#toTop.on{opacity:1;pointer-events:auto}
+#toTop svg{width:20px;height:20px;fill:none;stroke:#3a3c37;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+
+/* ticks-short */
+.tk{background:repeating-linear-gradient(to right,#b8b8b8 0 4px,transparent 4px 6px) left top/var(--tw,7px) 1px no-repeat,repeating-linear-gradient(to right,#b8b8b8 0 4px,transparent 4px 6px) left bottom/var(--tw,7px) 1px no-repeat,repeating-linear-gradient(to right,#b8b8b8 0 4px,transparent 4px 6px) right top/var(--tw,7px) 1px no-repeat,repeating-linear-gradient(to right,#b8b8b8 0 4px,transparent 4px 6px) right bottom/var(--tw,7px) 1px no-repeat!important}
+
+/* edge-align */
+.sec1 main > section.pg:not(#start) > .body :is(p,h2,h3,h4,ul,ol,.lab,.firm,.lh){padding-left:0;padding-right:0}
+
+/* tidy-edges */
+header{padding-left:18px!important;padding-right:18px!important}
+
+/* photo-border (rewritten 11 Nov, UI audit A1): the frame sits in a 1 px transparent border outside the image and is drawn with the fine dotted line
+   (1 px dot, 2 px gap: --dh / --dv, the same as every other dotted line) - not with the browser's own, denser "dotted" border */
+.tile,.phw,.wp img,.wpbody .wpi,.wsw .wth img,.wsq{box-sizing:border-box;border:1px solid transparent;background-origin:border-box;background-repeat:no-repeat;
+ background-image:var(--dh),var(--dh),var(--dv),var(--dv);background-position:left top,left bottom,left top,right top;background-size:100% 1px,100% 1px,1px 100%,1px 100%}
+.wp img,.wpbody .wpi,.wsw .wth img,.wsq{outline:0!important}
+.tile::after,.phw::after{display:none!important}
+'''
+LIVE_JS = r'''<button type="button" id="toTop" aria-label="back to the top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15L12 8L19 15"/></svg></button><script id="totop-js">(function(){var b=document.getElementById('toTop');if(!b)return;
+function upd(){var y=innerHeight-10;document.querySelectorAll('.pbar').forEach(function(p){var r=p.getBoundingClientRect(),bt=parseFloat(getComputedStyle(p).bottom);if(!isNaN(bt)&&r.height&&r.bottom>=innerHeight-bt-3&&r.top<y)y=r.top;});
+ b.style.bottom=Math.max(10,innerHeight-y+8)+'px';b.classList.toggle('on',scrollY>260);}
+b.onclick=function(){scrollTo({top:0,behavior:'smooth'});};addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);upd();})();</script><script id="ticks-js">(function(){var q=function(s){return document.querySelector(s)};
+function vis(e){return e&&e.offsetParent!==null&&e.getBoundingClientRect().height>0;}
+function place(){var t=q('.tk.t'),b=q('.tk.b'),m=q('.tk.m');if(!t||!b)return;
+ if(!m){m=document.createElement('i');m.className='tk m';(t.parentNode).appendChild(m);}
+ var off=function(e){return getComputedStyle(e).position==='fixed'?0:(e.offsetParent?e.offsetParent.getBoundingClientRect().top:0);};
+ var tbs=[].filter.call(document.querySelectorAll('.titlebar'),vis),hl;
+ if(tbs.length)hl=tbs[0].getBoundingClientRect().bottom;else{var hd=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--head'));hl=isNaN(hd)?null:hd;}
+ var bars=[].filter.call(document.querySelectorAll('.hb,.pbar'),vis),last=bars[bars.length-1],hs=document.getElementById('hscroll');
+ function set(e,top,h){if(top===null){e.style.removeProperty('top');e.style.removeProperty('height');e.style.removeProperty('bottom');return;}e.style.setProperty('top',Math.round(top-off(e))+'px','important');e.style.setProperty('bottom','auto','important');e.style.setProperty('height',h+'px','important');e.style.setProperty('display','block','important');}
+ if(hl!==null)set(t,hl,11);
+ set(m,innerHeight/2-5.5,11);
+ var bl=null;bars.forEach(function(x){var l=x.getBoundingClientRect().left;if(bl===null||l<bl)bl=l;});if(bl!==null)document.documentElement.style.setProperty('--tw',Math.max(4,Math.round(bl-8))+'px');if(last){var rh=Math.round(last.getBoundingClientRect().height),bt=hs&&vis(hs)&&!last.classList.contains('pbar')?hs.getBoundingClientRect().bottom:innerHeight-(parseFloat(getComputedStyle(last).bottom)||0);set(b,bt-11,11);}else set(b,null);}
+place();addEventListener('resize',place);setInterval(place,600);
+})();</script>
+'''
+UIFIX = '<style>button{font-family:Calibri,Carlito,sans-serif}</style>'   # 11 Nov (UI audit A6): buttons without a font of their own (scroll / back to the top) take the page font instead of Arial
+NOCOPY = NOCOPY.replace('</style>', LIVE_CSS + '</style>', 1)
+open(OUT, 'w').write(HTML.replace('</head>', UIFIX + '</head>', 1).replace('</body>', NOCOPY + UPDATE + LIVE_JS + '</body>', 1))
 open(os.path.join(ROOT, 'phone', 'version.json'), 'w').write('{"v":"' + VERSION + '"}\n')
 if __name__ == '__main__':
     print(len(pieces), 'pieces,', len(HTML) // 1024, 'KB ->', OUT)

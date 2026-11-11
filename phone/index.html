@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="de">
+<html lang="en">
 <head><script>/* 24 Oct (Steuart): the phone site always opens on the start page - no remembered scroll position, no #page in the address; coming back from the browser's page cache starts fresh too */ (function(){ try{ if("scrollRestoration" in history) history.scrollRestoration="manual"; if(location.hash) history.replaceState(null,"",location.pathname+location.search); }catch(e){} addEventListener("load",()=>scrollTo(0,0)); addEventListener("pageshow",e=>{ if(e.persisted) location.reload(); }); })();</script><script>if(/[?&]chk=0/.test(location.search)) document.documentElement.classList.add("nochk"); if(/[?&]mid=0/.test(location.search)) document.documentElement.classList.add("nomid");</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="icon" type="image/png" href="../icon-192.png"><meta name="theme-color" content="#ffffff"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="dasein-design"><script id="start-top">(function(){try{if("scrollRestoration" in history)history.scrollRestoration="manual";var K="start-seen",LIM=5000,base=location.pathname+location.search;function get(){try{return +sessionStorage.getItem(K)||0}catch(e){return 0}}function put(){try{sessionStorage.setItem(K,String(Date.now()))}catch(e){}}function stale(){var p=get();return p&&Date.now()-p>LIM}function reset(){try{sessionStorage.removeItem(K)}catch(e){}location.replace(base)}if(stale()&&location.hash){reset();return}put();function back(){if(stale())reset();else put()}setInterval(function(){if(document.visibilityState==="visible")put()},3000);document.addEventListener("visibilitychange",function(){if(document.visibilityState==="hidden")put();else back()});addEventListener("pageshow",function(e){if(e.persisted)location.reload();else back()});addEventListener("focus",back);document.addEventListener("resume",back);addEventListener("pagehide",put);}catch(e){}})();</script><script id="sw-reg">if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("load",function(){navigator.serviceWorker.register("../sw.js").catch(function(){});});</script>
-<title>dasein-design · phone preview</title>
+<title>dasein-design · architecture + design · Wien</title>
 <link rel="stylesheet" href="../fonts.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
@@ -591,7 +591,7 @@ html.nochk .links.chk{gap:14px 10px} html.nochk .links.chk .lk{padding:0;backgro
 .ivcap{padding:10px 10px 30px;color:var(--red);font-size:16px;font-weight:700}
 .ivcap small{display:block;margin-top:4px;color:#888;font-weight:400;font-size:12px;letter-spacing:.06em}
 </style>
-<!--type-scale--></head>
+<style>button{font-family:Calibri,Carlito,sans-serif}</style></head>
 <body>
 <script>/* three versions: logo and tabs all down the side (default) · logo on the side, tabs on top · logo and tabs across the top
    ?logo=rail / side / top, remembered on this phone */
@@ -995,16 +995,18 @@ html{--bar:0px!important}
 /* tidy-edges */
 header{padding-left:18px!important;padding-right:18px!important}
 
-/* photo-border */
-.wp img,.wpbody .wpi,.wsw .wth img{outline:0!important;box-sizing:border-box;border:1px dotted #b8b8b8}
-.tile,.phw{box-sizing:border-box;border:1px dotted #b8b8b8!important}
+/* photo-border (rewritten 11 Nov, UI audit A1): the frame sits in a 1 px transparent border outside the image and is drawn with the fine dotted line
+   (1 px dot, 2 px gap: --dh / --dv, the same as every other dotted line) - not with the browser's own, denser "dotted" border */
+.tile,.phw,.wp img,.wpbody .wpi,.wsw .wth img,.wsq{box-sizing:border-box;border:1px solid transparent;background-origin:border-box;background-repeat:no-repeat;
+ background-image:var(--dh),var(--dh),var(--dv),var(--dv);background-position:left top,left bottom,left top,right top;background-size:100% 1px,100% 1px,1px 100%,1px 100%}
+.wp img,.wpbody .wpi,.wsw .wth img,.wsq{outline:0!important}
 .tile::after,.phw::after{display:none!important}
 </style>
 <script>/* no right-click / long-press menu and no dragging on pictures (24 Oct) - the link logos keep their menu */
 (function(){ const ph=e=>{ const im=e.target.closest&&e.target.closest('img'); return im&&!im.closest('a[href^="http"]'); };
   document.addEventListener('contextmenu',e=>{ if(ph(e)) e.preventDefault(); },true);
   document.addEventListener('dragstart',e=>{ if(e.target.closest&&e.target.closest('img')) e.preventDefault(); },true); })();</script>
-<script>/* automatic update check (25 Oct): reload once when a newer build is on the server */ (function(){ const V="20261107030000"; function check(){ fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{ if(!j||!j.v||j.v===V) return; try{ if(sessionStorage.getItem("dd-upd")===j.v) return; sessionStorage.setItem("dd-upd",j.v); }catch(e){} const q=new URLSearchParams(location.search); q.set("v",j.v); location.replace(location.pathname+"?"+q.toString()); }).catch(()=>{}); } addEventListener("load",check); document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible") check(); }); })();</script><button type="button" id="toTop" aria-label="back to the top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15L12 8L19 15"/></svg></button><script id="totop-js">(function(){var b=document.getElementById('toTop');if(!b)return;
+<script>/* automatic update check (25 Oct): reload once when a newer build is on the server */ (function(){ const V="20261111194235"; function check(){ fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{ if(!j||!j.v||j.v===V) return; try{ if(sessionStorage.getItem("dd-upd")===j.v) return; sessionStorage.setItem("dd-upd",j.v); }catch(e){} const q=new URLSearchParams(location.search); q.set("v",j.v); location.replace(location.pathname+"?"+q.toString()); }).catch(()=>{}); } addEventListener("load",check); document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible") check(); }); })();</script><button type="button" id="toTop" aria-label="back to the top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15L12 8L19 15"/></svg></button><script id="totop-js">(function(){var b=document.getElementById('toTop');if(!b)return;
 function upd(){var y=innerHeight-10;document.querySelectorAll('.pbar').forEach(function(p){var r=p.getBoundingClientRect(),bt=parseFloat(getComputedStyle(p).bottom);if(!isNaN(bt)&&r.height&&r.bottom>=innerHeight-bt-3&&r.top<y)y=r.top;});
  b.style.bottom=Math.max(10,innerHeight-y+8)+'px';b.classList.toggle('on',scrollY>260);}
 b.onclick=function(){scrollTo({top:0,behavior:'smooth'});};addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);upd();})();</script><script id="ticks-js">(function(){var q=function(s){return document.querySelector(s)};

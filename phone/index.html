@@ -969,6 +969,9 @@ header{padding-left:18px!important;padding-right:18px!important}
 .wsw::before{content:"";position:absolute;left:-8px;right:-8px;top:50%;height:44px;transform:translateY(-50%)}
 a[href^="tel:"],a[href^="mailto:"]{position:relative}
 a[href^="tel:"]::after,a[href^="mailto:"]::after{content:"";position:absolute;left:-3px;right:-3px;top:-11px;bottom:-11px}
+/* linie-breite */
+header{border-image:none!important;border-bottom:1px solid transparent!important}
+header::after{content:"";position:absolute;left:8px;right:8px;bottom:-1px;height:1px;background:var(--gh);pointer-events:none}
 </style>
 <script>/* no right-click / long-press menu and no dragging on pictures (24 Oct) - the link logos keep their menu */
 (function(){ const ph=e=>{ const im=e.target.closest&&e.target.closest('img'); return im&&!im.closest('a[href^="http"]'); };

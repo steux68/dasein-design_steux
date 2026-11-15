@@ -317,6 +317,9 @@ a{{color:inherit}}
 /* header: logo, then the five tabs in two rows (3 + 2) */
 header{{position:fixed;left:0;right:0;top:0;z-index:20;background:#fff;padding:calc(env(safe-area-inset-top,0px) + 8px) max(10px,env(safe-area-inset-right,0px)) 8px max(10px,env(safe-area-inset-left,0px));
   border-bottom:1px solid transparent;border-image:var(--gh) 1}}
+/* 15 Nov: bars stacked at the top: only the bars' own dotted lines show, no dashed header line or frame ticks above them */
+body.tstk header{{border-image:none;border-bottom-color:transparent}}
+body.tstk .tk.t{{visibility:hidden}}
 .row1{{display:flex;align-items:center}}
 .logo{{flex:none;white-space:nowrap;display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--red);height:34px}}
 .logo img{{width:30px;height:30px}}

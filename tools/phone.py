@@ -15,6 +15,7 @@ from PIL import Image
 import lightbox as LB
 from texts import INTRO, BIO, INFO_TXT, LINKS_TXT, CONTACT_TXT, SERVICES, SERVICES_SHORT, LEGAL_BODY, BITS, CARDS, CARD_AT, WCATS, WCAT_OF   # shared with the desktop site
 import search as SEARCH
+import imgdims   # adds width / height to every <img> (Lighthouse)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.join(HERE, '..')
@@ -304,8 +305,8 @@ HTML = f'''<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="icon" type="image/png" href="../icon-192.png"><meta name="theme-color" content="#ffffff"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="dasein-design"><script id="start-top">(function(){{try{{if("scrollRestoration" in history)history.scrollRestoration="manual";var K="start-seen",LIM=5000,base=location.pathname+location.search;function get(){{try{{return +sessionStorage.getItem(K)||0}}catch(e){{return 0}}}}function put(){{try{{sessionStorage.setItem(K,String(Date.now()))}}catch(e){{}}}}function stale(){{var p=get();return p&&Date.now()-p>LIM}}function reset(){{try{{sessionStorage.removeItem(K)}}catch(e){{}}location.replace(base)}}if(stale()&&location.hash){{reset();return}}put();function back(){{if(stale())reset();else put()}}setInterval(function(){{if(document.visibilityState==="visible")put()}},3000);document.addEventListener("visibilitychange",function(){{if(document.visibilityState==="hidden")put();else back()}});addEventListener("pageshow",function(e){{if(e.persisted)location.reload();else back()}});addEventListener("focus",back);document.addEventListener("resume",back);addEventListener("pagehide",put);}}catch(e){{}}}})();</script><script id="sw-reg">if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("load",function(){{navigator.serviceWorker.register("../sw.js").catch(function(){{}});}});</script>
 <title>dasein-design · architecture + design · Wien</title>
+<meta name="description" content="dasein-design is an architecture and design practice in Vienna (Wien), run by Cuong Tran-Viet and Steuart Harrison: projects, services, guides for clients and contact.">
 <link rel="stylesheet" href="../fonts.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
 :root{{--dh:repeating-linear-gradient(to right,var(--dot) 0 1px,transparent 1px 3px);--dv:repeating-linear-gradient(to bottom,var(--dot) 0 1px,transparent 1px 3px);--gh:repeating-linear-gradient(to right,var(--line) 0 4px,transparent 4px 7px);--gv:repeating-linear-gradient(to bottom,var(--line) 0 4px,transparent 4px 7px);--bar:30px;--red:#e30613;--lime:rgba(205,255,62,.86);--green:#a5e35a;--grey:#ebebeb;--line:#c4c4c4;--dot:#b8b8b8;--hp:1px;--head:118px;--side:0px;--ttl:44px}}
 nav .tab:last-child:nth-child(odd){{grid-column:span 2}}
@@ -1219,10 +1220,9 @@ html.nochk .links.chk{{gap:14px 10px}} html.nochk .links.chk .lk{{padding:0;back
   $('pp2').onclick=()=>show(pi-1); $('np2').onclick=()=>show(pi+1);
 }})();
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
 /* live map with the H pin; loaded last so it can never stop the page */
-addEventListener('load',()=>{{ try{{
+function initMap(){{ try{{
   const HOME=[48.211431,16.333964], el=document.getElementById('map');
   const map=L.map(el,{{zoomControl:false,scrollWheelZoom:false,dragging:!L.Browser.mobile,tap:false,attributionControl:true}});
   const home=a=>{{ map.setView(HOME,17,{{animate:false}}); map.panBy([Math.min(110,el.clientWidth*.28),-30],{{animate:false}}); }}; home();   /* pin left of centre so its address label fits */
@@ -1230,7 +1230,15 @@ addEventListener('load',()=>{{ try{{
   L.tileLayer('https://tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png',{{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'}}).addTo(map);
   map.attributionControl.setPrefix(false);
   L.marker(HOME,{{icon:L.divIcon({{className:'',iconSize:[34,44],iconAnchor:[17,44],html:'<div class="pinH"><svg class="pinsvg" viewBox="0 0 40 52" aria-hidden="true"><path class="pb" d="M20 51C14.5 40.5 2 31 2 19A18 18 0 0 1 38 19C38 31 25.5 40.5 20 51Z"/><circle class="pw" cx="20" cy="19" r="14.5"/><g transform="translate(20 19) scale(1.12)"><path class="pr" d="M-5.31 7.88A9.5 9.5 0 1 1 5.31 7.88"/><path class="pa" transform="rotate(90)" d="M5.4 0L-4.6 -4.9L-2.2 0L-4.6 4.9Z"/><text x="0" y="9.5">H</text></g></svg><div class="plab"><b class="dd">dasein-design</b><br>Neulerchenfelderstrasse 42/6<br>A-1160 Wien</div></div>'}})}}).addTo(map);
-}}catch(err){{ console.warn('map not available',err); }} }});
+}}catch(err){{ console.warn('map not available',err); }} }}
+/* the map library is loaded only when the map is near the screen - keeps the first load light */
+(function(){{ let req=false; const el=document.getElementById('map'); if(!el) return;
+  function loadMap(){{ if(req) return; req=true;
+    const css=document.createElement('link'); css.rel='stylesheet'; css.href='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css'; document.head.appendChild(css);
+    const js=document.createElement('script'); js.src='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js'; js.onload=initMap; js.onerror=()=>console.warn('map not available'); document.head.appendChild(js); }}
+  if('IntersectionObserver' in window){{ const io=new IntersectionObserver(es=>{{ if(es.some(e=>e.isIntersecting)){{ io.disconnect(); loadMap(); }} }},{{rootMargin:'900px 0px'}}); io.observe(el); }}
+  else addEventListener('load',loadMap); }})();
+
 </script>
 <script>/* every link to another site opens in a new tab / window, so this site stays open behind it */
 (function(){{ const ext=a=>a&&/^https?:/i.test(a.getAttribute('href')||'')&&a.host!==location.host;
@@ -1306,7 +1314,7 @@ place();addEventListener('resize',place);setInterval(place,600);
 '''
 UIFIX = '<style>button{font-family:Carlito,Calibri,sans-serif}</style><style id="arrows-css">/* 17.11: alle Pfeile wie in DOCH/PASSAGE: nur der Pfeilkopf auf rundem, leicht durchsichtigem 26-px-Kreis mit feinem grauem Rand; kein Ring, kein W/O/N; Antippfläche ~46 px */.ar .rg,.ar text{display:none!important}.phw button{width:26px!important;height:26px!important;margin-top:-13px!important;background:rgba(255,255,255,.6)!important;box-shadow:0 0 0 1px rgba(0,0,0,.1)}.phw button .ar{width:30px;height:30px}.phw .pw{left:2px!important}.phw .pe{right:2px!important}.phw button::before{content:"";position:absolute;inset:-10px}.bar .ar,.cnt.pk .ar{width:30px;height:30px;background:radial-gradient(circle 13px at 50% 50%,rgba(255,255,255,.6) 0 12px,rgba(0,0,0,.1) 12px 13px,transparent 13px);margin:-3px}</style>'   # 11 Nov (UI audit A6): buttons without a font of their own (scroll / back to the top) take the page font instead of Arial
 NOCOPY = NOCOPY.replace('</style>', LIVE_CSS + '</style>', 1)
-open(OUT, 'w').write(HTML.replace('</head>', UIFIX + '</head>', 1).replace('</body>', NOCOPY + UPDATE + LIVE_JS + '</body>', 1))
+open(OUT, 'w').write(imgdims.apply(HTML.replace('</head>', UIFIX + '</head>', 1).replace('</body>', NOCOPY + UPDATE + LIVE_JS + '</body>', 1), os.path.dirname(OUT)))
 open(os.path.join(ROOT, 'phone', 'version.json'), 'w').write('{"v":"' + VERSION + '"}\n')
 if __name__ == '__main__':
     print(len(pieces), 'pieces,', len(HTML) // 1024, 'KB ->', OUT)

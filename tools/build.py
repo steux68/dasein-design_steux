@@ -70,9 +70,9 @@ html = f'''<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" type="image/png" href="icon-192.png"><meta name="theme-color" content="#ffffff"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="dasein-design"><script id="sw-reg">if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});</script>
 <title>dasein-design · architecture + design · Wien</title>
+<meta name="description" content="dasein-design is an architecture and design practice in Vienna (Wien), run by Cuong Tran-Viet and Steuart Harrison: projects, services, guides for clients and contact.">
 <link rel="stylesheet" href="fonts.css">
 <link rel="stylesheet" href="figma.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" data-live-map>
 <style>
 html,body{{margin:0;height:100%;overflow:hidden;background:#fff}}
 html,body,button,input,select,textarea,dialog{{font-family:Carlito,Calibri,sans-serif}}   /* one font everywhere, buttons included */
@@ -224,7 +224,6 @@ html,body,button,input,select,textarea,dialog{{font-family:Carlito,Calibri,sans-
 <div class="mz" id="mz"><button id="zin" aria-label="Zoom in">{SEARCH.ZOOM_IN}</button><button id="zout" aria-label="Zoom out">{SEARCH.ZOOM_OUT}</button><button id="zhome" aria-label="Back to the start view" title="back to the start view">{SEARCH.ZOOM_HOME}</button></div></div></div>
 </div></div>
 {LB.HTML}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" data-live-map></script>
 <script>
 (function(){{
   const sc=document.getElementById('scroller'), pgs=[...sc.children];
@@ -330,7 +329,7 @@ html,body,button,input,select,textarea,dialog{{font-family:Carlito,Calibri,sans-
     }}
   }}catch(err){{ console.warn('tab ripple skipped',err); }}
 {SEARCH.JS}
-  try{{
+  function initMap(){{ try{{
     if(window.L){{
       clip.hidden=false; placeMap();
       map=L.map('livemap',{{zoomControl:false,scrollWheelZoom:false,attributionControl:true}});
@@ -345,7 +344,14 @@ html,body,button,input,select,textarea,dialog{{font-family:Carlito,Calibri,sans-
       /* the map sits above the pages, so pass mouse-wheel scrolling on to the pages underneath */
       wrap.addEventListener('wheel',e=>{{e.preventDefault(); sc.scrollBy({{top:e.deltaY/S}});}},{{passive:false}});
     }}
-  }}catch(err){{ console.warn('map not available',err); clip.hidden=true; map=null; }}
+  }}catch(err){{ console.warn('map not available',err); clip.hidden=true; map=null; }} }}
+  /* the map library is loaded only when it is about to be needed (downloads or contact page) - keeps the first load light */
+  let mapReq=false;
+  function loadMap(){{ if(mapReq) return; mapReq=true;
+    const css=document.createElement('link'); css.rel='stylesheet'; css.href='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css'; document.head.appendChild(css);
+    const js=document.createElement('script'); js.src='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js'; js.onload=initMap; js.onerror=()=>console.warn('map not available'); document.head.appendChild(js); }}
+  document.addEventListener('pagechange',e=>{{ if(e.detail==='downloads'||e.detail==='contact') loadMap(); }});
+  if(cur==='downloads'||cur==='contact') loadMap();
 }})();
 </script>
 </body>

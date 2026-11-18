@@ -939,7 +939,9 @@ def patch(s):
     s = _contact_imp(s)   # 23 Oct, 13:04: contact + impressum on one page
     s = _links_board(s)   # 24 Oct: links for clients on a draughts board
     s = s.replace('</body>', NOCOPY + '</body>', 1)   # 24 Oct: photos harder to copy
-    return s.replace('</body>', HEART_JS + EXT_JS + MARK + '</body>', 1)
+    s = s.replace('</body>', HEART_JS + EXT_JS + MARK + '</body>', 1)
+    import imgdims   # 18 Nov: width / height on every <img> (Lighthouse)
+    return imgdims.apply(s, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 
 
 if __name__ == '__main__':

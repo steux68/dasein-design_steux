@@ -1312,9 +1312,28 @@ function place(){var t=q('.tk.t'),b=q('.tk.b'),m=q('.tk.m');if(!t||!b)return;
 place();addEventListener('resize',place);setInterval(place,600);
 })();</script>
 '''
+RIPPLE = '''<style id="ripple-css">
+/* 19.11: Tipp-Welle: schwarzer Punkt + graue Ringe (wie die Dasein-Kreise), fängt keine Berührung ab, liegt über allen Pop-ups */
+.rip{position:fixed;z-index:2000;pointer-events:none;border-radius:50%}
+.rip{width:44px;height:44px;margin:-22px 0 0 -22px;background:radial-gradient(circle,#000 0 2.5px,transparent 3px);animation:ripd 1.1s ease-out forwards}
+.rip::before,.rip::after{content:"";position:absolute;inset:0;border-radius:50%;border:1.5px solid #222;opacity:0;animation:ripr 1.1s ease-out forwards}
+.rip::after{border-color:#9a9a9a;animation-delay:.2s}
+@keyframes ripr{0%{transform:scale(.12);opacity:1}100%{transform:scale(1);opacity:0}}
+@keyframes ripd{0%{opacity:1}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.rip{animation-duration:.01s}}
+</style>
+<script id="ripple-js">(function(){
+/* Tipp-Welle: schwarzer Punkt + graue Ringe, folgt dem Finger ein Stück */
+var rp=null,rx=0,ry=0;
+addEventListener("pointerdown",function(e){var r=document.createElement("div");r.className="rip";r.style.left=e.clientX+"px";r.style.top=e.clientY+"px";document.body.appendChild(r);rp=r;rx=e.clientX;ry=e.clientY;setTimeout(function(){r.remove();if(rp===r)rp=null},1400);},true);
+function fol(x,y){if(!rp)return;var dx=Math.max(-70,Math.min(70,(x-rx)*.55)),dy=Math.max(-70,Math.min(70,(y-ry)*.55));rp.style.transform="translate("+dx+"px,"+dy+"px)";}
+addEventListener("touchmove",function(e){var t=e.touches[0];if(t)fol(t.clientX,t.clientY)},{passive:true,capture:true});
+addEventListener("mousemove",function(e){if(e.buttons)fol(e.clientX,e.clientY)},true);
+})();</script>
+'''   # 19 Nov: Tipp-Welle (schwarzer Punkt, graue Ringe), wie in DOCH/PASSAGE
 UIFIX = '<style>button{font-family:Carlito,Calibri,sans-serif}</style><style id="arrows-css">/* 17.11: alle Pfeile wie in DOCH/PASSAGE: nur der Pfeilkopf auf rundem, leicht durchsichtigem 26-px-Kreis mit feinem grauem Rand; kein Ring, kein W/O/N; Antippfläche ~46 px */.ar .rg,.ar text{display:none!important}.phw button{width:26px!important;height:26px!important;margin-top:-13px!important;background:rgba(255,255,255,.6)!important;box-shadow:0 0 0 1px rgba(0,0,0,.1)}.phw button .ar{width:30px;height:30px}.phw .pw{left:2px!important}.phw .pe{right:2px!important}.phw button::before{content:"";position:absolute;inset:-10px}.bar .ar,.cnt.pk .ar{width:30px;height:30px;background:radial-gradient(circle 13px at 50% 50%,rgba(255,255,255,.6) 0 12px,rgba(0,0,0,.1) 12px 13px,transparent 13px);margin:-3px}</style>'   # 11 Nov (UI audit A6): buttons without a font of their own (scroll / back to the top) take the page font instead of Arial
 NOCOPY = NOCOPY.replace('</style>', LIVE_CSS + '</style>', 1)
-open(OUT, 'w').write(imgdims.apply(HTML.replace('</head>', UIFIX + '</head>', 1).replace('</body>', NOCOPY + UPDATE + LIVE_JS + '</body>', 1), os.path.dirname(OUT)))
+open(OUT, 'w').write(imgdims.apply(HTML.replace('</head>', UIFIX + '</head>', 1).replace('</body>', NOCOPY + UPDATE + LIVE_JS + RIPPLE + '</body>', 1), os.path.dirname(OUT)))
 open(os.path.join(ROOT, 'phone', 'version.json'), 'w').write('{"v":"' + VERSION + '"}\n')
 if __name__ == '__main__':
     print(len(pieces), 'pieces,', len(HTML) // 1024, 'KB ->', OUT)

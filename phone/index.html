@@ -1008,7 +1008,7 @@ header::after{content:"";position:absolute;left:8px;right:8px;bottom:-1px;height
 (function(){ const ph=e=>{ const im=e.target.closest&&e.target.closest('img'); return im&&!im.closest('a[href^="http"]'); };
   document.addEventListener('contextmenu',e=>{ if(ph(e)) e.preventDefault(); },true);
   document.addEventListener('dragstart',e=>{ if(e.target.closest&&e.target.closest('img')) e.preventDefault(); },true); })();</script>
-<script>/* automatic update check (25 Oct): reload once when a newer build is on the server */ (function(){ const V="20261118161600"; function check(){ fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{ if(!j||!j.v||j.v===V) return; try{ if(sessionStorage.getItem("dd-upd")===j.v) return; sessionStorage.setItem("dd-upd",j.v); }catch(e){} const q=new URLSearchParams(location.search); q.set("v",j.v); location.replace(location.pathname+"?"+q.toString()); }).catch(()=>{}); } addEventListener("load",check); document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible") check(); }); })();</script><button type="button" id="toTop" aria-label="back to the top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15L12 8L19 15"/></svg></button><script id="totop-js">(function(){var b=document.getElementById('toTop');if(!b)return;
+<script>/* automatic update check (25 Oct): reload once when a newer build is on the server */ (function(){ const V="20261119080800"; function check(){ fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{ if(!j||!j.v||j.v===V) return; try{ if(sessionStorage.getItem("dd-upd")===j.v) return; sessionStorage.setItem("dd-upd",j.v); }catch(e){} const q=new URLSearchParams(location.search); q.set("v",j.v); location.replace(location.pathname+"?"+q.toString()); }).catch(()=>{}); } addEventListener("load",check); document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible") check(); }); })();</script><button type="button" id="toTop" aria-label="back to the top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15L12 8L19 15"/></svg></button><script id="totop-js">(function(){var b=document.getElementById('toTop');if(!b)return;
 function upd(){var y=innerHeight-10;document.querySelectorAll('.pbar').forEach(function(p){var r=p.getBoundingClientRect(),bt=parseFloat(getComputedStyle(p).bottom);if(!isNaN(bt)&&r.height&&r.bottom>=innerHeight-bt-3&&r.top<y)y=r.top;});
  b.style.bottom=Math.max(10,innerHeight-y+8)+'px';b.classList.toggle('on',scrollY>260);}
 b.onclick=function(){scrollTo({top:0,behavior:'smooth'});};addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);upd();})();</script><script id="ticks-js">(function(){var q=function(s){return document.querySelector(s)};
@@ -1032,5 +1032,23 @@ if(h)h.onclick=function(){scrollTo({top:0,behavior:'smooth'});};})();</script>
 if(m&&m.tagName!=="MAIN"&&!m.getAttribute("role"))m.setAttribute("role","main");
 if(!document.querySelector("h1")){var h=document.createElement("h1");h.textContent="dasein-design \u00b7 architecture + design \u00b7 Wien";h.style.cssText="position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0";var t=m||document.body;t.insertBefore(h,t.firstChild);}
 document.querySelectorAll("button.cvb").forEach(function(b){if(!(b.innerText||"").trim()&&!b.getAttribute("aria-label"))b.setAttribute("aria-label","show or hide the full text");});})();</script>
+<style id="ripple-css">
+/* 19.11: Tipp-Welle: schwarzer Punkt + graue Ringe (wie die Dasein-Kreise), fängt keine Berührung ab, liegt über allen Pop-ups */
+.rip{position:fixed;z-index:2000;pointer-events:none;border-radius:50%}
+.rip{width:44px;height:44px;margin:-22px 0 0 -22px;background:radial-gradient(circle,#000 0 2.5px,transparent 3px);animation:ripd 1.1s ease-out forwards}
+.rip::before,.rip::after{content:"";position:absolute;inset:0;border-radius:50%;border:1.5px solid #222;opacity:0;animation:ripr 1.1s ease-out forwards}
+.rip::after{border-color:#9a9a9a;animation-delay:.2s}
+@keyframes ripr{0%{transform:scale(.12);opacity:1}100%{transform:scale(1);opacity:0}}
+@keyframes ripd{0%{opacity:1}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.rip{animation-duration:.01s}}
+</style>
+<script id="ripple-js">(function(){
+/* Tipp-Welle: schwarzer Punkt + graue Ringe, folgt dem Finger ein Stück */
+var rp=null,rx=0,ry=0;
+addEventListener("pointerdown",function(e){var r=document.createElement("div");r.className="rip";r.style.left=e.clientX+"px";r.style.top=e.clientY+"px";document.body.appendChild(r);rp=r;rx=e.clientX;ry=e.clientY;setTimeout(function(){r.remove();if(rp===r)rp=null},1400);},true);
+function fol(x,y){if(!rp)return;var dx=Math.max(-70,Math.min(70,(x-rx)*.55)),dy=Math.max(-70,Math.min(70,(y-ry)*.55));rp.style.transform="translate("+dx+"px,"+dy+"px)";}
+addEventListener("touchmove",function(e){var t=e.touches[0];if(t)fol(t.clientX,t.clientY)},{passive:true,capture:true});
+addEventListener("mousemove",function(e){if(e.buttons)fol(e.clientX,e.clientY)},true);
+})();</script>
 </body>
 </html>

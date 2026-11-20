@@ -581,6 +581,18 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .cvb::before{content:"";position:absolute;left:0;right:0;top:-7px;bottom:-7px}
 .wsw::after{content:"";position:absolute;left:-4px;right:-4px;top:-10px;bottom:-10px}
 </style>
+<style id="test-farbe">
+/* test-farbe: Leisten dauerhaft pastell, aktive Leiste kraeftiger statt Lindgruen */
+html body .hb[data-i="0"]{--pc:#cfe2f9;--pcs:#9fc3ee;background-color:var(--pc)!important}
+html body .hb[data-i="1"]{--pc:#fbeb9e;--pcs:#f0d54f;background-color:var(--pc)!important}
+html body .hb[data-i="2"]{--pc:#8db5e8;--pcs:#5f94d8;background-color:var(--pc)!important}
+html body .hb[data-i="3"]{--pc:#f2c14e;--pcs:#e0a622;background-color:var(--pc)!important}
+html body .hb[data-i="4"]{--pc:#ffffff;--pcs:#d4d4d0;background-color:var(--pc)!important}
+html body .hb[data-i="5"]{--pc:#a6a6a1;--pcs:#8d8d88;background-color:var(--pc)!important}
+html body .hb.on[data-i],html body .hb.hit[data-i]{background-color:var(--pcs)!important}
+html body .hb.on[data-i]{box-shadow:inset 4px 0 0 #222!important}
+html body .hb.on[data-i] b{padding-left:8px}
+</style>
 </head>
 <body>
 <script>document.body.classList.add('stack','pairs','wtr');</script>
@@ -1091,3 +1103,4 @@ setTimeout(check,300);
 })();</script>
 </body>
 </html>
+<script>(function(){function f(){document.querySelectorAll(".hb").forEach(function(b,i){if(b.dataset.i==null)b.dataset.i=i;});}f();setTimeout(f,60);window.addEventListener("load",f);})();</script>

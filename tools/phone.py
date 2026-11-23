@@ -1268,7 +1268,7 @@ LIVE_CSS = r'''
 html{--bar:0px!important}
 .bar{border:0!important;background:none!important;pointer-events:none}.bar::after{display:none!important}.bar button{display:none!important}
 #toTop{position:fixed;right:18px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:40;width:34px;height:34px;padding:0;display:flex;align-items:center;justify-content:center;
- background:rgba(255,255,255,.94);border:1px dotted #b8b8b8;border-radius:0;opacity:0;pointer-events:none;transition:opacity .25s;-webkit-tap-highlight-color:transparent}
+ border:0;border-radius:0;background:var(--dh) left top/100% 1px no-repeat,var(--dh) left bottom/100% 1px no-repeat,var(--dv) left top/1px 100% no-repeat,var(--dv) right top/1px 100% no-repeat,rgba(255,255,255,.94);opacity:0;pointer-events:none;transition:opacity .25s;-webkit-tap-highlight-color:transparent}
 #toTop.on{opacity:1;pointer-events:auto}
 #toTop svg{width:20px;height:20px;fill:none;stroke:#3a3c37;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 

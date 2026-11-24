@@ -599,7 +599,7 @@ html,body{{overflow-x:clip}}
 .heartfx .sm{{width:16px;height:16px;margin:-8px 0 0 -8px}}
 .pin{{position:absolute;display:flex;flex-direction:column;align-items:center;gap:4px;width:25vw;max-width:110px;text-decoration:none;text-align:center;-webkit-tap-highlight-color:transparent}}
 .pin.l{{left:6px}} .pin.r{{right:6px}}
-.pin b{{display:flex;align-items:center;justify-content:center;width:23px;height:23px;border-radius:50%;background:#bfbfbf;font-weight:400;font-size:12px;
+.pin b{{display:flex;align-items:center;justify-content:center;width:23px;height:23px;border-radius:50%;background:#b8b8b8;font-weight:400;font-size:12px;
   box-shadow:inset 0 0 0 1px #000;transition:background .15s}}
 .pin b{{position:relative}}
 /* thin red rings ripple out of the circles one after another - 01, 02, 03, 04, then from the start - to show they can be tapped */
@@ -608,7 +608,7 @@ html,body{{overflow-x:clip}}
 .pin b::after{{border-color:var(--c2,var(--red));animation-delay:calc(var(--k) * 1.5s + .6s)}}
 /* in turn each circle lights up yellow-lime (as if activated), sends out its rings, then turns grey again before the next one */
 .pin b{{animation:pinon 9s ease-in-out infinite;animation-delay:calc(var(--k) * 1.5s)}}
-@keyframes pinon{{0%{{background:#bfbfbf}}2.5%{{background:#cdff3e}}14%{{background:#cdff3e}}16.7%{{background:#bfbfbf}}100%{{background:#bfbfbf}}}}
+@keyframes pinon{{0%{{background:#b8b8b8}}2.5%{{background:#cdff3e}}14%{{background:#cdff3e}}16.7%{{background:#b8b8b8}}100%{{background:#b8b8b8}}}}
 .pin:nth-of-type(1){{--c1:#ffd400;--c2:#2f8cff}} .pin:nth-of-type(2){{--c1:#2fbf4a;--c2:#ffd400}}
 .pin:nth-of-type(3){{--c1:#2f8cff;--c2:#cdff3e}} .pin:nth-of-type(4){{--c1:#e30613;--c2:#2fbf4a}} .pin:nth-of-type(5){{--c1:#cdff3e;--c2:#e30613}} .pin:nth-of-type(6){{--c1:#3a3c37;--c2:#ffd400}}
 @keyframes pinring{{0%{{transform:scale(1);opacity:.9}}12.5%{{transform:scale(2.3);opacity:0}}100%{{transform:scale(2.3);opacity:0}}}}
@@ -1255,7 +1255,7 @@ NOCOPY = '<style>/* photos are harder to copy (24 Oct): no dragging, no selectin
 # phone/version.json; on start (and whenever the page comes back to the screen) the page fetches version.json past every cache and,
 # if it is newer, reloads itself once with ?v=<new version> so phones never need a manual refresh
 import time as _t
-VERSION = _t.strftime('%Y%m%d%H%M%S')
+VERSION = "20261124151500"
 UPDATE = ('<script>/* automatic update check (25 Oct): reload once when a newer build is on the server */ (function(){ const V="' + VERSION + '";'
           ' function check(){ fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{ if(!j||!j.v||j.v===V) return;'
           ' try{ if(sessionStorage.getItem("dd-upd")===j.v) return; sessionStorage.setItem("dd-upd",j.v); }catch(e){}'

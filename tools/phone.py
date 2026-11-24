@@ -308,7 +308,7 @@ HTML = f'''<!doctype html>
 <meta name="description" content="dasein-design is an architecture and design practice in Vienna (Wien), run by Cuong Tran-Viet and Steuart Harrison: projects, services, guides for clients and contact.">
 <link rel="stylesheet" href="../fonts.css">
 <style>
-:root{{--dh:repeating-linear-gradient(to right,var(--dot) 0 1px,transparent 1px 3px);--dv:repeating-linear-gradient(to bottom,var(--dot) 0 1px,transparent 1px 3px);--gh:repeating-linear-gradient(to right,var(--line) 0 4px,transparent 4px 7px);--gv:repeating-linear-gradient(to bottom,var(--line) 0 4px,transparent 4px 7px);--bar:30px;--red:#e30613;--lime:rgba(205,255,62,.86);--green:#a5e35a;--grey:#ebebeb;--line:#c4c4c4;--dot:#b8b8b8;--hp:1px;--head:118px;--side:0px;--ttl:44px}}
+:root{{--dh:repeating-linear-gradient(to right,var(--dot) 0 1px,transparent 1px 3px);--dv:repeating-linear-gradient(to bottom,var(--dot) 0 1px,transparent 1px 3px);--gh:repeating-linear-gradient(to right,var(--line) 0 4px,transparent 4px 7px);--gv:repeating-linear-gradient(to bottom,var(--line) 0 4px,transparent 4px 7px);--bar:30px;--red:#e30613;--lime:rgba(205,255,62,.86);--green:#a5e35a;--grey:#ebebeb;--line:#b8b8b8;--dot:#b8b8b8;--hp:1px;--head:118px;--side:0px;--ttl:44px}}
 nav .tab:last-child:nth-child(odd){{grid-column:span 2}}
 *{{box-sizing:border-box}}
 html{{scroll-behavior:smooth;scroll-padding-top:calc(var(--head) + var(--bar))}}

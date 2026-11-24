@@ -1255,7 +1255,7 @@ NOCOPY = '<style>/* photos are harder to copy (24 Oct): no dragging, no selectin
 # phone/version.json; on start (and whenever the page comes back to the screen) the page fetches version.json past every cache and,
 # if it is newer, reloads itself once with ?v=<new version> so phones never need a manual refresh
 import time as _t
-VERSION = "20261124151500"
+VERSION = _t.strftime('%Y%m%d%H%M%S')
 UPDATE = ('<script>/* automatic update check (25 Oct): reload once when a newer build is on the server */ (function(){ const V="' + VERSION + '";'
           ' function check(){ fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{ if(!j||!j.v||j.v===V) return;'
           ' try{ if(sessionStorage.getItem("dd-upd")===j.v) return; sessionStorage.setItem("dd-upd",j.v); }catch(e){}'

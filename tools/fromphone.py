@@ -530,7 +530,7 @@ WONDER_CSS = """
 .dwbody{padding:0 14px 8px} .dwbody img{display:block;width:100%;aspect-ratio:1/1;object-fit:contain;background:#f6f6f6;outline:1px dotted #b8b8b8;outline-offset:-1px}
 .dwbody img{cursor:none}   /* the floating W / E arrow takes over (23 Oct) */
 .dwbody .d{margin:10px 0 2px;font-size:13px;letter-spacing:.06em;color:#8a8a86} .dwbody .l{margin:0 0 4px;font-size:18px;color:#222}
-.dwnav{display:flex;justify-content:space-between;padding:8px 12px 10px;border-top:1px solid transparent;border-image:repeating-linear-gradient(to right,#c4c4c4 0 4px,transparent 4px 7px) 1}
+.dwnav{display:flex;justify-content:space-between;padding:8px 12px 10px;border-top:1px solid transparent;border-image:repeating-linear-gradient(to right,#b8b8b8 0 4px,transparent 4px 7px) 1}
 .dwnav button{display:flex;align-items:center;gap:8px;border:0;background:none;font:14px Carlito,Calibri,sans-serif;cursor:pointer;padding:3px} .dwnav button:hover{color:#e30613}
 """
 

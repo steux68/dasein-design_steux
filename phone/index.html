@@ -599,6 +599,13 @@ html body .hb.on[data-i],html body .hb.hit[data-i]{background-color:var(--pcs)!i
 html body .hb.on[data-i]{box-shadow:inset 4px 0 0 #222!important}
 html body .hb.on[data-i] b{padding-left:8px}
 </style>
+<style id="popup-pfeile-css">/* 25 Nov: Pop-up-Pfeile in allen Pop-ups gleich gross wie in DOCH/PASSAGE (26-px-Kreis, mittig auf dem Foto); der pulsierende Ring waechst nur noch wenig */
+.wph button{width:26px!important;height:26px!important;margin-top:-13px!important;top:50%!important;background:rgba(255,255,255,.6)!important;box-shadow:0 0 0 1px rgba(0,0,0,.1)}
+.wph button .ar{width:30px;height:30px}.wph .pw{left:2px!important}.wph .pe{right:2px!important}
+.wph button::before{content:"";position:absolute;inset:-10px}
+.phw .ar.pulse .tr,.wph .ar.pulse .tr{animation-name:ringS}
+@keyframes ringS{0%{transform:scale(1);opacity:.5}100%{transform:scale(1.3);opacity:0}}
+</style>
 </head>
 <body>
 <script>document.body.classList.add('stack','pairs','wtr');</script>
@@ -1033,7 +1040,7 @@ header::after{content:"";position:absolute;left:8px;right:8px;bottom:-1px;height
 (function(){ const ph=e=>{ const im=e.target.closest&&e.target.closest('img'); return im&&!im.closest('a[href^="http"]'); };
   document.addEventListener('contextmenu',e=>{ if(ph(e)) e.preventDefault(); },true);
   document.addEventListener('dragstart',e=>{ if(e.target.closest&&e.target.closest('img')) e.preventDefault(); },true); })();</script>
-<script>/* automatic update check (25 Oct): reload once when a newer build is on the server */ (function(){ const V="20261125090000"; function check(){ fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{ if(!j||!j.v||j.v===V) return; try{ if(sessionStorage.getItem("dd-upd")===j.v) return; sessionStorage.setItem("dd-upd",j.v); }catch(e){} const q=new URLSearchParams(location.search); q.set("v",j.v); location.replace(location.pathname+"?"+q.toString()); }).catch(()=>{}); } addEventListener("load",check); document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible") check(); }); })();</script><button type="button" id="toTop" aria-label="back to the top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15L12 8L19 15"/></svg></button><script id="totop-js">(function(){var b=document.getElementById('toTop');if(!b)return;
+<script>/* automatic update check (25 Oct): reload once when a newer build is on the server */ (function(){ const V="20261125093000"; function check(){ fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{ if(!j||!j.v||j.v===V) return; try{ if(sessionStorage.getItem("dd-upd")===j.v) return; sessionStorage.setItem("dd-upd",j.v); }catch(e){} const q=new URLSearchParams(location.search); q.set("v",j.v); location.replace(location.pathname+"?"+q.toString()); }).catch(()=>{}); } addEventListener("load",check); document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible") check(); }); })();</script><button type="button" id="toTop" aria-label="back to the top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15L12 8L19 15"/></svg></button><script id="totop-js">(function(){var b=document.getElementById('toTop');if(!b)return;
 function upd(){var y=innerHeight-10;document.querySelectorAll('.pbar').forEach(function(p){var r=p.getBoundingClientRect(),bt=parseFloat(getComputedStyle(p).bottom);if(!isNaN(bt)&&r.height&&r.bottom>=innerHeight-bt-3&&r.top<y)y=r.top;});
  b.style.bottom=Math.max(10,innerHeight-y+8)+'px';b.classList.toggle('on',scrollY>260);}
 b.onclick=function(){scrollTo({top:0,behavior:'smooth'});};addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);upd();})();</script><script id="ticks-js">(function(){var q=function(s){return document.querySelector(s)};

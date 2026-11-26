@@ -5,7 +5,7 @@ f = 'phone/index.html'
 s = open(f, encoding='utf-8').read()
 if 'id="header-einheit-css"' in s: sys.exit('schon angewendet')
 css = ('<style id="header-einheit-css">header{padding-top:8px!important;padding-bottom:0!important}'
-       '.row1{height:58px!important}.logo{height:42px!important;gap:calc(2.67vw - .77px)!important}.logo img{width:calc(10.02vw - 2.9px)!important;height:calc(10.02vw - 2.9px)!important}.logo span{font-size:calc(9.02vw - 2.6px)!important}</style>')
+       '.row1{height:54px!important}.logo{height:38px!important;gap:calc(2.41vw - .7px)!important}.logo img{width:calc(9.07vw - 2.6px)!important;height:calc(9.07vw - 2.6px)!important}.logo span{font-size:calc(8.16vw - 2.35px)!important}</style>')
 assert s.count('</head>') == 1
 s = s.replace('</head>', css + '</head>')
 old = re.search(r'const V="(\d+)";', s).group(0)

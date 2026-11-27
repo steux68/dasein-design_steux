@@ -17,7 +17,7 @@ var DE={
 "nothing found":"nichts gefunden","search not available":"Suche nicht verfügbar",
 "map not available":"Karte nicht verfügbar","open the map":"Karte öffnen",
 "full CV":"ganzer Lebenslauf","close CV":"kurzer Lebenslauf","CV":"Lebenslauf","again":"noch einmal",
-"more":"mehr","fewer":"weniger","more links":"mehr Links","more bits & bats":"mehr Fundstücke",
+"work":"Werk","wonder":"Wunder","switch between work and wonder":"zwischen Werk und Wunder umschalten","more":"mehr","fewer":"weniger","more links":"mehr Links","more bits & bats":"mehr Fundstücke",
 "PDF follows":"PDF folgt","update":"aktualisieren","home":"start","desktop version":"Desktop-Version",
 "back to the top":"nach oben","show or hide the full text":"ganzen Text zeigen oder verbergen",
 "services":"Leistungen","OUR SERVICES":"UNSERE LEISTUNGEN","OFFICE":"BÜRO","bio":"bio","BIO":"BIO",
